@@ -1,6 +1,8 @@
 # Geotab API Reference for AI Coding Tools
 
-> **For AI Tools:** This guide shows the standard Geotab API authentication pattern. Credentials are loaded from `.env` file using python-dotenv. Always use this pattern for all Geotab integrations.
+> **Complete guide** with setup, troubleshooting, and common mistakes. Perfect for first-time setup or debugging.
+>
+> **Already know the basics?** Use [VIBE_CODING_CONTEXT.md](../VIBE_CODING_CONTEXT.md) as a quick reference instead.
 
 ## Setup (2 minutes)
 

@@ -393,6 +393,7 @@ Search for: `[geotab]` + your error message
 
 Quick reference documents in this repository:
 - [CLAUDE_PROMPTS.md](./guides/CLAUDE_PROMPTS.md) - AI prompts for common tasks
+- [ADVANCED_INTEGRATIONS.md](./guides/ADVANCED_INTEGRATIONS.md) - MCP servers, voice interfaces, AI content generation
 - [API_QUICKREF.md](./API_QUICKREF.md) - Top 20 Geotab API calls *(to be created)*
 - [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Common issues and fixes *(to be created)*
 

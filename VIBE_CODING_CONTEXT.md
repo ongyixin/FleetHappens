@@ -1,6 +1,8 @@
 # Geotab API - Vibe Coding Context
 
-> Load this at session start for AI coding assistants. Minimal tokens, maximum clarity.
+> **Quick reference card** for experienced developers and AI assistants. Minimal tokens, maximum clarity.
+>
+> **Need more details?** See [API_REFERENCE_FOR_AI.md](./guides/API_REFERENCE_FOR_AI.md) for setup instructions, troubleshooting, and common mistakes.
 
 ## Connection Pattern (Required)
 

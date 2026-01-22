@@ -91,19 +91,17 @@ Extending platform capabilities through integrations:
 - **Geotab Marketplace**: Distribute solutions to over 50,000 customers ([marketplace.geotab.com](https://marketplace.geotab.com/))
 - **Add-ins**: Embed your application directly inside MyGeotab ([Developer Docs](https://developers.geotab.com/myGeotab/addIns/developingAddIns/))
   - *Note: Add-ins are key for production but have limitations on demo databases.*
-- **Modern AI integrations**: MCP servers, voice interfaces, LLM-powered analytics
-- **Conversational access**: Natural language queries instead of code
-- **Multi-modal interfaces**: Voice, text, video generation from fleet data
+- **Third-party integrations**: Connect with other business systems and tools
 
-## Your Hackathon Project: Picking a Pillar
+## Choosing Your Focus
 
-When building your Geotab application, we encourage you to **focus on one or more of these pillars**. Ask yourself:
+When building a Geotab application, consider focusing on one or more of these pillars:
 
 - **Which pillar aligns with your interests?** Safety-focused? Sustainability-driven? Optimization enthusiast?
 - **What problem can you solve?** Each pillar represents real challenges that fleet managers face daily
-- **How can you add unique value?** Combine data in new ways, apply AI/ML, create better visualizations
+- **How can you add unique value?** Combine data in new ways, apply analytics, create better visualizations
 
-Your project doesn't need to address all pillars - a focused solution for one pillar can be incredibly impactful!
+A focused solution addressing one pillar can be incredibly impactful!
 
 ## Beyond Reading Data: Writing Back to Geotab
 
@@ -192,30 +190,7 @@ Here are examples of rules you can set up programmatically:
 
 ### Building Rules Programmatically
 
-Your application can analyze fleet data and automatically create rules. For example:
-
-```python
-# Pseudo-code example
-def create_safety_rule_for_risky_driver(driver_id, threshold):
-    """
-    Analyze driver behavior and create personalized safety rule
-    """
-    rule = {
-        "name": f"Safety Alert - Driver {driver_id}",
-        "condition": {
-            "type": "SpeedingEvent",
-            "driver": driver_id,
-            "speedOver": threshold  # Custom threshold per driver
-        },
-        "action": {
-            "type": "Notification",
-            "recipients": ["fleet_manager@company.com"],
-            "message": "Driver requires safety coaching"
-        }
-    }
-    # Add rule via Geotab API
-    api.add("Rule", rule)
-```
+Your application can analyze fleet data and automatically create rules. By using the Geotab API, you can programmatically create condition-action pairs that trigger when specific events occur - such as creating personalized safety alerts when a driver exceeds their custom speed threshold, or scheduling maintenance when diagnostic patterns indicate potential issues.
 
 ## The Demo Database: Your Live Sandbox
 
@@ -230,213 +205,24 @@ When you create a Geotab demo account, you get access to a **continuously stream
 
 This means you can build and test applications that respond to live data, create rules that trigger in real-time, and see how your analytics perform with constantly changing conditions - exactly like you would with a production fleet.
 
-## Next-Generation Integration Patterns
 
-Beyond traditional REST API integrations, there are exciting new ways to work with Geotab data using modern AI and communication technologies.
+## Building with Geotab
 
-### Model Context Protocol (MCP): Conversational Fleet Access
-
-**MCP servers** enable AI assistants like Claude to interact with your fleet data conversationally, without writing explicit API calls. Instead of coding requests, you can simply ask questions in natural language.
-
-**Example MCP Server**: [geotab-ace-mcp-demo](https://github.com/fhoffa/geotab-ace-mcp-demo)
-
-This experimental server bridges Claude Desktop with Geotab's ACE AI service, providing:
-
-- **Natural Language Queries**: Generative AI translates questions into SQL for BigQuery
-- **Shared Authentication**: Re-uses standard API credentials (same session)
-- **Async Interaction**: Submit question -> receive ID -> poll for results ("ask and wait" lifecycle)
-- **Multi-Account Access**: Query multiple Geotab databases in a single conversation
-- **Intelligent Caching**: Large datasets are stored in DuckDB for SQL analysis rather than overwhelming the AI
-- **Privacy Protection**: Automatically redacts sensitive driver information
-
-**Hackathon Ideas with MCP:**
-- Build a Slack bot that answers fleet questions conversationally
-- Create a voice assistant that queries fleet status
-- Develop a multi-tenant dashboard that switches between customer fleets seamlessly
-- Enable non-technical users to access fleet analytics through chat interfaces
-- **Agentic Workflows**: Build autonomous agents that monitor fleet data and take actions (schedule maintenance, alert drivers)
-
-### Voice Interfaces: Talking to Your Fleet
-
-Voice APIs open entirely new interaction patterns for fleet management, especially for users who are on the move or have their hands occupied.
-
-#### Voice Interfaces for Fleet Managers
-
-Fleet managers often work in dynamic environments where pulling out a laptop isn't practical. Voice interfaces enable:
-
-- **"Alexa, how many vehicles are currently en route?"**
-- **"Hey Siri, which drivers have completed their deliveries today?"**
-- **"Google, alert me if any vehicle exceeds 80 mph"**
-- **"Show me the location of vehicle 2417"** (voice → map display)
-- **"Send a message to all drivers in the downtown zone"**
-
-**Implementation Approaches:**
-- **Speech-to-Text + Geotab API**: Use services like OpenAI Whisper, Google Speech API, or Deepgram to transcribe questions
-- **Natural Language Processing**: Process the query through a language model or Geotab Ace API
-- **Text-to-Speech Response**: Convert results back to audio using ElevenLabs, Google TTS, or similar
-- **Voice Assistant Integration**: Build Alexa Skills, Google Actions, or Siri Shortcuts
-
-#### Voice Interfaces for Drivers
-
-Drivers need hands-free access while operating vehicles. Voice interfaces can:
-
-- **Navigation Updates**: "What's my next stop?" or "Route me around traffic"
-- **Status Reporting**: "Mark current delivery as complete" or "I'm starting my break"
-- **Safety Alerts**: Receive spoken warnings about harsh braking patterns
-- **Two-Way Communication**: Fleet manager broadcasts received as voice notifications
-- **Pre-Trip Inspections**: Voice-guided DVIR (Driver Vehicle Inspection Report) completion
-
-**Safety Considerations:**
-- Minimize driver distraction with short, clear audio cues
-- Use "wake word" activation to prevent accidental triggers
-- Design for noisy environments (engine noise, traffic, weather)
-- Keep interactions brief and non-critical while vehicle is in motion
-
-**Example Projects:**
-- Driver-facing voice assistant for delivery confirmation
-- Fleet manager dashboard with voice query support
-- Hands-free DVIR system for pre-trip inspections
-- Emergency alert system with voice notification cascade
-- Voice-activated geofence creation: "Create a zone around my current location"
-
-### AI-Powered Content Generation
-
-Transform raw fleet data into compelling, shareable content automatically.
-
-#### Automated Video Generation
-
-Use AI video tools to create visual reports from fleet data:
-
-- **Weekly Performance Summaries**: Animated charts showing fleet KPIs, fuel efficiency trends, safety scores
-- **Route Visualizations**: Time-lapse animations of vehicle movements overlaid on maps
-- **Driver Recognition Videos**: Celebrate top performers with personalized video highlights
-- **Incident Reconstructions**: Visual playback of harsh events with telemetry overlay
-- **Training Content**: Auto-generate safety training videos using anonymized incident data
-- **Customer Reporting**: Branded video reports for clients showing delivery metrics
-
-**Tools to Explore:**
-- **D-ID or Synthesia**: AI avatars presenting fleet reports
-- **Runway ML or Pictory**: Generate videos from text descriptions of fleet performance
-- **Remotion**: Code-based video generation using React and fleet data
-- **Plotly + ffmpeg**: Convert animated charts into video format
-- **Google Earth Studio**: Create flyover visualizations of route coverage
-
-#### AI Report Generation
-
-Create comprehensive written reports automatically:
-
-- **Executive Summaries**: LLMs analyze fleet data and write natural language insights
-- **Compliance Documentation**: Auto-generate regulatory reports with required data points
-- **Incident Reports**: Compile telemetry, driver statements, and context into formal reports
-- **Maintenance Recommendations**: Analyze diagnostic data and suggest service priorities
-- **Fuel Efficiency Analyses**: Identify trends and actionable recommendations in narrative form
-
-**Example Prompts for AI:**
-```
-"Analyze this week's fleet data and write an executive summary highlighting
-the top 3 efficiency wins and 2 areas needing attention. Include specific
-vehicle IDs and driver recommendations."
-
-"Generate a formal incident report for harsh braking event #12847, including
-telemetry context, location, time, and recommended follow-up actions."
-```
-
-#### Visual Intelligence
-
-Use computer vision and AI to enhance fleet data:
-
-- **Dashcam Analysis**: Automatically detect road hazards, pedestrians, or risky situations
-- **Damage Detection**: AI-powered vehicle inspection using smartphone photos
-- **License Plate Recognition**: Automated access control for fleet yards
-- **Load Verification**: Computer vision confirms cargo is properly loaded
-- **Driver Fatigue Detection**: Analyze driver behavior patterns for signs of tiredness
-
-### Other Creative AI Applications
-
-#### Predictive Maintenance with ML
-
-Go beyond simple threshold alerts:
-
-- **Failure Prediction Models**: Analyze historical diagnostic codes to predict breakdowns before they happen
-- **Optimal Service Scheduling**: ML determines the best time to service vehicles based on usage patterns
-- **Parts Inventory Optimization**: Predict which parts will be needed when
-- **Battery Health Scoring**: Combine voltage, temperature, and usage data for EV battery predictions
-
-#### Natural Language SQL Interfaces
-
-Allow non-technical users to query fleet data:
-
-- **"Show me all vehicles that drove more than 300 miles yesterday"** → Auto-generated SQL query
-- **"Which drivers haven't taken a break in 6 hours?"** → Compliance query
-- **"Compare fuel efficiency this month vs last month by vehicle type"** → Aggregation query
-
-#### Intelligent Route Optimization
-
-Beyond traditional routing:
-
-- **Real-time rerouting** based on traffic, weather, and vehicle telemetry
-- **Predictive ETAs** that account for driver behavior patterns
-- **Dynamic job assignment** based on vehicle location, capacity, and driver certification
-
-#### Sentiment Analysis for Driver Communication
-
-Analyze messages between drivers and dispatchers:
-
-- Detect frustrated drivers who may need support
-- Identify common pain points mentioned across multiple drivers
-- Prioritize urgent requests automatically
-
-#### Geofence Intelligence
-
-AI-enhanced geofencing:
-
-- **Automatic zone creation** based on common stop patterns
-- **Predictive alerts**: "Vehicle 2417 will exit the service area in 5 minutes based on current trajectory"
-- **Customer site detection**: Automatically identify and name frequently visited locations
-
-### Getting Started with Modern Integrations
-
-**For MCP Server Development:**
-1. Clone the [geotab-ace-mcp-demo](https://github.com/fhoffa/geotab-ace-mcp-demo) repository
-2. Study the MCP protocol specification
-3. Extend with custom tools for write operations (create groups, rules, etc.)
-4. Deploy as a service accessible to multiple AI assistants
-
-**For Voice Integrations:**
-1. Start with speech-to-text API (Whisper, Google, Deepgram)
-2. Connect to Geotab API or Ace API for natural language queries
-3. Return results via text-to-speech (ElevenLabs, Google TTS)
-4. Test in noisy environments to ensure reliability
-
-**For AI Content Generation:**
-1. Export fleet data in structured format (JSON, CSV)
-2. Use LLM APIs (OpenAI, Claude, Gemini) to generate narratives
-3. Integrate with video generation tools (D-ID, Remotion)
-4. Automate report delivery via email or dashboard
-
-**For ML/Predictive Analytics:**
-1. Extract historical diagnostic and trip data
-2. Build training datasets with labeled outcomes
-3. Train models using scikit-learn, TensorFlow, or PyTorch
-4. Deploy predictions back to Geotab as custom data types
-
-## Getting Started
-
-Ready to build? Here's what you'll do:
+Ready to build? Here's a typical development path:
 
 1. **Explore the data**: Use the API to understand what information is available
-2. **Pick a pillar**: Choose which area (Safety, Productivity, etc.) interests you
+2. **Choose your focus**: Pick which pillar (Safety, Productivity, etc.) aligns with your goals
 3. **Analyze patterns**: Look for insights in the data (which vehicles idle most? Which drivers are safest?)
 4. **Create value**: Build groups, rules, dashboards, or applications that help fleet managers
-5. **Write back**: Don't just display data - create automated actions that improve operations
+5. **Automate actions**: Don't just display data - create automated workflows that improve operations
 
-Remember: The best Geotab applications don't just show information - they **create actionable intelligence** that makes fleet managers' jobs easier and their operations more efficient.
+The best Geotab applications create **actionable intelligence** that makes fleet management more efficient and effective.
 
 ## Next Steps
 
 - **[INSTANT_START_WITH_CLAUDE.md](./guides/INSTANT_START_WITH_CLAUDE.md)**: Get your first API call working in 60 seconds
-- **[INSTANT_START_WITH_CLAUDE.md](./guides/INSTANT_START_WITH_CLAUDE.md)**: Using Claude on the web? Start in 60 seconds
 - **[HACKATHON_IDEAS.md](./guides/HACKATHON_IDEAS.md)**: Browse 20+ project ideas organized by pillar
+- **[ADVANCED_INTEGRATIONS.md](./guides/ADVANCED_INTEGRATIONS.md)**: Explore MCP, voice interfaces, and AI-powered features
 - **[GEOTAB_API_REFERENCE.md](./guides/GEOTAB_API_REFERENCE.md)**: Quick API reference card
 - **[CLAUDE_PROMPTS.md](./guides/CLAUDE_PROMPTS.md)**: AI prompts for common tasks
 
