@@ -275,6 +275,14 @@ Want more prompts for specific use cases? Check out [CLAUDE_PROMPTS.md](./CLAUDE
 - Troubleshooting prompts
 - Advanced use cases
 
+---
+
+## 💡 Hit Your Daily Limit?
+
+**Don't stop coding!** You can rotate between different free AI tools (ChatGPT, Gemini, etc.) and use GitHub to keep your progress synced.
+
+📖 **Full strategy guide**: See [BEGINNER_GLOSSARY.md](./BEGINNER_GLOSSARY.md#ai-coding-assistants) for detailed free quotas, tool comparison table, and rotation tips.
+
 ## Ready?
 
 Start now with this exact prompt:

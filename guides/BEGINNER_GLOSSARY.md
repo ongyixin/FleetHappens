@@ -46,12 +46,24 @@ Think of GitHub like Google Drive, but specifically designed for code. It:
 - Lets multiple people work on the same project
 - Shares code with others
 
+**For vibe coding**: GitHub is your "home base" that lets you switch between different AI tools seamlessly. Your code lives in GitHub, and every AI assistant can read it and continue building.
+
 **In this repo**: All our tutorials, examples, and guides live on GitHub so you can access them anytime.
 
 ### Git
 **What it is**: The underlying tool that tracks changes to your code.
 
-GitHub (the website) uses Git (the tool). You don't need to master Git to start—just know it helps you save and manage different versions of your code.
+GitHub (the website) uses Git (the tool).
+
+**You don't need to learn Git commands!** Just tell your AI assistant:
+- "Create a GitHub repo for this project"
+- "Save my code to GitHub"
+- "Push my changes"
+- "Show me what changed since last commit"
+
+The AI knows all the Git commands and will handle them for you. Focus on what you want to build, not on technical commands.
+
+**You also don't need to understand branches!** When rotating between AI tools, just work on the main branch (the default). The AI will handle everything. Branches are for advanced workflows—skip them for now.
 
 ### IDE (Integrated Development Environment)
 **What it is**: A special text editor designed for writing code.
@@ -81,31 +93,252 @@ Many of our tutorials run entirely in a browser—no downloads required!
 
 ## AI Coding Assistants
 
+**Pro Tip**: Don't limit yourself to just one tool! Each AI coding assistant offers free usage quotas. When you hit the limit on one, simply switch to another—your GitHub repo acts as the common workspace where all your progress is saved. This strategy lets you keep coding without interruption!
+
+### The Multi-Tool Strategy 🔄
+
+Here's how to maximize your free coding time:
+
+1. **Start with any tool** (pick your favorite below)
+2. **Code until you hit the free quota limit**
+3. **Commit and push your work to GitHub** (your safety net!)
+4. **Switch to a different tool** and continue from where you left off
+5. **Repeat** as needed—your GitHub repo keeps everything in sync
+
+**Why this works**: Your code lives in GitHub, not in any single AI tool. Each tool can read your repo, understand your project, and continue building. Think of GitHub as your project's "home base" and the AI tools as interchangeable helpers.
+
+---
+
 ### Claude
 **What it is**: An AI assistant made by Anthropic that can write code, explain concepts, and help debug.
 
-You can use Claude through:
+**Access options**:
 - **claude.ai** (web chat) - Great for beginners, no setup needed
 - **Claude Code** (command line tool) - Advanced option for experienced developers
 
+**Free quota**:
+- Free tier includes daily message limits that reset every 24 hours
+- Generous context window for understanding large codebases
+
+**Best for**: Complex reasoning, understanding existing code, multi-step tasks
+
 **In this repo**: We provide ready-to-use prompts for Claude to build Geotab applications.
+
+---
 
 ### ChatGPT
 **What it is**: An AI assistant by OpenAI that can write code and answer questions.
 
-Similar to Claude, but made by a different company. Works great for vibe coding too!
+**Access options**:
+- **chat.openai.com** (web chat)
+- **ChatGPT API** (for programmatic access)
+
+**Free quota**:
+- GPT-3.5: Generous free access with higher limits
+- GPT-4: Limited free messages per day (varies by account)
+
+**Best for**: Quick iterations, web searches (with browsing enabled), general programming
+
+---
 
 ### GitHub Copilot
 **What it is**: An AI tool that lives inside your IDE and suggests code as you type.
 
-Like autocomplete for emails, but for code. It's built into VS Code and other editors.
+**Access options**:
+- Built into VS Code, Visual Studio, and other popular editors
+- Works inline as you type
+
+**Free quota**:
+- Free for students, teachers, and open-source maintainers
+- 30-day free trial for everyone else
+
+**Best for**: Real-time code completion, writing boilerplate code, autocomplete on steroids
+
+**Note**: Works best alongside other tools (use ChatGPT/Claude for planning, Copilot for typing)
+
+---
 
 ### Gemini
 **What it is**: Google's AI assistant that can help with coding tasks.
 
-Another AI option that works well for vibe coding projects.
+**Access options**:
+- **gemini.google.com** (web chat)
+- Integrated into Google Workspace tools
 
-**Bottom line**: These are all AI tools that can write code for you. Pick whichever one you have access to!
+**Free quota**:
+- Generous free tier with high message limits
+- Access to latest Gemini models in free tier
+
+**Best for**: Integration with Google services, multimodal tasks (code + images)
+
+---
+
+### Google Antigravity IDE
+**What it is**: An AI-native IDE you install on your computer that helps you build full applications.
+
+**Access options**:
+- Desktop application for Windows, Mac, Linux
+
+**Free quota**:
+- Currently free during beta period
+- Check their website for current offerings
+
+**Best for**: Building complete Streamlit dashboards, Python applications with visual interfaces
+
+**In this repo**: See [ANTIGRAVITY_QUICKSTART.md](ANTIGRAVITY_QUICKSTART.md) for setup instructions
+
+---
+
+### Cursor
+**What it is**: An AI-first code editor (fork of VS Code) with built-in AI pair programming.
+
+**Access options**:
+- Desktop application for Windows, Mac, Linux
+
+**Free quota**:
+- 2 weeks free trial with pro features
+- Limited free tier after trial
+
+**Best for**: Editing existing code, codebase-aware AI assistance, refactoring
+
+---
+
+### Replit AI
+**What it is**: Browser-based coding environment with integrated AI assistant.
+
+**Access options**:
+- **replit.com** - Code entirely in your browser, no installation needed
+
+**Free quota**:
+- Free tier includes basic AI features
+- Runs code in the cloud (no local setup!)
+
+**Best for**: Quick prototypes, learning, no-install coding sessions
+
+---
+
+## Making the Most of Free Quotas
+
+### Daily Rotation Strategy
+
+Here's a sample rotation to maximize free usage:
+
+**Morning**: Start with Claude (complex design and architecture)
+- "Build a Geotab fleet dashboard with vehicle tracking"
+- Plan your app structure
+- Write core logic
+- "Save my work to GitHub"
+
+**Afternoon**: Switch to ChatGPT (rapid iteration)
+- "My project is at github.com/me/fleet-dash. Continue adding features"
+- Implement features
+- Debug issues
+- "Commit these changes to GitHub"
+
+**Evening**: Use Gemini or Replit (finishing touches)
+- "Continue my project at github.com/me/fleet-dash"
+- Add UI improvements
+- Test edge cases
+- "Push final changes to GitHub"
+
+**Key insight**: You never need to learn Git commands. Just ask each AI to save your work!
+
+### GitHub as Your Safety Net 🛡️
+
+**Critical habit**: Save your work to GitHub frequently!
+
+**Instead of learning Git commands, just ask your AI**:
+
+```
+"Save my current code to GitHub with a meaningful commit message"
+```
+
+or
+
+```
+"I need to push my changes to GitHub. Help me commit and push everything."
+```
+
+**The AI will handle all the Git commands for you!** This ensures:
+- ✅ Your work is never lost
+- ✅ Any AI tool can pick up where you left off
+- ✅ You can switch tools mid-project seamlessly
+- ✅ You have a history of all your changes
+
+### When Switching Tools
+
+When you hit a quota limit on one tool:
+
+1. **Ask the AI to save your work**:
+   ```
+   "Save all my code to GitHub before I switch tools"
+   ```
+
+2. **Open a different tool** (ChatGPT, Gemini, etc.)
+
+3. **Give context to the new AI**:
+   ```
+   I'm building a Geotab fleet dashboard. My code is at [your-github-url].
+   I was just working on adding a map view. Can you help me continue?
+   ```
+
+4. **Keep coding** - The new AI reads your repo and picks up where you left off!
+
+**Don't worry about Git commands** - each AI assistant knows how to use Git. Just tell them what you want ("save my work", "create a repo", "push to GitHub") and they'll handle the technical details.
+
+### Real Example: Let the AI Handle GitHub
+
+**Your first session with Claude**:
+```
+You: "I built this fleet dashboard. Save it to GitHub for me."
+
+Claude: "I'll create a GitHub repo and commit your code..."
+[Creates repo, commits code, provides you the URL]
+
+Claude: "✓ Code saved to: github.com/yourname/fleet-dashboard"
+```
+
+**Later, switching to ChatGPT**:
+```
+You: "Continue my project at github.com/yourname/fleet-dashboard.
+      Add a fuel efficiency chart."
+
+ChatGPT: [Reads your repo]
+         "I see your dashboard code. I'll add the fuel chart..."
+         [Writes code, commits changes]
+
+ChatGPT: "✓ Fuel chart added and pushed to GitHub"
+```
+
+**Even later, switching to Gemini**:
+```
+You: "My project is at github.com/yourname/fleet-dashboard.
+      Make the map interactive."
+
+Gemini: [Reads your repo]
+        "I'll add interactive map features..."
+        [Updates code, saves to GitHub]
+```
+
+**See the pattern?** You never typed a single Git command. You just told each AI what you wanted, and they handled all the GitHub operations.
+
+**Note**: All of this happens on the "main" branch automatically. You don't need to know what branches are or how they work. Just ask the AI to save your code, and everything is handled for you on the default main branch.
+
+---
+
+## Quick Comparison Table
+
+| Tool | Best For | Free Quota | Setup Required |
+|------|----------|------------|----------------|
+| **Claude** | Complex reasoning, architecture | Daily limit (resets) | None (web) |
+| **ChatGPT** | Quick iterations, general coding | High (GPT-3.5) / Limited (GPT-4) | None (web) |
+| **Gemini** | Google integration, high limits | Very generous | None (web) |
+| **GitHub Copilot** | Real-time autocomplete | 30-day trial | IDE setup |
+| **Antigravity IDE** | Full dashboards, Streamlit | Beta free access | Install app |
+| **Cursor** | Code editing, refactoring | 2-week trial | Install app |
+| **Replit AI** | No-install, browser-based | Basic free tier | None (web) |
+
+**Bottom line**: These are all AI tools that can write code for you. Use them strategically, rotate when needed, and let GitHub be your central hub!
 
 ---
 
