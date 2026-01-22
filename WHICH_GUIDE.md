@@ -16,6 +16,7 @@ Quick navigation to the right resource for your needs.
 | Teaching workshop | [TUTORIAL_DESIGN.md](./guides/TUTORIAL_DESIGN.md) | Full curriculum design |
 | Running workshop | [MINUTE_BY_MINUTE.md](./guides/MINUTE_BY_MINUTE.md) | Step-by-step timing |
 | Need project ideas | [HACKATHON_IDEAS.md](./guides/HACKATHON_IDEAS.md) | 20+ hackathon projects |
+| Advanced integrations | [ADVANCED_INTEGRATIONS.md](./guides/ADVANCED_INTEGRATIONS.md) | MCP servers, voice interfaces, AI content generation |
 | Writing prompts | [CLAUDE_PROMPTS.md](./guides/CLAUDE_PROMPTS.md) | AI prompt templates |
 
 ## For AI Coding Tools
