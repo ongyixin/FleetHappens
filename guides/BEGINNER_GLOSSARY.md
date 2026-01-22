@@ -46,12 +46,22 @@ Think of GitHub like Google Drive, but specifically designed for code. It:
 - Lets multiple people work on the same project
 - Shares code with others
 
+**For vibe coding**: GitHub is your "home base" that lets you switch between different AI tools seamlessly. Your code lives in GitHub, and every AI assistant can read it and continue building.
+
 **In this repo**: All our tutorials, examples, and guides live on GitHub so you can access them anytime.
 
 ### Git
 **What it is**: The underlying tool that tracks changes to your code.
 
-GitHub (the website) uses Git (the tool). You don't need to master Git to start—just know it helps you save and manage different versions of your code.
+GitHub (the website) uses Git (the tool).
+
+**You don't need to learn Git commands!** Just tell your AI assistant:
+- "Create a GitHub repo for this project"
+- "Save my code to GitHub"
+- "Push my changes"
+- "Show me what changed since last commit"
+
+The AI knows all the Git commands and will handle them for you. Focus on what you want to build, not on technical commands.
 
 ### IDE (Integrated Development Environment)
 **What it is**: A special text editor designed for writing code.
@@ -212,31 +222,42 @@ Here's how to maximize your free coding time:
 Here's a sample rotation to maximize free usage:
 
 **Morning**: Start with Claude (complex design and architecture)
+- "Build a Geotab fleet dashboard with vehicle tracking"
 - Plan your app structure
 - Write core logic
-- Commit to GitHub
+- "Save my work to GitHub"
 
 **Afternoon**: Switch to ChatGPT (rapid iteration)
+- "My project is at github.com/me/fleet-dash. Continue adding features"
 - Implement features
 - Debug issues
-- Commit to GitHub
+- "Commit these changes to GitHub"
 
 **Evening**: Use Gemini or Replit (finishing touches)
+- "Continue my project at github.com/me/fleet-dash"
 - Add UI improvements
 - Test edge cases
-- Final commit to GitHub
+- "Push final changes to GitHub"
+
+**Key insight**: You never need to learn Git commands. Just ask each AI to save your work!
 
 ### GitHub as Your Safety Net 🛡️
 
-**Critical habit**: Commit and push frequently!
+**Critical habit**: Save your work to GitHub frequently!
 
-```bash
-git add .
-git commit -m "Added vehicle tracking feature"
-git push
+**Instead of learning Git commands, just ask your AI**:
+
+```
+"Save my current code to GitHub with a meaningful commit message"
 ```
 
-This ensures:
+or
+
+```
+"I need to push my changes to GitHub. Help me commit and push everything."
+```
+
+**The AI will handle all the Git commands for you!** This ensures:
 - ✅ Your work is never lost
 - ✅ Any AI tool can pick up where you left off
 - ✅ You can switch tools mid-project seamlessly
@@ -246,17 +267,58 @@ This ensures:
 
 When you hit a quota limit on one tool:
 
-1. **Commit your current work**: `git add . && git commit -m "Progress update"`
-2. **Push to GitHub**: `git push`
-3. **Open a different tool**
-4. **Share your GitHub repo link** with the new AI
-5. **Continue coding**: The new AI reads your repo and picks up where you left off!
+1. **Ask the AI to save your work**:
+   ```
+   "Save all my code to GitHub before I switch tools"
+   ```
 
-**Example prompt for the new tool**:
+2. **Open a different tool** (ChatGPT, Gemini, etc.)
+
+3. **Give context to the new AI**:
+   ```
+   I'm building a Geotab fleet dashboard. My code is at [your-github-url].
+   I was just working on adding a map view. Can you help me continue?
+   ```
+
+4. **Keep coding** - The new AI reads your repo and picks up where you left off!
+
+**Don't worry about Git commands** - each AI assistant knows how to use Git. Just tell them what you want ("save my work", "create a repo", "push to GitHub") and they'll handle the technical details.
+
+### Real Example: Let the AI Handle GitHub
+
+**Your first session with Claude**:
 ```
-I'm building a Geotab fleet dashboard. My code is at [your-github-url].
-I was just working on adding a map view. Can you help me continue?
+You: "I built this fleet dashboard. Save it to GitHub for me."
+
+Claude: "I'll create a GitHub repo and commit your code..."
+[Creates repo, commits code, provides you the URL]
+
+Claude: "✓ Code saved to: github.com/yourname/fleet-dashboard"
 ```
+
+**Later, switching to ChatGPT**:
+```
+You: "Continue my project at github.com/yourname/fleet-dashboard.
+      Add a fuel efficiency chart."
+
+ChatGPT: [Reads your repo]
+         "I see your dashboard code. I'll add the fuel chart..."
+         [Writes code, commits changes]
+
+ChatGPT: "✓ Fuel chart added and pushed to GitHub"
+```
+
+**Even later, switching to Gemini**:
+```
+You: "My project is at github.com/yourname/fleet-dashboard.
+      Make the map interactive."
+
+Gemini: [Reads your repo]
+        "I'll add interactive map features..."
+        [Updates code, saves to GitHub]
+```
+
+**See the pattern?** You never typed a single Git command. You just told each AI what you wanted, and they handled all the GitHub operations.
 
 ---
 
