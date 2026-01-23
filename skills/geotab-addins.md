@@ -512,7 +512,3 @@ console.log("Fleet Stats registered");
 - Official Documentation: https://developers.geotab.com/myGeotab/addIns/developingAddIns/
 - API Reference: https://geotab.github.io/sdk/software/api/reference/
 - Sample Add-Ins: https://github.com/Geotab/sdk-addin-samples
-
----
-
-**Remember:** The most common mistake is using `}();` instead of `};` - always double-check this!
