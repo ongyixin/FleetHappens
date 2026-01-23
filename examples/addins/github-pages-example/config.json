@@ -1,0 +1,12 @@
+{
+    "name": "FleetDashboard",
+    "supportEmail": "your.email@example.com",
+    "version": "1.0",
+    "items": [{
+        "url": "https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/",
+        "path": "ActivityLink",
+        "menuName": {
+            "en": "Fleet Dashboard"
+        }
+    }]
+}
