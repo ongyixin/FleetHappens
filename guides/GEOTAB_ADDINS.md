@@ -1,685 +1,374 @@
-# Building Your First Geotab Add-In
+# Building Geotab Add-Ins
 
-**Transform MyGeotab with custom pages and buttons—no backend server required (mostly).**
+**Extend MyGeotab with custom pages using HTML, CSS, and JavaScript.**
 
-This guide shows you how to extend MyGeotab with custom functionality using Add-Ins. Whether you want a custom fleet dashboard, quick-action buttons, or specialized reporting tools, Add-Ins let you build directly into the MyGeotab interface.
-
----
-
-## Table of Contents
-- [What Are Geotab Add-Ins?](#what-are-geotab-add-ins)
-- [Resources You'll Need](#resources-youll-need)
-- [Level 1: Your First Add-In (5 Minutes)](#level-1-your-first-add-in-5-minutes)
-- [Level 2: Embedded Source Code Add-In](#level-2-embedded-source-code-add-in)
-- [Level 3: GitHub-Hosted Add-In (The Pro Setup)](#level-3-github-hosted-add-in-the-pro-setup)
-- [Understanding the Add-In Lifecycle](#understanding-the-add-in-lifecycle)
-- [Next Level: Building Real Add-Ins](#next-level-building-real-add-ins)
-- [Debugging Tips](#debugging-tips)
+This guide shows you how to build Add-Ins that integrate directly into the MyGeotab interface.
 
 ---
 
 ## What Are Geotab Add-Ins?
 
-Geotab Add-Ins let you customize and extend MyGeotab with your own pages and buttons. Think of them as plugins that live directly inside your fleet management system.
-
-### Two Types of Add-Ins
-
-**1. Page Add-Ins**
-Custom web pages that appear in your MyGeotab navigation menu. These are full applications that can:
-- Display custom dashboards combining MyGeotab data with your own APIs
-- Create specialized tools for your specific workflow
+Geotab Add-Ins let you add custom pages to MyGeotab. They appear in the navigation menu and can:
+- Display custom dashboards using MyGeotab data
+- Create specialized tools for your workflow
 - Build business-specific reports and visualizations
 
-**Example use case**: A manager compares fleet metrics with local weather data every morning. Instead of switching between tools, they open a custom Add-In page that combines both datasets in one view.
+### Two Approaches
 
-**2. Button Add-Ins**
-Custom buttons that appear in MyGeotab pages to:
-- Navigate quickly between different areas
-- Automate routine tasks (like report generation)
-- Pre-fill forms with context from the current page
+**1. Embedded Add-Ins** (Simple)
+- Code is embedded directly in the JSON configuration
+- No external hosting required
+- Good for very simple pages with minimal JavaScript
+- Limited - cannot easily access MyGeotab API in complex ways
 
-**Example use case**: A one-click button that generates a weekly safety report for the currently selected driver and emails it to their manager.
-
----
-
-## Resources You'll Need
-
-### Official Documentation
-- **[Geotab Add-In Developer Guide](https://developers.geotab.com/myGeotab/addIns/developingAddIns/)** - Complete reference documentation
-- **[Add-In Generator](https://github.com/Geotab/generator-addin)** - Official utility to scaffold Add-In projects
-
-### Requirements
-- **HTTPS Hosting**: All Add-In files must be publicly accessible via HTTPS
-- **TLS 1.2+**: Your hosting server must support modern encryption
-- **MyGeotab Account**: You'll need admin access to install Add-Ins
-
-**Don't worry about hosting yet!** We'll start with embedded Add-Ins (no hosting needed) and then show you how to use GitHub Pages for free HTTPS hosting.
+**2. External Hosted Add-Ins** (Recommended)
+- Files hosted on GitHub Pages or other HTTPS server
+- Full access to MyGeotab JavaScript API
+- Easy to develop and iterate
+- Can use modern development tools
+- **This is the recommended approach**
 
 ---
 
-## Level 1: Your First Add-In (5 Minutes)
+## Quick Start: Working Example
 
-Let's prove Add-Ins work by creating a simple one that displays YOUR fleet information.
+We have a tested, working Add-In you can try right now.
 
-### Step 1: Copy This Configuration
+### 1. Wait for GitHub Pages
 
-This is a complete, working Add-In that will show your username and database name:
+Our example is hosted at:
+```
+https://fhoffa.github.io/geotab-vibe-guide/simple-test.html
+```
+
+Give it 2-3 minutes after this repository is updated to ensure GitHub Pages has deployed the latest version.
+
+### 2. Install in MyGeotab
+
+1. Go to: **Administration → System → System Settings → Add-Ins**
+2. Click **"New Add-In"** → **"Configuration"** tab
+3. Paste this JSON:
 
 ```json
 {
-    "name": "Hello World Embedded",
-    "supportEmail": "test@example.com",
-    "version": "1.0",
-    "items": [{
-        "path": "ActivityLink",
-        "menuName": {
-            "en": "Hello World"
-        },
-        "page": "helloWorld"
-    }],
-    "files": {
-        "helloWorld.html": "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Hello World</title><style>body{font-family:Arial,sans-serif;padding:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;margin:0;display:flex;align-items:center;justify-content:center;}#container{background:white;padding:60px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.3);text-align:center;max-width:600px;}h1{color:#2c3e50;margin-bottom:20px;font-size:2.5rem;}p{color:#6c757d;font-size:1.2rem;margin-bottom:10px;}#api-info{background:#f8f9fa;padding:20px;border-radius:8px;margin-top:30px;border-left:4px solid #667eea;}#api-info h2{color:#667eea;margin-bottom:15px;font-size:1.3rem;}#user-name,#database{font-weight:bold;color:#2c3e50;}</style></head><body><div id='container'><h1>🎉 Success!</h1><p>Your Geotab Add-In is working!</p><p>You just extended MyGeotab with custom code.</p><div id='api-info'><h2>Connection Info</h2><p>User: <span id='user-name'>Loading...</span></p><p>Database: <span id='database'>Loading...</span></p></div></div><script>function initialize(api,state,callback){console.log('Add-In initialized!');window.geotabApi=api;api.getSession(function(credentials,server){document.getElementById('user-name').textContent=credentials.userName;document.getElementById('database').textContent=credentials.database;});callback();}function focus(api,state){console.log('Add-In focused');}function blur(api,state){console.log('Add-In blurred');}</script></body></html>"
+  "name": "Simple Fleet Test",
+  "supportEmail": "test@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://fhoffa.github.io/geotab-vibe-guide/simple-test.html",
+    "path": "ActivityLink/",
+    "menuName": {
+      "en": "Simple Test"
     }
+  }]
 }
 ```
 
-**Note**: The HTML is minified (all on one line) to work properly in JSON. You can see the readable version in `examples/addins/hello-world-embedded-readable.html`.
+4. Click **"Save"** and refresh MyGeotab
+5. Look for **"Simple Test"** in the left navigation menu
 
-### Step 2: Install It
+### 3. What You'll See
 
-1. Log into your MyGeotab account
-2. Navigate to: **Administration → System → System Settings → Add-Ins**
-3. Click **"New Add-In"**
-4. Switch to the **"Configuration"** tab
-5. Paste the JSON above
-6. Click **"Save"**
-7. **Refresh your browser page**
+The Add-In displays:
+- ✅ Connection status
+- Your username and database
+- Total vehicle count from your fleet
 
-### Step 3: See It Work
-
-Look at the left-hand navigation menu. You should see a new entry called **"Hello World"** right after the Activity section. Click it!
-
-You should see:
-- A success message
-- Your MyGeotab username
-- Your database name
-
-**What just happened?**
-- You created an Add-In with embedded HTML/CSS/JavaScript
-- The JavaScript accessed the MyGeotab API to get your session info
-- MyGeotab rendered your custom page in its interface
-
-**No external hosting needed!** Everything is in that JSON configuration.
-
-**Troubleshooting**: If you see "Issue Loading This Page", check the [Troubleshooting Guide](../../examples/addins/TROUBLESHOOTING.md).
-
-**Next**: Let's understand what's in that code and build something more advanced.
+**Check the browser console** (F12) to see the lifecycle methods being called:
+- `initialize()` - Called once when the page loads
+- `focus()` - Called when you navigate to the Add-In
+- `blur()` - Called when you navigate away
 
 ---
 
-## Level 2: Embedded Source Code Add-In
+## How It Works
 
-Now let's create an Add-In that displays YOUR content—no external hosting required. Everything lives in the JSON configuration.
+### The Files
 
-### Why Embedded Add-Ins?
+An external Add-In needs just two files:
 
-**Pros:**
-- No need to host files on a server
-- All code lives in one JSON file
-- Easy to share and version control
-
-**Cons:**
-- Gets messy with complex HTML/CSS/JavaScript
-- Harder to debug (no separate files to edit)
-- Not ideal for large applications
-
-**Best for**: Simple tools, proof-of-concepts, single-page utilities
-
-### Vibe Code It!
-
-Instead of writing HTML/CSS/JavaScript by hand, let's use Claude to build it. Copy this prompt:
-
-```text
-Create a Geotab Add-In configuration (JSON format) that displays a custom page.
-
-Requirements:
-1. Use embedded source code (no external hosting)
-2. Display a welcome message: "Hello from your fleet!"
-3. Access the MyGeotab API to fetch and display:
-   - Total number of vehicles in the fleet
-   - The current user's name
-4. Style it with clean, modern CSS
-5. Include the complete JSON configuration ready to paste into MyGeotab
-
-The Add-In should be named "Fleet Overview" and appear in the menu after "ActivityLink".
+**simple-test.html**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Test</title>
+    <style>
+        /* Your styles here */
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .card { background: white; border-radius: 8px; padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🚗 Simple Fleet Test</h1>
+        <div id="status">Initializing...</div>
+        <div id="info"></div>
+    </div>
+    <script src="https://yoursite.com/simple-test.js"></script>
+</body>
+</html>
 ```
 
-### What You'll Get
-
-Claude will generate a JSON file that looks like this structure:
-
-```json
-{
-    "name": "Fleet Overview",
-    "supportEmail": "your.email@example.com",
-    "version": "1.0",
-    "items": [{
-        "path": "ActivityLink",
-        "menuName": {
-            "en": "Fleet Overview"
-        },
-        "page": "customPage"
-    }],
-    "files": {
-        "customPage.html": "<html><head>...</head><body>...</body></html>",
-        "css": {
-            "styles.css": "body { font-family: Arial; } ..."
-        },
-        "js": {
-            "app.js": "// JavaScript to access MyGeotab API..."
-        }
-    }
-}
-```
-
-### Install It
-
-1. Copy the complete JSON from Claude
-2. Go to: **Administration → System → System Settings → Add-Ins**
-3. Click **"New Add-In"** → **"Configuration"** tab
-4. Paste the JSON
-5. Save and refresh
-
-**You now have a custom page that reads live data from your fleet!**
-
----
-
-## Level 3: GitHub-Hosted Add-In (The Pro Setup)
-
-Embedded Add-Ins work great for simple pages, but what if you want to:
-- Edit code easily in separate files
-- Use modern development tools
-- Iterate quickly without copy-pasting JSON
-
-**Solution**: Host your Add-In on GitHub Pages (free HTTPS hosting!).
-
-### Why GitHub Pages?
-
-- **Free**: No hosting costs
-- **HTTPS**: Meets Geotab's security requirements
-- **Easy updates**: Change code → commit → see updates
-- **Version control**: Track every change you make
-
-### Step-by-Step Setup
-
-#### 1. Create a New Repository
-
-Tell Claude:
-```text
-Create a new GitHub repository called "my-fleet-addin" with:
-1. An index.html file that:
-   - Displays "Fleet Dashboard" as the title
-   - Uses the MyGeotab API to fetch all vehicles
-   - Shows vehicle names in a simple list
-2. A styles.css file with clean, modern styling
-3. A README.md explaining what this Add-In does
-```
-
-#### 2. Enable GitHub Pages
-
-After Claude creates the repo:
-1. Go to your repository on GitHub.com
-2. Click **Settings** → **Pages** (in the left sidebar)
-3. Under "Source", select **main** branch
-4. Click **Save**
-5. GitHub will show you a URL like: `https://yourusername.github.io/my-fleet-addin/`
-
-**Wait 1-2 minutes** for the site to deploy.
-
-#### 3. Create Your Add-In Configuration
-
-Now create a simple JSON config that points to your GitHub Pages URL:
-
-```json
-{
-    "name": "GitHub Fleet Dashboard",
-    "supportEmail": "your.email@example.com",
-    "version": "1.0",
-    "items": [{
-        "url": "https://yourusername.github.io/my-fleet-addin/",
-        "path": "ActivityLink",
-        "menuName": {
-            "en": "Fleet Dashboard"
-        }
-    }],
-    "files": {}
-}
-```
-
-#### 4. Install in MyGeotab
-
-1. **Administration → System → System Settings → Add-Ins**
-2. **New Add-In** → **Configuration** tab
-3. Paste the JSON
-4. **Save** and refresh
-
-**You're live!** Your GitHub-hosted page is now embedded in MyGeotab.
-
-#### 5. Iterate and Update
-
-Want to add a feature? Tell Claude:
-```text
-Update my-fleet-addin to add a map showing vehicle locations.
-Use Leaflet.js for the map and plot each vehicle as a marker.
-```
-
-Claude will:
-1. Update your HTML file
-2. Commit the changes to GitHub
-3. GitHub Pages auto-deploys the update (takes 1-2 minutes)
-4. Refresh MyGeotab to see the changes
-
-**No JSON changes needed** — your Add-In automatically loads the latest version from GitHub!
-
----
-
-## Understanding the Add-In Lifecycle
-
-When building Add-Ins that interact with MyGeotab data, your JavaScript needs to implement three special functions. Think of them as hooks into MyGeotab's page loading system.
-
-### The Three Lifecycle Methods
-
+**simple-test.js**
 ```javascript
-// 1. initialize - Called ONCE when your Add-In page first loads
-function initialize(api, state, callback) {
-    // Set up your Add-In
-    // 'api' is your authenticated connection to MyGeotab
-    // 'state' contains the current page state
-    // 'callback' must be called when initialization is complete
+"use strict";
 
-    console.log("Add-In is initializing...");
+// CRITICAL: Assign the function itself - do NOT use () at the end!
+geotab.addin["simple-test"] = function() {
+    console.log("Add-In loading...");
 
-    // Example: Store API reference for later use
-    window.geotabApi = api;
-
-    // Signal that initialization is complete
-    callback();
-}
-
-// 2. focus - Called when your page becomes visible
-function focus(api, state) {
-    // User just navigated to your Add-In
-    // Perfect time to refresh data or show welcome messages
-
-    console.log("Add-In is now active!");
-
-    // Example: Fetch fresh vehicle data
-    api.call("Get", {
-        typeName: "Device"
-    }, function(vehicles) {
-        displayVehicles(vehicles);
-    });
-}
-
-// 3. blur - Called when user navigates away from your page
-function blur(api, state) {
-    // User is leaving your Add-In
-    // Use this to save state or clean up
-
-    console.log("User is leaving Add-In");
-
-    // Example: Save any unsaved work
-    // saveUserPreferences();
-}
-```
-
-### How to Use These in Your Add-In
-
-Tell Claude:
-```text
-Update my Add-In HTML file to implement the MyGeotab lifecycle methods:
-1. initialize: Fetch all vehicles and store them in a global variable
-2. focus: Refresh the vehicle list and display a "Welcome back!" message
-3. blur: Save the current view state to localStorage
-
-Make sure to call the callback in initialize!
-```
-
-**Why this matters**: MyGeotab calls these functions automatically. If you don't implement them correctly (especially `initialize`), your Add-In might not work.
-
-### Critical: The Correct Registration Pattern
-
-For **externally-hosted Add-Ins** (GitHub Pages), you must register your Add-In using the `geotab.addin` object pattern:
-
-```javascript
-// ✅ CORRECT - Assign the function itself (no () at the end)
-geotab.addin.myAddin = function() {
     return {
         initialize: function(api, state, callback) {
-            // Your initialization code
+            console.log("Initialize called!");
+
+            var statusEl = document.getElementById("status");
+            statusEl.textContent = "✅ Connected!";
+
+            // Get user info
+            api.getSession(function(session) {
+                var html = '<p>User: ' + session.userName + '</p>';
+                html += '<p>Database: ' + session.database + '</p>';
+
+                // Get vehicle count
+                api.call("Get", {
+                    typeName: "Device"
+                }, function(vehicles) {
+                    html += '<p>Vehicles: ' + vehicles.length + '</p>';
+                    document.getElementById("info").innerHTML = html;
+                });
+            });
+
             callback();
         },
+
         focus: function(api, state) {
-            // Called when page becomes visible
+            console.log("Focus called");
         },
+
         blur: function(api, state) {
-            // Called when user leaves page
+            console.log("Blur called");
         }
     };
-};  // Notice: NO () here!
+};  // ✅ NO () here - this is critical!
+
+console.log("Add-In registered");
 ```
 
+### The Critical Pattern
+
+**DO NOT use immediate function invocation!**
+
 ```javascript
-// ❌ WRONG - Don't use immediate invocation!
+// ❌ WRONG - This will NOT work!
 geotab.addin.myAddin = function() {
     return {...};
-}();  // This () breaks it - MyGeotab won't call initialize()
+}();  // The () breaks it!
+
+// ✅ CORRECT - This works!
+geotab.addin.myAddin = function() {
+    return {...};
+};  // No () - let MyGeotab call your function
 ```
 
 **Why this matters:**
 - MyGeotab needs to **call your function** to get the Add-In object
-- If you use `()` (immediate invocation), you're assigning the object directly
-- MyGeotab won't recognize it as an Add-In and won't call `initialize()`
+- With `()` you're assigning the object directly
+- MyGeotab won't recognize it and won't call `initialize()`
 
-**See the full story**: Check out [DEBUGGING_GEOTAB_ADDINS.md](DEBUGGING_GEOTAB_ADDINS.md) for the complete debugging journey that led to this discovery.
+### The Lifecycle Methods
+
+Your Add-In object must return three methods:
+
+**1. initialize(api, state, callback)**
+- Called once when your Add-In first loads
+- `api` - The MyGeotab API object (use this to fetch data)
+- `state` - Current page state
+- `callback` - **You MUST call this when initialization is complete**
+
+**2. focus(api, state)**
+- Called when user navigates to your Add-In
+- Perfect time to refresh data
+
+**3. blur(api, state)**
+- Called when user navigates away
+- Use this to save state or clean up
 
 ---
 
-## Next Level: Building Real Add-Ins
+## Using the MyGeotab API
 
-Now that you understand the basics, here are some practical Add-In ideas to build:
+The `api` object gives you access to all MyGeotab data:
 
-### 1. Quick Vehicle Finder
-**Difficulty**: Beginner
-**Prompt for Claude**:
-```text
-Create a Geotab Add-In that adds a search bar to quickly find vehicles by name.
-When I type a vehicle name, show matching vehicles with a "Jump to Vehicle" button
-that navigates to that vehicle's details page in MyGeotab.
+```javascript
+// Get current session
+api.getSession(function(credentials) {
+    console.log("User:", credentials.userName);
+    console.log("Database:", credentials.database);
+});
+
+// Get all vehicles
+api.call("Get", {
+    typeName: "Device"
+}, function(devices) {
+    console.log("Found " + devices.length + " vehicles");
+}, function(error) {
+    console.error("Error:", error);
+});
+
+// Get trips from last 7 days
+var oneWeekAgo = new Date();
+oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+api.call("Get", {
+    typeName: "Trip",
+    search: {
+        fromDate: oneWeekAgo.toISOString()
+    }
+}, function(trips) {
+    console.log("Found " + trips.length + " trips");
+});
 ```
 
-### 2. Custom Safety Dashboard
-**Difficulty**: Intermediate
-**Prompt for Claude**:
-```text
-Build a Geotab Add-In that displays:
-1. A chart of speeding events by driver over the last 7 days
-2. A list of drivers ranked by safety score
-3. A "Generate Report" button that exports data to CSV
+**Common typeName values:**
+- `Device` - Vehicles
+- `Trip` - Trip data
+- `LogRecord` - GPS logs
+- `ExceptionEvent` - Rule violations
+- `Driver` - Driver information
+- `Zone` - Geofences
 
-Use Chart.js for visualizations and the MyGeotab API to fetch ExceptionEvent data.
+See the [Geotab API Reference](https://geotab.github.io/sdk/software/api/reference/) for all available types and methods.
+
+---
+
+## Hosting on GitHub Pages
+
+GitHub Pages provides free HTTPS hosting - perfect for Add-Ins!
+
+### Setup Steps
+
+**1. Create a repository** (or use an existing one)
+
+**2. Enable GitHub Pages**
+- Go to repository Settings
+- Click "Pages" in the left sidebar
+- Under "Source", select "main" branch
+- Click "Save"
+
+**3. Add your files**
+- Create `your-addin.html` in the repository root
+- Create `your-addin.js` in the repository root
+- Commit and push
+
+**4. Wait 2-3 minutes** for GitHub Pages to deploy
+
+**5. Your Add-In is live at:**
+```
+https://yourusername.github.io/your-repo/your-addin.html
 ```
 
-### 3. Zone Creator Tool
-**Difficulty**: Intermediate
-**Prompt for Claude**:
-```text
-Create a Geotab Add-In with a map where I can:
-1. Click to draw a circular geofence
-2. Name the zone
-3. Save it to MyGeotab using the API
-4. See all my existing zones as colored overlays
-
-Use Leaflet.js for the map and MyGeotab's Zone API.
+**6. Configure in MyGeotab**
+```json
+{
+  "name": "My Add-In",
+  "supportEmail": "you@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://yourusername.github.io/your-repo/your-addin.html",
+    "path": "ActivityLink/",
+    "menuName": {
+      "en": "My Add-In"
+    }
+  }]
+}
 ```
 
-### 4. Fuel Efficiency Analyzer
-**Difficulty**: Advanced
-**Prompt for Claude**:
-```text
-Build a Geotab Add-In that:
-1. Fetches fuel usage data for the fleet
-2. Calculates MPG for each vehicle
-3. Identifies the top 5 most efficient and least efficient vehicles
-4. Shows a comparison chart
-5. Suggests optimization tips based on the data
+### Making Updates
+
+1. Edit your files in the repository
+2. Commit and push
+3. Wait 2-3 minutes for GitHub Pages to deploy
+4. Refresh MyGeotab - your changes appear automatically!
+
+**Tip:** Add a version query parameter if you need to bypass caching:
 ```
+https://yourusername.github.io/your-repo/your-addin.js?v=2
+```
+
+---
+
+## Example Add-In Ideas
+
+### Fleet Status Dashboard
+Shows real-time stats: active vehicles, total trips today, fuel usage, speeding events
+
+### Quick Vehicle Finder
+Search bar that filters vehicles by name and provides quick navigation to details
+
+### Safety Report Generator
+Displays exception events grouped by driver with one-click CSV export
+
+### Custom Map View
+Leaflet.js map showing vehicle locations color-coded by status or group
 
 ---
 
 ## Debugging Tips
 
-Add-Ins run in your browser, so use browser developer tools to debug.
-
-**Having issues?** See the comprehensive [Troubleshooting Guide](../../examples/addins/TROUBLESHOOTING.md) for common problems and solutions.
-
 ### Open Browser Console
+- **Chrome/Edge**: `F12` or `Ctrl+Shift+J`
+- **Firefox**: `F12` or `Ctrl+Shift+K`
+- **Safari**: Enable Developer menu in Preferences, then `Cmd+Option+C`
 
-- **Chrome/Edge**: Press `F12` or `Ctrl+Shift+J` (Windows) / `Cmd+Option+J` (Mac)
-- **Firefox**: Press `F12` or `Ctrl+Shift+K` (Windows) / `Cmd+Option+K` (Mac)
-- **Safari**: Enable Developer menu in Preferences → Advanced, then press `Cmd+Option+C`
+### Common Issues
 
-### Common Issues & Fixes
+**Add-In doesn't appear in menu**
+- Check you saved the configuration
+- Refresh your browser (hard refresh: `Ctrl+Shift+R`)
+- Check for JSON syntax errors
 
-**1. Add-In doesn't appear in menu**
-- Did you save the configuration?
-- Did you refresh the browser page?
-- Check the browser console for JavaScript errors
+**"Issue Loading This Page" error**
+- Verify the URL is accessible and uses HTTPS
+- Check browser console for errors
+- Ensure files are deployed on GitHub Pages (wait 2-3 minutes)
 
-**2. "api is not defined" error**
-- You're trying to use the MyGeotab API before `initialize` was called
-- Make sure your code is inside `initialize`, `focus`, or `blur` functions
+**initialize() never called**
+- **Most common:** You used `}();` instead of `};` at the end
+- Check browser console - is your JavaScript loading?
+- Verify you're using `geotab.addin["your-name"]` pattern
+- Make sure the name matches your configuration
 
-**3. CORS errors (GitHub Pages)**
-- MyGeotab might block requests to external APIs from your Add-In
-- Solution: Make API calls to MyGeotab only, or use a proxy
+**API calls fail**
+- Check you're calling `callback()` in initialize
+- Verify you have permission to access that data type in MyGeotab
+- Check the error callback for details
 
-**4. Page shows but data doesn't load**
-- Open browser console and check for errors
-- Add `console.log()` statements to see what's happening:
-```javascript
-api.call("Get", { typeName: "Device" }, function(result) {
-    console.log("Vehicles:", result);  // See what you got back
-});
-```
+### Testing Locally
 
-### Ask Claude to Debug
-
-If you're stuck, tell Claude:
-```text
-My Geotab Add-In is showing this error in the console:
-[paste error message]
-
-Here's my current code:
-[paste your HTML/JS]
-
-Can you explain what's wrong and fix it?
-```
+You can't run Add-Ins locally (they need MyGeotab's API context), but you can:
+1. Test your HTML/CSS independently
+2. Mock the API object for JavaScript testing
+3. Use GitHub Pages for fast iteration (2-3 minute deploy)
 
 ---
 
-## Navigation Menu Placement
+## Resources
 
-You can control where your Add-In appears in the left navigation menu.
+### Working Examples in This Repository
+- `simple-test.html` / `simple-test.js` - Minimal working Add-In
+- `minimal-test.html` / `minimal-test.js` - Even simpler example
 
-### Built-in Navigation Points
+### Official Documentation
+- [Geotab Add-In Developer Guide](https://developers.geotab.com/myGeotab/addIns/developingAddIns/)
+- [Geotab API Reference](https://geotab.github.io/sdk/software/api/reference/)
+- [Add-In Samples Repository](https://github.com/Geotab/sdk-addin-samples)
 
-Place your Add-In after any of these:
-- `GettingStartedLink`
-- `ActivityLink`
-- `EngineMaintenanceLink`
-- `ZoneAndMessagesLink`
-- `RuleAndGroupsLink`
-- `AdministrationLink`
-
-### Examples
-
-**Top-level menu item** (appears in main navigation):
-```json
-"path": "ActivityLink"
-```
-
-**Submenu item** (appears inside Activity dropdown):
-```json
-"path": "ActivityLink/"
-```
-Note the trailing slash!
-
-**With custom icon**:
-```json
-{
-    "path": "ActivityLink",
-    "svgIcon": "https://www.geotab.com/geoimages/home/icon-solutions.svg",
-    "menuName": {
-        "en": "Custom Dashboard",
-        "fr": "Tableau de Bord"
-    }
-}
-```
+### Tools
+- [GitHub Pages](https://pages.github.com/) - Free HTTPS hosting
+- [Geotab SDK](https://github.com/Geotab/sdk) - Complete SDK and samples
 
 ---
 
-## Advanced: Using Third-Party Libraries
-
-Your Add-In can use any JavaScript library available via CDN.
-
-### Example: Adding Leaflet Maps
-
-Tell Claude:
-```text
-Update my Geotab Add-In to include a Leaflet.js map.
-Add the Leaflet CSS and JS from CDN, then create a map centered on
-the first vehicle's location.
-```
-
-Claude will add these to your HTML:
-```html
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-```
-
-### Example: Adding Chart.js
-
-```text
-Add Chart.js to my Add-In and create a bar chart showing
-vehicle count by vehicle type.
-```
-
-### CSS Naming Conflicts
-
-MyGeotab has its own CSS that might interfere with your styles. **Best practice**: Prefix all your CSS classes.
-
-**Bad** (might conflict):
-```css
-.menu { background: blue; }
-.button { color: red; }
-```
-
-**Good** (won't conflict):
-```css
-#myaddin-menu { background: blue; }
-#myaddin-button { color: red; }
-```
-
-Tell Claude:
-```text
-Make sure all CSS classes in my Add-In are prefixed with "myaddin-"
-to avoid conflicts with MyGeotab's styles.
-```
-
----
-
-## Example: Complete GitHub-Hosted Add-In
-
-Here's a full example prompt to give Claude:
-
-```text
-Create a complete Geotab Add-In project for GitHub Pages:
-
-Project: "Fleet Health Monitor"
-
-Features:
-1. Displays all vehicles with their last known status
-2. Shows engine health indicators (red/yellow/green)
-3. Lists any active fault codes
-4. Auto-refreshes every 60 seconds
-5. Clicking a vehicle navigates to its details page in MyGeotab
-
-Technical requirements:
-1. Use the MyGeotab API lifecycle (initialize, focus, blur)
-2. Fetch Device data and StatusData
-3. Style with modern CSS (card layout, clean colors)
-4. Make it mobile-responsive
-5. Include error handling for API failures
-
-File structure:
-- index.html
-- styles.css
-- app.js
-- README.md
-
-Set up the GitHub repo and enable GitHub Pages.
-Create the Add-In JSON configuration I can paste into MyGeotab.
-```
-
-Claude will create everything and give you:
-- Complete source code
-- GitHub repository setup
-- JSON configuration for MyGeotab
-- Instructions to deploy and test
-
----
-
-## Security Best Practices
-
-### 1. Never Hardcode Credentials
-
-**Bad**:
-```javascript
-const apiKey = "sk_live_abc123secret";  // DON'T DO THIS
-```
-
-**Good**: Use the authenticated `api` object passed to your Add-In. MyGeotab handles authentication.
-
-### 2. Validate User Input
-
-If your Add-In accepts user input (search boxes, form fields), validate it:
-```javascript
-function searchVehicle(userInput) {
-    // Sanitize input
-    const cleanInput = userInput.trim().substring(0, 100);
-
-    // Use it safely
-    api.call("Get", {
-        typeName: "Device",
-        search: { name: cleanInput }
-    }, callback);
-}
-```
-
-### 3. Use HTTPS Only
-
-All external resources must use HTTPS:
-- ✅ `https://cdn.example.com/library.js`
-- ❌ `http://cdn.example.com/library.js`
-
-### 4. Be Careful with External APIs
-
-If your Add-In calls your own API:
-- Validate all responses
-- Handle errors gracefully
-- Use CORS properly
-- Don't expose sensitive endpoints
-
----
-
-## What's Next?
-
-You now know how to build Geotab Add-Ins! Here's how to level up:
-
-1. **Try the examples** in this guide with Claude
-2. **Explore the [official Add-In generator](https://github.com/Geotab/generator-addin)** for advanced scaffolding
-3. **Build something unique** for your fleet's specific needs
-4. **Share your Add-In** with teammates or the Geotab community
-
-### More Resources
-
-- [Geotab SDK Documentation](https://geotab.github.io/sdk/)
-- [MyGeotab API Reference](https://geotab.github.io/sdk/software/api/reference/)
-- [Geotab Developer Community](https://community.geotab.com/)
-
----
-
-**Remember**: You don't need to understand every line of code. Use vibe coding—tell Claude what you want, and iterate until it works. Focus on solving problems for your fleet, not on memorizing syntax.
-
-**Ready to build?** Pick an idea from the [HACKATHON_IDEAS.md](HACKATHON_IDEAS.md) guide and tell Claude to create it as a Geotab Add-In!
+**Ready to build your first Add-In? Start with the Simple Test example above and modify it to suit your needs!**
