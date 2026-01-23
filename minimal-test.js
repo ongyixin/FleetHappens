@@ -1,12 +1,14 @@
 // Minimal test mimicking Heat Map structure
 "use strict";
 
-geotab.addin.minimaltesti = function() {
-    console.log('minimaltesti Add-In loading...');
+// CRITICAL: Name should match the HTML filename (without extension)
+// File: minimal-test.html -> geotab.addin.minimaltest or geotab.addin['minimal-test']
+geotab.addin.minimaltest = function() {
+    console.log('minimaltest Add-In loading...');
 
     return {
         initialize: function(api, state, callback) {
-            console.log('🎉 minimaltesti initialize() called!');
+            console.log('🎉🎉🎉 minimaltest initialize() called!');
 
             document.body.innerHTML = '<h1>SUCCESS!</h1><pre id="output"></pre>';
             var output = document.getElementById('output');
@@ -28,9 +30,9 @@ geotab.addin.minimaltesti = function() {
         },
 
         focus: function(api, state) {
-            console.log('minimaltesti focus() called');
+            console.log('minimaltest focus() called');
         }
     };
 }();
 
-console.log('minimaltesti registered');
+console.log('minimaltest registered');
