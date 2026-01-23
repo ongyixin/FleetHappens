@@ -5,8 +5,8 @@
     <title>API Test</title>
 </head>
 <body>
-    <h1>GitHub Pages API Test v4.0</h1>
-    <p><strong>Version: 2026-01-23 19:55 UTC (with translations file)</strong></p>
+    <h1>GitHub Pages API Test v5.0</h1>
+    <p><strong>Version: 2026-01-23 20:00 UTC - Testing geotab.addin pattern</strong></p>
     <pre id="output"></pre>
 
     <script>
@@ -17,40 +17,54 @@
             document.getElementById('output').textContent = output;
         }
 
-        log('VERSION: v4.0 - 2026-01-23 19:55 UTC');
+        log('VERSION: v5.0 - 2026-01-23 20:00 UTC');
         log('1. Page loaded');
         log('2. JavaScript running');
 
-        // Define initialize as global function
+        // Try BOTH patterns
+
+        // Pattern 1: Global functions (documented way)
         window.initialize = function(api, state, callback) {
-            log('3. ✅✅✅ initialize() CALLED!');
-            log('4. API: ' + (api ? 'EXISTS' : 'NULL'));
-
+            log('3a. ✅ window.initialize() CALLED!');
             if (api) {
-                log('5. API type: ' + typeof api);
-                log('6. API.call: ' + (typeof api.call));
-                log('7. API.getSession: ' + (typeof api.getSession));
-
+                log('4a. API EXISTS via window.initialize');
                 api.getSession(function(cred) {
-                    log('8. ✅ Got user: ' + cred.userName);
-                    log('9. ✅ Database: ' + cred.database);
-                }, function(err) {
-                    log('8. ❌ Session error: ' + err);
+                    log('5a. User: ' + cred.userName);
                 });
             }
-
             callback();
         };
 
-        window.focus = function(api, state) {
-            log('FOCUS: api=' + (api ? 'YES' : 'NO'));
-        };
+        // Pattern 2: geotab.addin object
+        if (typeof geotab === 'undefined') {
+            window.geotab = {};
+        }
+        if (typeof geotab.addin === 'undefined') {
+            geotab.addin = {};
+        }
 
-        window.blur = function(api, state) {
-            log('BLUR');
-        };
+        geotab.addin.githubpagestest = function() {
+            return {
+                initialize: function(api, state, callback) {
+                    log('3b. ✅ geotab.addin.githubpagestest.initialize() CALLED!');
+                    if (api) {
+                        log('4b. API EXISTS via geotab.addin');
+                        api.getSession(function(cred) {
+                            log('5b. User: ' + cred.userName);
+                        });
+                    }
+                    callback();
+                },
+                focus: function(api, state) {
+                    log('FOCUS via geotab.addin, api=' + (!!api));
+                },
+                blur: function(api, state) {
+                    log('BLUR via geotab.addin');
+                }
+            };
+        }();
 
-        log('Waiting for initialize()...');
+        log('Registered both patterns, waiting...');
     </script>
 </body>
 </html>
