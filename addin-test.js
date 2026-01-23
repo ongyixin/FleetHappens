@@ -1,5 +1,5 @@
-// Geotab Add-In - Testing multiple name patterns
-console.log('addin-test.js v11.0 loading...');
+// Geotab Add-In - Testing with internal ID
+console.log('addin-test.js v12.0 loading...');
 
 // Create the addin object structure
 var addinImpl = function() {
@@ -15,7 +15,7 @@ var addinImpl = function() {
         }
     }
 
-    log('v11.0 - Trying multiple name patterns...');
+    log('v12.0 - Testing internal ID name...');
 
     return {
         initialize: function(api, state, callback) {
@@ -54,11 +54,10 @@ var addinImpl = function() {
     };
 };
 
-// Register under MULTIPLE possible names
+// Try the internal ID that appeared in the error message
+geotab.addin['githubpagestest-addin-test'] = addinImpl();
 geotab.addin.apitest = addinImpl();
 geotab.addin['api-test'] = addinImpl();
-geotab.addin.addintest = addinImpl();
-geotab.addin['addin-test'] = addinImpl();
 
-console.log('v11.0 - Registered as: apitest, api-test, addintest, addin-test');
+console.log('v12.0 - Registered under githubpagestest-addin-test and others');
 console.log('Available addins:', Object.keys(geotab.addin));
