@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Heat Map (Our Repo)</title>
+    <link rel="stylesheet" href="styles/vendor.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="scripts/vendor.js"></script>
+    <script src="scripts/main.js"></script>
+</head>
+<body>
+    <div id="heatmap" style="height: calc(100%)">
+        <div id="disclaimer">
+            <label id="disclaimerLabel">Sample add-in/tool (Hosted on fhoffa repo)</label>
+            <p>This tool is provided as an example and is available on an As-Is basis.</p>
+        </div>
+        <div class="cssGrid sm-part-12">
+            <div class="lg-part-2 md-part-3 sm-part-12">
+                <div id="controls">
+                    <h2>Heatmap (Test)</h2>
+                    <p>Testing if the exact Heat Map code works from our GitHub Pages.</p>
+                    <label for="visualizeBy">Visualize by:</label>
+                    <input type="radio" id="visualizeByLocationHistory" name="visualizeBy" value="locationHistory" checked="checked"> Location History
+                    <input type="radio" id="visualizeByExceptionHistory" name="visualizeBy" value="exceptionHistory"> Exception History
+                    <label for="exceptionTypes">Rule:</label>
+                    <select id="exceptionTypes" class="checkmateFormEditField" ng-mousedown="selectType($event)" disabled="disabled">
+                        <option disabled="disabled">Select a rule</option>
+                    </select>
+                    <label for="vehicles">Vehicle(s):</label>
+                    <select id="vehicles" class="checkmateFormEditField" multiple="true" ng-mousedown="selectType($event)"></select>
+                    <label for="from">From:</label>
+                    <input id="from" type="datetime-local" class="checkmateFormEditField">
+                    <label for="to">To:</label>
+                    <input id="to" type="datetime-local" class="checkmateFormEditField">
+                    <div style="margin:1em"></div>
+                    <input type="submit" value="Show Heat Map" id="showHeatMap">
+                    <div id="error"></div>
+                    <div id="message"></div>
+                    <div id="loading" class="spinner" style="display:none"><div></div><div></div><div></div></div>
+                </div>
+            </div>
+            <div class="lg-part-10 md-part-9 sm-part-12">
+                <div id="heatmap-map" style="width:100%"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

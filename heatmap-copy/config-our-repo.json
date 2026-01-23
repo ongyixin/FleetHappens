@@ -1,0 +1,12 @@
+{
+  "name": "Heat Map Test",
+  "supportEmail": "test@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://fhoffa.github.io/geotab-vibe-guide/heatmap-copy/heatmap-local.html",
+    "path": "ActivityLink/",
+    "menuName": {
+      "en": "Heat Map Test"
+    }
+  }]
+}
