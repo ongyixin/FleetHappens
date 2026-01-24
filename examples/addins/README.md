@@ -37,7 +37,6 @@ Even simpler example with just the basics.
 Embedded add-in with everything in the JSON configuration.
 
 **Files:**
-- `embedded-source.html` - Readable development version
 - `embedded-config.json` - Ready to paste (no hosting needed!)
 - `EMBEDDED_README.md` - Complete documentation
 

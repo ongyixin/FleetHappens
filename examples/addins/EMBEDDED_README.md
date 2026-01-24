@@ -4,16 +4,11 @@ This example shows how to create a Geotab Add-In **without any external hosting*
 
 ## What's Included
 
-**embedded-source.html**
-- Readable, development version
-- All HTML, CSS, and JavaScript in one file
-- Use this to develop and test your add-in
-
 **embedded-config.json**
-- Production version ready to paste into MyGeotab
-- Code is minified and embedded in the `files` property
+- Ready-to-paste embedded add-in configuration
+- All HTML, CSS, and JavaScript inline in the `files` property
 - Quotes are properly escaped for JSON
-- Copy this entire file content
+- Copy this entire file content and paste into MyGeotab
 
 ## How to Use
 
@@ -70,17 +65,7 @@ When you use `<script src='app.js'>`, MyGeotab tries to load it as an external U
 
 ## Developing Your Own
 
-### Method 1: Modify embedded-source.html
-
-1. Edit `embedded-source.html` with your changes
-2. Test it by opening in browser (won't have API access locally)
-3. When ready, convert to JSON:
-   - Separate HTML, CSS, JS
-   - Minify each part (remove whitespace, newlines)
-   - Escape quotes: `"` becomes `\"`
-   - Put in the `files` structure
-
-### Method 2: Use AI
+### Method 1: Use AI (Recommended)
 
 Tell your AI assistant:
 
@@ -93,6 +78,25 @@ Give me the complete JSON to paste into MyGeotab.
 ```
 
 The AI will generate the properly formatted embedded JSON for you.
+
+### Method 2: Develop Externally, Then Convert
+
+For easier debugging during development:
+
+1. **Start with external hosting** (GitHub Pages)
+   - Create separate HTML, CSS, and JS files
+   - Use the external add-in pattern with `<script src="app.js">`
+   - Test and debug in MyGeotab
+
+2. **When ready, convert to embedded:**
+   - Copy your HTML file
+   - Replace `<link rel="stylesheet" href="styles.css">` with `<style>...</style>`
+   - Replace `<script src="app.js"></script>` with `<script>...</script>`
+   - Minify the code (remove unnecessary whitespace)
+   - Escape double quotes: `"` → `\"`
+   - Put the inline HTML string in the `files` object
+
+This approach gives you the best of both worlds - easy development with external hosting, then convert to embedded for easy sharing.
 
 ## When to Use Embedded vs External
 
