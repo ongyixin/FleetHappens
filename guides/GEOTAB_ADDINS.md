@@ -57,6 +57,49 @@ Add-Ins extend MyGeotab with custom functionality. There are two types:
 
 ---
 
+## Two Ways to Deploy
+
+**External Hosted (Using GitHub Pages)**
+- Files hosted on GitHub Pages (free HTTPS hosting)
+- Best for development - easy to update and debug
+- Example above uses this method
+- See the full guide below for how to build this way
+
+**Embedded (No Hosting Required)**
+- Everything embedded directly in the JSON configuration
+- No GitHub, no hosting, no waiting
+- Just copy-paste JSON into MyGeotab and it works
+- Perfect for quick tests, prototypes, and sharing
+- Full MyGeotab API access (same as external)
+
+### Quick Example: Embedded Add-In
+
+Copy-paste this into MyGeotab (no hosting required):
+
+```json
+{
+  "name": "Embedded Fleet Stats",
+  "supportEmail": "test@example.com",
+  "version": "1.0",
+  "items": [],
+  "files": {
+    "fleet.html": "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Fleet</title><style>body{font-family:Arial;padding:20px;background:#f5f5f5;}h1{color:#333;}.info{margin:15px 0;padding:10px;background:#e8f4f8;border-radius:4px;}</style></head><body><h1>Fleet Statistics</h1><div id='status'>Initializing...</div><div id='info'></div><script src='app.js'></script></body></html>",
+    "js": {
+      "app.js": "geotab.addin['embedded-fleet']=function(){return{initialize:function(api,state,callback){var statusEl=document.getElementById('status');var infoEl=document.getElementById('info');statusEl.textContent='Connected!';api.getSession(function(session){var html=\"<div class='info'><strong>User:</strong> \"+session.userName+\"<br><strong>Database:</strong> \"+session.database+\"</div>\";api.call('Get',{typeName:'Device'},function(devices){html+=\"<div class='info'><strong>Vehicles:</strong> \"+devices.length+\"</div>\";infoEl.innerHTML=html;});infoEl.innerHTML=html;});callback();},focus:function(api,state){},blur:function(api,state){}};};",
+      "config.js": "console.log('Embedded add-in loaded');"
+    }
+  }
+}
+```
+
+This works immediately - no GitHub Pages, no waiting. It uses the MyGeotab API just like external add-ins.
+
+**When to use each:**
+- **Embedded**: Quick tests, prototypes, sharing examples, no hosting access
+- **External**: Active development, frequent updates, team projects, larger add-ins
+
+---
+
 ## How to Build One (The Vibe Way)
 
 ### Step 1: Use the Skill
@@ -111,13 +154,24 @@ Make it look nicer with a modern card-based layout
 
 ## Example Prompts to Try
 
-### Simple Dashboard
+### Simple Dashboard (External Hosted)
 ```
 Build a Geotab Add-In that displays my fleet overview:
 - Total vehicles
 - Active vehicles today
 - Total trips this week
 - Use cards with icons and nice styling
+Host it on GitHub Pages.
+```
+
+### Embedded Dashboard (No Hosting)
+```
+Build an embedded Geotab Add-In that shows:
+- Total vehicles
+- Total drivers
+- Current user and database name
+Create it as an embedded add-in with everything in the JSON configuration.
+No external hosting needed.
 ```
 
 ### Vehicle Finder
