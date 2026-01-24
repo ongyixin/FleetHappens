@@ -126,7 +126,7 @@ Create a Geotab Add-In that shows:
 3. Total fleet mileage for today
 4. A "Refresh" button to reload the data
 
-Host it on GitHub Pages and give me the configuration JSON to paste into MyGeotab.
+Use external hosting and give me the files and configuration JSON to paste into MyGeotab.
 ```
 
 ### Step 3: Let AI Build It
@@ -134,7 +134,7 @@ Host it on GitHub Pages and give me the configuration JSON to paste into MyGeota
 The AI will:
 - Create the HTML and JavaScript files
 - Use the correct pattern (no immediate invocation!)
-- Set up GitHub Pages hosting
+- Prepare files for hosting (or create embedded version)
 - Give you the JSON configuration to install
 
 ### Step 4: Test and Iterate
@@ -164,7 +164,7 @@ Build a Geotab Add-In that displays my fleet overview:
 - Active vehicles today
 - Total trips this week
 - Use cards with icons and nice styling
-Host it on GitHub Pages.
+Use external hosting (like GitHub Pages).
 ```
 
 ### Embedded Dashboard (No Hosting)
