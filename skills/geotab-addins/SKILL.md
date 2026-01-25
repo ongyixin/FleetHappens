@@ -540,6 +540,158 @@ api.multiCall([
 });
 ```
 
+### Updating Data (Set API)
+
+The `Set` method allows you to update existing entities. This is how you modify data in MyGeotab:
+
+```javascript
+// Rename a vehicle
+api.call("Set", {
+    typeName: "Device",
+    entity: {
+        id: deviceId,      // Required: the entity's ID
+        name: "New Name"   // Properties to update
+    }
+}, function(result) {
+    console.log("Vehicle renamed successfully");
+}, function(error) {
+    console.error("Error updating:", error.message || error);
+});
+```
+
+**Example: Editable Vehicle List**
+```javascript
+function saveVehicleName(deviceId, newName, button) {
+    if (!apiRef) return;
+
+    // Show saving state
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    apiRef.call("Set", {
+        typeName: "Device",
+        entity: {
+            id: deviceId,
+            name: newName
+        }
+    }, function() {
+        // Success
+        button.disabled = false;
+        button.textContent = "Saved!";
+        setTimeout(function() { button.textContent = "Save"; }, 2000);
+    }, function(err) {
+        // Error
+        button.disabled = false;
+        button.textContent = "Retry";
+        alert("Error updating vehicle name: " + (err.message || err));
+    });
+}
+```
+
+**Set API Notes:**
+- The `id` field is required to identify which entity to update
+- Only include the fields you want to change (plus `id`)
+- User must have appropriate permissions to modify entities
+- Works with Device, User, Zone, Rule, and other modifiable types
+
+### Creating Data (Add API)
+
+Use `Add` to create new entities:
+
+```javascript
+api.call("Add", {
+    typeName: "Zone",
+    entity: {
+        name: "New Geofence",
+        externalReference: "custom-id-123",
+        points: [
+            {x: -79.3832, y: 43.6532},
+            {x: -79.3830, y: 43.6535},
+            // ... more points
+        ]
+    }
+}, function(newId) {
+    console.log("Created zone with ID:", newId);
+}, function(error) {
+    console.error("Error creating zone:", error);
+});
+```
+
+### Deleting Data (Remove API)
+
+Use `Remove` to delete entities:
+
+```javascript
+api.call("Remove", {
+    typeName: "Zone",
+    entity: {
+        id: zoneId
+    }
+}, function() {
+    console.log("Zone deleted");
+}, function(error) {
+    console.error("Error deleting:", error);
+});
+```
+
+## Styling: External CSS Files Required
+
+**CRITICAL: Use External CSS Files for Reliable Styling**
+
+When hosting add-ins externally (Replit, GitHub Pages, etc.), inline `<style>` tags in the HTML may not render properly in MyGeotab's iframe context. For reliable styling:
+
+**Solution: Use a separate CSS file**
+
+**styles.css**
+```css
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.stat-value {
+    font-size: 36px;
+    font-weight: bold;
+    color: #1f2937;
+}
+```
+
+**your-addin.html**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Your Add-In</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="card">
+        <div class="stat-value" id="count">...</div>
+    </div>
+    <script src="your-addin.js"></script>
+</body>
+</html>
+```
+
+**Why external CSS files work better:**
+- External CSS files are loaded as separate resources, avoiding iframe sanitization
+- More maintainable and easier to update
+- Better caching behavior
+- Easier to debug (can inspect the linked stylesheet)
+
+**If you must use inline styles:**
+- Put CSS directly on elements: `<div style="color:red;">`
+- This always works but is harder to maintain
+
 ## GitHub Pages Deployment
 
 ### Setup
@@ -748,9 +900,10 @@ geotab.addin["fleet-stats"] = function() {
             document.getElementById("vehicle-count").textContent = "Error";
         });
 
-        // Get drivers
+        // Get drivers (use User with isDriver filter, not Driver type!)
         apiReference.call("Get", {
-            typeName: "Driver"
+            typeName: "User",
+            search: { isDriver: true }
         }, function(drivers) {
             document.getElementById("driver-count").textContent = drivers.length;
         }, function(error) {
@@ -798,6 +951,197 @@ console.log("Fleet Stats registered");
 }
 ```
 
+## Complete Vehicle Management Example
+
+This example demonstrates CRUD operations with an editable vehicle list:
+
+**vehicle-manager.css**
+```css
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+.container { max-width: 900px; margin: 0 auto; }
+.header { color: white; margin-bottom: 30px; text-align: center; }
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+.stat-value { font-size: 36px; font-weight: bold; color: #1f2937; }
+.vehicle-list { width: 100%; border-collapse: collapse; }
+.vehicle-list th, .vehicle-list td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+.vehicle-name-input {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.save-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.save-btn:hover { background: #5a67d8; }
+.save-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+```
+
+**vehicle-manager.html**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vehicle Manager</title>
+    <link rel="stylesheet" href="vehicle-manager.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Fleet Management</h1>
+            <div>Connected as: <span id="username">...</span></div>
+        </div>
+        <div class="card">
+            <div>Total Vehicles: <span id="vehicle-count" class="stat-value">...</span></div>
+        </div>
+        <div class="card">
+            <h2>Manage Vehicles</h2>
+            <table class="vehicle-list">
+                <thead>
+                    <tr><th>Serial Number</th><th>Name</th><th>Action</th></tr>
+                </thead>
+                <tbody id="vehicle-table-body">
+                    <tr><td colspan="3">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="vehicle-manager.js"></script>
+</body>
+</html>
+```
+
+**vehicle-manager.js**
+```javascript
+"use strict";
+
+geotab.addin["vehicle-manager"] = function() {
+    var apiRef = null;
+
+    function updateStats() {
+        if (!apiRef) return;
+
+        apiRef.getSession(function(session) {
+            document.getElementById("username").textContent = session.userName;
+        });
+
+        apiRef.call("Get", { typeName: "Device" }, function(devices) {
+            document.getElementById("vehicle-count").textContent = devices.length;
+            renderVehicleList(devices);
+        }, function(err) {
+            document.getElementById("vehicle-count").textContent = "Error";
+            console.error("Vehicle error:", err);
+        });
+    }
+
+    function renderVehicleList(devices) {
+        var tbody = document.getElementById("vehicle-table-body");
+        tbody.innerHTML = "";
+
+        devices.forEach(function(device) {
+            var tr = document.createElement("tr");
+
+            // Serial number column
+            var tdSerial = document.createElement("td");
+            tdSerial.textContent = device.serialNumber || "N/A";
+            tr.appendChild(tdSerial);
+
+            // Editable name column
+            var tdName = document.createElement("td");
+            var input = document.createElement("input");
+            input.type = "text";
+            input.className = "vehicle-name-input";
+            input.value = device.name || "";
+            input.id = "input-" + device.id;
+            tdName.appendChild(input);
+            tr.appendChild(tdName);
+
+            // Save button column
+            var tdAction = document.createElement("td");
+            var btn = document.createElement("button");
+            btn.textContent = "Save";
+            btn.className = "save-btn";
+            btn.onclick = function() {
+                var newName = document.getElementById("input-" + device.id).value;
+                saveVehicleName(device.id, newName, btn);
+            };
+            tdAction.appendChild(btn);
+            tr.appendChild(tdAction);
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    function saveVehicleName(deviceId, newName, btn) {
+        if (!apiRef) return;
+
+        btn.disabled = true;
+        btn.textContent = "Saving...";
+
+        apiRef.call("Set", {
+            typeName: "Device",
+            entity: {
+                id: deviceId,
+                name: newName
+            }
+        }, function() {
+            btn.disabled = false;
+            btn.textContent = "Saved!";
+            setTimeout(function() { btn.textContent = "Save"; }, 2000);
+        }, function(err) {
+            btn.disabled = false;
+            btn.textContent = "Retry";
+            alert("Error: " + (err.message || err));
+        });
+    }
+
+    return {
+        initialize: function(api, state, callback) {
+            apiRef = api;
+            updateStats();
+            callback();
+        },
+        focus: function(api, state) {
+            apiRef = api;
+            updateStats();
+        },
+        blur: function(api, state) {}
+    };
+};
+
+console.log("Vehicle Manager registered");
+```
+
+**Key patterns in this example:**
+1. **External CSS file** - Ensures styling works in MyGeotab iframe
+2. **API Set for updates** - Demonstrates writing data back to MyGeotab
+3. **UX feedback** - Button states: Save → Saving... → Saved! → Save
+4. **Dynamic table rendering** - Building UI from API data
+5. **Error handling** - Both in API calls and UI feedback
+
 ## When Helping Users
 
 ### Always Include:
@@ -814,6 +1158,8 @@ console.log("Fleet Stats registered");
 3. Name mismatches between files
 4. GitHub Pages deployment wait time (2-3 minutes)
 5. Browser cache (suggest hard refresh)
+6. **Styling issues** - Use external CSS files, not inline `<style>` tags
+7. Don't use `typeName: "Driver"` - use `User` with `isDriver: true` search
 
 ### Testing Checklist for Users:
 1. Wait 2-3 minutes after pushing to GitHub
