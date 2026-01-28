@@ -473,6 +473,28 @@ Here's my current vanilla JS add-in:
 3. **Easier debugging** - Vanilla JS has no build step, simpler stack traces
 4. **Vibe coding works better** - AI can transform working code more reliably than generating complex React from scratch
 
+### Zenith Trade-offs (Be Aware!)
+
+| Aspect | Vanilla JS | React + Zenith |
+|--------|-----------|----------------|
+| **Setup time** | Instant | npm install + build (minutes) |
+| **Bundle size** | ~5 KB | ~2.3 MB (fonts, components) |
+| **Debugging** | Clear stack traces | Minified, hard to trace |
+| **Dependencies** | None | React, Zenith, Webpack, Babel |
+| **Iteration speed** | Edit → Refresh | Edit → Build → Refresh |
+| **Error messages** | Clear | Cryptic (minified) |
+
+**Zenith Gotchas We Discovered:**
+- `FeedbackProvider` wrapper required for `Alert` components
+- Zenith `Table` component has issues with custom render functions → use HTML table with Zenith styling instead
+- Component names differ: `TextInput` (not TextField), `Waiting` (not Spinner)
+- Large bundle includes all fonts even if unused
+
+**Recommendation:**
+- **Quick prototypes / learning** → Vanilla JS
+- **Production add-ins matching MyGeotab UI** → Zenith (worth the complexity)
+- **Simple add-ins that just work** → Vanilla JS with Zenith color tokens
+
 ## Additional Resources
 
 **Related Skills:**

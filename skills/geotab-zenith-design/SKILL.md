@@ -303,6 +303,64 @@ import '@geotab/zenith/dist/index.css';
 {loading ? <Waiting /> : data.map(item => <Row item={item} />)}
 ```
 
+### Missing FeedbackProvider for Alerts
+```jsx
+// WRONG - Alert won't work properly
+function App() {
+  return <Alert variant="error">Error!</Alert>;
+}
+
+// CORRECT - wrap with FeedbackProvider
+import { FeedbackProvider, Alert } from '@geotab/zenith';
+
+function App() {
+  return (
+    <FeedbackProvider>
+      <Alert variant="error">Error!</Alert>
+    </FeedbackProvider>
+  );
+}
+```
+
+### Table with Custom Render Functions
+The Zenith `Table` component may have issues with complex custom render functions. If you encounter errors, use a standard HTML table with Zenith styling:
+
+```jsx
+// If Zenith Table causes issues, use HTML table with Zenith colors
+<table style={{ width: '100%', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr>
+      <th style={{ padding: '12px', borderBottom: '1px solid #EDEBE9', color: '#605E5C' }}>
+        Name
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {data.map(item => (
+      <tr key={item.id}>
+        <td style={{ padding: '12px', borderBottom: '1px solid #EDEBE9' }}>
+          {item.name}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+```
+
+## Trade-offs vs Vanilla JS
+
+| Aspect | Vanilla JS | React + Zenith |
+|--------|-----------|----------------|
+| Setup | Instant | npm + webpack build |
+| Bundle size | ~5 KB | ~2.3 MB |
+| Debugging | Clear errors | Minified stack traces |
+| Iteration | Edit → Refresh | Edit → Build → Refresh |
+| MyGeotab match | Approximate | Exact |
+
+**Use Zenith when:** Professional look matching MyGeotab is required
+
+**Use Vanilla JS when:** Quick prototypes, learning, simple add-ins
+
 ## Using with MyGeotab Add-Ins
 
 For React Add-Ins using Zenith:
