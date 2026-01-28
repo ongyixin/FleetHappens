@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Button,
   TextInput,
-  Table,
   Alert,
   Waiting
 } from '@geotab/zenith';
@@ -20,57 +19,55 @@ function VehicleManager({ api }) {
 
   // Load data on mount
   useEffect(() => {
-    loadData();
-  }, []);
+    if (api) {
+      loadData();
+    }
+  }, [api]);
 
-  async function loadData() {
+  function loadData() {
+    if (!api) return;
+
     setLoading(true);
     setError(null);
 
-    try {
-      // Get session info
-      api.getSession(function(session) {
-        setUsername(session.userName);
-      });
+    // Get session info
+    api.getSession(function(session) {
+      setUsername(session.userName);
+    });
 
-      // Get vehicles
-      const devices = await new Promise((resolve, reject) => {
-        api.call('Get', { typeName: 'Device' }, resolve, reject);
-      });
-      setVehicles(devices);
-    } catch (err) {
-      setError('Failed to load vehicles. Please try again.');
-      console.error('Error:', err);
-    } finally {
+    // Get vehicles
+    api.call('Get', { typeName: 'Device' }, function(devices) {
+      setVehicles(devices || []);
       setLoading(false);
-    }
+    }, function(err) {
+      setError('Failed to load vehicles: ' + (err.message || err));
+      setLoading(false);
+    });
   }
 
-  async function saveVehicleName(deviceId) {
+  function saveVehicleName(deviceId) {
+    if (!api) return;
+
     setSaving(true);
     setError(null);
     setSuccess(null);
 
-    try {
-      await new Promise((resolve, reject) => {
-        api.call('Set', {
-          typeName: 'Device',
-          entity: { id: deviceId, name: editName }
-        }, resolve, reject);
-      });
-
+    api.call('Set', {
+      typeName: 'Device',
+      entity: { id: deviceId, name: editName }
+    }, function() {
       // Update local state
-      setVehicles(vehicles.map(v =>
-        v.id === deviceId ? { ...v, name: editName } : v
-      ));
+      setVehicles(vehicles.map(function(v) {
+        return v.id === deviceId ? Object.assign({}, v, { name: editName }) : v;
+      }));
       setEditingId(null);
-      setSuccess('Vehicle name updated successfully!');
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (err) {
-      setError('Failed to update vehicle name: ' + (err.message || err));
-    } finally {
       setSaving(false);
-    }
+      setSuccess('Vehicle name updated successfully!');
+      setTimeout(function() { setSuccess(null); }, 3000);
+    }, function(err) {
+      setError('Failed to update vehicle name: ' + (err.message || err));
+      setSaving(false);
+    });
   }
 
   function startEdit(vehicle) {
@@ -83,92 +80,60 @@ function VehicleManager({ api }) {
     setEditName('');
   }
 
-  // Table columns
-  const columns = [
-    {
-      key: 'serialNumber',
-      header: 'Serial Number'
-    },
-    {
-      key: 'name',
-      header: 'Name',
-      sortable: true,
-      render: (_, row) => {
-        if (editingId === row.id) {
-          return (
-            <TextInput
-              value={editName}
-              onChange={(e) => setEditName(e.target.value)}
-              placeholder="Enter vehicle name"
-              disabled={saving}
-            />
-          );
-        }
-        return row.name || 'N/A';
-      }
-    },
-    {
-      key: 'actions',
-      header: 'Action',
-      render: (_, row) => {
-        if (editingId === row.id) {
-          return (
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <Button
-                variant="primary"
-                onClick={() => saveVehicleName(row.id)}
-                disabled={saving}
-              >
-                {saving ? 'Saving...' : 'Save'}
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={cancelEdit}
-                disabled={saving}
-              >
-                Cancel
-              </Button>
-            </div>
-          );
-        }
-        return (
-          <Button
-            variant="secondary"
-            onClick={() => startEdit(row)}
-          >
-            Edit
-          </Button>
-        );
-      }
-    }
-  ];
+  // Styles
+  var cardStyle = {
+    background: 'white',
+    borderRadius: '8px',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+    border: '1px solid #EDEBE9',
+    marginBottom: '24px'
+  };
+
+  var tableStyle = {
+    width: '100%',
+    borderCollapse: 'collapse'
+  };
+
+  var thStyle = {
+    textAlign: 'left',
+    padding: '12px 16px',
+    borderBottom: '1px solid #EDEBE9',
+    color: '#605E5C',
+    fontWeight: 600,
+    fontSize: '13px'
+  };
+
+  var tdStyle = {
+    padding: '12px 16px',
+    borderBottom: '1px solid #EDEBE9'
+  };
 
   return (
     <div style={{
-      padding: 'var(--zenith-spacing-lg, 24px)',
-      fontFamily: 'var(--zenith-font-family, "Segoe UI", sans-serif)',
+      padding: '24px',
+      fontFamily: '"Segoe UI", sans-serif',
       minHeight: '100vh',
-      background: 'var(--zenith-neutral-50, #FAF9F8)'
+      background: '#FAF9F8'
     }}>
       {/* Header */}
       <header style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 'var(--zenith-spacing-lg, 24px)'
+        marginBottom: '24px'
       }}>
         <div>
           <h1 style={{
-            fontSize: 'var(--zenith-font-size-xxl, 28px)',
-            fontWeight: 'var(--zenith-font-weight-bold, 700)',
+            fontSize: '28px',
+            fontWeight: 700,
             margin: 0,
-            color: 'var(--zenith-neutral-900, #201F1E)'
+            color: '#201F1E'
           }}>
             Vehicle Manager
           </h1>
           <p style={{
             margin: '4px 0 0 0',
-            color: 'var(--zenith-neutral-500, #605E5C)'
+            color: '#605E5C'
           }}>
             Connected as: {username}
           </p>
@@ -188,7 +153,7 @@ function VehicleManager({ api }) {
         <Alert
           variant="error"
           dismissible
-          onDismiss={() => setError(null)}
+          onDismiss={function() { setError(null); }}
           style={{ marginBottom: '16px' }}
         >
           {error}
@@ -199,7 +164,7 @@ function VehicleManager({ api }) {
         <Alert
           variant="success"
           dismissible
-          onDismiss={() => setSuccess(null)}
+          onDismiss={function() { setSuccess(null); }}
           style={{ marginBottom: '16px' }}
         >
           {success}
@@ -207,45 +172,34 @@ function VehicleManager({ api }) {
       )}
 
       {/* Stats Card */}
-      <div style={{
-        background: 'white',
-        padding: 'var(--zenith-spacing-md, 16px)',
-        borderRadius: '8px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        border: '1px solid var(--zenith-neutral-100, #EDEBE9)',
-        marginBottom: 'var(--zenith-spacing-lg, 24px)'
-      }}>
-        <div style={{
-          fontSize: 'var(--zenith-font-size-sm, 12px)',
-          color: 'var(--zenith-neutral-500, #605E5C)',
-          marginBottom: '4px'
-        }}>
-          Total Vehicles
-        </div>
-        <div style={{
-          fontSize: 'var(--zenith-font-size-xxl, 28px)',
-          fontWeight: 'var(--zenith-font-weight-bold, 700)',
-          color: 'var(--zenith-primary, #0078D4)'
-        }}>
-          {loading ? '...' : vehicles.length}
+      <div style={cardStyle}>
+        <div style={{ padding: '16px' }}>
+          <div style={{
+            fontSize: '12px',
+            color: '#605E5C',
+            marginBottom: '4px'
+          }}>
+            Total Vehicles
+          </div>
+          <div style={{
+            fontSize: '28px',
+            fontWeight: 700,
+            color: '#0078D4'
+          }}>
+            {loading ? '...' : vehicles.length}
+          </div>
         </div>
       </div>
 
       {/* Vehicle Table */}
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        border: '1px solid var(--zenith-neutral-100, #EDEBE9)',
-        overflow: 'hidden'
-      }}>
+      <div style={cardStyle}>
         <div style={{
-          padding: 'var(--zenith-spacing-md, 16px)',
-          borderBottom: '1px solid var(--zenith-neutral-100, #EDEBE9)'
+          padding: '16px',
+          borderBottom: '1px solid #EDEBE9'
         }}>
           <h2 style={{
-            fontSize: 'var(--zenith-font-size-lg, 16px)',
-            fontWeight: 'var(--zenith-font-weight-semibold, 600)',
+            fontSize: '16px',
+            fontWeight: 600,
             margin: 0
           }}>
             Manage Vehicles
@@ -262,16 +216,69 @@ function VehicleManager({ api }) {
             <Waiting size="large" />
             <p style={{
               marginTop: '16px',
-              color: 'var(--zenith-neutral-500, #605E5C)'
+              color: '#605E5C'
             }}>
               Loading vehicles...
             </p>
           </div>
         ) : (
-          <Table
-            columns={columns}
-            data={vehicles}
-          />
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={thStyle}>Serial Number</th>
+                <th style={thStyle}>Name</th>
+                <th style={thStyle}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vehicles.map(function(vehicle) {
+                return (
+                  <tr key={vehicle.id}>
+                    <td style={tdStyle}>{vehicle.serialNumber || 'N/A'}</td>
+                    <td style={tdStyle}>
+                      {editingId === vehicle.id ? (
+                        <TextInput
+                          value={editName}
+                          onChange={function(e) { setEditName(e.target.value); }}
+                          placeholder="Enter vehicle name"
+                          disabled={saving}
+                        />
+                      ) : (
+                        vehicle.name || 'N/A'
+                      )}
+                    </td>
+                    <td style={tdStyle}>
+                      {editingId === vehicle.id ? (
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <Button
+                            variant="primary"
+                            onClick={function() { saveVehicleName(vehicle.id); }}
+                            disabled={saving}
+                          >
+                            {saving ? 'Saving...' : 'Save'}
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            onClick={cancelEdit}
+                            disabled={saving}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="secondary"
+                          onClick={function() { startEdit(vehicle); }}
+                        >
+                          Edit
+                        </Button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
       </div>
     </div>
