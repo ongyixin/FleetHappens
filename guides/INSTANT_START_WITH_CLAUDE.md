@@ -4,7 +4,21 @@
 
 ## What You Need
 
-Just your Geotab credentials. That's it.
+1. **Your Geotab credentials** (demo/test account only!)
+2. **Claude with network egress access enabled** for `my.geotab.com`
+
+### Enable Network Access to Geotab
+
+Before Claude can connect to the Geotab API, you need to allow network egress to `my.geotab.com`:
+
+1. Go to **Settings** > **Capabilities** in Claude
+2. Find **Network egress** settings
+3. Select **"Package managers and specific domains"**
+4. Add `my.geotab.com` to your allowed domains list
+
+> **Note:** If you have "All domains" enabled, this step is not needed. If network egress is disabled or set to "Package managers only", Claude won't be able to connect to Geotab.
+>
+> For more details, see [Claude's file and network capabilities](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude).
 
 ## ⚠️ CRITICAL SECURITY WARNING
 
@@ -277,9 +291,9 @@ After your instant start:
 ## Troubleshooting
 
 **Claude says "I can't connect to external URLs":**
-- Enable network access in Claude's settings
-- Allow connection to my.geotab.com
-- Try again
+- Follow the [Enable Network Access to Geotab](#enable-network-access-to-geotab) steps above
+- Make sure `my.geotab.com` is in your allowed domains list
+- For Teams/Enterprise: Check with your admin if network egress is restricted at the organization level
 
 **Authentication fails:**
 - Verify credentials at https://my.geotab.com/
