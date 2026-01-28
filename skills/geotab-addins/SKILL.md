@@ -389,6 +389,62 @@ geotab.addin["vehicle-manager"] = function() {
 "url": "https://username.github.io/repo/addin.html?v=2"
 ```
 
+## Learning Path: Vanilla to Zenith
+
+### Step 1: Start with Vanilla JS
+
+The Vehicle Manager example above uses vanilla JavaScript with external CSS. This approach:
+- Works immediately (no build step)
+- Easy to understand and modify
+- Good for learning the Geotab API patterns
+- Runs directly in MyGeotab
+
+**Test it:** Use the vanilla example at `examples/addins/vehicle-manager/`
+
+### Step 2: Vibe Code the Transformation to Zenith
+
+Once comfortable with the vanilla version, use AI to transform it to React + Zenith for a professional MyGeotab look.
+
+**Prompt to give your AI assistant:**
+
+```
+Transform this Geotab Add-In to use React and the @geotab/zenith design system:
+
+1. Convert the vanilla JS to a React functional component
+2. Replace custom CSS with Zenith components:
+   - Buttons → <Button variant="primary/secondary">
+   - Text inputs → <TextInput label="..." />
+   - Tables → <Table columns={} data={} />
+   - Loading states → <Waiting size="large" />
+   - Error/success messages → <Alert variant="error/success">
+3. Use Zenith design tokens for any custom styling (--zenith-spacing-md, etc.)
+4. Set up webpack build configuration
+5. Keep the same Geotab API logic (Get, Set calls)
+
+Here's my current vanilla JS add-in:
+[paste your code]
+```
+
+**What changes:**
+
+| Vanilla JS | React + Zenith |
+|-----------|----------------|
+| `document.getElementById()` | React state + JSX |
+| Custom `.save-btn` CSS | `<Button variant="primary">` |
+| Custom input styling | `<TextInput label="Name">` |
+| Manual DOM table building | `<Table columns={} data={}>` |
+| `alert()` for errors | `<Alert variant="error">` |
+| No build step | npm + webpack required |
+
+**Zenith version example:** `examples/addins/vehicle-manager-zenith/`
+
+### Why This Progression?
+
+1. **Learn the API first** - Vanilla JS lets you focus on Geotab API patterns without React complexity
+2. **Understand what Zenith replaces** - You'll appreciate Zenith more after building custom CSS
+3. **Easier debugging** - Vanilla JS has no build step, simpler stack traces
+4. **Vibe coding works better** - AI can transform working code more reliably than generating complex React from scratch
+
 ## Additional Resources
 
 **Related Skills:**
