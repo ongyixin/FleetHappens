@@ -14,7 +14,13 @@ Debugging a broken Zenith app is much harder than debugging vanilla JS. Get your
 
 ## The Transformation Prompt
 
-Point your AI to your existing code:
+First, tell your AI to use the Zenith skill:
+
+```
+Use the geotab-zenith-design skill
+```
+
+Then point it to your existing code:
 
 ```
 Look at my working Geotab Add-In in [folder path or GitHub URL].
@@ -125,3 +131,10 @@ Ask yourself: **"Is the MyGeotab look worth an hour of build setup and slower it
 - If no → Keep vanilla, ship faster
 
 **A working vanilla Add-In beats a broken Zenith one.**
+
+---
+
+## Resources
+
+- [Zenith Skill](/skills/geotab-zenith-design/SKILL.md) - AI skill with component patterns and gotchas
+- [Add-Ins Guide](GEOTAB_ADDINS.md) - Start here for vanilla Add-Ins
