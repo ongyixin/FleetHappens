@@ -52,9 +52,9 @@ import { Button } from '@geotab/zenith';
 ### Basic Usage
 
 ```jsx
-import { TextField } from '@geotab/zenith';
+import { TextInput } from '@geotab/zenith';
 
-<TextField
+<TextInput
   label="Vehicle Name"
   value={name}
   onChange={(e) => setName(e.target.value)}
@@ -64,7 +64,7 @@ import { TextField } from '@geotab/zenith';
 ### Props
 
 ```jsx
-<TextField
+<TextInput
   label="Email Address"        // Required label
   value={email}                // Controlled value
   onChange={handleChange}      // Change handler
@@ -82,7 +82,7 @@ import { TextField } from '@geotab/zenith';
 ### Multiline (Textarea)
 
 ```jsx
-<TextField
+<TextInput
   label="Description"
   value={description}
   onChange={(e) => setDescription(e.target.value)}
@@ -376,18 +376,18 @@ import { Alert } from '@geotab/zenith';
 
 ## Loading States
 
-### Spinner
+### Waiting
 
 ```jsx
-import { Spinner } from '@geotab/zenith';
+import { Waiting } from '@geotab/zenith';
 
-<Spinner size="small" />   // 16px
-<Spinner size="medium" />  // 24px (default)
-<Spinner size="large" />   // 48px
+<Waiting size="small" />   // 16px
+<Waiting size="medium" />  // 24px (default)
+<Waiting size="large" />   // 48px
 
 // Centered loading state
 <div style={{ display: 'flex', justifyContent: 'center', padding: '48px' }}>
-  <Spinner size="large" />
+  <Waiting size="large" />
 </div>
 ```
 
@@ -479,7 +479,7 @@ function VehicleForm({ vehicle, onSave, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <TextField
+      <TextInput
         label="Vehicle Name"
         value={name}
         onChange={(e) => setName(e.target.value)}

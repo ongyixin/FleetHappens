@@ -446,4 +446,18 @@ The AI will create files that use the injected `api` object to fetch your data.
 
 ---
 
+## Styling Your Add-In
+
+**Start with vanilla CSS.** Get your Add-In working first.
+
+Once it works, you can optionally upgrade to **Zenith** (Geotab's official design system) to match MyGeotab's look exactly. But there's a trade-off: Zenith requires React, webpack, and a build step.
+
+**→ [Transforming Vanilla to Zenith](VANILLA_TO_ZENITH.md)** - when you're ready for the polished look
+
+**Compare both approaches:**
+- [Vanilla version](https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager/vehicle-manager.html)
+- [Zenith version](https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager-zenith/dist/vehicle-manager.html)
+
+---
+
 **That's it. Describe what you want, let AI build it, paste the config, and you have a custom MyGeotab page.**

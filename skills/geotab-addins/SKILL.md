@@ -9,36 +9,34 @@ metadata:
 
 # Building Geotab Add-Ins
 
-## Purpose
-
-This skill teaches AI assistants how to build Geotab Add-Ins that extend the MyGeotab fleet management platform with custom pages and functionality.
-
 ## What Are Geotab Add-Ins?
-
-Geotab Add-Ins are custom pages that integrate directly into the MyGeotab interface. They can:
-- Display custom dashboards using MyGeotab API data
-- Create specialized tools and reports
-- Integrate external data sources with fleet information
+Custom pages that integrate directly into MyGeotab. They can display dashboards, create tools/reports, and modify fleet data.
 
 ## Two Deployment Types
 
-| Type | Best For | Hosting |
-|------|----------|---------|
-| **External Hosted** | Active development, frequent updates | GitHub Pages, Replit, Netlify, Vercel |
-| **Embedded** | Simple add-ins, easy sharing, no hosting | JSON configuration only |
+| External Hosted (Recommended) | Embedded (No Hosting) |
+|------------------------------|----------------------|
+| Files on HTTPS server | Code in JSON configuration |
+| Separate HTML, CSS, JS files | Everything inline in one string |
+| Easy to develop and debug | Good for simple prototypes |
+| **Use external CSS files for styling** | Must use inline `style=""` attributes |
 
-**CRITICAL: External hosting requires CORS support** with `Access-Control-Allow-Origin: *` header.
+**Recommended Hosting: GitHub Pages** - Free, simple static hosting with proper CORS support. Just push files and enable Pages in repo settings.
+
+Other options: Netlify, Vercel, Firebase Hosting (all have CORS support).
+
+<!-- TODO: Explore Replit server-side capabilities for dynamic add-ins (API proxies, data processing) -->
+
+**CORS Required:** Hosting must include `Access-Control-Allow-Origin: *` header.
 
 ## Front-End Styling Options
 
-| Approach | Best For | Framework |
-|----------|----------|-----------|
-| **Vanilla JS + CSS** | Simple add-ins, embedded deployment | None (ES5) |
-| **React + Zenith** | Professional UI matching MyGeotab | React |
+| Approach | Best For | Notes |
+|----------|----------|-------|
+| **Vanilla JS + External CSS** | Most add-ins, embedded | ES5 only, external CSS for reliable styling |
+| **React + Zenith** | Professional UI matching MyGeotab | See `geotab-zenith-design` skill |
 
-**For React-based add-ins:** Use the `geotab-zenith-design` skill for Geotab's official design system. Zenith provides pre-built React components (buttons, tables, modals) with WCAG 2.2 accessibility and consistent MyGeotab styling.
-
-**Note:** Embedded add-ins should use vanilla JS. React/Zenith requires external hosting.
+**Note:** Embedded add-ins must use vanilla JS with inline styles. React/Zenith requires external hosting.
 
 ## Add-In Structure
 
@@ -46,186 +44,162 @@ Every Add-In must register with MyGeotab and implement three lifecycle methods:
 
 ```javascript
 geotab.addin["your-addin-name"] = function() {
+    var apiRef = null;
+
     return {
         initialize: function(api, state, callback) {
-            // Called once when Add-In loads
-            // MUST call callback() when done!
-            callback();
+            apiRef = api;
+            // Setup code here
+            callback();  // MUST call this!
         },
         focus: function(api, state) {
-            // Called when user navigates to Add-In
+            apiRef = api;
             // Refresh data here
         },
         blur: function(api, state) {
-            // Called when user navigates away
             // Cleanup here
         }
     };
 };  // Note: No () - assign function, don't invoke it
 ```
 
-**Critical:** Always call `callback()` in initialize or the Add-In will hang.
+## Recommended: External CSS Pattern
 
-## Recommended: Single-File Pattern
+For reliable styling in MyGeotab's iframe, use separate CSS files (inline `<style>` tags may not render):
 
-For AI-assisted development, use a single HTML file with inline CSS and JavaScript:
-
+**your-addin.html**
 ```html
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>Your Add-In</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
-        .card { background: white; padding: 20px; border-radius: 8px; margin: 10px 0; }
-        .stat { font-size: 2em; font-weight: bold; color: #2c3e50; }
-    </style>
+    <link rel="stylesheet" href="your-addin.css">
 </head>
 <body>
-    <h1>Your Add-In</h1>
-    <div class="card">
-        <div class="stat" id="count">...</div>
-    </div>
-
-    <script>
-    geotab.addin["your-addin"] = function() {
-        var apiRef = null;
-
-        function refresh() {
-            if (!apiRef) return;
-            apiRef.call("Get", {typeName: "Device"}, function(devices) {
-                document.getElementById("count").textContent = devices.length;
-            }, function(error) {
-                document.getElementById("count").textContent = "Error";
-            });
-        }
-
-        return {
-            initialize: function(api, state, callback) {
-                apiRef = api;
-                refresh();
-                callback();
-            },
-            focus: function(api, state) {
-                apiRef = api;
-                refresh();
-            },
-            blur: function(api, state) {}
-        };
-    };
-    </script>
+    <div id="app">...</div>
+    <script src="your-addin.js"></script>
 </body>
 </html>
 ```
 
-## Using the MyGeotab API
-
-### Get Session Info
-```javascript
-api.getSession(function(credentials, server) {
-    console.log("User:", credentials.userName);
-    console.log("Database:", credentials.database);
-});
+**your-addin.css**
+```css
+body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+.card { background: white; padding: 20px; border-radius: 8px; }
 ```
 
-### Fetch Data
+**MyGeotab Configuration:**
+```json
+{
+  "name": "Your Add-In",
+  "supportEmail": "you@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://yourusername.github.io/repo/your-addin.html",
+    "path": "ActivityLink/",
+    "menuName": { "en": "Your Add-In" }
+  }]
+}
+```
+
+## API Operations
+
+### Read Data (Get)
 ```javascript
-// Get all vehicles
-api.call("Get", {typeName: "Device"}, function(devices) {
+api.call("Get", { typeName: "Device" }, function(devices) {
     console.log("Found " + devices.length + " vehicles");
 }, function(error) {
     console.error("Error:", error);
 });
 
-// With search filter
+// With search criteria
 api.call("Get", {
     typeName: "Device",
     search: { name: "Vehicle 123" }
-}, function(devices) {
-    // Handle results
-});
+}, successCallback, errorCallback);
 
-// With date range
+// Get drivers (NOT typeName: "Driver" - it causes errors!)
 api.call("Get", {
-    typeName: "Trip",
-    search: {
-        fromDate: new Date(Date.now() - 86400000).toISOString(),
-        toDate: new Date().toISOString()
-    }
-}, function(trips) {
-    // Handle results
+    typeName: "User",
+    search: { isDriver: true }
+}, function(drivers) { ... });
+
+// DON'T use resultsLimit when counting!
+// api.call("Get", { typeName: "Device", resultsLimit: 100 })
+// ^ Wrong - only returns up to 100, not total count
+```
+
+### Update Data (Set)
+```javascript
+api.call("Set", {
+    typeName: "Device",
+    entity: { id: deviceId, name: "New Name" }
+}, function() {
+    console.log("Updated!");
+}, function(error) {
+    console.error("Error:", error);
 });
 ```
 
-### MultiCall for Performance
+### Create Data (Add)
+```javascript
+api.call("Add", {
+    typeName: "Zone",
+    entity: { name: "New Geofence", points: [...] }
+}, function(newId) {
+    console.log("Created with ID:", newId);
+});
+```
+
+### Delete Data (Remove)
+```javascript
+api.call("Remove", {
+    typeName: "Zone",
+    entity: { id: zoneId }
+}, function() {
+    console.log("Deleted");
+});
+```
+
+### Multiple Calls (MultiCall)
 ```javascript
 api.multiCall([
-    ["Get", {typeName: "Device"}],
-    ["Get", {typeName: "Zone"}]
+    ["Get", { typeName: "Device" }],
+    ["Get", { typeName: "User", search: { isDriver: true } }]
 ], function(results) {
     var devices = results[0];
-    var zones = results[1];
+    var drivers = results[1];
+});
+```
+
+### Session Info
+```javascript
+api.getSession(function(session) {
+    console.log("User:", session.userName);
+    console.log("Database:", session.database);
 });
 ```
 
 ### Common Type Names
+`Device` (vehicles), `User`, `Trip`, `Zone` (geofences), `LogRecord` (GPS), `ExceptionEvent` (rule violations), `Group`, `Rule`, `FuelTransaction`, `StatusData`
 
-| Type | Description |
-|------|-------------|
-| `Device` | Vehicles/assets |
-| `Trip` | Trip records |
-| `LogRecord` | GPS position logs |
-| `ExceptionEvent` | Rule violations |
-| `User` | MyGeotab users |
-| `Group` | Vehicle groups |
-| `Zone` | Geofences |
-| `StatusData` | Engine diagnostics |
+## Critical Mistakes to Avoid
 
-### Important API Notes
+| Mistake | Problem | Solution |
+|---------|---------|----------|
+| Missing `callback()` | Add-In hangs | Always call `callback()` in initialize |
+| Using `}();` | Wrong pattern | Use `};` - assign function, don't invoke |
+| Modern JS (ES6+) | Browser errors | Use ES5 syntax only |
+| `typeName: "Driver"` | API errors | Use `User` with `isDriver: true` |
+| Inline `<style>` tags | Styles don't render | Use external CSS file |
+| Variable named `state` | Shadows parameter | Use `appState` or similar |
 
-**Getting Drivers:** Don't use `typeName: "Driver"` - it causes errors. Use:
-```javascript
-api.call("Get", {
-    typeName: "User",
-    search: { isDriver: true }
-}, function(drivers) {
-    console.log("Drivers: " + drivers.length);
-});
-```
+See [references/TROUBLESHOOTING.md](references/TROUBLESHOOTING.md) for complete debugging guide.
 
-**Counting Entities:** Don't use `resultsLimit` when counting - it limits results:
-```javascript
-// ❌ Wrong - only returns up to 100
-api.call("Get", {typeName: "Device", resultsLimit: 100}, ...);
+## Embedded Add-Ins (No Hosting)
 
-// ✅ Correct - returns all for accurate count
-api.call("Get", {typeName: "Device"}, function(devices) {
-    console.log("Total: " + devices.length);
-});
-```
-
-## MyGeotab Configuration
-
-### External Hosting
-```json
-{
-  "name": "Your Add-In Name",
-  "supportEmail": "you@example.com",
-  "version": "1.0.0",
-  "items": [{
-    "url": "https://yourusername.github.io/repo/addin.html",
-    "path": "ActivityLink/",
-    "menuName": {
-      "en": "Your Add-In"
-    }
-  }]
-}
-```
-
-### Embedded (No Hosting)
-
-For embedded add-ins, use the `files` property. **All CSS must be inline styles** - `<style>` tags in head may be stripped.
+For quick prototypes without hosting:
 
 ```json
 {
@@ -235,73 +209,291 @@ For embedded add-ins, use the `files` property. **All CSS must be inline styles*
   "items": [{
     "url": "page.html",
     "path": "ActivityLink",
-    "menuName": {"en": "My Add-In"}
+    "menuName": { "en": "My Add-In" }
   }],
   "files": {
-    "page.html": "<!DOCTYPE html><html>...</html>"
+    "page.html": "<!DOCTYPE html><html><body style='padding:20px;font-family:Arial;'><div id='app'>Loading...</div><script>geotab.addin['myapp']=function(){return{initialize:function(api,state,callback){api.call('Get',{typeName:'Device'},function(d){document.getElementById('app').textContent='Vehicles: '+d.length;});callback();},focus:function(){},blur:function(){}};};console.log('registered');</script></body></html>"
   }
 }
 ```
 
+**Embedded Rules:**
+- Use `style=""` on elements (not `<style>` tags)
+- Single quotes for HTML attributes
+- Escape double quotes: `\"`
+- No external file references
+- Path without trailing slash: `"ActivityLink"` (not `"ActivityLink/"`)
+
 See [references/EMBEDDED.md](references/EMBEDDED.md) for complete embedded add-in guide.
+
+## Complete Example: Vehicle Manager
+
+A working add-in with CRUD operations that lists vehicles and allows renaming them.
+
+**Live example:** `https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager/`
+
+**vehicle-manager.css**
+```css
+body {
+    margin: 0; padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+.container { max-width: 900px; margin: 0 auto; }
+.header { color: white; text-align: center; margin-bottom: 30px; }
+.card {
+    background: white; border-radius: 12px; padding: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px;
+}
+.stat-value { font-size: 36px; font-weight: bold; color: #1f2937; }
+.vehicle-list { width: 100%; border-collapse: collapse; }
+.vehicle-list th, .vehicle-list td { padding: 12px; border-bottom: 1px solid #f3f4f6; text-align: left; }
+.vehicle-name-input { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; width: 100%; box-sizing: border-box; }
+.save-btn { background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+.save-btn:hover { background: #5a67d8; }
+.save-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+```
+
+**vehicle-manager.html**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vehicle Manager</title>
+    <link rel="stylesheet" href="vehicle-manager.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Fleet Management</h1>
+            <div>Connected as: <span id="username">...</span></div>
+        </div>
+        <div class="card">
+            <div>Total Vehicles: <span id="vehicle-count" class="stat-value">...</span></div>
+        </div>
+        <div class="card">
+            <h2>Manage Vehicles</h2>
+            <table class="vehicle-list">
+                <thead><tr><th>Serial Number</th><th>Name</th><th>Action</th></tr></thead>
+                <tbody id="vehicle-table-body"><tr><td colspan="3">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="vehicle-manager.js"></script>
+</body>
+</html>
+```
+
+**vehicle-manager.js**
+```javascript
+"use strict";
+
+geotab.addin["vehicle-manager"] = function() {
+    var apiRef = null;
+
+    function updateStats() {
+        if (!apiRef) return;
+
+        apiRef.getSession(function(session) {
+            document.getElementById("username").textContent = session.userName;
+        });
+
+        apiRef.call("Get", { typeName: "Device" }, function(devices) {
+            document.getElementById("vehicle-count").textContent = devices.length;
+            renderVehicleList(devices);
+        }, function(err) {
+            document.getElementById("vehicle-count").textContent = "Error";
+        });
+    }
+
+    function renderVehicleList(devices) {
+        var tbody = document.getElementById("vehicle-table-body");
+        tbody.innerHTML = "";
+
+        devices.forEach(function(device) {
+            var tr = document.createElement("tr");
+
+            var tdSerial = document.createElement("td");
+            tdSerial.textContent = device.serialNumber || "N/A";
+            tr.appendChild(tdSerial);
+
+            var tdName = document.createElement("td");
+            var input = document.createElement("input");
+            input.type = "text";
+            input.className = "vehicle-name-input";
+            input.value = device.name || "";
+            input.id = "input-" + device.id;
+            tdName.appendChild(input);
+            tr.appendChild(tdName);
+
+            var tdAction = document.createElement("td");
+            var btn = document.createElement("button");
+            btn.textContent = "Save";
+            btn.className = "save-btn";
+            btn.onclick = function() {
+                saveVehicleName(device.id, document.getElementById("input-" + device.id).value, btn);
+            };
+            tdAction.appendChild(btn);
+            tr.appendChild(tdAction);
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    function saveVehicleName(deviceId, newName, btn) {
+        btn.disabled = true;
+        btn.textContent = "Saving...";
+
+        apiRef.call("Set", {
+            typeName: "Device",
+            entity: { id: deviceId, name: newName }
+        }, function() {
+            btn.disabled = false;
+            btn.textContent = "Saved!";
+            setTimeout(function() { btn.textContent = "Save"; }, 2000);
+        }, function(err) {
+            btn.disabled = false;
+            btn.textContent = "Retry";
+            alert("Error: " + (err.message || err));
+        });
+    }
+
+    return {
+        initialize: function(api, state, callback) {
+            apiRef = api;
+            updateStats();
+            callback();
+        },
+        focus: function(api, state) {
+            apiRef = api;
+            updateStats();
+        },
+        blur: function(api, state) {}
+    };
+};
+```
 
 ## GitHub Pages Deployment
 
-1. Enable GitHub Pages in repository settings
-2. Select main branch as source
-3. Add files to repository
-4. Wait 2-3 minutes for deployment
-5. Access at: `https://username.github.io/repo/file.html`
+1. Push files to GitHub repository
+2. Enable GitHub Pages (Settings → Pages → main branch)
+3. Wait 2-3 minutes for deployment
+4. Test URL directly in browser first
+5. Add to MyGeotab: Administration → System Settings → Add-Ins → paste JSON
+6. Hard refresh (Ctrl+Shift+R) if add-in doesn't appear
 
 **Cache Busting:** Add version query if changes don't appear:
 ```json
 "url": "https://username.github.io/repo/addin.html?v=2"
 ```
 
-## JavaScript Requirements
+## Learning Path: Vanilla to Zenith
 
-**Use ES5 only** - MyGeotab may run in older browsers:
+### Step 1: Start with Vanilla JS
 
-```javascript
-// ❌ Modern JS (may not work)
-const x = 1;
-const fn = () => {};
-`template ${literal}`;
+The Vehicle Manager example above uses vanilla JavaScript with external CSS. This approach:
+- Works immediately (no build step)
+- Easy to understand and modify
+- Good for learning the Geotab API patterns
+- Runs directly in MyGeotab
 
-// ✅ ES5 (always works)
-var x = 1;
-var fn = function() {};
-"string " + variable;
+**Test it:** Use the vanilla example at `examples/addins/vehicle-manager/`
+
+**Ready-to-use JSON (copy & paste into MyGeotab):**
+```json
+{
+  "name": "Vehicle Manager (Vanilla)",
+  "supportEmail": "test@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager/vehicle-manager.html",
+    "path": "ActivityLink/",
+    "menuName": { "en": "Vehicle Manager" }
+  }]
+}
 ```
 
-## Critical Mistakes to Avoid
+### Step 2: Vibe Code the Transformation to Zenith
 
-| Mistake | Problem | Solution |
-|---------|---------|----------|
-| Missing `callback()` | Add-In hangs | Always call `callback()` in initialize |
-| Using `}();` | Wrong pattern | Use `};` - assign function, don't invoke |
-| Modern JS | Browser errors | Use ES5 syntax only |
-| No error handling | Silent failures | Always provide error callback |
-| `typeName: "Driver"` | API errors | Use `User` with `isDriver: true` |
+Once comfortable with the vanilla version, use AI to transform it to React + Zenith for a professional MyGeotab look.
 
-See [references/TROUBLESHOOTING.md](references/TROUBLESHOOTING.md) for complete debugging guide.
+**Prompt to give your AI assistant:**
 
-## Quick Reference
+```
+Transform this Geotab Add-In to use React and the @geotab/zenith design system:
 
-### Lifecycle Methods
+1. Convert the vanilla JS to a React functional component
+2. Replace custom CSS with Zenith components:
+   - Buttons → <Button variant="primary/secondary">
+   - Text inputs → <TextInput label="..." />
+   - Tables → <Table columns={} data={} />
+   - Loading states → <Waiting size="large" />
+   - Error/success messages → <Alert variant="error/success">
+3. Use Zenith design tokens for any custom styling (--zenith-spacing-md, etc.)
+4. Set up webpack build configuration
+5. Keep the same Geotab API logic (Get, Set calls)
 
-| Method | When Called | Must Do |
-|--------|-------------|---------|
-| `initialize` | Once at load | Call `callback()` |
-| `focus` | User navigates to | Refresh data |
-| `blur` | User navigates away | Cleanup |
+Here's my current vanilla JS add-in:
+[paste your code]
+```
 
-### UI Best Practices
+**What changes:**
 
-- Show `...` while loading
-- Show `Error` on failures
-- Refresh data in `focus` method
-- Use clear loading/error states
+| Vanilla JS | React + Zenith |
+|-----------|----------------|
+| `document.getElementById()` | React state + JSX |
+| Custom `.save-btn` CSS | `<Button variant="primary">` |
+| Custom input styling | `<TextInput label="Name">` |
+| Manual DOM table building | `<Table columns={} data={}>` |
+| `alert()` for errors | `<Alert variant="error">` |
+| No build step | npm + webpack required |
+
+**Zenith version example:** `examples/addins/vehicle-manager-zenith/`
+
+**Ready-to-use JSON (copy & paste into MyGeotab):**
+```json
+{
+  "name": "Vehicle Manager (Zenith)",
+  "supportEmail": "test@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager-zenith/dist/vehicle-manager.html",
+    "path": "ActivityLink/",
+    "menuName": { "en": "Vehicle Manager (Zenith)" }
+  }]
+}
+```
+
+### Why This Progression?
+
+1. **Learn the API first** - Vanilla JS lets you focus on Geotab API patterns without React complexity
+2. **Understand what Zenith replaces** - You'll appreciate Zenith more after building custom CSS
+3. **Easier debugging** - Vanilla JS has no build step, simpler stack traces
+4. **Vibe coding works better** - AI can transform working code more reliably than generating complex React from scratch
+
+### Zenith Trade-offs (Be Aware!)
+
+| Aspect | Vanilla JS | React + Zenith |
+|--------|-----------|----------------|
+| **Setup time** | Instant | npm install + build (minutes) |
+| **Bundle size** | ~5 KB | ~2.3 MB (fonts, components) |
+| **Debugging** | Clear stack traces | Minified, hard to trace |
+| **Dependencies** | None | React, Zenith, Webpack, Babel |
+| **Iteration speed** | Edit → Refresh | Edit → Build → Refresh |
+| **Error messages** | Clear | Cryptic (minified) |
+
+**Zenith Gotchas We Discovered:**
+- `FeedbackProvider` wrapper required for `Alert` components
+- Zenith `Table` component has issues with custom render functions → use HTML table with Zenith styling instead
+- Component names differ: `TextInput` (not TextField), `Waiting` (not Spinner)
+- Large bundle includes all fonts even if unused
+
+**Recommendation:**
+- **Quick prototypes / learning** → Vanilla JS
+- **Production add-ins matching MyGeotab UI** → Zenith (worth the complexity)
+- **Simple add-ins that just work** → Vanilla JS with Zenith color tokens
 
 ## Additional Resources
 
