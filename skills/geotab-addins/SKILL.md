@@ -401,6 +401,20 @@ The Vehicle Manager example above uses vanilla JavaScript with external CSS. Thi
 
 **Test it:** Use the vanilla example at `examples/addins/vehicle-manager/`
 
+**Ready-to-use JSON (copy & paste into MyGeotab):**
+```json
+{
+  "name": "Vehicle Manager (Vanilla)",
+  "supportEmail": "test@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager/vehicle-manager.html",
+    "path": "ActivityLink/",
+    "menuName": { "en": "Vehicle Manager" }
+  }]
+}
+```
+
 ### Step 2: Vibe Code the Transformation to Zenith
 
 Once comfortable with the vanilla version, use AI to transform it to React + Zenith for a professional MyGeotab look.
@@ -437,6 +451,20 @@ Here's my current vanilla JS add-in:
 | No build step | npm + webpack required |
 
 **Zenith version example:** `examples/addins/vehicle-manager-zenith/`
+
+**Ready-to-use JSON (copy & paste into MyGeotab):**
+```json
+{
+  "name": "Vehicle Manager (Zenith)",
+  "supportEmail": "test@example.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager-zenith/dist/vehicle-manager.html",
+    "path": "ActivityLink/",
+    "menuName": { "en": "Vehicle Manager (Zenith)" }
+  }]
+}
+```
 
 ### Why This Progression?
 
