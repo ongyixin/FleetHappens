@@ -44,7 +44,7 @@ Zenith organizes components into four levels:
 | Level | Description | Examples |
 |-------|-------------|----------|
 | **Electrons** | Foundation tokens | Spacing, colors, typography |
-| **Atoms** | Basic elements | Button, TextField, Checkbox |
+| **Atoms** | Basic elements | Button, TextInput, Checkbox |
 | **Organisms** | Complex components | Table, Modal, Toolbar |
 | **Templates** | Page layouts | Dashboard, List view |
 
@@ -64,9 +64,9 @@ import { Button } from '@geotab/zenith';
 ### Text Fields
 
 ```jsx
-import { TextField } from '@geotab/zenith';
+import { TextInput } from '@geotab/zenith';
 
-<TextField
+<TextInput
   label="Vehicle Name"
   value={name}
   onChange={(e) => setName(e.target.value)}
@@ -138,9 +138,9 @@ import { Alert } from '@geotab/zenith';
 ### Loading States
 
 ```jsx
-import { Spinner } from '@geotab/zenith';
+import { Waiting } from '@geotab/zenith';
 
-{loading ? <Spinner size="medium" /> : <Content />}
+{loading ? <Waiting size="medium" /> : <Content />}
 ```
 
 ## Design Tokens
@@ -185,7 +185,7 @@ import { Spinner } from '@geotab/zenith';
 
 ```jsx
 import React, { useState } from 'react';
-import { Button, TextField, Table, Spinner, Alert } from '@geotab/zenith';
+import { Button, TextInput, Table, Waiting, Alert } from '@geotab/zenith';
 import '@geotab/zenith/dist/index.css';
 
 function Dashboard({ api }) {
@@ -229,7 +229,7 @@ function Dashboard({ api }) {
       {error && <Alert variant="error">{error}</Alert>}
 
       <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-        <TextField
+        <TextInput
           label="Search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -238,7 +238,7 @@ function Dashboard({ api }) {
       </div>
 
       {loading ? (
-        <Spinner size="large" />
+        <Waiting size="large" />
       ) : (
         <Table columns={columns} data={filtered} />
       )}
@@ -253,7 +253,7 @@ Zenith components are WCAG 2.2 compliant. Follow these practices:
 
 ### Always Provide Labels
 ```jsx
-<TextField label="Email Address" />  // Good
+<TextInput label="Email Address" />  // Good
 <Button aria-label="Close" icon="close" />  // Good for icon-only
 ```
 
@@ -300,7 +300,7 @@ import '@geotab/zenith/dist/index.css';
 {data.map(item => <Row item={item} />)}
 
 // CORRECT
-{loading ? <Spinner /> : data.map(item => <Row item={item} />)}
+{loading ? <Waiting /> : data.map(item => <Row item={item} />)}
 ```
 
 ## Using with MyGeotab Add-Ins

@@ -8,11 +8,11 @@ A full example of a MyGeotab Add-In using Zenith components.
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Button,
-  TextField,
+  TextInput,
   Table,
   Select,
   Alert,
-  Spinner,
+  Waiting,
   Modal,
   Checkbox,
   Badge
@@ -177,7 +177,7 @@ function FleetDashboard({ api }) {
         alignItems: 'flex-end'
       }}>
         <div style={{ flex: '1 1 300px' }}>
-          <TextField
+          <TextInput
             label="Search Vehicles"
             placeholder="Enter vehicle name..."
             value={searchTerm}
@@ -230,7 +230,7 @@ function FleetDashboard({ api }) {
           alignItems: 'center',
           padding: 'var(--zenith-spacing-xl, 32px)'
         }}>
-          <Spinner size="large" />
+          <Waiting size="large" />
           <p style={{
             marginTop: 'var(--zenith-spacing-md, 16px)',
             color: 'var(--zenith-neutral-500, #605E5C)'
