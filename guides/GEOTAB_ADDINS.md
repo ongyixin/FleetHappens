@@ -446,4 +446,56 @@ The AI will create files that use the injected `api` object to fetch your data.
 
 ---
 
+## Styling: Vanilla CSS vs Zenith
+
+Your Add-In can look however you want. Two approaches:
+
+### Option 1: Vanilla CSS (Recommended for Learning)
+
+Write your own CSS. Simple, fast, no build step.
+
+```css
+body { font-family: Arial; padding: 20px; }
+.card { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+button { background: #007bff; color: white; padding: 8px 16px; border: none; cursor: pointer; }
+```
+
+**Pros:** Instant setup, easy debugging, small files (~5KB)
+**Cons:** Won't match MyGeotab's exact look
+
+### Option 2: Zenith (Geotab's Design System)
+
+Zenith is Geotab's official React component library. Your Add-In will look exactly like MyGeotab.
+
+**But here's the honest trade-off:**
+
+| Aspect | Vanilla JS | React + Zenith |
+|--------|-----------|----------------|
+| **Setup** | None | npm install + webpack build |
+| **Bundle size** | ~5 KB | ~2.3 MB |
+| **Debug errors** | Clear messages | Minified stack traces |
+| **Edit → Test** | Refresh browser | Rebuild first |
+
+**Zenith Gotchas We Discovered:**
+- `Alert` components need a `FeedbackProvider` wrapper or they fail silently
+- Zenith `Table` can break with custom render functions - HTML tables work better
+- Component names: `TextInput` (not TextField), `Waiting` (not Spinner)
+
+### Our Recommendation
+
+**Start with Vanilla CSS.** Get your Add-In working first. Then decide if the professional MyGeotab look is worth the build complexity.
+
+**Learning Path:**
+1. Build with vanilla JS/CSS (this guide)
+2. Test it works in MyGeotab
+3. If you need the polished look, ask AI: "Transform this to use React + Zenith"
+
+**Try both versions:**
+- Vanilla: `https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager/vehicle-manager.html`
+- Zenith: `https://fhoffa.github.io/geotab-vibe-guide/examples/addins/vehicle-manager-zenith/dist/vehicle-manager.html`
+
+The Zenith version looks more professional but required webpack, React, and debugging minified errors to build.
+
+---
+
 **That's it. Describe what you want, let AI build it, paste the config, and you have a custom MyGeotab page.**
