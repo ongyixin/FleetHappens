@@ -597,7 +597,7 @@ Think of frameworks like IKEA furniture: the hard work is done, you just assembl
 Now that you understand the basics, here's where to go next:
 
 1. **Brand new to coding?**
-   - Start with [INSTANT_START_WITH_CLAUDE.md](INSTANT_START_WITH_CLAUDE.md) - Build your first app in 60 seconds using just your browser
+   - Start with [GOOGLE_GEM_USER_GUIDE.md](GOOGLE_GEM_USER_GUIDE.md) - Build a MyGeotab Add-In in minutes using Google Gemini's Gem
 
 2. **Want to build something specific?**
    - Check [HACKATHON_IDEAS.md](HACKATHON_IDEAS.md) for 20+ project ideas with difficulty ratings
@@ -621,4 +621,4 @@ That's normal! The beauty of vibe coding is you don't need to understand everyth
 
 ---
 
-**Next Step**: Head to [INSTANT_START_WITH_CLAUDE.md](INSTANT_START_WITH_CLAUDE.md) and build your first Geotab application right now—no installation required!
+**Next Step**: Head to [GOOGLE_GEM_USER_GUIDE.md](GOOGLE_GEM_USER_GUIDE.md) and build your first MyGeotab Add-In right now—no installation required!
