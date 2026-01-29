@@ -28,6 +28,12 @@ Demo databases are fully functional Geotab environments with simulated fleet dat
 
 The demo simulates realistic vehicle movement, driver behavior, and telematics data for your selected configuration. The **Location** determines which data center hosts your database, while the simulated vehicle routes are based on the vocation and region.
 
+**Vocation affects data patterns:**
+- **Long distance** - Longer trips, more highway driving, fewer stops
+- **Daytime tour** - Shorter trips, more stops, urban driving patterns
+- **Hub and spoke** - Trips radiating from central location(s)
+- **Public works** - Municipal/utility vehicle patterns
+
 > **Note:** The sample data below comes from a European-hosted demo database (50 vehicles, Vans and Trucks, with simulated routes in Spain). **Entity schemas and field names are consistent across all demo databases.** Specific values like IDs, coordinates, and counts will vary - the samples below show the structure and type of data you'll find.
 
 ---
