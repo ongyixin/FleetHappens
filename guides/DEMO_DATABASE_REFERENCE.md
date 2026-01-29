@@ -19,16 +19,16 @@ Demo databases are fully functional Geotab environments with simulated fleet dat
 | Option | Choices |
 |--------|---------|
 | **Vocation** | Daytime tour, Hub and spoke, Long distance, Public works |
-| **Location** | Canada, Australia, USA, UK, Italy, Netherlands |
+| **Location** | Canada, Australia, USA, UK, Italy, Netherlands *(data center region)* |
 | **Vehicle Type** | Vans and Trucks, Passenger, Electric Vehicle (EV) |
 | **Fleet Size** | 10, 20, 30, 40, or 50 vehicles |
 | **Expiration** | 1-7 days, 30 days, or 60 days |
 
 > **Tip:** Choose **60 days** expiration for maximum development time.
 
-The demo simulates realistic vehicle movement, driver behavior, and telematics data for your selected configuration.
+The demo simulates realistic vehicle movement, driver behavior, and telematics data for your selected configuration. The **Location** determines which data center hosts your database, while the simulated vehicle routes are based on the vocation and region.
 
-> **Note:** The sample data below comes from a **European delivery fleet** demo database (50 vehicles, Vans and Trucks, simulating routes in Spain). This was created through a partner/internal demo system with additional location options. Your public demo database will have different data depending on your selections. **Entity schemas and field names are consistent across all demo databases**, but specific values (locations, vehicle counts, diagnostic ranges, rule IDs) will vary.
+> **Note:** The sample data below comes from a European-hosted demo database (50 vehicles, Vans and Trucks, with simulated routes in Spain). **Entity schemas and field names are consistent across all demo databases.** Specific values like IDs, coordinates, and counts will vary - the samples below show the structure and type of data you'll find.
 
 ---
 
@@ -36,11 +36,11 @@ The demo simulates realistic vehicle movement, driver behavior, and telematics d
 
 This guide currently documents one demo database profile. Additional profiles planned:
 
-| Profile | Location | Vehicle Type | Vocation | Status |
-|---------|----------|--------------|----------|--------|
-| European Delivery | Europe (Spain routes) | Vans and Trucks | Daytime tour | Documented below |
-| USA Long Haul | USA | Vans and Trucks | Long distance | TODO |
-| EV Fleet | USA or UK | Electric Vehicle (EV) | Hub and spoke | TODO |
+| Profile | Data Center | Vehicle Type | Vocation | Simulated Routes | Status |
+|---------|-------------|--------------|----------|------------------|--------|
+| European Delivery | Italy/Netherlands | Vans and Trucks | Daytime tour | Spain | Documented below |
+| USA Long Haul | USA | Vans and Trucks | Long distance | USA | TODO |
+| EV Fleet | USA or UK | Electric Vehicle (EV) | Hub and spoke | TBD | TODO |
 
 ---
 
