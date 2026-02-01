@@ -41,8 +41,12 @@ This tutorial teaches the pattern—once you understand it, you can build any wo
 ## Prerequisites
 
 1. **Geotab credentials** — [Create a free demo account](https://my.geotab.com/registration.html) if you don't have one
-2. **Slack workspace** — You'll need permission to create a webhook
-3. **n8n account** — Free cloud account (we'll create this)
+2. **n8n account** — Free cloud account (we'll create this)
+3. **Alert destination** (pick one):
+   - Slack workspace (need permission to create webhooks)
+   - Discord server (need permission to create webhooks)
+   - Email address (works out of the box with n8n Cloud)
+   - None (just testing? Skip this for now)
 
 ---
 
@@ -179,11 +183,22 @@ Alternatively, use an **IF** node for more complex conditions:
 
 ---
 
-## Step 7: Set Up Slack Webhook
+## Step 7: Choose Your Alert Destination
 
-Before adding the Slack node, create an incoming webhook in Slack.
+Pick the option that works for you:
 
-### In Slack:
+| Option | Best For | Setup Difficulty |
+|--------|----------|------------------|
+| **Slack** | Teams already using Slack | Easy |
+| **Discord** | Personal projects, gaming communities | Easy |
+| **Email** | Universal, no new tools needed | Easiest |
+| **Console/Debug** | Testing without any setup | None |
+
+---
+
+## Option A: Slack Alerts
+
+### Set Up Slack Webhook
 
 1. Go to [api.slack.com/apps](https://api.slack.com/apps)
 2. Click **"Create New App"** → **"From scratch"**
@@ -193,21 +208,13 @@ Before adding the Slack node, create an incoming webhook in Slack.
 6. Select the channel for alerts (e.g., `#fleet-alerts`)
 7. Copy the **Webhook URL** (looks like `https://hooks.slack.com/services/...`)
 
----
-
-## Step 8: Add Slack Alert Node
+### Add Slack Node
 
 1. Click **+** after the Filter node
 2. Search for **"Slack"**
-3. Select **"Slack"** node
-4. Configure:
-
-**Slack Settings:**
-
-| Setting | Value |
-|---------|-------|
-| Authentication | Webhook |
-| Webhook URL | (paste your Slack webhook URL) |
+3. Configure:
+   - **Authentication**: Webhook
+   - **Webhook URL**: (paste your URL)
 
 **Message:**
 ```
@@ -221,7 +228,77 @@ Before adding the Slack node, create an incoming webhook in Slack.
 <https://my.geotab.com|View in MyGeotab>
 ```
 
-5. Name this node: `Send Slack Alert`
+---
+
+## Option B: Discord Alerts
+
+### Set Up Discord Webhook
+
+1. Open Discord and go to your server
+2. Click the **gear icon** next to your channel name → **Integrations**
+3. Click **"Webhooks"** → **"New Webhook"**
+4. Name it `Fleet Alerts` and copy the **Webhook URL**
+
+### Add Discord Node
+
+1. Click **+** after the Filter node
+2. Search for **"Discord"**
+3. Configure:
+   - **Webhook URL**: (paste your URL)
+
+**Message:**
+```
+🚨 **Speeding Alert**
+
+**Vehicle:** {{ $json.result.device.name }}
+**Duration:** {{ $json.result.speedingDuration }} seconds
+**Trip Distance:** {{ ($json.result.distance / 1000).toFixed(1) }} km
+**Time:** {{ $json.result.start }}
+```
+
+---
+
+## Option C: Email Alerts
+
+### Add Email Node
+
+1. Click **+** after the Filter node
+2. Search for **"Send Email"**
+3. Configure:
+   - **To**: your-email@example.com
+   - **Subject**: `Speeding Alert: {{ $json.result.device.name }}`
+
+**Body:**
+```
+Speeding Alert
+
+Vehicle: {{ $json.result.device.name }}
+Duration: {{ $json.result.speedingDuration }} seconds
+Trip Distance: {{ ($json.result.distance / 1000).toFixed(1) }} km
+Time: {{ $json.result.start }}
+
+View in MyGeotab: https://my.geotab.com
+```
+
+**Note:** n8n Cloud includes email sending. Self-hosted requires SMTP configuration.
+
+---
+
+## Option D: Just Testing? Use Debug Output
+
+If you just want to see if the workflow works without setting up notifications:
+
+1. Click **+** after the Filter node
+2. Search for **"No Operation, do nothing"** (or skip adding a node)
+3. Run the workflow in test mode—you'll see the data in the n8n interface
+
+This lets you verify everything works before connecting to Slack/Discord/Email.
+
+---
+
+## Step 8: Name Your Alert Node
+
+Whatever option you chose, name the node: `Send Alert`
 
 ---
 
@@ -237,7 +314,8 @@ Before adding the Slack node, create an incoming webhook in Slack.
 |---------|----------|
 | Authentication fails | Check credentials in Variables |
 | No trips returned | Expand time range or check database has data |
-| Slack not sending | Verify webhook URL, check Slack app permissions |
+| Slack/Discord not sending | Verify webhook URL, check app permissions |
+| Email not sending | n8n Cloud includes email; self-hosted needs SMTP setup |
 
 ---
 
