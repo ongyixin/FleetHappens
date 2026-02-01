@@ -34,22 +34,82 @@ Traditional fleet tools require you to check dashboards, run reports, and take a
 
 ---
 
-## When Do You Need an Agentic System?
+## Geotab Already Has Alerts—When Do You Need More?
 
-### You Need It If...
+**Important:** Geotab's built-in features handle many common scenarios:
 
-- You want **alerts pushed to you** (Slack, SMS, email) instead of checking dashboards
-- You need to **integrate Geotab with other systems** (CRM, maintenance software, dispatch)
-- You want **automated workflows** ("If vehicle enters geofence, notify customer")
-- You're doing **compliance monitoring** (HOS violations, speeding thresholds)
-- You need **24/7 monitoring** without humans watching screens
+| Built-In Feature | What It Does |
+|------------------|--------------|
+| **Rules & Exceptions** | Trigger on speeding, harsh braking, after-hours use, etc. |
+| **Zones (Geofences)** | Detect entry/exit from defined areas |
+| **Notifications** | Send email alerts when rules trigger |
+| **Reports** | Scheduled email reports |
 
-### You Don't Need It If...
+**Use Geotab native features when:**
+- Email alerts are sufficient
+- You need standard rule-based triggers (speed > X, zone entry, fault codes)
+- You're okay with Geotab's built-in notification destinations
 
-- You only need to view data occasionally
-- A dashboard or report is sufficient
-- You're doing one-time analysis (use a script instead)
-- Your team prefers manual review of events
+---
+
+## When External Agentic Systems Add Value
+
+Build an external agent when you need capabilities **beyond** Geotab's native features:
+
+### 1. Different Alert Destinations
+Geotab sends email. You need **Slack, Teams, Discord, SMS, PagerDuty**, or push notifications.
+
+### 2. Integration with External Systems
+- Create tickets in **ServiceNow, Jira, Zendesk**
+- Update records in **Salesforce, HubSpot, SAP**
+- Log to **Google Sheets, Airtable, databases**
+- Trigger webhooks in **custom applications**
+
+### 3. Multi-Step Workflows
+Not just "alert when X happens" but:
+```
+Fault code detected →
+  Check vehicle location →
+  Find nearest service center →
+  Create maintenance ticket →
+  Alert driver with directions →
+  Notify fleet manager →
+  Update CRM status
+```
+
+### 4. AI-Powered Decisions
+Beyond threshold rules—using LLMs to:
+- Analyze patterns and trends
+- Generate personalized coaching recommendations
+- Summarize incidents in natural language
+- Make context-aware decisions
+
+### 5. Cross-System Correlation
+Combine Geotab data with external data:
+- Weather conditions + driving behavior
+- Traffic data + route optimization
+- Customer delivery windows + ETA calculations
+
+### 6. Custom Business Logic
+Rules that don't fit Geotab's rule builder:
+- "Alert only if this is the driver's 3rd speeding event this week"
+- "Notify customer when delivery is 15 minutes away, but only during business hours"
+- "Escalate to manager if no response within 30 minutes"
+
+---
+
+## Decision Guide
+
+```
+Can Geotab's built-in Rules + Email handle it?
+├── Yes → Use native Geotab features (simplest!)
+└── No → Why not?
+    ├── Need Slack/Teams/SMS → Agentic system
+    ├── Need external system integration → Agentic system
+    ├── Need multi-step workflow → Agentic system
+    ├── Need AI reasoning → Agentic system
+    └── Need custom logic → Agentic system
+```
 
 ---
 

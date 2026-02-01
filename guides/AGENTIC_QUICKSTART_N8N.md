@@ -23,6 +23,21 @@ This guide walks you through building an agent that monitors your Geotab fleet a
 
 ---
 
+## Why Not Just Use Geotab's Built-In Alerts?
+
+**Good question!** Geotab has native Rules and Notifications that can email you when speeding occurs. Use those if email is sufficient.
+
+**Build this n8n workflow when you need:**
+- **Slack/Teams/Discord** instead of email
+- **Richer context** in alerts (driver history, nearby locations)
+- **Multi-step workflows** (alert → log to spreadsheet → create ticket)
+- **Custom logic** ("only alert if 3rd offense this week")
+- **Integration with other systems** (CRM, dispatch, maintenance)
+
+This tutorial teaches the pattern—once you understand it, you can build any workflow.
+
+---
+
 ## Prerequisites
 
 1. **Geotab credentials** — [Create a free demo account](https://my.geotab.com/registration.html) if you don't have one
