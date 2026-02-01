@@ -326,6 +326,37 @@ Vehicle running low on fuel (from Geotab StatusData)
   → Send recommendation to driver
 ```
 
+**EV Charging Integration:**
+```
+EV battery below 30% (from Geotab StatusData)
+  → Find compatible chargers via Open Charge Map API
+  → Filter by connector type (CCS, CHAdeMO, Tesla), charging speed, real-time availability
+  → Calculate if charge is needed to complete route
+  → Reserve charger slot if API supports it
+  → Route driver with estimated charge time and wait
+```
+
+**Fleet Electrification Planning:**
+```
+Analyze historical trip data from Geotab
+  → Calculate daily range requirements per vehicle
+  → Identify which ICE vehicles can switch to EV
+  → Model depot charging infrastructure needs
+  → Find optimal public charging locations for long routes
+  → Estimate TCO savings from electrification
+```
+
+### EV Charging APIs
+
+| Service | Features | Best For |
+|---------|----------|----------|
+| **Open Charge Map** | Global coverage, free, community-maintained | General EV charging lookup |
+| **PlugShare** | Real-time availability, reviews, photos | Driver-facing apps |
+| **ChargePoint** | Network-specific, reservation support | ChargePoint network fleets |
+| **EVgo / Electrify America** | DC fast charging networks | Long-haul EV routes |
+| **Tesla Supercharger API** | Tesla fleet access | Tesla fleet vehicles |
+| **NREL AFDC** | US DOE data, includes hydrogen | Government/research |
+
 ### Other Mapping Options
 
 | Service | Best For | MCP Support |
