@@ -278,6 +278,54 @@ Create a Geotab Add-In with a Leaflet map showing:
 
 ---
 
+## Using CDN Libraries (Charts, Maps, CSS Frameworks)
+
+Add-Ins can load JavaScript and CSS libraries from CDNs. This works for both external and embedded Add-Ins.
+
+**Available libraries:**
+
+| Library | Use Case | CDN URL |
+|---------|----------|---------|
+| **Chart.js** | Bar, line, pie, doughnut charts | `https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js` |
+| **Leaflet** | Interactive maps with markers | `https://unpkg.com/leaflet@1.9.4/dist/leaflet.js` |
+| **Day.js** | Date formatting and manipulation | `https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js` |
+| **Bootstrap** | Professional CSS framework | Load dynamically (see below) |
+
+**Example prompts:**
+
+```
+Create an Add-In with a bar chart showing trips per vehicle for the last 7 days.
+Use Chart.js from CDN.
+```
+
+```
+Build an Add-In that shows all my vehicles on a Leaflet map.
+When I click a marker, show the vehicle name and current speed.
+Auto-zoom to fit all vehicles.
+```
+
+```
+Create a dashboard using Bootstrap for styling.
+Show vehicle counts in Bootstrap cards with the grid layout.
+```
+
+**Important for embedded Add-Ins:**
+- `<style>` tags are stripped by MyGeotab
+- Static `<link>` tags get URL-rewritten and break
+- **Solution:** Load CSS dynamically via JavaScript:
+
+```javascript
+// Load Bootstrap CSS dynamically
+var link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css';
+document.head.appendChild(link);
+```
+
+Tell your AI: "Use Bootstrap with dynamic CSS loading for an embedded Add-In"
+
+---
+
 ## How Add-Ins Get Access to Your Data
 
 Understanding how the connection works helps when prompting the AI.
