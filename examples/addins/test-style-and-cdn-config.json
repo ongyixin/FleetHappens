@@ -1,12 +1,12 @@
 {
-  "name": "Style & CDN Test",
+  "name": "Style CDN Test",
   "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0.0",
   "items": [{
     "url": "test-style-cdn.html",
     "path": "ActivityLink",
     "menuName": {
-      "en": "Style & CDN Test"
+      "en": "Style and CDN Test"
     }
   }],
   "files": {

@@ -46,7 +46,7 @@ Every response that creates an Add-In must output a complete JSON configuration 
 Every Add-In configuration must follow this exact schema:
 
 {
-  "name": "Add-In Name",
+  "name": "Add In Name",
   "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0",
   "items": [{
@@ -62,18 +62,23 @@ Every Add-In configuration must follow this exact schema:
 }
 
 **Required fields:**
-- `name`: Display name for the Add-In
+- `name`: Display name for the Add-In (letters, numbers, and spaces only - no special characters!)
 - `supportEmail`: Support URL or contact (use https://github.com/fhoffa/geotab-vibe-guide)
 - `version`: Version string (e.g., "1.0")
 - `items`: Array with at least one item containing `url`, `path`, `menuName`
 - `files`: Object mapping filename to HTML content string
+
+**IMPORTANT: name field**
+The `name` field must contain only letters, numbers, and spaces. No special characters like `&`, `-`, `@`, etc.
+- WRONG: `"name": "Fleet & Stats"` or `"name": "Fleet-Dashboard"` or `"name": "My Add-In!"`
+- CORRECT: `"name": "Fleet Dashboard"` or `"name": "FleetDashboard1"`
 
 **IMPORTANT: supportEmail value**
 NEVER use support@geotab.com - Geotab support does not handle issues for custom Add-Ins. If you don't know the creator's email, use: `"supportEmail": "https://github.com/fhoffa/geotab-vibe-guide"`
 
 ## Critical Embedded Add-In Rules
 
-1. **CSS Must Be Inline**: Use `style=""` attributes on elements. Do NOT use `<style>` tags in the head - MyGeotab may strip them.
+1. **CSS Must Be Inline**: Use `style=""` attributes on elements. `<style>` tags in the head ARE stripped by MyGeotab.
 
 WRONG:
 <style>.card { background: white; }</style>
@@ -82,7 +87,12 @@ WRONG:
 CORRECT:
 <div style="background:white;padding:20px;">Content</div>
 
-2. **JavaScript Must Use ES5**: No arrow functions, const/let, or template literals.
+2. **CDN Libraries Work**: You CAN load external JavaScript libraries from CDNs like Cloudflare, jsDelivr, or unpkg. This is great for charting libraries, utilities, etc.
+
+WORKS:
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+3. **JavaScript Must Use ES5**: No arrow functions, const/let, or template literals.
 
 WRONG:
 const items = devices.map(d => d.name);
@@ -93,9 +103,9 @@ for (var i = 0; i < devices.length; i++) {
     items.push(devices[i].name);
 }
 
-3. **Quote Escaping**: Use single quotes for HTML attributes, escape double quotes in JSON.
+4. **Quote Escaping**: Use single quotes for HTML attributes, escape double quotes in JSON.
 
-4. **Add-In Registration Pattern**: Always use this exact pattern (assign function, don't invoke):
+5. **Add-In Registration Pattern**: Always use this exact pattern (assign function, don't invoke):
 
 geotab.addin["addin-name"] = function() {
     return {
@@ -112,7 +122,7 @@ geotab.addin["addin-name"] = function() {
     };
 };
 
-5. **Path Values**: Use `"ActivityLink"` (no trailing slash) for the sidebar.
+6. **Path Values**: Use `"ActivityLink"` (no trailing slash) for the sidebar.
 
 ## Geotab API Integration
 

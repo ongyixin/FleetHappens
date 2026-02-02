@@ -92,7 +92,7 @@ body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
 **MyGeotab Configuration:**
 ```json
 {
-  "name": "Your Add-In",
+  "name": "Your Add In",
   "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0.0",
   "items": [{
@@ -102,6 +102,16 @@ body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
   }]
 }
 ```
+
+**Configuration Rules:**
+- `name`: Letters, numbers, and spaces only (no special characters like `&`, `-`). Use `"Fleet Dashboard"` not `"Fleet & Dashboard"`
+- `supportEmail`: Never use support@geotab.com. Use `https://github.com/fhoffa/geotab-vibe-guide` or your own contact
+- `menuName`: Can contain spaces and special characters (this is what users see in the menu)
+
+**Embedded Add-In Rules:**
+- `<style>` tags ARE stripped - must use inline `style=""` attributes
+- CDN libraries WORK - can load Chart.js, Leaflet, etc. from Cloudflare/jsDelivr/unpkg
+- Must use ES5 JavaScript (no arrow functions, const/let, template literals)
 
 ## API Operations
 
@@ -442,7 +452,7 @@ For quick prototypes without hosting:
 
 ```json
 {
-  "name": "Embedded Add-In",
+  "name": "Embedded Add In",
   "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0",
   "items": [{
@@ -645,7 +655,7 @@ The Vehicle Manager example above uses vanilla JavaScript with external CSS. Thi
 **Ready-to-use JSON (copy & paste into MyGeotab):**
 ```json
 {
-  "name": "Vehicle Manager (Vanilla)",
+  "name": "Vehicle Manager Vanilla",
   "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0.0",
   "items": [{
@@ -696,7 +706,7 @@ Here's my current vanilla JS add-in:
 **Ready-to-use JSON (copy & paste into MyGeotab):**
 ```json
 {
-  "name": "Vehicle Manager (Zenith)",
+  "name": "Vehicle Manager Zenith",
   "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0.0",
   "items": [{
