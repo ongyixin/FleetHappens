@@ -104,15 +104,21 @@ body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
 ```
 
 **Configuration Rules:**
-- `name`: Letters, numbers, spaces, dots, dashes, underscores OK. No `&`, `+`, `!`. Use `"Fleet - Dashboard v1.0"` not `"Fleet & Dashboard"`
+- `name`: Letters, numbers, spaces, dots, dashes, underscores, parentheses OK. No `&`, `+`, `!`. Use `"Fleet Dashboard (Beta)"` not `"Fleet & Dashboard"`
 - `supportEmail`: Never use support@geotab.com. Use `https://github.com/fhoffa/geotab-vibe-guide` or your own contact
 - `menuName`: Can contain spaces and special characters (this is what users see in the menu)
 
 **Embedded Add-In Rules:**
 - `<style>` tags ARE stripped - use inline `style=""` or load CSS dynamically via JS
-- CDN JS libraries WORK - Chart.js, Leaflet, etc. via `<script src="https://cdn...">`
+- CDN JS libraries WORK via `<script src="https://cdn...">`
 - CDN CSS works via dynamic loading: `var link=document.createElement('link');link.rel='stylesheet';link.href='https://cdn.../bootstrap.min.css';document.head.appendChild(link);`
 - Must use ES5 JavaScript (no arrow functions, const/let, template literals)
+
+**Recommended CDN Libraries:**
+- **Charts:** Chart.js (`https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js`)
+- **Maps:** Leaflet (`https://unpkg.com/leaflet@1.9.4/dist/leaflet.js` + CSS via dynamic load)
+- **Dates:** Day.js (`https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js`)
+- **CSS Framework:** Bootstrap (load CSS dynamically: `https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css`)
 
 ## API Operations
 

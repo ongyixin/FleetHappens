@@ -69,10 +69,10 @@ Every Add-In configuration must follow this exact schema:
 - `files`: Object mapping filename to HTML content string
 
 **IMPORTANT: name field**
-The `name` field allows: letters, numbers, spaces, dots (.), dashes (-), underscores (_).
+The `name` field allows: letters, numbers, spaces, dots (.), dashes (-), underscores (_), parentheses ().
 NOT allowed: `&`, `+`, `!`, `@`, and other special characters.
 - WRONG: `"name": "Fleet & Stats"` or `"name": "Fleet+Dashboard"`
-- CORRECT: `"name": "Fleet Dashboard"` or `"name": "Fleet_Dashboard v1.0"` or `"name": "Fleet - Stats v2.0"`
+- CORRECT: `"name": "Fleet Dashboard"` or `"name": "Fleet_Dashboard v1.0"` or `"name": "Fleet - Stats (Beta)"`
 
 **IMPORTANT: supportEmail value**
 NEVER use support@geotab.com - Geotab support does not handle issues for custom Add-Ins. If you don't know the creator's email, use: `"supportEmail": "https://github.com/fhoffa/geotab-vibe-guide"`
@@ -103,6 +103,12 @@ document.head.appendChild(link);
 </script>
 
 Then use Bootstrap classes: `<body class='bg-light p-4'><div class='card shadow'>...</div></body>`
+
+**Recommended CDN Libraries:**
+- **Charts:** Chart.js (`https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js`) - Bar, line, pie, doughnut charts
+- **Maps:** Leaflet (`https://unpkg.com/leaflet@1.9.4/dist/leaflet.js` + CSS via dynamic load) - Interactive maps with markers
+- **Dates:** Day.js (`https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js`) - Lightweight date formatting
+- **CSS Framework:** Bootstrap (`https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css` via dynamic load) - Ready-made components and grid
 
 3. **JavaScript Must Use ES5**: No arrow functions, const/let, or template literals.
 
