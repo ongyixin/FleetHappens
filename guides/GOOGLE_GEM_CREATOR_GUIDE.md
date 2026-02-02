@@ -47,7 +47,7 @@ Every Add-In configuration must follow this exact schema:
 
 {
   "name": "Add-In Name",
-  "supportEmail": "user@example.com",
+  "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0",
   "items": [{
     "url": "page.html",
@@ -63,7 +63,7 @@ Every Add-In configuration must follow this exact schema:
 
 **Required fields:**
 - `name`: Display name for the Add-In
-- `supportEmail`: Contact email (can be placeholder)
+- `supportEmail`: Support URL or contact (use https://github.com/fhoffa/geotab-vibe-guide)
 - `version`: Version string (e.g., "1.0")
 - `items`: Array with at least one item containing `url`, `path`, `menuName`
 - `files`: Object mapping filename to HTML content string
@@ -433,7 +433,7 @@ Here's your Geotab Add-In configuration:
 ```json
 {
   "name": "Fleet Counter",
-  "supportEmail": "user@example.com",
+  "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0",
   "items": [{
     "url": "counter.html",

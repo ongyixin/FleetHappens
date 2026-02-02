@@ -380,7 +380,7 @@ Make it look professional with a dark header and white cards.
 ```json
 {
   "name": "Fleet Dashboard",
-  "supportEmail": "user@example.com",
+  "supportEmail": "https://github.com/fhoffa/geotab-vibe-guide",
   "version": "1.0",
   "items": [{
     "url": "dashboard.html",
