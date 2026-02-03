@@ -292,6 +292,15 @@ This is different from regular API calls which return immediately.
 // Ace uses the SAME api object and credentials!
 // Async pattern: create chat → send prompt → poll for results
 
+// Helper to extract data from Ace response structure
+// Response format: { apiResult: { results: [{ ... }] } }
+function getAceData(response) {
+    if (response && response.apiResult && response.apiResult.results) {
+        return response.apiResult.results[0];
+    }
+    return response; // Fallback if structure differs
+}
+
 function askAce(question, onComplete) {
     showLoading("Thinking...");
 
@@ -300,19 +309,21 @@ function askAce(question, onComplete) {
         serviceName: "dna-planet-orchestration",
         functionName: "create-chat",
         functionParameters: {}
-    }, function(chatResult) {
-        var chatId = chatResult.chatId;
+    }, function(response) {
+        var data = getAceData(response);
+        var chatId = data.chat_id;  // Note: underscore, not camelCase
 
         // Step 2: Send the question
         api.call("GetAceResults", {
             serviceName: "dna-planet-orchestration",
             functionName: "send-prompt",
             functionParameters: {
-                chatId: chatId,
+                chat_id: chatId,  // Note: underscore in parameter too
                 prompt: question
             }
-        }, function(promptResult) {
-            var messageGroupId = promptResult.messageGroupId;
+        }, function(response) {
+            var data = getAceData(response);
+            var messageGroupId = data.message_group.id;  // Nested object
 
             // Step 3: Poll for results (can take 30-60+ seconds)
             pollForResults(chatId, messageGroupId, onComplete);
@@ -325,14 +336,21 @@ function pollForResults(chatId, messageGroupId, onComplete) {
         serviceName: "dna-planet-orchestration",
         functionName: "get-status",
         functionParameters: {
-            chatId: chatId,
-            messageGroupId: messageGroupId
+            chat_id: chatId,
+            message_group_id: messageGroupId
         }
-    }, function(status) {
-        if (status.state === "DONE") {
+    }, function(response) {
+        var data = getAceData(response);
+        var msgGroup = data.message_group || {};
+        var statusObj = msgGroup.status || {};
+        var state = statusObj.status || "UNKNOWN";  // Double nested: message_group.status.status
+
+        if (state === "DONE") {
             hideLoading();
-            onComplete(status.answer, status.data);
-        } else if (status.state === "FAILED") {
+            // Answer location may vary - check common locations
+            var answer = msgGroup.content || statusObj.answer || data.answer;
+            onComplete(answer, data);
+        } else if (state === "FAILED") {
             hideLoading();
             console.error("Ace query failed");
         } else {
