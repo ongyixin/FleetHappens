@@ -394,16 +394,33 @@ The styling isn't working. Can you make sure all CSS is inline using style="" at
 
 The Gem uses the direct Geotab API, which is great for displaying data. For **complex analytical questions**, you can ask the Gem to integrate with Geotab Ace.
 
+**Key point:** Ace uses the **same API connection** - no separate authentication. Just a different method call.
+
 **When to mention Ace in your prompts:**
 - Questions requiring AI analysis: "Which drivers need coaching?"
 - Trend analysis: "What's my fuel efficiency trend?"
 - Recommendations: "How can I reduce costs?"
 
-**Example Ace prompt:**
+**How Ace is called (same api object):**
+```javascript
+// Ace uses the SAME api object as regular calls
+// No extra authentication needed!
+api.call("GetAceAnswer", {
+    question: "Which drivers need safety coaching?"
+}, function(result) {
+    // result.answer = AI-generated text response
+    // result.data = optional dataset (if query returns data)
+    displayAnswer(result.answer);
+}, function(error) {
+    console.error("Ace error:", error);
+});
+```
+
+**Example Ace prompt for the Gem:**
 ```
 Create an Add-In that has a text input where I can type questions
-about my fleet. Send the question to Geotab Ace API and display
-the response. Include a loading indicator since Ace can take
+about my fleet. When submitted, call api.call("GetAceAnswer", {question: userInput})
+and display the response. Include a loading indicator since Ace can take
 30+ seconds to respond.
 ```
 

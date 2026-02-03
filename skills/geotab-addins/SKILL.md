@@ -225,7 +225,7 @@ api.getSession(function(session) {
 
 ## When to Use Geotab Ace vs Direct API
 
-Add-Ins can use both the direct API (above) and Geotab Ace for AI-powered queries.
+Add-Ins can use both the direct API (above) and Geotab Ace for AI-powered queries. **Ace uses the same API connection** - no separate authentication needed.
 
 | Use Direct API | Use Geotab Ace |
 |----------------|----------------|
@@ -237,12 +237,15 @@ Add-Ins can use both the direct API (above) and Geotab Ace for AI-powered querie
 
 ### Calling Ace from Add-Ins
 
+Ace is called through the **same `api` object** - just a different method. No extra setup needed.
+
 ```javascript
-// Ace uses same api object but different endpoint
-// Show loading indicator - Ace can take 30+ seconds!
+// Ace uses the SAME api object - no separate authentication!
+// Show loading indicator - Ace can take 30+ seconds
 function askAce(question, callback) {
     showLoading("Thinking...");
 
+    // Same api.call() you use for Get/Set/Add
     api.call("GetAceAnswer", {
         question: question
     }, function(result) {
