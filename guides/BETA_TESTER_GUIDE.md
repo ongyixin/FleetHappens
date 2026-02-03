@@ -2,7 +2,7 @@
 
 **Thank you for being an early tester!**
 
-We're building something new here - a curriculum that teaches developers to build fleet apps using AI assistance ("vibe coding"). You're among the first to try it, and your feedback will directly shape what hackathon participants experience.
+We're building something new here - a set of guides that teach developers to build fleet apps using AI assistance ("vibe coding"). You're among the first to try it, and your feedback will directly shape what hackathon participants experience.
 
 This guide will evolve based on what you tell us. Found something confusing? We'll fix it. Hit a dead end? We want to know. Have an idea? Share it.
 
@@ -60,13 +60,13 @@ cp .env.example .env
 
 ## Your Sandbox Folder
 
-**Keep your experiments separate from the curriculum!**
+**Keep your experiments separate from the guides!**
 
 Create a `sandbox/` folder for your own projects:
 
 ```
 geotab-vibe-guide/
-├── guides/           # Don't modify - curriculum content
+├── guides/           # Don't modify - tutorial content
 ├── examples/         # Don't modify - reference examples
 ├── skills/           # Don't modify - AI patterns
 ├── sandbox/          # YOUR SPACE - experiment here!
@@ -124,7 +124,7 @@ sandbox/
 - What would you add or change?
 
 ### Path C: Python Examples (30-60 min)
-**Test the progressive curriculum:**
+**Test the step-by-step examples:**
 1. Start with `examples/python/01_authentication/TASK.md`
 2. Use your preferred AI tool to complete the task
 3. Move through 02, 03, etc.
