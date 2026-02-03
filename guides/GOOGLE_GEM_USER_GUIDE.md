@@ -413,6 +413,11 @@ Ace is async - you can't just make one call. Tell the Gem:
 
 This is different from regular API calls which return immediately.
 
+**Important: Ace Data Latency**
+- Ace data runs **behind** real-time API - don't expect the very latest records
+- New demo accounts: wait **~1 day** before Ace has data to answer questions
+- For real-time data, the Add-In should use direct API calls instead
+
 **Example prompts for Ace Add-Ins:**
 
 ```

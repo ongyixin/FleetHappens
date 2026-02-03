@@ -249,6 +249,11 @@ Ace queries are async and can take 30-60+ seconds. You can't just make one call 
 
 This is different from regular API calls which return immediately.
 
+**Important: Ace Data Latency**
+- Ace data runs **behind** real-time API data - don't expect the very latest records
+- New demo accounts: wait **~1 day** before Ace has enough data to answer questions
+- For real-time data, use direct API calls instead
+
 ```javascript
 // Ace uses the SAME api object and credentials!
 // Async pattern: create chat → send prompt → poll for results

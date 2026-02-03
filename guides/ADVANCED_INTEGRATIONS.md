@@ -84,6 +84,11 @@ Understanding when to use Geotab Ace versus the direct API is crucial for buildi
 
 **Rule of thumb:** If you need the answer in under 5 seconds, use direct API. If you need AI-powered insights or would otherwise need to write complex analysis code, use Ace.
 
+**Important: Ace Data Latency**
+- Ace data runs **behind** real-time API data - don't expect the very latest records
+- New demo accounts: wait **~1 day** before Ace has enough data to answer questions
+- If you need current data, use direct API calls
+
 ### Decision Flowchart
 
 ```
