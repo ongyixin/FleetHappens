@@ -23,6 +23,40 @@ Custom pages that integrate directly into MyGeotab. They can display dashboards,
 
 **Recommended Hosting: GitHub Pages** - Free, simple static hosting with proper CORS support. Just push files and enable Pages in repo settings.
 
+### Quick Reference: Embedded Add-In Format
+
+> ⚠️ **CRITICAL:** Embedded Add-Ins use a specific JSON structure. Getting this wrong causes "Page Not Found" errors.
+
+```json
+{
+  "name": "My Add In",
+  "supportEmail": "https://github.com/your-repo",
+  "version": "1.0",
+  "items": [{
+    "url": "page.html",
+    "path": "ActivityLink",
+    "menuName": { "en": "My Add-In" }
+  }],
+  "files": {
+    "page.html": "<!DOCTYPE html><html>...</html>"
+  }
+}
+```
+
+**Common Mistake - WRONG format:**
+```json
+❌ "pages": [{ "html": "..." }]
+❌ "items": [{ "html": "..." }]
+❌ "content": "..."
+```
+
+**Correct format:**
+```json
+✅ "files": { "page.html": "<!DOCTYPE html>..." }
+```
+
+See [Embedded Add-Ins](#embedded-add-ins-no-hosting) section for complete details.
+
 Other options: Netlify, Vercel, Firebase Hosting (all have CORS support).
 
 <!-- TODO: Explore Replit server-side capabilities for dynamic add-ins (API proxies, data processing) -->
@@ -597,7 +631,11 @@ See [references/TROUBLESHOOTING.md](references/TROUBLESHOOTING.md) for complete 
 
 ## Embedded Add-Ins (No Hosting)
 
-For quick prototypes without hosting:
+For quick prototypes without hosting.
+
+> ⚠️ **CRITICAL:** The JSON structure must be EXACTLY as shown below. Common mistakes cause "Page Not Found" errors.
+
+### Correct Format
 
 ```json
 {
@@ -615,11 +653,22 @@ For quick prototypes without hosting:
 }
 ```
 
-**Embedded Rules:**
-- Use `style=""` on elements (not `<style>` tags)
-- Single quotes for HTML attributes
+### Common Format Mistakes
+
+| ❌ WRONG | ✅ CORRECT |
+|----------|-----------|
+| `"pages": [{"html": "..."}]` | `"files": {"page.html": "..."}` |
+| `"items": [{"html": "..."}]` | `"files": {"page.html": "..."}` |
+| `"content": "..."` | `"files": {"page.html": "..."}` |
+| `"path": "ActivityLink/"` (trailing slash) | `"path": "ActivityLink"` (no trailing slash) |
+
+### Embedded Rules
+
+- Use `style=""` on elements (not `<style>` tags - they get stripped!)
+- Single quotes for HTML attributes inside JSON strings
 - Escape double quotes: `\"`
-- No external file references
+- No external file references (everything inline)
+- `url` in items matches filename in `files` object
 - Path without trailing slash: `"ActivityLink"` (not `"ActivityLink/"`)
 
 See [references/EMBEDDED.md](references/EMBEDDED.md) for complete embedded add-in guide.
