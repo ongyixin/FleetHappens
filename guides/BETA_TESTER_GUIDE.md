@@ -1,6 +1,14 @@
 # Beta Tester Guide
 
-Welcome, beta tester! You're helping us refine this curriculum before the hackathon. Your feedback is invaluable.
+**Thank you for being an early tester!**
+
+We're building something new here - a curriculum that teaches developers to build fleet apps using AI assistance ("vibe coding"). You're among the first to try it, and your feedback will directly shape what hackathon participants experience.
+
+This guide will evolve based on what you tell us. Found something confusing? We'll fix it. Hit a dead end? We want to know. Have an idea? Share it.
+
+This is also a fun opportunity for you: you get early access to play with these tools, build something cool, and help shape how others will learn. Enjoy the exploration!
+
+---
 
 ## Quick Start (5 minutes)
 
