@@ -261,13 +261,23 @@ api.getSession(function(session) {
 
 Add-Ins can use both the direct API (above) and Geotab Ace for AI-powered queries. **Ace uses the same API connection** - no separate authentication needed.
 
+### Performance Comparison (Real Test Data)
+
+| Metric | Direct API | Ace AI |
+|--------|-----------|--------|
+| **Response Time** | ~400ms | ~70 seconds |
+| **Speed Ratio** | 1x | **175x slower** |
+| **Best For** | Simple lookups, real-time | Complex analysis, insights |
+
+> **Try it yourself:** Install [examples/addins/ace-vs-api-comparison.json](../../examples/addins/ace-vs-api-comparison.json) to see the difference live.
+
 | Use Direct API | Use Geotab Ace |
 |----------------|----------------|
 | Real-time data (vehicle location) | Complex analysis ("fuel efficiency trend") |
 | Simple lookups (get vehicle by ID) | Natural language questions |
 | Write operations (create zone) | Insights ("which drivers need coaching?") |
 | High-frequency updates | Cross-entity analysis |
-| Response needed in <1 second | OK to wait 10-60 seconds |
+| Response needed in <1 second | OK to wait 30-90 seconds |
 
 ### Calling Ace from Add-Ins
 

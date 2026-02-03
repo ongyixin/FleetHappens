@@ -228,12 +228,16 @@ Ace is Geotab's AI that answers complex fleet questions in natural language. It 
 
 ### When to Use Ace vs Direct API
 
+**Performance (real test data):** Direct API ~400ms vs Ace ~70 seconds (175x difference)
+
 | Use Ace For | Use Direct API For |
 |-------------|-------------------|
 | "Top 5 vehicles by fuel consumption" | Current vehicle locations |
 | "Drivers with most harsh braking this month" | Live speed/status |
 | "Fleet efficiency trends" | Real-time device info |
 | Complex analysis questions | Simple data lookups |
+
+> **Live demo:** The `ace-vs-api-comparison` Add-In shows this difference in real-time.
 
 ### Ace API Pattern (Verified Working)
 
@@ -279,7 +283,9 @@ function askAce(api, question, onComplete, onError) {
             }
         }, function(promptResponse) {
             var promptData = getAceData(promptResponse);
-            var messageGroupId = promptData.message_group_id;
+            // Handle both response formats: flat message_group_id or nested message_group.id
+            var messageGroupId = promptData.message_group_id ||
+                                 ((promptData.message_group || {}).id);
             if (!messageGroupId) {
                 onError("Failed to send prompt");
                 return;
