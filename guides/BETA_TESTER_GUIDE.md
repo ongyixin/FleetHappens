@@ -195,9 +195,9 @@ If you spot a typo or have a fix:
 4. Submit a PR
 
 ### Option 3: Direct Message
-DM **Felipe Hoffa** on:
-- Twitter/X: [@felipehoffa](https://twitter.com/felipehoffa)
-- LinkedIn: [Felipe Hoffa](https://www.linkedin.com/in/felipehoffa/)
+Reach out to **Felipe Hoffa**:
+- **Geotab internal**: DM on Slack or Teams
+- **External**: [LinkedIn](https://www.linkedin.com/in/felipehoffa/)
 
 ### What We're Looking For
 
