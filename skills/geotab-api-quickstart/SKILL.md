@@ -70,6 +70,19 @@ print("Connected!")
 
 ## Fetching Data
 
+### Count Entities (Efficient)
+
+```python
+# GetCountOf returns just the count - no data transfer
+device_count = api.call('GetCountOf', typeName='Device')
+print(f"Fleet has {device_count} vehicles")
+
+trip_count = api.call('GetCountOf', typeName='Trip')
+zone_count = api.call('GetCountOf', typeName='Zone')
+```
+
+**Note:** `GetCountOf` includes inactive entities. Use `api.get()` with filters for active-only counts.
+
 ### Get All Vehicles
 
 ```python
