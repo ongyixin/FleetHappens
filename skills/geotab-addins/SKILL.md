@@ -343,7 +343,7 @@ askAce(api, "Which vehicles drove the most last month?", function(result) {
 
 ### Getting Full Results (More Than 10 Rows)
 
-Ace's `preview_array` only returns 10 rows. For full data, use `signed_urls` from the response - **CORS-approved** for direct fetch from Add-Ins:
+Ace's `preview_array` only returns 10 rows. For full data, use `signed_urls` from the response - **CORS-approved for geotab.com** (embedded Add-Ins work):
 
 ```javascript
 // Extract CSV URL from Ace response messages

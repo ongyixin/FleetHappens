@@ -617,7 +617,7 @@ var dist = row[cols[1]];    // Second column = value
 
 ### Getting Full Results via CSV Download
 
-The `preview_array` only returns 10 rows. For full datasets, use `signed_urls` from the response - these are **CORS-approved** and can be fetched directly from Add-Ins:
+The `preview_array` only returns 10 rows. For full datasets, use `signed_urls` from the response - these are **CORS-approved for geotab.com origin** (embedded Add-Ins work directly):
 
 ```javascript
 // In your pollForResults success handler, after status === "DONE":
@@ -646,6 +646,8 @@ if (csvUrl) {
 ```
 
 **Why this matters:** Ace queries like "Get 100 recent GPS logs" will only show 10 in `preview_array`, but the CSV URL contains all 100+ results.
+
+**Note:** CORS allows `geotab.com` origin - embedded Add-Ins work. External/hosted Add-Ins may need to request expanded CORS policy from Geotab.
 
 ### Critical Ace Mistakes to Avoid
 
