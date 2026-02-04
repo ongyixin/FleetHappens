@@ -137,6 +137,33 @@ new Date(timeStr.replace(' ', 'T') + 'Z')
 - Different aggregation logic
 - "Active" vs "all" device filtering
 
+## Why Counts Differ: API vs Ace
+
+| Method | Count | What's Included |
+|--------|-------|-----------------|
+| `GetCountOf Device` | 6538 | ALL devices (active + inactive) |
+| Ace "How many vehicles?" | 3161 | Only tracked, active devices |
+
+**Ace always applies these filters:**
+```sql
+WHERE IsTracked = TRUE
+  AND Device_ActiveTo >= CURRENT_DATETIME()
+```
+
+This is usually what you want for analysis (ignore test devices, retired vehicles).
+
+## Ace BigQuery Tables
+
+Ace queries these pre-built tables (from actual SQL we've observed):
+
+| Table | Use Case |
+|-------|----------|
+| `LatestVehicleMetadata` | Device info with IsTracked filter |
+| `Trip` | Trip data with TripStartDateTime, TripEndDateTime |
+| `VehicleKPI_Daily` | Pre-aggregated daily stats (faster for distance queries) |
+
+**Device timezone matters:** Ace uses `Local_Date` and `DeviceTimeZoneId` for daily aggregations. A "yesterday" query respects each device's timezone, not UTC.
+
 ## Data Freshness
 
 - Typical lag: 2-24 hours behind real-time

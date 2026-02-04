@@ -270,7 +270,14 @@ Ace is Geotab's AI that answers complex fleet questions in natural language. It 
 
 ### When to Use Ace vs Direct API
 
-**Performance (real test data):** Direct API ~400ms vs Ace ~70 seconds (175x difference)
+**Performance comparison (real test data):**
+
+| Metric | Direct API | Ace AI |
+|--------|-----------|--------|
+| **Speed** | ~200-500ms | ~12-60 seconds |
+| **Data freshness** | Real-time | 2-24 hours behind |
+| **Result limit** | 5000 per call | 10 in preview_array |
+| **Device filter** | All devices | Only IsTracked=TRUE |
 
 | Use Ace For | Use Direct API For |
 |-------------|-------------------|
@@ -279,7 +286,21 @@ Ace is Geotab's AI that answers complex fleet questions in natural language. It 
 | "Fleet efficiency trends" | Real-time device info |
 | Complex analysis questions | Simple data lookups |
 
-> **Live demo:** The `ace-vs-api-comparison` Add-In shows this difference in real-time.
+> **Live demo:** The `ace-vs-api-comparison` Add-In shows this difference: [GitHub Pages](https://fhoffa.github.io/geotab-vibe-guide/examples/addins/ace-api-comparison.html)
+
+### Why Counts Differ
+
+GetCountOf returns ALL devices (6538), while Ace filters to tracked active devices (3161):
+```sql
+-- Ace always applies:
+WHERE IsTracked = TRUE AND Device_ActiveTo >= CURRENT_DATETIME()
+```
+
+### API Limits to Know
+
+- **5000 results max** per API call (use pagination for more)
+- **Ace preview_array** returns only 10 rows (use download_url for full data)
+- **Rate limiting:** Space Ace queries 8+ seconds apart
 
 ### Ace API Pattern (Verified Working)
 
