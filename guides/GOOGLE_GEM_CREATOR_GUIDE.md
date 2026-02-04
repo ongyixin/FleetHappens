@@ -625,6 +625,7 @@ Make entity names clickable using `window.parent.location.hash`:
 | Trips | `#tripsHistory,devices:!(` + device.id + `)` |
 | Map | `#map,liveVehicleIds:!(` + device.id + `)` |
 | Exceptions | `#exceptions2,assetsFilter:!(` + device.id + `)` |
+| Zone edit | `#zones,edit:` + zone.id |
 
 ```javascript
 link.onclick = function(e) {
@@ -633,7 +634,10 @@ link.onclick = function(e) {
 };
 ```
 
-**Important:** Use `device.id` (internal ID like "b3230"), not `device.name`.
+**Important:**
+- Use `device.id` (internal ID like "b3230"), not `device.name`
+- Multiple vehicles: `devices:!(b12,b13,b14)` (comma-separated inside `!()`)
+- Always call `e.preventDefault()` in click handlers
 
 ## External Integrations
 
@@ -647,6 +651,12 @@ Add-Ins can integrate with external services using standard URL schemes (no API 
 | WhatsApp | `https://wa.me/number?text=...` |
 | Google Maps | `https://google.com/maps?q=lat,lng` |
 | Google Calendar | `https://calendar.google.com/calendar/render?action=TEMPLATE&text=...` |
+
+**Tip:** Use `encodeURIComponent()` when inserting device data into URLs:
+```javascript
+var subject = encodeURIComponent('Issue with ' + device.name);
+link.href = 'mailto:fleet@company.com?subject=' + subject;
+```
 
 Also available: Copy to clipboard, CSV download, Print (`window.print()`), Text-to-speech (`speechSynthesis`), Native share (`navigator.share`).
 
