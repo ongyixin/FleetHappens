@@ -181,6 +181,24 @@ api.call('Get', { typeName: 'DeviceStatusInfo' }, function(statuses) {
 
 ## API Operations
 
+### Available Methods
+
+| Method | Purpose |
+|--------|---------|
+| `Get` | Fetch entities by type |
+| `GetCountOf` | Count entities (efficient) |
+| `Add` | Create new entity |
+| `Set` | Update existing entity |
+| `Remove` | Delete entity |
+| `GetFeed` | Incremental data sync (for polling changes) |
+| `GetAddresses` | Reverse geocoding (coordinates → address) |
+| `GetCoordinates` | Geocoding (address → coordinates) |
+| `GetRoadMaxSpeeds` | Speed limits at GPS locations |
+| `GetVersion` | API version info |
+| `multiCall` | Batch multiple calls in one request |
+| `getSession` | Get current user session (userName, database) |
+| `GetAceResults` | AI-powered fleet queries (see Ace section) |
+
 ### Read Data (Get)
 ```javascript
 api.call("Get", { typeName: "Device" }, function(devices) {

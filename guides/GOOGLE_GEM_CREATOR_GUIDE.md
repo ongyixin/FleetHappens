@@ -174,6 +174,24 @@ geotab.addin["addin-name"] = function() {
 
 The `api` object is injected by MyGeotab - no credentials needed.
 
+### Available API Methods
+
+| Method | Purpose | Example |
+|--------|---------|---------|
+| `Get` | Fetch entities by type | `api.call("Get", { typeName: "Device" }, cb)` |
+| `GetCountOf` | Count entities (efficient) | `api.call("GetCountOf", { typeName: "Device" }, cb)` |
+| `Add` | Create new entity | `api.call("Add", { typeName: "Zone", entity: {...} }, cb)` |
+| `Set` | Update existing entity | `api.call("Set", { typeName: "Device", entity: {id, name} }, cb)` |
+| `Remove` | Delete entity | `api.call("Remove", { typeName: "Zone", entity: {id} }, cb)` |
+| `GetFeed` | Incremental data sync | `api.call("GetFeed", { typeName: "LogRecord", fromVersion }, cb)` |
+| `GetAddresses` | Reverse geocoding (coords→address) | `api.call("GetAddresses", { coordinates: [{x,y}] }, cb)` |
+| `GetCoordinates` | Geocoding (address→coords) | `api.call("GetCoordinates", { addresses: ["123 Main St"] }, cb)` |
+| `GetRoadMaxSpeeds` | Speed limits at locations | `api.call("GetRoadMaxSpeeds", { deviceSearch: {id} }, cb)` |
+| `GetVersion` | API version info | `api.call("GetVersion", {}, cb)` |
+| `multiCall` | Batch multiple calls | `api.multiCall([["Get", {...}], ["Get", {...}]], cb)` |
+| `getSession` | Current user session | `api.getSession(function(session) {...})` |
+| `GetAceResults` | AI-powered queries | See Ace section below |
+
 ### Getting Data
 api.call("Get", { typeName: "Device" }, function(devices) {
     console.log("Found " + devices.length + " vehicles");
