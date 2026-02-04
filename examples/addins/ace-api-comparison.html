@@ -26,8 +26,8 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-info py-2 mb-3">
-                    <small class="fw-bold">QUESTIONS ASKED</small><br>
-                    <code class="text-success">API: api.call('GetCountOf', {typeName: 'Device'})</code><br>
+                    <small class="fw-bold">GOAL:</small> Count total vehicles in fleet<br>
+                    <code class="text-success">API: GetCountOf Device</code><br>
                     <em class="text-warning">Ace: "How many vehicles are in my fleet?"</em>
                 </div>
                 <div class="row">
@@ -61,8 +61,8 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-info py-2 mb-3">
-                    <small class="fw-bold">QUESTIONS ASKED</small><br>
-                    <code class="text-success">API: Get Trip (real-time), find latest stop time</code><br>
+                    <small class="fw-bold">GOAL:</small> Find most recent trip in fleet<br>
+                    <code class="text-success">API: Get Trip (last 24h) → sort by stop time</code><br>
                     <em class="text-warning">Ace: "Most recent trip in my fleet?"</em>
                 </div>
                 <div class="row">
@@ -95,9 +95,9 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-info py-2 mb-3">
-                    <small class="fw-bold">QUESTIONS ASKED</small><br>
-                    <code class="text-success">API: For each device, Get Trip (yesterday UTC), sum distances</code><br>
-                    <em class="text-warning">Ace: "Top 3 vehicles by distance yesterday [date]"</em>
+                    <small class="fw-bold">GOAL:</small> Top 3 vehicles by distance yesterday<br>
+                    <code class="text-success">API: Get all devices → query trips per device → sum distances → sort</code><br>
+                    <em class="text-warning">Ace: "Top 3 vehicles by distance yesterday"</em>
                 </div>
                 <div class="row">
                     <div class="col-6">
