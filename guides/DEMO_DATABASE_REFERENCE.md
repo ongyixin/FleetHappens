@@ -259,10 +259,12 @@ Engine and sensor telemetry readings.
 | Diagnostic ID | Name | Unit | Sample Values |
 |--------------|------|------|---------------|
 | `DiagnosticOdometerId` | Odometer | meters | 99,446,800 |
+| `DiagnosticSpeedId` | GPS Vehicle Speed | km/h | 0 - 120 |
+| `DiagnosticPostedRoadSpeedId` | Posted Road Speed Limit | km/h | 50, 80, 100 |
 | `DiagnosticEngineSpeedId` | Engine RPM | RPM | 713.5, 880, 1289.25 |
 | `DiagnosticFuelLevelId` | Fuel Level | % | 54.89 - 92.93 |
 | `DiagnosticDeviceTotalFuelId` | Total Fuel Used | liters | 23,196.49 |
-| `DiagnosticEngineRoadSpeedId` | Road Speed | km/h | 0 - 95 |
+| `DiagnosticEngineRoadSpeedId` | Engine Road Speed | km/h | 0 - 95 |
 | `DiagnosticEngineCoolantTemperatureId` | Coolant Temp | °C | 39, 60, 72, 89, 92 |
 | `DiagnosticGoDeviceVoltageId` | Device Voltage | volts | 24.74 - 28.78 |
 | `DiagnosticAccelerationForwardBrakingId` | Accel/Braking | m/s² | -6.71 to 3.56 |
@@ -353,6 +355,23 @@ Safety rule violation record.
 | `distance` | float | Distance during event | `0.001300758` |
 | `diagnostic` | string | Associated diagnostic | `"NoDiagnosticId"` |
 | `state` | string | Event state | `"ExceptionEventStateValidId"` |
+| `details` | object | Speed details (speeding rules only) | See below |
+
+**The `details` Object (Speeding Events Only):**
+
+For speeding rule exceptions (e.g., `RulePostedSpeedingId`), the `details` object may contain:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `maxSpeed` | float | Maximum speed during violation (km/h) |
+| `speedLimit` | float | Posted speed limit at location (km/h) |
+
+**Note:** The `details` object is not always populated. It may be `undefined` for:
+- Recently created events still being processed
+- Non-speeding rule types
+- Events in databases with limited road data
+
+Always use defensive coding: `(ex.details && ex.details.maxSpeed) || 0`
 
 **Sample Record:**
 
