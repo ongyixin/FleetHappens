@@ -24,25 +24,28 @@ var speedLimit = (ex.details && ex.details.speedLimit) || 0;
 
 This pattern is confirmed from a real debugging session where `Cannot read properties of undefined (reading 'maxSpeed')` crashed an Add-In.
 
-### Speed Diagnostic IDs (Verified)
+### Speed Diagnostic IDs
 
-| Diagnostic ID | Description | Unit | Demo DB | Real Vehicles |
-|--------------|-------------|------|---------|---------------|
+| Diagnostic ID | Description | Unit | USA Daytime Demo | Real Vehicles |
+|--------------|-------------|------|------------------|---------------|
 | `DiagnosticEngineRoadSpeedId` | Engine-reported road speed | km/h | ✅ Yes | Yes |
 | `DiagnosticEngineSpeedId` | Engine RPM | RPM | ✅ Yes | Yes |
 | `DiagnosticSpeedId` | GPS-based vehicle speed | km/h | ❌ No | Yes |
 | `DiagnosticPostedRoadSpeedId` | Posted road speed limit | km/h | ❌ No | Yes (where map data exists) |
 
-**Verified from demo database testing:**
+**Tested in USA Daytime demo database:**
 - `DiagnosticEngineRoadSpeedId` returns ECM-reported speed (0, 3, 6, 23, 24 km/h observed)
-- `DiagnosticSpeedId` and `DiagnosticPostedRoadSpeedId` return 0 results in demo databases
+- `DiagnosticSpeedId` and `DiagnosticPostedRoadSpeedId` return 0 results
 - For demo database testing, use `DiagnosticEngineRoadSpeedId` as alternative speed source
+- Other demo types (EV Fleet, Long Distance) may have different availability
 
 **Common Mistake:** Using `DiagnosticPostedSpeedId` (doesn't exist) instead of `DiagnosticPostedRoadSpeedId`.
 
-### Demo Database Limitations (Verified)
+### Demo Database Limitations (Tested in USA Daytime Demo)
 
-ExceptionEvents in demo databases have these characteristics:
+> **Note:** Availability may vary by demo database type (EV Fleet, Long Distance, etc.).
+
+ExceptionEvents in tested demo databases have these characteristics:
 - Speeding events exist for `RulePostedSpeedingId`
 - Have `NoDiagnosticId` (not linked to a specific diagnostic)
 - Have no `details` object (no `maxSpeed`/`speedLimit` pre-calculated)

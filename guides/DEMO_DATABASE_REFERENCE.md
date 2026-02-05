@@ -45,15 +45,8 @@ This guide documents multiple verified demo database profiles:
 | Profile | Data Center | Vehicle Type | Vocation | Simulated Routes | Status |
 |---------|-------------|--------------|----------|------------------|--------|
 | European Long Distance | Italy/Netherlands | Vans and Trucks | Long distance | Spain | Documented below |
-| USA Las Vegas Fleet | USA | Vans and Trucks (GO9) | Mixed (scissor lifts, forklifts, vans) | Las Vegas/Henderson | Verified for diagnostics |
+| USA Daytime | USA | Vans and Trucks | Daytime tour | USA | Confirming |
 | EV Fleet | USA or UK | Electric Vehicle (EV) | Hub and spoke | TBD | TODO |
-
-**USA Las Vegas Fleet (Verified Diagnostics):**
-
-This profile was used to verify which diagnostics are available in demo databases:
-- **Available:** `DiagnosticEngineRoadSpeedId`, `DiagnosticEngineSpeedId`, `DiagnosticIgnitionId`, `DiagnosticOdometerId`, fuel diagnostics, coolant temp
-- **Not Available:** `DiagnosticSpeedId`, `DiagnosticPostedRoadSpeedId`, harsh braking/cornering diagnostics
-- **ExceptionEvents:** Exist for `RulePostedSpeedingId` but with `NoDiagnosticId` and no `details` object
 
 ---
 
@@ -261,7 +254,7 @@ Engine and sensor telemetry readings.
 | `data` | float | Reading value | `99620700` |
 | `controller` | string | ECU source | `"ControllerNoneId"` |
 
-**Diagnostics Available in Demo Databases (Verified):**
+**Diagnostics Available (Tested in USA Daytime Demo):**
 
 | Diagnostic ID | Name | Unit | Sample Values |
 |--------------|------|------|---------------|
@@ -276,7 +269,9 @@ Engine and sensor telemetry readings.
 | `DiagnosticGpsLogReasonId` | GPS Log Metadata | - | 0 |
 | `DiagnosticAux1Id` through `DiagnosticAux8Id` | Auxiliary Inputs | boolean | 0 |
 
-**Diagnostics NOT Available in Demo Databases (Verified):**
+**Diagnostics NOT Available (Tested in USA Daytime Demo):**
+
+> **Note:** Availability may vary by demo database type. EV Fleet demos may have different diagnostics (e.g., `DiagnosticStateOfChargeId`).
 
 | Diagnostic ID | Name | Notes |
 |--------------|------|-------|
@@ -284,7 +279,7 @@ Engine and sensor telemetry readings.
 | `DiagnosticPostedRoadSpeedId` | Posted Road Speed Limit | Returns 0 results |
 | `DiagnosticAccelerometerForwardBrakingId` | Harsh Braking G-force | Returns 0 results |
 | `DiagnosticSeatBeltId` | Seatbelt Status | Returns 0 results |
-| `DiagnosticStateOfChargeId` | EV Battery % | Returns 0 results |
+| `DiagnosticStateOfChargeId` | EV Battery % | Returns 0 results (may be available in EV demos) |
 
 **Important for Speed Data:**
 
@@ -387,9 +382,9 @@ For speeding rule exceptions (e.g., `RulePostedSpeedingId`), the `details` objec
 | `maxSpeed` | float | Maximum speed during violation (km/h) |
 | `speedLimit` | float | Posted speed limit at location (km/h) |
 
-**Demo Database Behavior (Verified):**
+**Demo Database Behavior (Tested in USA Daytime Demo):**
 
-ExceptionEvents in demo databases have these characteristics:
+ExceptionEvents in this demo database have these characteristics:
 - Speeding events exist for `RulePostedSpeedingId`
 - Have `NoDiagnosticId` (not linked to a specific diagnostic)
 - **Have no `details` object** (no `maxSpeed`/`speedLimit` pre-calculated)
