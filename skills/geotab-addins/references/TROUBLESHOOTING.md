@@ -208,28 +208,9 @@ Common issues when building speeding dashboards and safety Add-Ins.
 
 **Full reference:** See [SPEED_DATA.md](/skills/geotab-api-quickstart/references/SPEED_DATA.md) for complete patterns (Python + JavaScript).
 
-### Quick Reference: Common Speed Data Mistakes
+### Quick Reference: Common Speed Data Issues
 
-**Wrong diagnostic ID:**
-```javascript
-// ❌ Wrong - DiagnosticPostedSpeedId doesn't exist
-diagnosticSearch: { id: "DiagnosticPostedSpeedId" }
-
-// ✅ Correct
-diagnosticSearch: { id: "DiagnosticPostedRoadSpeedId" }
-```
-
-**Time window too narrow:**
-```javascript
-// ❌ Wrong - exact timestamps may have no data
-fromDate: ex.activeFrom, toDate: ex.activeTo
-
-// ✅ Correct - add 30-second buffer
-var startTime = new Date(ex.activeFrom);
-startTime.setSeconds(startTime.getSeconds() - 30);
-```
-
-**ExceptionEvent.details undefined:**
+**ExceptionEvent.details undefined (CONFIRMED):**
 ```javascript
 // ❌ Wrong - crashes if details missing
 Math.round(ex.details.maxSpeed)
@@ -238,7 +219,10 @@ Math.round(ex.details.maxSpeed)
 (ex.details && ex.details.maxSpeed) || 0
 ```
 
-**Posted limit shows 0:** Not all roads have speed limit data. Display "N/A" when `limit === 0`.
+**Unverified patterns** (see [SPEED_DATA.md](/skills/geotab-api-quickstart/references/SPEED_DATA.md) for details):
+- Diagnostic ID naming (`DiagnosticPostedRoadSpeedId` vs `DiagnosticPostedSpeedId`)
+- Time window buffering for StatusData queries
+- Posted speed limit showing 0 on unmapped roads
 
 ---
 
