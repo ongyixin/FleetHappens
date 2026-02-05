@@ -302,6 +302,44 @@ api.call("Get", {
 5. Verify the Add-In appears in menu
 6. Check console for "registered" and "initializing" messages
 
+## Working with Speed Data and ExceptionEvents
+
+Common issues when building speeding dashboards and safety Add-Ins.
+
+**Full reference:** See [SPEED_DATA.md](/skills/geotab-api-quickstart/references/SPEED_DATA.md) for complete patterns (Python + JavaScript).
+
+### Quick Reference: Common Speed Data Issues
+
+**ExceptionEvent.details undefined (CONFIRMED):**
+```javascript
+// ❌ Wrong - crashes if details missing
+Math.round(ex.details.maxSpeed)
+
+// ✅ Correct - defensive check
+(ex.details && ex.details.maxSpeed) || 0
+```
+
+**Demo database limitations (CONFIRMED):**
+- `DiagnosticSpeedId` and `DiagnosticPostedRoadSpeedId` return 0 results
+- Use `DiagnosticEngineRoadSpeedId` as alternative speed source
+- ExceptionEvents have no `details` object in demo databases
+- See SPEED_DATA.md for `detectDemoDatabase()` function to auto-detect
+
+**Wrong diagnostic ID (CONFIRMED):**
+```javascript
+// ❌ Wrong - doesn't exist
+diagnosticSearch: { id: "DiagnosticPostedSpeedId" }
+
+// ✅ Correct
+diagnosticSearch: { id: "DiagnosticPostedRoadSpeedId" }
+```
+
+**Unverified patterns** (see [SPEED_DATA.md](/skills/geotab-api-quickstart/references/SPEED_DATA.md)):
+- Time window buffering for StatusData queries (30-second buffer)
+- StatusData fallback when `details` is missing
+
+---
+
 ## When Helping Users
 
 ### Always Include:
