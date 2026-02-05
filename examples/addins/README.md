@@ -34,6 +34,35 @@ Even simpler example with just the basics.
 
 **Type:** External hosted (requires HTTPS hosting)
 
+### ace-duckdb-lab.* (Advanced: Ace + DuckDB WASM)
+Demonstrates integrating Geotab Ace with DuckDB in the browser for in-memory SQL analytics.
+
+**Features:**
+- Ask natural language questions via Geotab Ace
+- Load CSV results into an in-browser DuckDB database (WASM)
+- Run custom SQL queries on the data
+- Debug console showing Ace API workflow
+
+**Files:**
+- `ace-duckdb-lab.html` - Main HTML with embedded JavaScript
+- `ace-duckdb-lab-config.json` - Configuration for MyGeotab
+
+**Type:** External hosted (requires HTTPS hosting)
+
+**Technical Notes:**
+- DuckDB runs entirely in the browser using WebAssembly
+- Includes workaround for GCS CORS restrictions (blob fetch)
+- Documents engineering improvements Geotab could make
+
+### ace-api-comparison.* (Ace vs Direct API)
+Side-by-side comparison of Ace natural language queries vs direct API calls.
+
+**Files:**
+- `ace-api-comparison.html` - Comparison tool
+- `ace-api-comparison-external.json` - Configuration
+
+**Type:** External hosted
+
 ### embedded-* (No Hosting Required!)
 Embedded add-in with everything in the JSON configuration.
 
