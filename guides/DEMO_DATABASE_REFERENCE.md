@@ -40,13 +40,20 @@ The demo simulates realistic vehicle movement, driver behavior, and telematics d
 
 ## Sample Data Profiles
 
-This guide currently documents one demo database profile. Additional profiles planned:
+This guide documents multiple verified demo database profiles:
 
 | Profile | Data Center | Vehicle Type | Vocation | Simulated Routes | Status |
 |---------|-------------|--------------|----------|------------------|--------|
 | European Long Distance | Italy/Netherlands | Vans and Trucks | Long distance | Spain | Documented below |
-| USA Daytime | USA | Vans and Trucks | Daytime tour | USA | TODO |
+| USA Las Vegas Fleet | USA | Vans and Trucks (GO9) | Mixed (scissor lifts, forklifts, vans) | Las Vegas/Henderson | Verified for diagnostics |
 | EV Fleet | USA or UK | Electric Vehicle (EV) | Hub and spoke | TBD | TODO |
+
+**USA Las Vegas Fleet (Verified Diagnostics):**
+
+This profile was used to verify which diagnostics are available in demo databases:
+- **Available:** `DiagnosticEngineRoadSpeedId`, `DiagnosticEngineSpeedId`, `DiagnosticIgnitionId`, `DiagnosticOdometerId`, fuel diagnostics, coolant temp
+- **Not Available:** `DiagnosticSpeedId`, `DiagnosticPostedRoadSpeedId`, harsh braking/cornering diagnostics
+- **ExceptionEvents:** Exist for `RulePostedSpeedingId` but with `NoDiagnosticId` and no `details` object
 
 ---
 
@@ -254,32 +261,37 @@ Engine and sensor telemetry readings.
 | `data` | float | Reading value | `99620700` |
 | `controller` | string | ECU source | `"ControllerNoneId"` |
 
-**Common Diagnostic Types and Sample Values:**
+**Diagnostics Available in Demo Databases (Verified):**
 
 | Diagnostic ID | Name | Unit | Sample Values |
 |--------------|------|------|---------------|
-| `DiagnosticOdometerId` | Odometer | meters | 99,446,800 |
-| `DiagnosticEngineSpeedId` | Engine RPM | RPM | 713.5, 880, 1289.25 |
-| `DiagnosticFuelLevelId` | Fuel Level | % | 54.89 - 92.93 |
-| `DiagnosticDeviceTotalFuelId` | Total Fuel Used | liters | 23,196.49 |
-| `DiagnosticEngineRoadSpeedId` | Engine Road Speed | km/h | 0 - 95 |
-| `DiagnosticEngineCoolantTemperatureId` | Coolant Temp | °C | 39, 60, 72, 89, 92 |
-| `DiagnosticGoDeviceVoltageId` | Device Voltage | volts | 24.74 - 28.78 |
-| `DiagnosticAccelerationForwardBrakingId` | Accel/Braking | m/s² | -6.71 to 3.56 |
-| `DiagnosticAccelerationSideToSideId` | Lateral Accel | m/s² | -4.42 to 3.73 |
-| `DiagnosticAccelerationUpDownId` | Vertical Accel | m/s² | 5.04 to 15.08 |
-| `DiagnosticEngineDataActiveId` | Engine Active | boolean | 0 or 1 |
+| `DiagnosticEngineRoadSpeedId` | Engine Road Speed (ECM) | km/h | 0, 3, 6, 23, 24 |
+| `DiagnosticEngineSpeedId` | Engine RPM | RPM | 618, 648, 697, 1614, 1841 |
+| `DiagnosticOdometerId` | Odometer | meters | ~135,567,000 |
+| `DiagnosticDeviceTotalFuelId` | Total Fuel Used | liters | 295–734 |
+| `DiagnosticDeviceTotalIdleFuelId` | Idle Fuel Used | liters | 53–54 |
+| `DiagnosticEngineCoolantTemperatureId` | Coolant Temp | °C | 29–69 |
+| `DiagnosticIgnitionId` | Ignition On/Off | boolean | 0 or 1 |
+| `DiagnosticPositionValidId` | GPS Fix Valid | boolean | 0 or 1 |
+| `DiagnosticGpsLogReasonId` | GPS Log Metadata | - | 0 |
+| `DiagnosticAux1Id` through `DiagnosticAux8Id` | Auxiliary Inputs | boolean | 0 |
 
-**Speed Diagnostics (Real Vehicles Only):**
+**Diagnostics NOT Available in Demo Databases (Verified):**
 
-The following diagnostics are available with real Geotab devices but may not be present in demo databases:
+| Diagnostic ID | Name | Notes |
+|--------------|------|-------|
+| `DiagnosticSpeedId` | GPS Vehicle Speed | Returns 0 results |
+| `DiagnosticPostedRoadSpeedId` | Posted Road Speed Limit | Returns 0 results |
+| `DiagnosticAccelerometerForwardBrakingId` | Harsh Braking G-force | Returns 0 results |
+| `DiagnosticSeatBeltId` | Seatbelt Status | Returns 0 results |
+| `DiagnosticStateOfChargeId` | EV Battery % | Returns 0 results |
 
-| Diagnostic ID | Name | Unit | Notes |
-|--------------|------|------|-------|
-| `DiagnosticSpeedId` | GPS Vehicle Speed | km/h | Primary speed source |
-| `DiagnosticPostedRoadSpeedId` | Posted Road Speed Limit | km/h | Requires map data coverage |
+**Important for Speed Data:**
 
-These are essential for building speeding dashboards and safety Add-Ins. See the [troubleshooting guide](/skills/geotab-addins/references/TROUBLESHOOTING.md#working-with-speed-data-and-exceptionevents) for patterns.
+For speeding dashboards in demo databases:
+- Use `DiagnosticEngineRoadSpeedId` (ECM-reported speed) instead of `DiagnosticSpeedId` (GPS speed)
+- `DiagnosticPostedRoadSpeedId` (posted speed limit) is not available
+- See [SPEED_DATA.md](/skills/geotab-api-quickstart/references/SPEED_DATA.md) for detection patterns and fallbacks
 
 **Sample Record:**
 
@@ -375,12 +387,20 @@ For speeding rule exceptions (e.g., `RulePostedSpeedingId`), the `details` objec
 | `maxSpeed` | float | Maximum speed during violation (km/h) |
 | `speedLimit` | float | Posted speed limit at location (km/h) |
 
-**Note:** The `details` object is not always populated. It may be `undefined` for:
-- Recently created events still being processed
-- Non-speeding rule types
-- Events in databases with limited road data
+**Demo Database Behavior (Verified):**
 
-Always use defensive coding: `(ex.details && ex.details.maxSpeed) || 0`
+ExceptionEvents in demo databases have these characteristics:
+- Speeding events exist for `RulePostedSpeedingId`
+- Have `NoDiagnosticId` (not linked to a specific diagnostic)
+- **Have no `details` object** (no `maxSpeed`/`speedLimit` pre-calculated)
+- All show `UnknownDriverId`
+- Synthetic-looking (identical durations)
+
+This means speeding dashboards that rely on `ex.details.maxSpeed` will show 0 or crash in demo databases.
+
+**Always use defensive coding:** `(ex.details && ex.details.maxSpeed) || 0`
+
+See [SPEED_DATA.md](/skills/geotab-api-quickstart/references/SPEED_DATA.md) for demo database detection and fallback patterns.
 
 **Sample Record:**
 
