@@ -585,6 +585,7 @@ The AI will walk you through every step. When done, your URL will look like:
 - `examples/addins/minimal-test.*` - Even simpler example (tested ✅)
 - [Heat Map Add-In](https://github.com/Geotab/sdk-addin-samples/tree/master/addin-heatmap) (official example)
 - [All SDK Samples](https://github.com/Geotab/sdk-addin-samples) (browse more examples)
+- [Guide to Official Samples](./SDK_ADDIN_SAMPLES_GUIDE.md) (what each sample teaches + vibe prompts)
 
 **Documentation:**
 - [Geotab Add-In Developer Guide](https://developers.geotab.com/myGeotab/addIns/developingAddIns/)
