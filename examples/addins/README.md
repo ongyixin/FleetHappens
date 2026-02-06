@@ -108,5 +108,4 @@ Create a Geotab Add-In similar to simple-test but with [your features].
 ## Learn More
 
 - [guides/GEOTAB_ADDINS.md](../../guides/GEOTAB_ADDINS.md) — Full guide to building Add-Ins with vibe coding
-- [guides/SDK_ADDIN_SAMPLES_GUIDE.md](../../guides/SDK_ADDIN_SAMPLES_GUIDE.md) — Walkthrough of Geotab's 7 official Add-In samples
-- [Geotab/sdk-addin-samples](https://github.com/Geotab/sdk-addin-samples) — Official sample repository (install all 7 with one JSON config)
+- [guides/SDK_ADDIN_SAMPLES_GUIDE.md](../../guides/SDK_ADDIN_SAMPLES_GUIDE.md) — Geotab's 7 official Add-In samples: what each teaches, vibe prompts, and batch install

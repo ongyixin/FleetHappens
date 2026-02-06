@@ -44,7 +44,8 @@ Complete reference guide for participants and instructors.
 ### Code Samples
 - **GitHub Samples Repository**: https://github.com/Geotab/sdk
 - **API Runner (Interactive)**: https://geotab.github.io/sdk/software/api/runner.html
-- **Add-In Examples**: https://github.com/Geotab/sdk-addin-samples — see also [our walkthrough guide](./guides/SDK_ADDIN_SAMPLES_GUIDE.md)
+- **Add-In Examples**: https://github.com/Geotab/sdk-addin-samples
+- **Add-In Samples Walkthrough**: [SDK_ADDIN_SAMPLES_GUIDE.md](./guides/SDK_ADDIN_SAMPLES_GUIDE.md) — what each official sample teaches + vibe prompts
 
 ---
 
