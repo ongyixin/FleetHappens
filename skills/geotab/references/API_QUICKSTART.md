@@ -264,39 +264,23 @@ for reading in status_data:
 
 ## Historical GPS Data (LogRecord)
 
-LogRecords are GPS breadcrumbs — latitude, longitude, speed, and timestamp for every recorded position. Use them for route visualization, heat maps, geofence analysis, and historical location queries.
+LogRecords are GPS breadcrumbs — latitude, longitude, speed, and timestamp for every recorded position. Use them for route reconstruction, heat maps, and geofence analysis.
 
-### Get GPS History for a Vehicle
+### Query Pattern
 
 ```python
 from datetime import datetime, timedelta
 
-# Get a device ID first
-devices = api.get('Device', search={'name': 'Truck-101'})
-device_id = devices[0]['id']
-
-# Fetch GPS breadcrumbs from last 24 hours
+# GPS history for one vehicle (last 24h)
 records = api.get('LogRecord',
     deviceSearch={'id': device_id},
     fromDate=datetime.now() - timedelta(hours=24),
     toDate=datetime.now()
 )
-
-for r in records[:5]:
-    print(f"  {r['dateTime']}: ({r['latitude']}, {r['longitude']}) speed={r.get('speed', 0)} km/h")
+# Each record: latitude, longitude, speed (km/h), dateTime, device.id
 ```
 
-### Get GPS Data for All Vehicles (Date Range Required)
-
-```python
-# ALWAYS use a date range — LogRecord without dates fetches everything
-records = api.get('LogRecord',
-    fromDate=datetime.now() - timedelta(hours=1),
-    toDate=datetime.now()
-)
-
-print(f"Fleet generated {len(records)} GPS points in the last hour")
-```
+**Critical:** Always include `fromDate`/`toDate`. LogRecord without date filters attempts to fetch millions of records. For fleet-wide queries, keep the window narrow (hours, not days).
 
 ### LogRecord Fields
 
@@ -307,45 +291,6 @@ print(f"Fleet generated {len(records)} GPS points in the last hour")
 | `speed` | float | Speed in km/h |
 | `dateTime` | string | ISO 8601 timestamp |
 | `device` | object | `{ "id": "..." }` reference |
-
-### Common Patterns
-
-```python
-# Route reconstruction: get ordered GPS points for a trip
-records = api.get('LogRecord',
-    deviceSearch={'id': device_id},
-    fromDate=trip['start'],
-    toDate=trip['stop']
-)
-route = [(r['longitude'], r['latitude']) for r in records]
-
-# Heat map data: get all fleet positions for a time period
-records = api.get('LogRecord',
-    fromDate=datetime.now() - timedelta(days=7),
-    toDate=datetime.now(),
-    resultsLimit=5000  # cap for performance
-)
-points = [(r['latitude'], r['longitude']) for r in records if r.get('latitude')]
-```
-
-### Common Mistake: No Date Filter
-
-```python
-# WRONG — will try to fetch millions of records
-records = api.get('LogRecord')
-
-# WRONG — too large a window for the whole fleet
-records = api.get('LogRecord',
-    fromDate=datetime.now() - timedelta(days=365)
-)
-
-# CORRECT — narrow date range, or combine with device filter
-records = api.get('LogRecord',
-    deviceSearch={'id': device_id},
-    fromDate=datetime.now() - timedelta(days=7),
-    toDate=datetime.now()
-)
-```
 
 ## Filtering and Searching
 
