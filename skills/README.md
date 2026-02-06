@@ -27,7 +27,9 @@ That's it. Claude Code now has access to Geotab API patterns, Add-In development
 
 ### Option 2: Claude.ai Upload
 
-On paid Claude.ai plans, upload a skill's `SKILL.md` file directly via the UI. See [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude).
+On paid Claude.ai plans, upload skill files to your project via the UI. See [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude).
+
+**Important:** The `geotab` skill has a `references/` subfolder with 13 supporting files. Upload `SKILL.md` **and** the reference files — otherwise Claude sees navigation links it can't follow. The easiest way is to [download the zip](#option-3-download-the-zip) first, then upload the contents.
 
 ### Option 3: Download the Zip
 
