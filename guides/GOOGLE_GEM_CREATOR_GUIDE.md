@@ -283,62 +283,15 @@ api.call('Get', {
 
 **⚠️ Common Mistake:** Similar-sounding IDs may not work. For example, `DiagnosticEngineCrankingVoltageId` returns no data, but `DiagnosticCrankingVoltageId` works. Always verify in Engine Measurements first.
 
-### All Supported Entity Types (34 Total)
+### Entity Type Capabilities
 
-**Core Assets (Writable):**
-- `Device` - Vehicles/assets
-- `User` - Users and drivers
-- `Group` - Organizational hierarchy
+**Writable (Get + Add/Set/Remove):** `Device`, `User`, `Group`, `Zone`, `Route`, `Rule`, `DistributionList`, `DVIRLog`, `FuelTransaction`, `CustomData`, `AddInData`, `DeviceShare`
 
-**Geofencing (Writable):**
-- `Zone` - Geofences/locations
-- `Route` - Planned routes
+**Read-only (Get only):** `Trip`, `LogRecord`, `StatusData`, `DeviceStatusInfo`, `ExceptionEvent`, `FaultData`, `Diagnostic` (65K+ types), `DriverChange`, `FuelUsed`, `FillUp`, `FuelTaxDetail`, `Audit`, `DebugData`
 
-**Rules & Alerts:**
-- `Rule` - Exception rules (writable)
-- `Condition` - Rule conditions (writable, but Get not supported - access via Rule)
-- `ExceptionEvent` - Rule violations (read-only)
-- `DistributionList` - Notification recipients (writable)
+**Special handling:** `Condition` (access via Rule, no Get), `DutyStatusAvailability` (requires userSearch), `DutyStatusViolation` (requires search params), `DutyStatusLog` (limited write)
 
-**Diagnostics & Faults (Read-Only):**
-- `Diagnostic` - Sensor definitions (65K+ types)
-- `Controller` - ECU definitions
-- `FaultData` - Engine fault codes
-- `FailureMode` - Fault failure modes
-- `FlashCode` - Legacy codes (Get not supported)
-
-**Telematics Data (Read-Only):**
-- `LogRecord` - GPS breadcrumbs
-- `StatusData` - Sensor readings (speed, fuel, temp, etc.)
-- `Trip` - Completed journeys
-- `DeviceStatusInfo` - Current vehicle state
-
-> **Speed Data Tip:** Use `DiagnosticSpeedId` for vehicle speed and `DiagnosticPostedRoadSpeedId` for posted limits. Add 30-second time buffers when querying. See [SPEED_DATA.md](/skills/geotab/references/SPEED_DATA.md) for complete patterns.
-
-**Compliance/HOS:**
-- `DVIRLog` - Vehicle inspections (writable)
-- `DutyStatusLog` - HOS records (limited write)
-- `DutyStatusAvailability` - Available time (requires userSearch param)
-- `DutyStatusViolation` - HOS violations (requires search params)
-- `DriverChange` - Driver ID events (read-only)
-
-**Fuel:**
-- `FuelTransaction` - Fuel card data (writable)
-- `FuelUsed` - Consumption (read-only)
-- `FillUp` - Fill events (read-only)
-- `FuelTaxDetail` - IFTA records (read-only)
-
-**Custom Data (Writable):**
-- `CustomData` - Custom storage
-- `AddInData` - Per-Add-In storage
-
-**System:**
-- `Audit` - Activity log (read-only)
-- `BinaryPayload` - Raw data (Get not supported)
-- `DebugData` - Debug info (read-only)
-- `DeviceShare` - Shared access (writable)
-
-> **Tested:** 28/33 types work with Get, 30/33 with GetCountOf. Types marked with issues require special handling.
+> **Speed Data Tip:** Use `DiagnosticSpeedId` for vehicle speed and `DiagnosticPostedRoadSpeedId` for posted limits.
 
 ### Persistent Storage (AddInData)
 
