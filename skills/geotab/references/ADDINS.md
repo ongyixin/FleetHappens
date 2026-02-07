@@ -129,7 +129,67 @@ body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
 **Configuration Rules:**
 - `name`: Letters, numbers, spaces, dots, dashes, underscores, parentheses OK. No `&`, `+`, `!`. Use `"Fleet Dashboard (Beta)"` not `"Fleet & Dashboard"`
 - `supportEmail`: Never use support@geotab.com. Use `https://github.com/fhoffa/geotab-vibe-guide` or your own contact
-- `menuName`: Can contain spaces and special characters (this is what users see in the menu)
+- `menuName`: Can contain spaces and special characters (this is what users see in the menu). Add translations for multilingual fleets:
+  ```json
+  "menuName": {
+    "en": "Cold Chain View",
+    "fr": "Vue Chaîne du Froid",
+    "es": "Vista Cadena de Frío"
+  }
+  ```
+
+### Localization (i18n)
+
+MyGeotab passes the user's language in `state.language` during `initialize`. Use this to set UI labels:
+
+```javascript
+var i18n = {
+    en: { title: "Fleet Dashboard", loading: "Loading..." },
+    fr: { title: "Tableau de Bord", loading: "Chargement..." },
+    es: { title: "Panel de Flota", loading: "Cargando..." }
+};
+
+initialize: function(api, state, callback) {
+    var lang = state.language || "en";
+    var t = i18n[lang] || i18n.en;
+    document.getElementById("title").textContent = t.title;
+    // ...
+}
+```
+
+MyGeotab handles `menuName` translations automatically. Your JavaScript handles UI labels via `state.language`.
+
+### Filtering Devices by Group
+
+Large fleets can have thousands of vehicles. Add a group dropdown to let users narrow the list:
+
+```javascript
+// Fetch devices and groups together
+api.multiCall([
+    ["Get", { typeName: "Device" }],
+    ["Get", { typeName: "Group" }]
+], function(res) {
+    var allDevices = res[0], groups = res[1];
+
+    // Populate group dropdown
+    groups.forEach(function(g) {
+        if (g.name) {
+            var o = document.createElement("option");
+            o.value = g.id;
+            o.textContent = g.name;
+            groupSelect.appendChild(o);
+        }
+    });
+
+    // Filter vehicles when group changes
+    groupSelect.onchange = function() {
+        var gId = this.value;
+        var filtered = gId === "all" ? allDevices : allDevices.filter(function(d) {
+            return d.groups.some(function(dg) { return dg.id === gId; });
+        });
+        // Rebuild vehicle list from filtered array
+    };
+});
 
 **Embedded Add-In Rules:**
 - `<style>` tags ARE stripped - use inline `style=""` or load CSS dynamically via JS
@@ -301,6 +361,13 @@ api.call('Get', {
 | Fuel Level | `DiagnosticFuelLevelId` |
 | Engine Hours | `DiagnosticEngineHoursAdjustmentId` |
 | Battery Voltage | `DiagnosticBatteryTemperatureId` |
+| Cargo Temp Zone 1 | `DiagnosticCargoTemperatureZone1Id` |
+| Cargo Temp Zone 2 | `DiagnosticCargoTemperatureZone2Id` |
+| Cargo Temp Zone 3 | `DiagnosticCargoTemperatureZone3Id` |
+| Reefer Setpoint Zone 1 | `RefrigerationUnitSetTemperatureZone1Id` |
+| Reefer Setpoint Zone 2 | `RefrigerationUnitSetTemperatureZone2Id` |
+| Reefer Setpoint Zone 3 | `RefrigerationUnitSetTemperatureZone3Id` |
+| Reefer Unit Status | `RefrigerationUnitStatusId` (digital: 0=Disabled, 1=On, 2=Off, 3=Error) |
 
 **Common Mistake:** Similar-sounding IDs may not work. For example, `DiagnosticEngineCrankingVoltageId` returns no data, but `DiagnosticCrankingVoltageId` works. Always verify in Engine Measurements first.
 

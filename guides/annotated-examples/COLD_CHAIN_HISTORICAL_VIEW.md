@@ -1,8 +1,8 @@
-# Annotated Example: Cold Chain Historical View
+# Annotated Example: Cold Chain Historical View (v3.2)
 
 **A temperature monitoring Add-In — what it does, why it works, and how to prompt for something like it.**
 
-This Add-In lets fleet managers select vehicles, pick a date range, and see historical temperature data plotted against setpoints. It was built with AI-assisted "vibe coding" and shows patterns you'll want to reuse.
+This Add-In lets fleet managers filter vehicles by group, pick which temperature signals to plot (across multiple reefer zones), set a date range, and see historical charts with PDF and Excel export. It supports multiple languages and includes reefer unit status tracking.
 
 > **Try it yourself:** Paste [cold-chain-configuration.json](cold-chain-configuration.json) into MyGeotab.
 > Go to Administration → System Settings → Add-Ins → New Add-In → Configuration tab.
@@ -11,46 +11,50 @@ This Add-In lets fleet managers select vehicles, pick a date range, and see hist
 
 ## The Problem It Solves
 
-A fleet manager running refrigerated trucks needs to prove the cargo stayed cold. Regulators, customers, and insurance all want proof. This Add-In answers one question: **"What were the temperatures in my trucks yesterday?"**
+A fleet manager running refrigerated trucks needs to prove the cargo stayed cold. Regulators, customers, and insurance all want proof. This Add-In answers: **"What were the temperatures in my trucks yesterday — across all zones, and was the reefer unit actually running?"**
 
 It gives you:
-- A vehicle selector (multi-select for comparing trucks)
-- A date range picker (defaults to yesterday — because compliance reviews happen after the fact)
-- Temperature charts showing actual readings vs. the setpoint target
-- PDF export with charts and data tables for compliance binders
-- Excel export with one sheet per vehicle for further analysis
+- A group filter to narrow down vehicles on large fleets
+- Checkbox pickers for vehicles and signals (cargo temp, setpoint, unit status — zones 1-3)
+- Min/Max threshold inputs to set the chart Y-axis range
+- A date range picker (defaults to yesterday)
+- One Chart.js line chart per vehicle with all selected signals overlaid
+- Digital signals (reefer unit status) rendered as stepped lines with human-readable labels
+- PDF and Excel export with signal names and values
+- Localized menu names (English, French, Spanish, Portuguese, Italian, Polish) and JS-side i18n
 
 ---
 
-## The Prompt That Built It
-
-Here's a prompt that would generate something very close to this Add-In:
+## The Prompt That Would Build It
 
 ```
 Use the geotab-addins skill.
 
 Create an embedded Geotab Add-In called "Cold Chain Historical View" that:
 
-1. Shows a multi-select dropdown of all vehicles in the fleet
-2. Has date range pickers defaulting to yesterday (full day)
-3. When the user clicks "Plot Selection", fetches temperature data
-   (both cargo/air temperature and setpoint) for each selected vehicle
-4. Displays a Chart.js line chart per vehicle showing actual temp
-   (red, filled) vs. setpoint (black, dashed) over time
-5. Has a "Export PDF" button that generates a report with the chart
-   images and a data table per vehicle
-6. Has a "Export Excel" button that creates an .xlsx file with one
-   worksheet per vehicle
+1. Fetches all Groups and Devices on load. Shows a group dropdown
+   that filters which vehicles appear in the vehicle picker.
+2. Vehicle picker is a custom checkbox dropdown (not <select multiple>)
+3. Signal picker with checkboxes for these known diagnostic IDs:
+   - DiagnosticCargoTemperatureZone1Id, Zone2, Zone3
+   - RefrigerationUnitSetTemperatureZone1Id, Zone2, Zone3
+   - RefrigerationUnitStatusId (digital — show as stepped line)
+4. Min/Max input fields that set the chart Y-axis range
+5. Date range pickers defaulting to yesterday
+6. One Chart.js line chart per vehicle. Each selected signal is a
+   separate line with a different color. Digital signals use stepped lines.
+7. PDF export with chart images and data tables (Time, Signal, Value).
+   Digital values should show labels: Disabled, On, Off, Error.
+8. Excel export with one worksheet per vehicle, all signals included.
+9. Localize the menu name (menuName) in en, fr, es, pt, it, pl.
+   Use state.language in initialize() to set UI labels from an i18n object.
 
 IMPORTANT:
-- Don't hardcode diagnostic IDs — search for diagnostics containing
-  "Temperature" and filter client-side for zone 1 cargo/air and setpoint
 - Use api.multiCall to batch API requests
 - Pin all CDN library versions
-- Use StatusData for temperature readings
+- Use StatusData for all sensor readings
+- Add try/catch around PDF canvas export
 ```
-
-That's it. The rest is details the AI fills in. But there are interesting decisions in *how* this Add-In was built that are worth understanding so you can guide the AI better.
 
 ---
 
@@ -58,76 +62,117 @@ That's it. The rest is details the AI fills in. But there are interesting decisi
 
 ### 1. Embedded deployment (no hosting needed)
 
-This Add-In uses the **embedded** approach — the entire HTML/JS app lives inside the `"files"` block of the configuration JSON. No GitHub Pages, no server.
+The entire HTML/JS app lives inside the `"files"` block of the configuration JSON. No GitHub Pages, no server.
 
-**Where to see it:** Look at the top-level structure of [cold-chain-configuration.json](cold-chain-configuration.json) — the `"files"` key contains the full `coldchain.html` as a single string.
+**Where to see it:** The top-level structure of [cold-chain-configuration.json](cold-chain-configuration.json) — the `"files"` key contains `coldchain.html` as a single string.
 
-**When to ask for this in your prompt:** Say "Create an **embedded** Geotab Add-In" when you want zero hosting. Say "Create an **externally hosted** Add-In" when the code is too large for a single string. See [Two Ways to Deploy](../GEOTAB_ADDINS.md#two-ways-to-deploy) for the trade-offs.
+**When to ask for this in your prompt:** Say "Create an **embedded** Geotab Add-In" when you want zero hosting. Say "Create an **externally hosted** Add-In" when the code is too large. See [Two Ways to Deploy](../GEOTAB_ADDINS.md#two-ways-to-deploy).
 
-### 2. Diagnostic discovery instead of hardcoded IDs
+### 2. Group filtering for large fleets
 
-Different Geotab databases have different diagnostic IDs for temperature sensors. This Add-In searches for diagnostics with "Temperature" in the name, then filters client-side for "zone 1" + "cargo" or "set".
+v2.1 loaded all devices into a flat list — unusable on fleets with thousands of vehicles. v3.2 fetches `Group` entities alongside devices, populates a group dropdown, and filters the vehicle list client-side when the user selects a group.
 
-**Where to see it:** In the `initialize` function — look for the `multiCall` that fetches `Diagnostic` with `search: { name: '%Temperature%' }`, followed by the `for` loop that checks `indexOf('set')` and `indexOf('cargo')`.
+**Where to see it:** The `multiCall` in `initialize` now fetches `Device` and `Group` together. The `updateVeh` function filters `allDevices` by checking if each device's `groups` array contains the selected group ID.
 
-**Why this matters for your prompts:** If you're building any sensor-based Add-In (temperature, fuel, tire pressure), always tell the AI: *"Don't hardcode diagnostic IDs — search by name pattern and filter client-side."* This makes your Add-In portable across databases.
+**Why this matters for your prompts:** For any Add-In that lists vehicles, tell the AI: *"Add a group dropdown that filters the vehicle list. Fetch Group entities with multiCall and filter devices client-side by their groups array."*
 
-### 3. `multiCall` for batching
+### 3. Known diagnostic IDs vs. discovery
 
-The Add-In uses `api.multiCall` in two places:
-- **On load:** Fetches all devices AND all temperature diagnostics in a single API round-trip
-- **Per vehicle:** Fetches both actual temperature AND setpoint data together
+v2.1 searched for diagnostics by name pattern (`%Temperature%`) and filtered client-side — portable but fragile. v3.2 uses a predefined list of known diagnostic IDs for reefer temperature sensors. Both approaches are valid:
 
-**Where to see it:** Search for `api.multiCall` in the configuration — there are two instances. The first is in `initialize` (devices + diagnostics). The second is inside the `btnLoad` click handler (StatusData for each vehicle).
+- **Known IDs** (v3.2 approach): Simpler, no false positives, but assumes specific diagnostics exist in the database
+- **Discovery** (v2.1 approach): More portable, works across different device types, but needs careful client-side filtering
 
-**Why this matters for your prompts:** Always tell the AI: *"Use `api.multiCall` to batch API calls."* A common mistake is making separate `api.call` requests that could be combined.
+**Where to see it:** The `signals` array at the top of the script — 7 entries with hardcoded IDs like `DiagnosticCargoTemperatureZone1Id` and `RefrigerationUnitSetTemperatureZone1Id`.
 
-### 4. `StatusData` for sensor readings
+**Why this matters for your prompts:** If you know your fleet uses standard reefer diagnostics, use known IDs for simplicity. If the Add-In needs to work across unknown databases, ask for discovery: *"Search for diagnostics by name pattern and filter client-side."* See the [diagnostic discovery pattern](../../skills/geotab/references/ADDINS.md#discovering-diagnostics-by-name-portable-across-databases) in the ADDINS skill.
 
-All telematics sensor data in Geotab lives in `StatusData` — temperature, fuel level, tire pressure, battery voltage. The search always follows the same shape: filter by device, diagnostic, and time range.
+### 4. Multi-zone support with user-selectable signals
 
-**Where to see it:** Look for `typeName: 'StatusData'` in the click handler. The search includes `deviceSearch`, `diagnosticSearch`, `fromDate`, and `toDate`.
+Instead of hardcoding "Zone 1 only," the user picks which signals to plot from a checkbox dropdown. This covers Zone 1, 2, and 3 for both cargo temperature and setpoint, plus the reefer unit status.
 
-**Why this matters for your prompts:** When asking the AI for sensor data, be specific: *"Use StatusData with deviceSearch and diagnosticSearch filters."* This prevents the AI from inventing wrong approaches.
+**Where to see it:** The `sigDrop` dropdown is built from the `signals` array. Each checkbox carries `data-name` and optionally `data-digital` attributes. When plotting, one `multiCall` per vehicle batches a StatusData request per selected signal.
 
-### 5. One dynamic chart per vehicle
+**Why this matters for your prompts:** When building sensor dashboards, tell the AI: *"Let the user select which signals to plot from a checkbox list. Build one multiCall per vehicle with one StatusData query per selected signal."*
 
-Instead of cramming all vehicles into one chart (messy), the Add-In creates a separate `<canvas>` and Chart.js instance per selected vehicle. Each chart shows that vehicle's actual temperature (red filled area) vs. its setpoint (black dashed line).
+### 5. Digital signals (stepped lines)
 
-**Where to see it:** Inside the `btnLoad` click handler — a `forEach` loop over selected vehicle IDs. Each iteration creates a new `<div>` with a `<canvas>`, then instantiates a `new Chart()`.
+The reefer unit status (`RefrigerationUnitStatusId`) is a digital value — not a continuous temperature reading. v3.2 marks it with `isDigital: true` and renders it as a `stepped` Chart.js line. Raw numeric values (0, 1, 2, 3) map to human labels: Disabled, On, Off, Error.
 
-**Why this matters for your prompts:** When you want per-item visualizations, tell the AI: *"Create one chart per vehicle, dynamically added to the page."* This scales better than trying to overlay 10 vehicles on one chart.
+**Where to see it:** The `signals` array entry with `isDigital: true`. In the chart config, `stepped: isDig` produces a stepped line. In the export functions, `statusLabels[p.data]` maps numbers to words.
 
-### 6. Client-side PDF and Excel export
+**Why this matters for your prompts:** When you have binary or enumerated sensor data (on/off, open/closed, status codes), tell the AI: *"Render digital signals as stepped lines. Map numeric values to human-readable labels."*
 
-Both exports happen entirely in the browser using CDN libraries. The PDF captures chart canvases as PNG images and adds data tables. The Excel file creates one worksheet per vehicle. No server setup required — though you could also generate exports server-side if you have a backend.
+### 6. Internationalization (i18n)
 
-**Where to see it:** Look for `btnExport` (PDF using jsPDF + autoTable) and `btnExcel` (Excel using SheetJS/xlsx).
+The Add-In localizes at two levels:
 
-**Why this matters for your prompts:** Client-side export is the simplest path when you haven't set up a server. When asking for export features, specify: *"Use jsPDF for PDF export and SheetJS for Excel export, loaded from CDN."*
+- **Menu name:** The `menuName` object in the configuration JSON has translations for 6 languages. MyGeotab picks the right one based on the user's language setting.
+- **UI labels:** An `i18n` JavaScript object maps label keys to translated strings. `state.language` (provided by MyGeotab in `initialize`) selects the right translation set.
 
-### 7. Version-pinned CDN libraries
+**Where to see it:** The `menuName` block at the top of the configuration (6 language keys). In the JS, the `i18n` object and the `state.language` usage at the start of `initialize`.
 
-Every `<script>` tag uses a specific version (`chart.js@3.9.1`, not `chart.js@latest`). This prevents the Add-In from breaking when libraries release updates.
+**Why this matters for your prompts:** If your Add-In will be used by multilingual teams, tell the AI: *"Add menuName translations for en, fr, es. Use state.language in initialize() to pick UI label translations from an i18n object."* MyGeotab passes the user's language in the `state` parameter — this is the standard way to localize Add-Ins.
 
-**Where to see it:** The `<head>` section — six `<script>` tags, all with pinned versions.
+### 7. Custom checkbox dropdowns
 
-**Why this matters for your prompts:** AI tools sometimes generate `@latest` CDN links. Always tell the AI: *"Pin all CDN library versions."*
+v2.1 used `<select multiple>` which requires Ctrl+Click — confusing for most users. v3.2 builds custom dropdown panels with checkboxes, toggled by clicking a styled button. Only one dropdown opens at a time.
+
+**Where to see it:** The `vehBtn`/`vehDrop` and `sigBtn`/`sigDrop` HTML elements. The onclick handlers toggle `display: none/block` and close the other dropdown.
+
+**Why this matters for your prompts:** When you need multi-select, tell the AI: *"Use custom checkbox dropdowns instead of <select multiple>. Only one dropdown should be open at a time."*
+
+### 8. Min/Max Y-axis thresholds
+
+Users can set custom min/max values for the chart Y-axis. This makes it easy to visually check if temperatures stayed within an acceptable range — the chart won't auto-scale to hide small excursions.
+
+**Where to see it:** The `minTemp` and `maxTemp` inputs. In the Chart.js options, `y: { min: customMin, max: customMax }` (with null fallback for auto-scaling when fields are empty).
+
+**Why this matters for your prompts:** For compliance charts, tell the AI: *"Add min/max input fields that set the chart Y-axis range, so users can visually check against acceptable limits."*
+
+### 9. `multiCall` for batching
+
+Still the backbone. Used in two places:
+- **On load:** Fetches all devices AND all groups in a single round-trip
+- **Per vehicle:** Batches one StatusData query per selected signal
+
+**Where to see it:** Search for `api.multiCall` — two instances.
+
+**Why this matters for your prompts:** Always tell the AI: *"Use `api.multiCall` to batch API calls."*
+
+### 10. Version-pinned CDN libraries
+
+Every `<script>` tag uses a specific version. Same libraries as v2.1.
+
+**Where to see it:** The `<head>` section.
+
+**Why this matters for your prompts:** Always tell the AI: *"Pin all CDN library versions."*
+
+---
+
+## What Changed from v2.1 to v3.2
+
+| Area | v2.1 | v3.2 |
+|------|------|------|
+| Vehicle selection | Flat list, `<select multiple>` | Group filter + checkbox dropdown |
+| Signal selection | Auto-discovered (Zone 1 only) | User picks from 7 known signals (Zones 1-3) |
+| Reefer unit status | Not tracked | Digital signal with stepped line + status labels |
+| Chart Y-axis | Auto-scaled | Optional min/max thresholds |
+| Localization | English only | 6 languages in menu + JS-side i18n |
+| PDF/Excel | Temperature only | All signals with Signal column |
+| PDF error handling | None | try/catch on canvas export |
 
 ---
 
 ## Things to Watch Out For
 
-This is a solid Add-In, but it has a few limitations worth knowing about — either to fix or to avoid in your own builds:
-
 | Issue | What Happens | What to Ask For Instead |
 |-------|-------------|------------------------|
 | No error callbacks on API calls | If the API fails, user sees "Loading..." forever | *"Add error callbacks to all api.multiCall calls with a user-visible error message"* |
-| Hardcoded to Zone 1 only | Multi-zone reefer trucks only show the first zone | *"Search for all temperature zones and let the user select which zone to display"* |
-| No loading spinner per vehicle | User can't tell which vehicles have loaded | *"Add a loading indicator for each vehicle that disappears when its data loads"* |
 | PDF table capped at 100 rows | Long date ranges lose data in the PDF | *"Paginate the PDF data table across multiple pages if it exceeds one page"* |
 | Temperature assumed °C | Could be wrong for some databases | *"Detect the user's unit preference or add a °C/°F toggle"* |
-| All devices fetched (no group filter) | Slow on large fleets | *"Filter the device list by group so only relevant vehicles appear"* |
+| i18n only has English strings in JS | Menu is translated but UI labels fall back to English | *"Add translations to the i18n object for fr, es, pt, it, pl"* |
+| No loading spinner per vehicle | User can't tell which vehicles have loaded | *"Add a loading indicator for each vehicle that disappears when its data loads"* |
 
 ---
 
@@ -135,20 +180,11 @@ This is a solid Add-In, but it has a few limitations worth knowing about — eit
 
 Copy-paste these into Claude or another AI tool. Give it the [configuration.json](cold-chain-configuration.json) as context.
 
-**Add alert thresholds:**
+**Add breach highlighting:**
 ```
-Take this Cold Chain Add-In and add configurable temperature thresholds.
-When the cargo temperature exceeds the threshold, highlight that section
-of the chart in red. Add input fields for min and max acceptable temperature.
-Use the geotab-addins skill for correct patterns.
-```
-
-**Add multi-zone support:**
-```
-Modify this Cold Chain Add-In to support multiple reefer zones
-(Zone 1, Zone 2, Zone 3). Search for all temperature diagnostics,
-group them by zone, and show each zone as a separate line on the chart.
-Use different colors per zone.
+Take this Cold Chain Add-In and highlight chart regions where the cargo
+temperature goes above or below the min/max thresholds. Use Chart.js
+annotation plugin to shade those regions in red.
 Use the geotab-addins skill for correct patterns.
 ```
 
@@ -161,13 +197,21 @@ and correlate with the StatusData timestamps.
 Use the geotab-addins skill for correct patterns.
 ```
 
-**Fix the error handling:**
+**Complete the i18n:**
+```
+This Cold Chain Add-In has menuName translations for fr, es, pt, it, pl
+but the JavaScript i18n object only has English. Add matching translations
+for all UI labels in the i18n object. Use the same language keys as menuName.
+Use the geotab-addins skill for correct patterns.
+```
+
+**Add error handling:**
 ```
 Improve this Cold Chain Add-In's error handling:
 - Add error callbacks to all api.multiCall calls
-- Show a user-friendly message if no temperature diagnostics are found
+- Show a user-friendly message if no data is returned for a signal
 - Add a loading spinner per vehicle while data loads
-- Handle the case where a vehicle has no temperature data
+- Disable the Plot button while loading and re-enable when done
 Use the geotab-addins skill for correct patterns.
 ```
 
@@ -175,7 +219,7 @@ Use the geotab-addins skill for correct patterns.
 
 ## Full Configuration
 
-The complete configuration ready to paste into MyGeotab:
+The complete v3.2 configuration ready to paste into MyGeotab:
 [cold-chain-configuration.json](cold-chain-configuration.json)
 
 For more on how Add-Ins work, see the [Building Add-Ins guide](../GEOTAB_ADDINS.md).
