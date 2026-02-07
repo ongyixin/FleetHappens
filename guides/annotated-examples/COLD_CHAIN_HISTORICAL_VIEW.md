@@ -8,6 +8,8 @@ This Add-In lets fleet managers filter vehicles by group, pick which temperature
 
 > **Try it yourself:** Paste [cold-chain-configuration.json](cold-chain-configuration.json) into MyGeotab.
 > Go to Administration → System Settings → Add-Ins → New Add-In → Configuration tab.
+>
+> **Read the code:** [coldchain.html](coldchain.html) is the formatted, commented source. The configuration JSON has the same code minified into one line.
 
 ---
 
@@ -118,7 +120,7 @@ The Add-In localizes at two levels:
 
 ### 7. Other good practices in this Add-In
 
-A few more patterns worth noting — look for them in the [configuration](cold-chain-configuration.json):
+A few more patterns worth noting — look for them in [coldchain.html](coldchain.html):
 
 - **Custom checkbox dropdowns** instead of `<select multiple>` (which requires Ctrl+Click). See `vehBtn`/`vehDrop` and `sigBtn`/`sigDrop`.
 - **Min/Max Y-axis thresholds** — users set acceptable temperature bounds and the chart scales accordingly. See the `minTemp`/`maxTemp` inputs and `y: { min, max }` in the Chart.js options.
@@ -194,9 +196,9 @@ Use the geotab-addins skill for correct patterns.
 
 ---
 
-## Full Configuration
+## Source Files
 
-The complete v3.2 configuration ready to paste into MyGeotab:
-[cold-chain-configuration.json](cold-chain-configuration.json)
+- **[coldchain.html](coldchain.html)** — Formatted, commented source code (read this)
+- **[cold-chain-configuration.json](cold-chain-configuration.json)** — Ready to paste into MyGeotab (same code, minified into the JSON `files` block)
 
 For more on how Add-Ins work, see the [Building Add-Ins guide](../GEOTAB_ADDINS.md).
