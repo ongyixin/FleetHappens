@@ -100,11 +100,11 @@ See `EMBEDDED_README.md` for details.
 
 **Or tell AI:**
 ```
-Use the geotab-addins skill.
+Use the geotab skill (`skills/geotab/SKILL.md`) and load `skills/geotab/references/ADDINS.md`.
 
 Create a Geotab Add-In similar to simple-test but with [your features].
 ```
 
 ## Learn More
 
-See [guides/GEOTAB_ADDINS.md](https://github.com/fhoffa/geotab-vibe-guide/blob/main/guides/GEOTAB_ADDINS.md) for the full guide.
+See [guides/GEOTAB_ADDINS.md](https://github.com/fhoffa/geotab-vibe-guide/blob/main/guides/GEOTAB_ADDINS.md) for the full Add-Ins guide, or jump straight to the [official SDK samples walkthrough](https://github.com/fhoffa/geotab-vibe-guide/blob/main/guides/SDK_ADDIN_SAMPLES_GUIDE.md).
