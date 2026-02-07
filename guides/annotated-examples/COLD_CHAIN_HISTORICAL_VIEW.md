@@ -118,11 +118,11 @@ The Add-In localizes at two levels:
 
 ### 7. Custom checkbox dropdowns
 
-v2.1 used `<select multiple>` which requires Ctrl+Click — confusing for most users. v3.2 builds custom dropdown panels with checkboxes, toggled by clicking a styled button. Only one dropdown opens at a time.
+`<select multiple>` requires Ctrl+Click — confusing for most users. Instead, this Add-In builds dropdown panels with checkboxes. Only one dropdown opens at a time.
 
-**Where to see it:** The `vehBtn`/`vehDrop` and `sigBtn`/`sigDrop` HTML elements. The onclick handlers toggle `display: none/block` and close the other dropdown.
+**Where to see it:** `vehBtn`/`vehDrop` and `sigBtn`/`sigDrop` in the HTML.
 
-**Why this matters for your prompts:** When you need multi-select, tell the AI: *"Use custom checkbox dropdowns instead of <select multiple>. Only one dropdown should be open at a time."*
+**Why this matters for your prompts:** *"Use custom checkbox dropdowns instead of `<select multiple>`. Only one dropdown should be open at a time."*
 
 ### 8. Min/Max Y-axis thresholds
 
