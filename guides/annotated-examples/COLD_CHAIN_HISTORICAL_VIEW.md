@@ -116,39 +116,14 @@ The Add-In localizes at two levels:
 
 **Why this matters for your prompts:** If your Add-In will be used by multilingual teams, tell the AI: *"Add menuName translations for en, fr, es. Use state.language in initialize() to pick UI label translations from an i18n object."* MyGeotab passes the user's language in the `state` parameter — this is the standard way to localize Add-Ins.
 
-### 7. Custom checkbox dropdowns
+### 7. Other good practices in this Add-In
 
-`<select multiple>` requires Ctrl+Click — confusing for most users. Instead, this Add-In builds dropdown panels with checkboxes. Only one dropdown opens at a time.
+A few more patterns worth noting — look for them in the [configuration](cold-chain-configuration.json):
 
-**Where to see it:** `vehBtn`/`vehDrop` and `sigBtn`/`sigDrop` in the HTML.
-
-**Why this matters for your prompts:** *"Use custom checkbox dropdowns instead of `<select multiple>`. Only one dropdown should be open at a time."*
-
-### 8. Min/Max Y-axis thresholds
-
-Users can set custom min/max values for the chart Y-axis. This makes it easy to visually check if temperatures stayed within an acceptable range — the chart won't auto-scale to hide small excursions.
-
-**Where to see it:** The `minTemp` and `maxTemp` inputs. In the Chart.js options, `y: { min: customMin, max: customMax }` (with null fallback for auto-scaling when fields are empty).
-
-**Why this matters for your prompts:** For compliance charts, tell the AI: *"Add min/max input fields that set the chart Y-axis range, so users can visually check against acceptable limits."*
-
-### 9. `multiCall` for batching
-
-Still the backbone. Used in two places:
-- **On load:** Fetches all devices AND all groups in a single round-trip
-- **Per vehicle:** Batches one StatusData query per selected signal
-
-**Where to see it:** Search for `api.multiCall` — two instances.
-
-**Why this matters for your prompts:** Always tell the AI: *"Use `api.multiCall` to batch API calls."*
-
-### 10. Version-pinned CDN libraries
-
-Every `<script>` tag uses a specific version. Same libraries as v2.1.
-
-**Where to see it:** The `<head>` section.
-
-**Why this matters for your prompts:** Always tell the AI: *"Pin all CDN library versions."*
+- **Custom checkbox dropdowns** instead of `<select multiple>` (which requires Ctrl+Click). See `vehBtn`/`vehDrop` and `sigBtn`/`sigDrop`.
+- **Min/Max Y-axis thresholds** — users set acceptable temperature bounds and the chart scales accordingly. See the `minTemp`/`maxTemp` inputs and `y: { min, max }` in the Chart.js options.
+- **`multiCall` batching everywhere** — on load (devices + groups in one call) and per vehicle (one StatusData query per selected signal). Search for `api.multiCall`.
+- **Version-pinned CDN libraries** — every `<script>` tag uses a specific version (`@3.9.1`, not `@latest`). Check the `<head>` section.
 
 ---
 
