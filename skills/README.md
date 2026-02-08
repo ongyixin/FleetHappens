@@ -29,7 +29,19 @@ That's it. Claude Code now has access to Geotab API patterns, Add-In development
 
 On paid Claude.ai plans, upload skill files to your project via the UI. See [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude).
 
-**Important:** The `geotab` skill has a `references/` subfolder with 13 supporting files. Upload `SKILL.md` **and** the reference files — otherwise Claude sees navigation links it can't follow. The easiest way is to clone the repo (see below) and upload the contents of `skills/geotab/`.
+**Important:** The `geotab` skill has a `references/` subfolder with 13 supporting files. Upload `SKILL.md` **and** the reference files — otherwise Claude sees navigation links it can't follow.
+
+To get the files, clone the repo and zip the skills folder yourself:
+
+```bash
+git clone https://github.com/fhoffa/geotab-vibe-guide.git
+cd geotab-vibe-guide
+zip -r geotab-skills.zip skills/geotab/ skills/agentic-n8n/ skills/geotab-custom-mcp/ skills/README.md
+```
+
+Then unzip and upload the contents to your Claude project.
+
+> **Minimal alternative:** If you just want to get started quickly, copy-paste [`SKILL.md`](geotab/SKILL.md) and [`references/API_QUICKSTART.md`](geotab/references/API_QUICKSTART.md) into your project — that covers the core API patterns.
 
 ### Option 3: Clone This Repo
 
