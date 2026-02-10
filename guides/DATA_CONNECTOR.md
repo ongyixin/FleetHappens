@@ -28,6 +28,12 @@ The Data Connector is a MyGeotab add-in. On production databases you install it 
 
 Without this step, queries will return **412** or **403** errors.
 
+> **Can't see the Add-In after activation?** The Data Connector page is under MyGeotab **Administration**. If it doesn't appear, ensure your user account has these security clearances:
+> - **Launch Custom Reports or Add-Ins**
+> - **View "Geotab Data Connector" Add-In**
+>
+> An administrator can grant these under **Administration > Users**, then editing the user's security clearances.
+
 > **Full setup docs:** [Data Connector Partner Setup](https://support.geotab.com/mygeotab/mygeotab-add-ins/doc/data-conn-partner#h.wiq7fzud3vwa) and [Data Connector User Guide](https://support.geotab.com/mygeotab/mygeotab-add-ins/doc/data-connector)
 
 ### New Database? Wait for the Data Pipeline

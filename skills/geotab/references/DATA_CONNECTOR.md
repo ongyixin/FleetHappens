@@ -20,6 +20,8 @@ The Data Connector add-in must be enabled on the database. On demo databases, in
 
 Without this: 412 (`"Database cannot be subscribed"`) or 403.
 
+**Can't see the Add-In?** The Data Connector page is under MyGeotab Administration. The user account needs these security clearances: **Launch Custom Reports or Add-Ins** and **View "Geotab Data Connector" Add-In**. An admin can grant these under Administration > Users.
+
 **New databases:** KPI/safety tables are empty for ~2–3 hours after activation while the pipeline backfills. `LatestVehicleMetadata` populates immediately.
 
 ## Data Availability by Rate Plan
