@@ -8,7 +8,7 @@ This repository is a "Vibe Coding" starter kit. You don't need to be an expert c
 
 1. **Get credentials:** [Create a free demo database](https://my.geotab.com/registration.html) (takes 2 minutes)
    > **Important:** On the registration page, click **"Create a Demo Database"** (not "I'm a New Customer"). This gives you pre-populated sample data to work with.
-2. **New to coding?** Read the [**Beginner's Glossary**](./guides/BEGINNER_GLOSSARY.md) first
+2. **New to coding?** Read the [**Beginner's Guide**](./guides/BEGINNER_GUIDE.md) first
 
 ## Choose Your Path
 
@@ -86,7 +86,7 @@ If you're an AI coding assistant, start with:
 ## 📂 Repository Structure
 
 *   [**`GOOGLE_GEM_USER_GUIDE.md`**](./guides/GOOGLE_GEM_USER_GUIDE.md): **Start here!** Build Add-Ins by describing (or drawing) what you want.
-*   [**`BEGINNER_GLOSSARY.md`**](./guides/BEGINNER_GLOSSARY.md): New to coding? This explains all terms.
+*   [**`BEGINNER_GUIDE.md`**](./guides/BEGINNER_GUIDE.md): New to coding? This explains all terms.
 *   [**`CLAUDE_PROMPTS.md`**](./guides/CLAUDE_PROMPTS.md): Ready-made prompts to build apps with Claude.
 *   [**`examples/`**](./examples/): Working Add-In examples plus AI delegation guidance.
 *   [**`guides/`**](./guides/): Hackathon ideas, tutorials, and deep dives.

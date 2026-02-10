@@ -1,4 +1,4 @@
-# Beginner's Glossary: Your First Steps in Vibe Coding
+# Beginner's Guide: Your First Steps in Vibe Coding
 
 **Welcome!** If you're new to coding, APIs, or fleet management, this guide is for you. Don't worry if these terms sound unfamiliar—by the end of this glossary, you'll understand everything you need to start building with Geotab.
 
