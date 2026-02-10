@@ -221,11 +221,11 @@ When writing prompts, reference these table names:
 | **VehicleSafety_Daily** | Yes | Per-vehicle safety rankings |
 | **DriverSafety_Daily** | Yes | Per-driver safety rankings |
 | **FaultMonitoring_Daily** | Yes | Daily fault code activity |
-| **FaultMonitoring** | No | Current faults with lifecycle details |
+| **FaultMonitoring** | No | Current faults with lifecycle details — see [FAULT_MONITORING.md](./FAULT_MONITORING.md) for concepts |
 | **LatestVehicleMetadata** | No | VIN, make, model, last GPS, odometer, health |
 | **DeviceGroups** | No | Vehicle-to-group mappings |
 | **DriverGroups** | No | Driver-to-group mappings |
-| **DriverMetadata** | No | Driver names and timezones |
+| **LatestDriverMetadata** | No | Driver names, timezones, account status |
 
 ## Give Your AI the Full Context
 
@@ -241,7 +241,9 @@ Instead of manually explaining the Data Connector's quirks to your AI, give it t
 
 ## Going Deeper
 
+- **Fault monitoring deep dive:** See [FAULT_MONITORING.md](./FAULT_MONITORING.md) — fault cycles, persistence, DTC lifecycle, severity, and maintenance prompts
 - **Data Connector vs API vs Ace:** See [DATA_ACCESS_COMPARISON.md](./DATA_ACCESS_COMPARISON.md) — benchmarks and tradeoffs for all three data channels
-- **For AI assistants implementing code:** See the [Data Connector skill reference](../skills/geotab/references/DATA_CONNECTOR.md) for complete code patterns, pagination handling, and all table schemas
-- **Official documentation:** [Data Connector User Guide](https://support.geotab.com/mygeotab/mygeotab-add-ins/doc/data-connector)
+- **For AI assistants implementing code:** See the [Data Connector skill reference](../skills/geotab/references/DATA_CONNECTOR.md) for complete code patterns, pagination handling, and all table schemas with column types
+- **Official schema reference:** [Data Connector Schema and Dictionary](https://support.geotab.com/mygeotab/mygeotab-add-ins/doc/data-conn-schema) — authoritative column definitions for every table
+- **Official user guide:** [Data Connector User Guide](https://support.geotab.com/mygeotab/mygeotab-add-ins/doc/data-connector)
 - **For BI tools:** The official docs cover Power BI, Excel, and Tableau setup in detail
