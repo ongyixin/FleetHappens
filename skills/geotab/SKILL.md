@@ -19,6 +19,7 @@ This is the unified skill for all Geotab fleet management development. Navigate 
 | **Build Add-Ins** | [ADDINS.md](references/ADDINS.md) | Create custom MyGeotab pages (vanilla JS) |
 | **Style with Zenith** | [ZENITH_STYLING.md](references/ZENITH_STYLING.md) | React components matching MyGeotab look |
 | **AI Queries** | [ACE_API.md](references/ACE_API.md) | Natural language fleet queries via Geotab Ace |
+| **Data Connector** | [DATA_CONNECTOR.md](references/DATA_CONNECTOR.md) | OData API for pre-aggregated KPIs, safety, faults |
 
 ## Reference Files
 
@@ -35,6 +36,7 @@ This is the unified skill for all Geotab fleet management development. Navigate 
 
 | Reference | When to Use |
 |-----------|-------------|
+| [DATA_CONNECTOR.md](references/DATA_CONNECTOR.md) | Pre-aggregated fleet KPIs via OData (daily/hourly/monthly distance, fuel, idle, safety) |
 | [SPEED_DATA.md](references/SPEED_DATA.md) | Working with vehicle speed data, LogRecord queries |
 | [TRIP_ANALYSIS.md](references/TRIP_ANALYSIS.md) | Analyzing trip data, fuel efficiency, distance calculations |
 
