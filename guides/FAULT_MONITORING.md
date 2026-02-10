@@ -9,18 +9,18 @@
 > - **MyGeotab API:** `FaultData` entity for raw fault events
 > - **Ace:** Natural language queries about vehicle faults
 
-> **TODO — Demo account data varies.** Fault data availability depends on which demo database you get. We tested two 50-vehicle demo databases (Feb 2026) and found very different results:
+> **TODO — Demo account data varies.** Fault data availability depends on which demo database you create. We tested two 50-vehicle demos (Feb 2026):
 >
-> | Data Source | Database 1 (no faults) | Database 2 (has faults) |
+> | Data Source | USA Daytime (Passenger, Las Vegas) | European Long Distance (Vans & Trucks, Spain/Portugal) |
 > |---|---|---|
 > | `FaultMonitoring` (OData) | 0 records | 10 fault cycles |
 > | `FaultMonitoring_Daily` (OData) | 0 records | 281 daily records |
 > | `FaultData` (API) | 0 records | 6,962 fault events |
 > | `ExceptionEvent` (API) | 50,000 records | 28,566 records |
 >
-> Database 2's faults were all **GoDevice faults** (GPS antenna unplugged, engine hours stale) — not engine DTCs (OBD-II/J1939). These still demonstrate the full fault cycle lifecycle (persistent cycles, durations, counts), but won't have breakdown risk scores (those apply to engine DTCs only). Real production fleets will have both GoDevice and engine faults.
+> The European fleet's faults were all **GoDevice faults** (GPS antenna unplugged, engine hours stale) — not engine DTCs (OBD-II/J1939). These still demonstrate the full fault cycle lifecycle (persistent cycles, durations, counts), but won't have breakdown risk scores (those apply to engine DTCs only). Real production fleets will have both GoDevice and engine faults.
 >
-> **If your demo database has no fault data:** Try creating another demo database with a different location/vocation/type of fleet. Exception events (speeding, harsh cornering, etc.) are always available and are a different data category from diagnostic fault codes.
+> **If your demo database has no fault data:** Try creating another demo with a different location/vocation/type of fleet. The European Long Distance / Vans & Trucks configuration had fault data; the USA Daytime / Passenger configuration did not. See [DEMO_DATABASE_REFERENCE.md](./DEMO_DATABASE_REFERENCE.md#what-data-each-profile-has-tested-feb-2026) for the full comparison. Exception events (speeding, harsh cornering, etc.) are always available regardless of configuration.
 
 ## Where Do Fault Codes Come From?
 
