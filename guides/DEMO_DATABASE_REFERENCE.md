@@ -42,11 +42,34 @@ The demo simulates realistic vehicle movement, driver behavior, and telematics d
 
 This guide documents multiple verified demo database profiles:
 
-| Profile | Data Center | Vehicle Type | Vocation | Simulated Routes | Status |
-|---------|-------------|--------------|----------|------------------|--------|
-| European Long Distance | Italy/Netherlands | Vans and Trucks | Long distance | Spain | Documented below |
-| USA Daytime | USA | Vans and Trucks | Daytime tour | USA | Confirming |
-| EV Fleet | USA or UK | Electric Vehicle (EV) | Hub and spoke | TBD | TODO |
+| Profile | Data Center | Vehicle Type | Vocation | Simulated Routes | Fault Data? | Status |
+|---------|-------------|--------------|----------|------------------|-------------|--------|
+| European Long Distance | Italy/Netherlands | Vans and Trucks | Long distance | Spain/Portugal | Yes — GoDevice faults | Documented below |
+| USA Daytime | USA | Passenger | Daytime tour | Las Vegas, Nevada | None | Tested, schema documented below |
+| EV Fleet | USA or UK | Electric Vehicle (EV) | Hub and spoke | TBD | Unknown | TODO |
+
+### What Data Each Profile Has (Tested Feb 2026)
+
+> **TODO:** We've only tested two profiles so far. Other location/vocation/fleet type combinations likely produce different data. Help us fill in the gaps — if you test a new combination, update this table.
+
+The demo you create determines what data you can work with. This matters especially for **fault data** and **exception event variety**:
+
+| | USA Daytime (Passenger, Las Vegas) | European Long Distance (Vans & Trucks, Spain/Portugal) |
+|---|---|---|
+| **Fleet description** | Light-duty passenger car fleet in Las Vegas, Nevada | Heavy-duty commercial fleet across the Iberian Peninsula |
+| **VehicleKpi_Daily/Monthly** | Yes | Yes |
+| **Exception events** | 50K — 3 rules firing (speeding, cornering, jackrabbit starts) | 28.5K — 6 rules firing (includes harsh braking and custom rules) |
+| **FaultMonitoring (OData)** | None | 10 persistent GoDevice fault cycles |
+| **FaultMonitoring_Daily (OData)** | None | 281 daily records |
+| **FaultData (API)** | None | 6,962 raw fault events |
+| **Fault types** | No DTCs at all | GoDevice faults only (GPS antenna unplugged, engine hours stale) — no engine DTCs |
+
+**Choosing a demo database:**
+- **For safety/driving behavior dashboards:** Any demo works — exception events are always available
+- **For fault monitoring workflows:** Choose a European/Long Distance/Vans & Trucks configuration — or try other combinations and let us know what you find
+- **For engine DTCs (OBD-II/J1939):** No tested demo produces these yet — you'll need a real fleet database or ask Geotab for a specialized demo
+
+See [FAULT_MONITORING.md](./FAULT_MONITORING.md) for the full test results and details on the difference between fault codes and exception events.
 
 ---
 
@@ -60,7 +83,7 @@ This guide documents multiple verified demo database profiles:
 | Rule | 12 | Safety and compliance rules |
 | Trip | 1,000+ | Completed journeys |
 | ExceptionEvent | 1,000+ | Rule violations (speeding, harsh braking, etc.) |
-| FaultData | 500-1,000 | Engine diagnostic codes |
+| FaultData | 0–7,000 | **Varies by database** — some demos have GoDevice faults (GPS antenna, engine hours), others have none. No engine DTCs in any tested demo. See [FAULT_MONITORING.md](./FAULT_MONITORING.md) TODO |
 | DriverChange | 1,000+ | Driver identification events |
 | LogRecord | 100,000+ | GPS breadcrumbs |
 | StatusData | 100,000+ | Sensor readings |

@@ -160,6 +160,8 @@ Flag any vehicles with significant after-hours usage.
 
 ### Prompt 6: "Fleet Health Check"
 
+> **Note:** Step 5 queries FaultMonitoring, which may be empty on some demo databases — fault data availability varies. See [FAULT_MONITORING.md](./FAULT_MONITORING.md) for details on what to expect.
+
 ```text
 Using the Data Connector, give me a fleet health report.
 
