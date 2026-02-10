@@ -187,7 +187,7 @@ For each, show the vehicle name, fault code, description, how many days
 it's been active, and the distance driven with the fault.
 ```
 
-This prompt works directly in Ace (the natural language query tool in MyGeotab). Ace will generate SQL against `FaultMonitoring`, join with `LatestVehicleMetadata` for device names, and filter to `IsPersistentCycle = TRUE`. See [Ace for Fault Monitoring](#ace-for-fault-monitoring) for what this returns on demo databases.
+This prompt works directly in Ace (the natural language query tool in MyGeotab). Ace figures out which tables to use, joins in vehicle names, and filters to ongoing faults — all from your plain English question. See [Ace for Fault Monitoring](#ace-for-fault-monitoring) for what this returns on demo databases.
 
 ---
 
@@ -218,32 +218,22 @@ Daily log of every fault cycle. One row per fault-cycle per day, between the cyc
 
 ## Ace for Fault Monitoring
 
-Geotab Ace can answer fault monitoring questions in natural language. It generates SQL against the same OData tables and returns results — no code needed.
+Geotab Ace can answer fault monitoring questions in natural language — no code, no SQL, no queries. Just ask a question and get results.
 
-### What Ace Does Well
+### What to Ask
 
-When asked about persistent faults, Ace generated this SQL:
+Try these prompts directly in Ace:
 
-```sql
-SELECT t_meta.DeviceName, t_fault.DeviceId, t_fault.FaultCode,
-       t_fault.FaultCodeDescription,
-       ROUND(DATETIME_DIFF(CURRENT_DATETIME(...),
-             t_fault.ActiveDateTimeFirstSeen, HOUR) / 24, 2) AS ActiveDuration_Days,
-       t_fault.ActiveDistance AS ActiveDistance_Km
-FROM FaultMonitoring AS t_fault
-JOIN LatestVehicleMetadata AS t_meta ON t_fault.DeviceId = t_meta.DeviceId
-WHERE t_fault.IsPersistentCycle = TRUE
-```
+- "Which vehicles have persistent fault codes right now?"
+- "Show me all vehicles with GPS antenna faults and how long they've been active"
+- "What are the most common fault codes across my fleet?"
+- "Are any vehicles driving with active faults for more than 30 days?"
 
-It correctly:
-- Joined with `LatestVehicleMetadata` to include device names
-- Calculated duration in days from `ActiveDateTimeFirstSeen`
-- Filtered to persistent cycles with `IsPersistentCycle = TRUE`
-- Selected meaningful columns (fault code, description, duration, distance)
+Ace automatically looks up the right tables, joins in vehicle names, calculates durations, and filters to what matters. You don't need to know column names or table structures — just describe what you want to know.
 
-### Ace Results on the European Fleet
+### What You Get Back
 
-Ace returned 4 persistent faults:
+When we asked Ace *"Which vehicles have persistent faults?"* on the European demo fleet, it returned:
 
 | Vehicle | Fault | Active Days | Active Distance |
 |---|---|---|---|
@@ -252,21 +242,24 @@ Ace returned 4 persistent faults:
 | Demo - 38 | Engine hours stale | 47.3 days | — |
 | Demo - 40 | Engine hours stale | 48.0 days | — |
 
-OData returned 10 cycles (5 GPS antenna + 5 engine hours stale). Ace returned 4 because its `IsTracked = TRUE` filter excluded some vehicles, and the `preview_array` is capped at 10 rows (full results available via `signed_urls`).
+It figured out on its own to include vehicle names, calculate how many days each fault has been active, and show only the persistent (ongoing) faults. The OData table actually has 10 fault cycles — Ace returned 4 because it filtered to tracked vehicles only and caps its preview at 10 rows.
 
-### Ace on the Vegas Fleet
+On the Vegas fleet (which has no fault data), Ace correctly returned empty results and confirmed there were no persistent faults.
 
-Ace correctly returned empty results — no persistent faults exist on that database. It generated valid SQL and confirmed 0 preview rows.
+### Good to Know
 
-### Timing Comparison
+- **Ace is slow for fault queries** (~100s vs ~1s for OData or API). It's best for exploration and one-off questions, not dashboards.
+- **Ace may apply extra filters** you didn't ask for (like excluding untracked vehicles). If you're getting fewer results than expected, that's likely why.
+- **Ace works when there's no data too.** It won't error out on an empty database — it'll tell you there are no results.
+- **Results include a preview** (capped at 10 rows) and download links for the full dataset.
 
-| Channel | Time | Records | Notes |
+### When to Use Ace vs Other Channels
+
+| Channel | Time | What You Get | Best For |
 |---|---|---|---|
-| OData `FaultMonitoring` | 1.5s | 10 fault cycles | Full lifecycle columns, ready to use |
-| API `FaultData` | 0.9s | 6,962 raw events | Individual fault detections, need aggregation |
-| Ace (via `GetAceResults` API) | 101.7s | 4 rows (preview) | Natural language → SQL, auto-joined with device names |
-
-Ace is the slowest option but requires no code and returns human-readable results with device names. Use it for ad-hoc exploration; use OData or the API for dashboards and automation.
+| **Ace** | ~100s | Human-readable results with vehicle names | Quick answers, exploration, learning what data exists |
+| **OData Data Connector** | ~1.5s | Pre-organized fault cycles with full lifecycle | Dashboards, BI tools, recurring reports |
+| **MyGeotab API** | ~0.9s | Raw fault events | Custom apps, Add-Ins, detailed event analysis |
 
 ---
 
