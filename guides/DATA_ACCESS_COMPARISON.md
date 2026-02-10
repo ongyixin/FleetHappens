@@ -128,7 +128,7 @@ All three agree on 1.2% idle. The ratio is consistent even though absolute hours
 - Works inside MyGeotab Add-Ins via the `api` object
 
 **Weaknesses:**
-- **Doesn't scale for fleet-wide aggregation.** Works great on a demo database with 50 vehicles, but a production fleet with thousands of vehicles and millions of trips makes raw API aggregation impractical. You'll hit result caps, need extensive pagination, and spend significant time on client-side computation. This is the biggest surprise when moving from demo to production — see [Demo vs Production](#demo-vs-production) below.
+- **Fleet-wide aggregation doesn't scale.** The API itself is fast for targeted queries (trips for one vehicle, current location of a device). But the pattern of "fetch all trips across the entire fleet, then aggregate in pandas" breaks down on production fleets — you'll hit result caps, need extensive pagination, and spend significant time on client-side computation. See [Demo vs Production](#demo-vs-production) below.
 - Results capped at 5,000 per call (need pagination for large datasets)
 - Requires code to aggregate (sum trips, calculate idle percentages, etc.)
 - Duration fields may need parsing
@@ -195,9 +195,9 @@ When numbers don't match, it's usually one of these reasons — not a bug.
 
 ## Demo vs Production
 
-> **The benchmarks above were run on a demo database with 50 vehicles.** Production fleets can have hundreds or thousands of vehicles, and the API's behavior changes dramatically at scale.
+> **The benchmarks above were run on a demo database with 50 vehicles.** Production fleets can have hundreds or thousands of vehicles, and the API's aggregation pattern changes dramatically at scale.
 
-The API approach that works smoothly on a demo database — fetch all trips, aggregate in pandas — becomes impractical on a production fleet. Here's what changes:
+The API itself scales well for targeted queries — fetching trips for a specific vehicle, getting a device's current location, reading fault codes for one asset. What *doesn't* scale is using it as a fleet-wide aggregation engine: "fetch all trips for all vehicles, then sum/group/rank in pandas." That pattern works smoothly on a demo but becomes impractical in production:
 
 | | Demo (50 vehicles) | Production (500–5,000+ vehicles) |
 |---|---|---|
