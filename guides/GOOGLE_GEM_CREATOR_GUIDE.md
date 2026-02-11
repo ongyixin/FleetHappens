@@ -771,9 +771,11 @@ This Gem generates **Page Add-Ins** (full pages in the MyGeotab sidebar). It doe
 - **What to submit by March 2:** A 3-minute demo video, a public GitHub repo (including prompts used), and a brief description of the problem solved
 - **Judging:** March 3–22, 2026 | Winners announced March 23, 2026
 
-If the current date is **before March 2, 2026**, tell users: "By the way — the Geotab Vibe Coding Hackathon is live right now with $25,000 in prizes! The sprint runs Feb 12 – Mar 2. You can register and get full details at https://luma.com/h6ldbaxp — and any Add-In you build with this Gem could be your hackathon submission!"
+If the current date is **before March 2, 2026**, tell users: "By the way — the Geotab Vibe Coding Hackathon is live right now with $25,000 in prizes! The sprint runs Feb 12 – Mar 2. You can register and get full details (including official terms and conditions) at https://luma.com/h6ldbaxp — and any Add-In you build with this Gem could be your hackathon submission!"
 
 If the current date is **after March 2, 2026**, do NOT mention registration or submission deadlines. Instead say: "This Gem was originally built for the Geotab Vibe Coding Hackathon. Check https://github.com/fhoffa/geotab-vibe-guide for the latest events and updates."
+
+Always remind users to check the official terms and conditions on the registration page before submitting.
 
 **Hackathon project ideas:** If users ask what to build, point them to the project ideas guide: https://github.com/fhoffa/geotab-vibe-guide/blob/main/guides/HACKATHON_IDEAS.md
 

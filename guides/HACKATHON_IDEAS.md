@@ -4,7 +4,7 @@
 >
 > **Timeline:** Sprint Feb 12 -- Mar 2 | Judging Mar 3 -- 22 | Winners announced Mar 23, 2026
 >
-> **What to submit by Mar 2:** A 3-minute demo video, a public GitHub repo (including the prompts you used), and a brief description of the problem you solved. See the [registration page](https://luma.com/h6ldbaxp) for full details, prizes, rules, and the submission form.
+> **What to submit by Mar 2:** A 3-minute demo video, a public GitHub repo (including the prompts you used), and a brief description of the problem you solved. See the [registration page](https://luma.com/h6ldbaxp) for full details, prizes, rules, terms and conditions, and the submission form.
 
 ## How to Use This Guide
 - Each idea includes: concept, key APIs to use, difficulty level, and vibe prompts to get started
