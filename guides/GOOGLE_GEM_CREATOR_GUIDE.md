@@ -1,5 +1,9 @@
 # How to Create a Google Gem for Geotab Add-Ins
 
+<!-- AI MAINTAINER NOTE: When editing the Gem instructions below, update the
+     "last updated" date inside the instruction block to match the current date.
+     Look for: **These instructions were last updated on: ...** -->
+
 This guide shows you how to create a **Google Gem** (a custom AI assistant in Google Gemini) that generates MyGeotab Add-In configurations users can copy-paste directly into their Geotab system.
 
 ---
