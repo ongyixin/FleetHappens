@@ -4,12 +4,13 @@
 
 When an Add-In doesn't work:
 
-1. **Check browser console** (F12) for JavaScript errors
-2. **Check callback** - are you calling `callback()` in initialize?
-3. **Check GitHub Pages** - is the URL accessible? Wait 2-3 minutes after push
-4. **Test the URL** - open it directly in browser, does it load?
-5. **Check configuration** - valid JSON? Correct URL?
-6. **Hard refresh** - Clear cache with Ctrl+Shift+R
+1. **Click "Copy Debug Data"** — paste the result to your AI assistant for diagnosis
+2. **Check callback** — are you calling `callback()` in initialize?
+3. **Check GitHub Pages** — is the URL accessible? Wait 2-3 minutes after push
+4. **Test the URL** — open it directly in browser, does it load?
+5. **Check configuration** — valid JSON? Correct URL?
+6. **Hard refresh** — Clear cache with Ctrl+Shift+R
+7. **Browser console (F12)** — fallback if the Add-In can't render or Copy Debug returns empty data
 
 ## Copy Debug Data Button (Essential for AI-Assisted Debugging)
 
@@ -46,9 +47,9 @@ api.call('Get', { typeName: 'Device' }, function(devices) {
 
 In practice, when users report problems to an AI assistant, the AI tends to guess at causes (name mismatch? permissions? CDN issue?) and generate speculative fixes one after another. Each failed guess wastes a full copy-paste-install cycle. The "Copy Debug Data" button short-circuits this: one click gives the AI the actual data to diagnose the real problem immediately.
 
-## On-Screen Debug Console
+## On-Screen Debug Console (Fallback)
 
-When browser DevTools are inconvenient (mobile testing, quick iterations), add a visible console directly in your Add-In:
+The "Copy Debug Data" button above is the primary debugging tool — it feeds real API data straight to the AI. Use this on-screen console as a **fallback** when the Add-In is too broken to render its buttons, when Copy Debug returns empty data, or when you need to trace execution order in real time:
 
 ```javascript
 // Add this to your Add-In for visible debug output
@@ -94,57 +95,6 @@ initialize: function(api, state, callback) {
 - Objects displayed as JSON
 - Visible even without DevTools open
 - Useful for mobile testing
-
-### Quick Debug Pattern
-
-For temporary debugging during development:
-
-```javascript
-// Simple inline debug - add anywhere
-function debug(msg) {
-    var d = document.getElementById("debug") || (function() {
-        var div = document.createElement("div");
-        div.id = "debug";
-        div.style.cssText = "position:fixed;bottom:10px;right:10px;background:#000;color:#0f0;" +
-            "padding:10px;font-family:monospace;font-size:11px;max-width:400px;max-height:300px;" +
-            "overflow:auto;z-index:9999;border-radius:4px;";
-        document.body.appendChild(div);
-        return div;
-    })();
-    d.innerHTML += msg + "<br>";
-    d.scrollTop = d.scrollHeight;
-}
-
-// Usage throughout your code
-debug("Loaded " + devices.length + " devices");
-debug("API response: " + JSON.stringify(result).substring(0, 100));
-```
-
-### Debugging API Calls
-
-Wrap API calls to see what's happening:
-
-```javascript
-function debugApiCall(api, method, params, onSuccess, onError) {
-    console.log("API CALL: " + method + " with params:", params);
-
-    api.call(method, params,
-        function(result) {
-            console.log("API SUCCESS: " + method + " returned:", result);
-            if (onSuccess) onSuccess(result);
-        },
-        function(error) {
-            console.log("API ERROR: " + method + " failed:", error);
-            if (onError) onError(error);
-        }
-    );
-}
-
-// Usage
-debugApiCall(api, "Get", { typeName: "Device" }, function(devices) {
-    // handle devices
-});
-```
 
 ## API Call Style: Always Use Callbacks (Not api.async)
 
