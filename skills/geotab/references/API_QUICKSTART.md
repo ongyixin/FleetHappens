@@ -134,6 +134,23 @@ for status in device_statuses[:5]:
     print(f"Vehicle at: {lat}, {lng}")
 ```
 
+**⚠️ DeviceStatusInfo Data Completeness Warning:** `DeviceStatusInfo` is reliable for GPS position, speed, and driving status, but often **lacks odometer and engine hours**. In many Geotab environments these fields are missing or return 0. Use `StatusData` with specific Diagnostic IDs instead:
+
+```python
+# UNRELIABLE for odometer:
+# status.get('odometer', 0)  # Often 0 or missing!
+
+# RELIABLE — use StatusData with DiagnosticOdometerId
+odo_data = api.get('StatusData', search={
+    'diagnosticSearch': {'id': 'DiagnosticOdometerId'},
+    'deviceSearch': {'id': device_id}
+}, resultsLimit=1)
+if odo_data:
+    meters = odo_data[0]['data']
+    miles = meters / 1609.34  # Meters to miles
+    km = meters / 1000        # Meters to km
+```
+
 ## Supported Entity Types (34 Types)
 
 The MyGeotab API supports these entity types via the `Get` method. Not all are writable.
@@ -252,13 +269,20 @@ for reading in status_data:
 ```
 
 **Common Diagnostic IDs:**
-| Measurement | Diagnostic ID |
-|-------------|---------------|
-| Cranking Voltage | `DiagnosticCrankingVoltageId` |
-| Odometer | `DiagnosticOdometerAdjustmentId` |
-| Fuel Level | `DiagnosticFuelLevelId` |
-| Engine Hours | `DiagnosticEngineHoursAdjustmentId` |
-| Battery Voltage | `DiagnosticBatteryTemperatureId` |
+| Measurement | Diagnostic ID | Raw Unit |
+|-------------|---------------|----------|
+| Cranking Voltage | `DiagnosticCrankingVoltageId` | Volts |
+| Odometer | `DiagnosticOdometerId` | **Meters** (÷1609.34→miles) |
+| Fuel Level | `DiagnosticFuelLevelId` | Percentage |
+| Engine Hours | `DiagnosticEngineHoursId` | **Seconds** (÷3600→hours) |
+| Battery Voltage | `DiagnosticBatteryTemperatureId` | Volts |
+
+**⚠️ Unit Conversions (Critical!):** StatusData values use SI/metric base units. Without conversion, values look absurdly large:
+- Odometer of `193,297,400` is **meters** → `193,297,400 / 1609.34 ≈ 120,109 miles`
+- Engine hours of `12,891,600` is **seconds** → `12,891,600 / 3600 ≈ 3,581 hours`
+- Trip `.distance` is **kilometers** → multiply by `0.621371` for miles
+
+**⚠️ Odometer vs OdometerAdjustment:** Use `DiagnosticOdometerId` for actual current readings. `DiagnosticOdometerAdjustmentId` is for manual offset adjustments and typically returns 0. Similarly, use `DiagnosticEngineHoursId` (not `DiagnosticEngineHoursAdjustmentId`) for actual hours.
 
 **Common Mistake:** Similar-sounding IDs may not work. For example, `DiagnosticEngineCrankingVoltageId` returns no data, but `DiagnosticCrankingVoltageId` works. Always verify in Engine Measurements first.
 

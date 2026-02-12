@@ -124,7 +124,18 @@ check("has debug log toggle", function (cfg) {
     return { pass: true };
 });
 
-// 10. Vehicle links are clickable (when the add-in lists devices)
+// 10. Copy Debug Data button included
+check("has Copy Debug Data button", function (cfg) {
+    var pages = htmlContents(cfg);
+    if (!pages.length) return { pass: true };
+    var missing = pages.filter(function (html) {
+        return !/copyDebugData/.test(html);
+    });
+    if (missing.length) return { pass: false, message: "Every Add-In should include a copyDebugData() function and button for AI-assisted debugging" };
+    return { pass: true };
+});
+
+// 11. Vehicle links are clickable (when the add-in lists devices)
 check("vehicle names are clickable links (when listing devices)", function (cfg) {
     var pages = htmlContents(cfg);
     var needsLinks = pages.filter(function (html) {

@@ -4,16 +4,52 @@
 
 When an Add-In doesn't work:
 
-1. **Check browser console** (F12) for JavaScript errors
-2. **Check callback** - are you calling `callback()` in initialize?
-3. **Check GitHub Pages** - is the URL accessible? Wait 2-3 minutes after push
-4. **Test the URL** - open it directly in browser, does it load?
-5. **Check configuration** - valid JSON? Correct URL?
-6. **Hard refresh** - Clear cache with Ctrl+Shift+R
+1. **Click "Copy Debug Data"** — paste the result to your AI assistant for diagnosis
+2. **Check callback** — are you calling `callback()` in initialize?
+3. **Check GitHub Pages** — is the URL accessible? Wait 2-3 minutes after push
+4. **Test the URL** — open it directly in browser, does it load?
+5. **Check configuration** — valid JSON? Correct URL?
+6. **Hard refresh** — Clear cache with Ctrl+Shift+R
+7. **Browser console (F12)** — fallback if the Add-In can't render or Copy Debug returns empty data
 
-## On-Screen Debug Console
+## Copy Debug Data Button (Essential for AI-Assisted Debugging)
 
-When browser DevTools are inconvenient (mobile testing, quick iterations), add a visible console directly in your Add-In:
+Every Add-In should include a "Copy Debug Data" button that copies raw API response data to the clipboard. This is critical for the AI-assisted debugging loop: the user clicks the button, pastes the data back to their AI assistant, and the AI can diagnose the actual problem from real data instead of guessing.
+
+```javascript
+var _debugData = {};  // Store raw API responses
+
+function copyDebugData() {
+    var t = document.createElement('textarea');
+    t.value = JSON.stringify(_debugData, null, 2);
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    document.body.removeChild(t);
+    alert('Debug data copied to clipboard! Paste it back to the AI chat for analysis.');
+}
+
+// Store data samples in every API callback:
+api.call('Get', { typeName: 'Device' }, function(devices) {
+    _debugData.devices = devices.slice(0, 5);  // First 5 for debugging
+    // ... your logic
+}, function(err) {
+    _debugData.lastError = String(err.message || err);
+});
+```
+
+**HTML button (add alongside the debug log toggle):**
+```html
+<button onclick='copyDebugData()' style='background:#f39c12;color:#fff;border:none;padding:4px 16px;cursor:pointer;font-size:12px;border-radius:4px 4px 0 0;margin-left:4px;'>Copy Debug Data</button>
+```
+
+### Why This Matters
+
+In practice, when users report problems to an AI assistant, the AI tends to guess at causes (name mismatch? permissions? CDN issue?) and generate speculative fixes one after another. Each failed guess wastes a full copy-paste-install cycle. The "Copy Debug Data" button short-circuits this: one click gives the AI the actual data to diagnose the real problem immediately.
+
+## On-Screen Debug Console (Fallback)
+
+The "Copy Debug Data" button above is the primary debugging tool — it feeds real API data straight to the AI. Use this on-screen console as a **fallback** when the Add-In is too broken to render its buttons, when Copy Debug returns empty data, or when you need to trace execution order in real time:
 
 ```javascript
 // Add this to your Add-In for visible debug output
@@ -60,200 +96,34 @@ initialize: function(api, state, callback) {
 - Visible even without DevTools open
 - Useful for mobile testing
 
-### Quick Debug Pattern
+## API Data Gotchas (Quick Reference)
 
-For temporary debugging during development:
+These are the most common data-related bugs. Full code patterns and examples live in the references linked below — this section is a quick reminder of what to watch for.
 
-```javascript
-// Simple inline debug - add anywhere
-function debug(msg) {
-    var d = document.getElementById("debug") || (function() {
-        var div = document.createElement("div");
-        div.id = "debug";
-        div.style.cssText = "position:fixed;bottom:10px;right:10px;background:#000;color:#0f0;" +
-            "padding:10px;font-family:monospace;font-size:11px;max-width:400px;max-height:300px;" +
-            "overflow:auto;z-index:9999;border-radius:4px;";
-        document.body.appendChild(div);
-        return div;
-    })();
-    d.innerHTML += msg + "<br>";
-    d.scrollTop = d.scrollHeight;
-}
+| Gotcha | What goes wrong | Where to find the fix |
+|--------|----------------|----------------------|
+| `api.async` undefined | Crashes in some MyGeotab versions | [ADDINS.md — API Calling Conventions](ADDINS.md) |
+| `this` in event handlers | `this` becomes the button element, not your object | [ADDINS.md — Common Pitfalls](ADDINS.md) |
+| `DeviceStatusInfo` missing odometer | Returns 0 — use `StatusData` + `DiagnosticOdometerId` instead | [ADDINS.md — DeviceStatusInfo vs StatusData](ADDINS.md) |
+| Unit conversions | Odometer is meters, engine hours is seconds — values look absurdly large | [ADDINS.md — Unit Conversions](ADDINS.md) |
+| Reference objects have only `id` | `exception.device.name` is undefined — build lookup maps | [ADDINS.md — Reference Objects](ADDINS.md) |
+| ExceptionEvent has no GPS | Query `LogRecord` for coordinates during the event's time range | [ADDINS.md — Reference Objects](ADDINS.md) |
 
-// Usage throughout your code
-debug("Loaded " + devices.length + " devices");
-debug("API response: " + JSON.stringify(result).substring(0, 100));
-```
+For Python equivalents of these patterns, see [API_QUICKSTART.md](API_QUICKSTART.md).
 
-### Debugging API Calls
+## Common Add-In Mistakes (Quick Reference)
 
-Wrap API calls to see what's happening:
+These are covered in detail (with full code examples) in [ADDINS.md — Critical Mistakes to Avoid](ADDINS.md). Summary for quick diagnosis:
 
-```javascript
-function debugApiCall(api, method, params, onSuccess, onError) {
-    console.log("API CALL: " + method + " with params:", params);
-
-    api.call(method, params,
-        function(result) {
-            console.log("API SUCCESS: " + method + " returned:", result);
-            if (onSuccess) onSuccess(result);
-        },
-        function(error) {
-            console.log("API ERROR: " + method + " failed:", error);
-            if (onError) onError(error);
-        }
-    );
-}
-
-// Usage
-debugApiCall(api, "Get", { typeName: "Device" }, function(devices) {
-    // handle devices
-});
-```
-
-## Common Mistakes
-
-### 1. Forgetting to Call callback()
-
-**Problem:** Add-In hangs during initialization
-
-```javascript
-// Wrong - callback never called
-initialize: function(api, state, callback) {
-    loadData(api);
-    // Missing callback()!
-}
-
-// Correct
-initialize: function(api, state, callback) {
-    loadData(api);
-    callback();
-}
-
-// Also correct - call after async work
-initialize: function(api, state, callback) {
-    api.call("Get", {typeName: "Device"}, function(devices) {
-        displayDevices(devices);
-        callback();  // Called when async work completes
-    });
-}
-```
-
-### 2. Not Handling Errors
-
-**Problem:** API calls fail silently
-
-```javascript
-// No error handling
-api.call("Get", {typeName: "Device"}, function(devices) {
-    displayDevices(devices);
-});
-
-// With error handling
-api.call("Get", {typeName: "Device"},
-    function(devices) {
-        displayDevices(devices);
-    },
-    function(error) {
-        console.error("Failed to load devices:", error);
-        showErrorMessage("Could not load vehicles. Please try again.");
-    }
-);
-```
-
-### 3. Using Immediate Invocation
-
-**Problem:** Using `}();` instead of `};` when registering
-
-```javascript
-// Wrong - invokes the function immediately
-geotab.addin["name"] = function() { return {...}; }();
-
-// Correct - assigns the function for MyGeotab to call
-geotab.addin["name"] = function() { return {...}; };
-```
-
-### 4. Undeclared Variables
-
-**Problem:** Forgetting `const`, `let`, or `var` creates implicit globals
-
-```javascript
-// Wrong - implicit global
-devices = [];
-
-// Correct - properly declared
-const devices = [];
-```
-
-### 5. Variable Name Collisions with 'state'
-
-**Problem:** Using `state` as both parameter AND global variable
-
-```javascript
-// Wrong - 'state' parameter collides with global
-var state = { data: [] };
-
-geotab.addin["name"] = function() {
-    return {
-        initialize: function(api, state, callback) {
-            // Which 'state'? Confusion!
-            state.data = [];  // Modifies parameter, not your variable!
-            callback();
-        }
-    };
-};
-
-// Correct - use different names
-var appState = { data: [] };
-
-geotab.addin["name"] = function() {
-    return {
-        initialize: function(api, pageState, callback) {
-            // Clear: appState is yours, pageState is from MyGeotab
-            appState.data = [];
-            callback();
-        }
-    };
-};
-```
-
-### 6. Using resultsLimit for Counting
-
-**Problem:** Only getting partial count
-
-```javascript
-// Wrong - only returns up to 100
-api.call("Get", {
-    typeName: "Device",
-    resultsLimit: 100
-}, function(devices) {
-    // devices.length will be at most 100!
-});
-
-// Correct - returns all for accurate count
-api.call("Get", {
-    typeName: "Device"
-}, function(devices) {
-    console.log("Total vehicles: " + devices.length);
-});
-```
-
-### 7. Using typeName: "Driver" Directly
-
-**Problem:** Causes InvalidCastException in many databases
-
-```javascript
-// Wrong - causes errors in many databases
-api.call("Get", {typeName: "Driver"}, ...);
-
-// Correct - always works
-api.call("Get", {
-    typeName: "User",
-    search: { isDriver: true }
-}, function(drivers) {
-    console.log("Total drivers: " + drivers.length);
-});
-```
+| Symptom | Likely cause |
+|---------|-------------|
+| Add-In hangs on load | Missing `callback()` in `initialize` |
+| API calls fail silently | No error callback — always pass the 4th argument to `api.call` |
+| Add-In doesn't register | Using `}();` (immediate invocation) instead of `};` |
+| Unexpected variable values | Implicit globals — forgot `var`/`let`/`const` |
+| `state` behaves oddly | Your variable shadows the `initialize(api, state, callback)` parameter — rename yours to `appState` |
+| Device count capped at 100 | Using `resultsLimit` when you meant to count all — omit it |
+| `InvalidCastException` on drivers | Using `typeName: "Driver"` — use `User` with `search: { isDriver: true }` |
 
 ## GitHub Pages Issues
 
@@ -350,3 +220,7 @@ diagnosticSearch: { id: "DiagnosticPostedRoadSpeedId" }
 3. Name mismatches between files
 4. GitHub Pages deployment wait time (2-3 minutes)
 5. Browser cache (suggest hard refresh)
+
+### After Debugging: Offer Lessons Learned
+
+If a debugging session uncovered a non-obvious API gotcha (e.g., DeviceStatusInfo missing odometer, reference objects returning only IDs, unit conversion surprises), offer to write a short summary the user can file at https://github.com/fhoffa/geotab-vibe-guide/issues. Keep it to: what went wrong, what the actual fix was, and which API behavior was surprising. Don't offer this for trivial typos or config mistakes — only when there's a genuine lesson that would help others.
