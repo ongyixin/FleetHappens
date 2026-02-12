@@ -323,9 +323,87 @@ api.getSession(function(session) {
 });
 ```
 
+### DeviceStatusInfo vs StatusData — Know the Difference
+
+`DeviceStatusInfo` gives you the current vehicle state (GPS, speed, driving status) but often **lacks odometer and engine hours**. Use `StatusData` with specific Diagnostic IDs for reliable sensor readings.
+
+| Data | Source | Notes |
+|------|--------|-------|
+| Current GPS position | `DeviceStatusInfo` | `.latitude`, `.longitude` |
+| Current speed | `DeviceStatusInfo` | `.speed` (km/h) |
+| Driving status | `DeviceStatusInfo` | `.isDriving` |
+| **Odometer** | `StatusData` + `DiagnosticOdometerId` | Value in **meters** — divide by 1609.34 for miles |
+| **Engine Hours** | `StatusData` + `DiagnosticEngineHoursId` | Value in **seconds** — divide by 3600 for hours |
+| Fuel Level | `StatusData` + `DiagnosticFuelLevelId` | Percentage |
+
+```javascript
+// Get reliable odometer readings for all devices
+api.call('Get', {
+    typeName: 'StatusData',
+    search: { diagnosticSearch: { id: 'DiagnosticOdometerId' }, latestOnly: true }
+}, function(odoData) {
+    odoData.forEach(function(entry) {
+        var miles = Math.round(entry.data / 1609.34);  // meters → miles
+        console.log('Device ' + entry.device.id + ': ' + miles + ' miles');
+    });
+}, errorCallback);
+```
+
+### Reference Objects — Resolve IDs Before Using Names
+
+Many API responses return **reference objects** — nested objects with only an `id`, not the full entity. You MUST resolve them with a separate API call.
+
+```javascript
+// ExceptionEvent returns references, NOT full objects:
+// { device: { id: "b28" }, rule: { id: "RuleSpeedingId" } }
+// WRONG: exception.device.name → undefined
+// WRONG: exception.rule.name → undefined
+// WRONG: exception.latitude → undefined (ExceptionEvent has NO GPS!)
+
+// CORRECT: Build lookup maps first, then resolve
+api.multiCall([
+    ['Get', { typeName: 'Device' }],
+    ['Get', { typeName: 'Rule' }]
+], function(results) {
+    var deviceMap = {}, ruleMap = {};
+    results[0].forEach(function(d) { deviceMap[d.id] = d.name; });
+    results[1].forEach(function(r) { ruleMap[r.id] = r.name; });
+
+    // Now resolve names from exceptions
+    exceptions.forEach(function(ex) {
+        var vehicleName = deviceMap[ex.device.id] || 'Unknown';
+        var ruleName = ruleMap[ex.rule.id] || 'Unknown Rule';
+    });
+});
+```
+
+**To get GPS for an ExceptionEvent**, query LogRecord for the device during the exception's time range:
+```javascript
+api.call('Get', {
+    typeName: 'LogRecord',
+    search: {
+        deviceSearch: { id: exception.device.id },
+        fromDate: exception.activeFrom,
+        toDate: exception.activeTo
+    }
+}, function(logs) {
+    logs.forEach(function(log) {
+        // log.latitude, log.longitude are available here
+    });
+}, errorCallback);
+```
+
 ### Querying StatusData with Diagnostic IDs
 
 StatusData contains detailed sensor readings, but you need the **correct Diagnostic ID** to get specific measurements. There are 65,000+ diagnostic types - knowing the right ID unlocks detailed vehicle telemetry.
+
+**⚠️ CRITICAL — Unit Conversions:**
+| Diagnostic | Raw Unit | Conversion |
+|------------|----------|------------|
+| `DiagnosticOdometerId` | meters | ÷ 1609.34 for miles, ÷ 1000 for km |
+| `DiagnosticEngineHoursId` | seconds | ÷ 3600 for hours |
+| `DiagnosticSpeedId` | km/h | × 0.621371 for mph |
+| Trip `.distance` | kilometers | × 0.621371 for miles |
 
 **How to discover Diagnostic IDs:**
 1. In MyGeotab, go to **Engine & Maintenance > Engine Measurements**
@@ -356,10 +434,12 @@ api.call('Get', {
 | Measurement | Diagnostic ID |
 |-------------|---------------|
 | Cranking Voltage | `DiagnosticCrankingVoltageId` |
-| Odometer | `DiagnosticOdometerAdjustmentId` |
+| Odometer | `DiagnosticOdometerId` |
 | Fuel Level | `DiagnosticFuelLevelId` |
-| Engine Hours | `DiagnosticEngineHoursAdjustmentId` |
+| Engine Hours | `DiagnosticEngineHoursId` |
 | Battery Voltage | `DiagnosticBatteryTemperatureId` |
+
+**⚠️ Odometer vs OdometerAdjustment:** Use `DiagnosticOdometerId` for the actual current reading. `DiagnosticOdometerAdjustmentId` is for manual offset adjustments and typically returns 0.
 | Cargo Temp Zone 1 | `DiagnosticCargoTemperatureZone1Id` |
 | Cargo Temp Zone 2 | `DiagnosticCargoTemperatureZone2Id` |
 | Cargo Temp Zone 3 | `DiagnosticCargoTemperatureZone3Id` |
@@ -675,6 +755,10 @@ link.onclick = function(e) {
 | `typeName: "Driver"` | API errors | Use `User` with `isDriver: true` |
 | Inline `<style>` tags | Styles don't render | Use external CSS file |
 | Variable named `state` | Shadows parameter | Use `appState` or similar |
+| Using `api.async.call()` | `undefined` error in some environments | Use `api.call(method, params, successCb, errorCb)` |
+| Using `this.method()` in callbacks | `this` context lost | Define functions as `var fn = function(){}` in closure scope |
+| Trusting DeviceStatusInfo for odometer | Returns 0 or undefined | Use StatusData with `DiagnosticOdometerId` |
+| Wrong StatusData units | Values look absurdly large | Odometer is meters (÷1609.34→miles), hours is seconds (÷3600→hours) |
 
 See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for complete debugging guide.
 

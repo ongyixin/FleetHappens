@@ -36,11 +36,23 @@ After any edit to the Gem guide, read the full instruction block (between the op
 
 ## Completeness
 
-13. Does the example response in the "Example Response Format" section include **all** of: debug-log div, `callback()`, inline styles, clickable entity links (if listing entities)?
+13. Does the example response in the "Example Response Format" section include **all** of: debug-log div, **Copy Debug Data button**, `callback()`, inline styles, clickable entity links (if listing entities)?
 
-14. Does the pre-flight validation checklist cover **at least** these checks: supportEmail, name characters, callback, variable declarations, no style tags, correct TypeNames, registration pattern, debug log, clickable entity names?
+14. Does the pre-flight validation checklist cover **at least** these checks: supportEmail, name characters, callback, variable declarations, no style tags, correct TypeNames, registration pattern, debug log, **copy debug data button**, clickable entity names, **callback-based API calls (not api.async)**, **no `this` in nested callbacks**?
 
 15. Are installation instructions included (Administration → System Settings → Add-Ins → ...)?
+
+## Debugging
+
+18. Does the guide include a "Debugging Workflow" section that tells the Gem to **collect data first** (not guess at causes)?
+
+19. Does the guide tell the Gem to include `_debugData` storage AND a `copyDebugData()` function in every Add-In?
+
+20. Does the guide warn against `api.async.call()` and require callback-based `api.call()` instead?
+
+21. Does the guide warn that `DeviceStatusInfo` may lack odometer/engine hours and recommend `StatusData` with `DiagnosticOdometerId`/`DiagnosticEngineHoursId`?
+
+22. Does the guide document StatusData unit conversions (odometer in meters, engine hours in seconds)?
 
 ## Tone
 
