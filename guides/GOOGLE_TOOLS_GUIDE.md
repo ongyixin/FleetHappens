@@ -194,7 +194,7 @@ AI Studio supports the same annotation workflow as Canvas:
 ### How It Works
 
 1. Go to [firebase.studio](https://firebase.studio/)
-2. Choose **Prototyper mode** (AI-driven) or **Code mode** (VS Code-like editor)
+2. Choose **Prototyper mode** (AI-driven, currently generates Next.js apps) or **Code mode** (VS Code-like editor)
 3. Build your application using AI or code
 4. Click **Publish** to deploy
 5. Share the URL with anyone
@@ -221,7 +221,7 @@ When you click Publish:
 
 ### Cost
 
-- Firebase Studio itself is free to use
+- Firebase Studio is free during preview (3 workspaces at no cost; join the [Google Developer Program](https://developers.google.com/profile) for more)
 - Hosting costs are usage-based through your GCP billing account
 - Token costs for Gemini API calls depend on your usage tier
 - Containers are paused when not in use (you're not charged for idle time)
@@ -255,6 +255,12 @@ npm install -g @google/gemini-cli
 gemini
 ```
 
+Or, if you use Homebrew:
+
+```bash
+brew install gemini-cli
+```
+
 That's it. Two commands and you have access.
 
 ### Key Features
@@ -283,7 +289,7 @@ gemini "refactor the dashboard component to use React hooks"
 
 **The most powerful tool in the lineup.**
 
-[Google Antigravity](https://antigravity.google/) is an agent-first development platform announced in November 2025 alongside Gemini 3. It doesn't just generate code — it plans, reasons, builds, tests, and deploys multi-file applications using multiple AI agents working in parallel.
+[Google Antigravity](https://antigravity.google/) is an agent-first desktop IDE announced in November 2025 alongside Gemini 3. Built as a modified fork of VS Code, it doesn't just generate code — it plans, reasons, builds, tests, and deploys multi-file applications using multiple AI agents working in parallel.
 
 > **Note:** Antigravity is a separate product from [Jules](https://jules.google.com/) (Google's asynchronous AI code agent for GitHub) and [Project Astra](https://deepmind.google/models/project-astra/) (Google DeepMind's universal AI assistant research prototype). All three are part of Google's broader AI agent ecosystem but serve different purposes.
 
@@ -296,22 +302,25 @@ gemini "refactor the dashboard component to use React hooks"
 
 ### How It Works
 
-1. Open [Antigravity](https://antigravity.google/)
-2. Describe your application (or use voice prompts)
-3. Choose a mode:
+1. [Download and install](https://antigravity.google/) Antigravity (available for macOS, Windows, and Linux)
+2. Open your project in Antigravity
+3. Describe your application (or use voice prompts)
+4. Choose a mode:
    - **Fast mode** — Quick, one-off tasks
    - **Planning mode** — Detailed implementation plans using Gemini 3 Pro reasoning
-4. Review the implementation plan
-5. Approve and watch the agents build
+5. Review the implementation plan
+6. Approve and watch the agents build
 
 ### Key Features
 
-- **Agent-first UI** — Multiple agents work on your project simultaneously
+- **Two views:**
+  - **Editor view** — A familiar VS Code-style interface with an AI agent sidebar for synchronous coding
+  - **Manager view** — A control center for orchestrating multiple agents working in parallel across workspaces
 - **Implementation plans** — See exactly what will be built before any code is written. Review and edit the plan before proceeding.
-- **Inbox system** — Manage notifications from different agents. Kick off 10 agents in the morning, check your inbox for results.
+- **Artifacts** — Agents generate verifiable deliverables (task lists, plans, screenshots, browser recordings) so you can inspect what was done
 - **Browser subagent** — Powered by Gemini 2.5 Computer Use. The AI can interact with your app in a real browser, clicking buttons, testing flows, capturing screenshots.
 - **Reasoning mode** — Uses Gemini 3 Deep Think capabilities to break down complex tasks into steps
-- **Voice prompting** — Describe your idea by speaking instead of typing
+- **Multi-model support** — Defaults to Gemini 3 Pro but also supports Anthropic Claude and other models
 - **Model selection** — Choose between Gemini 3 Pro high/low thinking budgets
 
 ### Example: Personal Finance Dashboard
@@ -484,7 +493,7 @@ As vibe coding matures, the best practice is moving toward **spec-driven develop
 
 This produces more consistent, higher-quality results — especially for team projects and production applications.
 
-> **Don't be the monkey. Be the architect, and let the contractor build.**
+> **Don't be a code monkey. Be the Architect. Let Antigravity be the contractor.**
 > — Mahin Sheth, Geotab Connect 2026
 
 ---
