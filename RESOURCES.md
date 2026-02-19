@@ -7,6 +7,7 @@ Complete reference guide for participants and instructors.
 ## 🌐 Geotab Official Resources
 
 ### Getting Started
+- **Kickoff Webinar**: Watch Felipe and Aaron walk through the Geotab API and vibe coding tools — [YouTube](https://www.youtube.com/watch?v=Zuazi88lBeg) | [LinkedIn](https://www.linkedin.com/posts/hoffa_from-idea-to-25k-kickstarting-the-geotab-activity-7429763308112732161-vzZA)
 - **Create Demo Account**: https://my.geotab.com/registration.html
   > **Important:** Click **"Create a Demo Database"** (not "I'm a New Customer") to get pre-populated sample data.
 - **MyGeotab Login**: https://my.geotab.com/
