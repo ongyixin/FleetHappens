@@ -23,7 +23,7 @@ Before you can use Add-Ins, you need a MyGeotab account to install them in.
 1. Go to [my.geotab.com/registration.html](https://my.geotab.com/registration.html)
 2. **Click "Create a Demo Database"** (not "I'm a New Customer") — this gives you pre-populated sample data
 3. Fill out the form (takes ~2 minutes)
-4. Check your email for confirmation
+4. **Check your email and click the verification link** before trying to log in — you'll get an "Invalid user name or password" error if you skip this step
 
 > **Geotab employees:** Use a personal Gmail or other external email address to create your demo account. Internal Geotab accounts may have different permissions that could affect these tutorials.
 
@@ -66,7 +66,7 @@ The Gem will output a JSON configuration block. Select and copy the entire JSON 
 
 1. Log into **MyGeotab**
 2. Go to: Click your **user profile icon** (top-right corner) → **Administration → System → System Settings → Add-Ins**
-3. Enable **"Allow unverified Add-Ins"** → Yes (required for custom Add-Ins)
+3. Enable **"Allow unverified Add-Ins"** → Yes (required for custom Add-Ins — without this, your Add-In won't load)
 4. Click **"New Add-In"**
 5. Click the **"Configuration"** tab
 6. **Paste** the JSON you copied
