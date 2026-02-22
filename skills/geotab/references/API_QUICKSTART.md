@@ -539,6 +539,23 @@ zone = api.add('Zone', {
 print(f"Created zone: {zone}")
 ```
 
+### Add a FuelTransaction
+
+```python
+from datetime import datetime
+
+fuel_tx = api.add('FuelTransaction', {
+    'dateTime': datetime.now().isoformat(),
+    'volume': 50.5,            # liters
+    'cost': 75.25,
+    'currencyCode': 'USD',
+    'device': {'id': device_id},  # replace with your device ID
+    'location': {'x': -79.4, 'y': 43.6},  # longitude, latitude
+    'sourceFlag': 'Manual'
+})
+print(f"Created fuel transaction: {fuel_tx}")
+```
+
 ### Batch Operations (multi_call)
 
 ```python
