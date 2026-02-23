@@ -58,32 +58,13 @@ Replace `device_id` / `"b123"` with an actual device ID from your database. You 
 
 No — not through the standard MyGeotab API. `FillUp` is a **read-only** entity. The system generates FillUp records automatically by analyzing engine fuel-level data over time; you cannot insert them directly via `Add`.
 
-If you need to inject the underlying **StatusData** records (engine fuel-level readings that the system uses to detect fill-ups), you can use the **Data Intake Gateway (DIG)**. DIG is Geotab's REST API for ingesting custom telematics device data — including StatusData records — into MyGeotab.
+If you need to inject the underlying **StatusData** records (engine fuel-level readings that the system uses to detect fill-ups), you can use the **Data Intake Gateway (DIG)**.
 
-**Important: DIG uses a different account system than the MyGeotab API.** Your regular MyGeotab credentials (the ones you use for `api.call` or the SDK) will **not** work with DIG. Here's how they compare:
+**Important:** DIG is a separate service that requires a **MyAdmin account** with the `DIG-Access` role — your regular MyGeotab credentials won't work. Contact your Reseller or [Geotab Support](mailto:integrations@geotab.com) to get set up.
 
-| | MyGeotab API | DIG |
-|---|---|---|
-| **Account type** | MyGeotab user | MyAdmin service account |
-| **Authentication** | Session-based (`Authenticate` method) | JWT tokens (OAuth-style `/authentication` endpoints) |
-| **Device targeting** | MyGeotab device ID (e.g. `"b20"`) | Geotab serial number (provisioned via MyAdmin API) |
-| **Purpose** | Read/write MyGeotab entities | Ingest custom telematics device records in bulk |
+**DIG resources:**
 
-To get DIG access, your MyAdmin service account must have the **`DIG-Access` role**. Contact your Reseller or [Geotab Support](mailto:integrations@geotab.com) if you need help setting this up.
+- [DIG API Endpoint support article](https://support.geotab.com/en-GB/software-integration/doc/dig-api-endpoint)
+- [Data Intake Gateway integrator guide](https://docs.google.com/document/d/15uNuPqwFcPLe6vKs_JgY5nPTy2isQ3WYUu4oyQ3cEfQ/edit)
 
-**Key points about DIG:**
-
-- DIG accepts bulk `StatusData` records via its `/records` HTTPS endpoint.
-- Each record targets a specific device by its Geotab **serial number** (not the MyGeotab device ID). Serial numbers are provisioned through the MyAdmin API.
-- Records must include UTC timestamps in ISO 8601 zulu format (`yyyy-MM-ddTHH:mm:ss.ffffffZ`).
-- DIG uses JWT tokens for auth — you authenticate once to get a token, refresh it as needed, and include it in subsequent requests.
-
-**Getting started with DIG:**
-
-1. Read the [DIG API Endpoint support article](https://support.geotab.com/en-GB/software-integration/doc/dig-api-endpoint).
-2. Review the [Data Intake Gateway integrator guide](https://docs.google.com/document/d/15uNuPqwFcPLe6vKs_JgY5nPTy2isQ3WYUu4oyQ3cEfQ/edit) for authentication workflows, record formats, and best practices.
-3. Use the [DIG OpenAPI specification on GitHub](https://github.com/Geotab/mg-media/tree/master/DIG) and the [DIG Sample Calls Colab notebook](https://colab.research.google.com/) to explore the API.
-
-**For testing:** If you just want to simulate fill-up data for development, consider generating synthetic StatusData on your own side rather than pushing to the production DIG endpoint. DIG is designed for real integrations with custom telematics devices — not for casual testing.
-
-> **Source:** [Hackathon Q&A on Reddit](https://www.reddit.com/r/GEOTAB/comments/1r242zb/comment/o6o7o2e/) — community follow-up confirmed by Geotab support. DIG details from the [Data Intake Gateway integrator guide](https://docs.google.com/document/d/15uNuPqwFcPLe6vKs_JgY5nPTy2isQ3WYUu4oyQ3cEfQ/edit).
+> **Source:** [Hackathon Q&A on Reddit](https://www.reddit.com/r/GEOTAB/comments/1r242zb/comment/o6o7o2e/) — community follow-up confirmed by Geotab support.
