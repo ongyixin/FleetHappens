@@ -15,6 +15,7 @@ import path from "path";
 import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
 import { getDevices, getTrips } from "@/lib/geotab/client";
+import { getSessionFromRequest } from "@/lib/geotab/session";
 import { normalizeTrip } from "@/lib/geotab/normalize";
 import type { ApiResponse, TripSummary, GeotabDevice, GeotabTrip } from "@/types";
 
@@ -85,11 +86,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     );
   }
 
+  const userCreds = getSessionFromRequest(req);
   const explicitFromDate = searchParams.get("fromDate");
   const toDate = searchParams.get("toDate") ?? new Date().toISOString();
 
   // Demo mode: skip all live calls — serve file fallback immediately.
-  if (process.env.PULSE_DEMO_GROUPS === "true") {
+  // Only applies when no user session is present.
+  if (!userCreds && process.env.PULSE_DEMO_GROUPS === "true") {
     const fallbackRaw =
       loadTripsFallback(`trips-${deviceId}.json`, deviceId, deviceId) ??
       loadTripsFallback("trips.json", deviceId, deviceId) ??
@@ -106,7 +109,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   // Resolve device name for normalisation (non-blocking live lookup)
   let deviceName = deviceId;
   try {
-    const devices: GeotabDevice[] = await getDevices();
+    const devices: GeotabDevice[] = await getDevices(userCreds);
     const found = devices.find((d) => d.id === deviceId);
     if (found) deviceName = found.name;
   } catch {
@@ -118,7 +121,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   // When caller supplies explicit dates, use them directly (no auto-expansion)
   if (explicitFromDate) {
     try {
-      const rawTrips = await getTrips(deviceId, explicitFromDate, toDate);
+      const rawTrips = await getTrips(deviceId, explicitFromDate, toDate, userCreds);
       const trips = rawTrips.map((t) => normalizeTrip(t, deviceName));
       return NextResponse.json({
         ok: true,
@@ -128,18 +131,16 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       } satisfies ApiResponse<TripSummary[]>);
     } catch (err) {
       lastError = err;
-      // Fall through to file fallback at the bottom
+      // Fall through to file fallback at the bottom (demo only)
     }
   }
 
   // Auto-expanding lookback: call the live API directly (no cache wrapper) so an
   // empty result from the 7-day window does not block the 30/90/365-day attempts.
-  // The memory cache in withFallback would return the cached empty array on every
-  // subsequent iteration if we used the same cache key — bypassing it here is intentional.
   for (const days of explicitFromDate ? [] : LOOKBACK_WINDOWS_DAYS) {
     const fromDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
     try {
-      const rawTrips = await getTrips(deviceId, fromDate, toDate);
+      const rawTrips = await getTrips(deviceId, fromDate, toDate, userCreds);
       const trips = rawTrips.map((t) => normalizeTrip(t, deviceName));
 
       // Keep expanding if this window returned nothing (unless it's the last window)
@@ -159,15 +160,20 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     }
   }
 
-  // All live API attempts failed — load the static file fallback directly.
-  // Try a per-device file first, then fall back to the generic trips.json.
+  // Per-user session: return an error rather than demo fallback data
+  if (userCreds) {
+    return NextResponse.json({
+      ok: false,
+      error: lastError instanceof Error ? lastError.message : "Failed to load trips",
+    } satisfies ApiResponse<never>, { status: 500 });
+  }
+
+  // Demo session fallback — load the static file fallback directly.
   const fallbackRaw =
     loadTripsFallback(`trips-${deviceId}.json`, deviceId, deviceName) ??
     loadTripsFallback("trips.json", deviceId, deviceName) ??
     [];
 
-  // Stamp each fallback trip with the current deviceId/name so TripMap,
-  // breadcrumb fetches, and story generation all use consistent identifiers.
   const fallbackNormalized = fallbackRaw.map((t) => ({ ...t, deviceId, deviceName }));
   const fallbackTrips = rebaseIfStale(fallbackNormalized);
 

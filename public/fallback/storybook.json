@@ -1,0 +1,131 @@
+[
+  {
+    "tripId": "demo-trip-001",
+    "tone": "playful",
+    "title": "From the Mission to the Marina — The Long Way",
+    "panelCount": 4,
+    "firstLocationName": "Mission District, SF",
+    "lastLocationName": "Marina District, SF",
+    "firstCaption": "Wheels rolling at 7:23 AM from the Mission — coffee was still brewing when the engine turned over.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/The_skyline_of_downtown_San_Francisco.jpg/960px-The_skyline_of_downtown_San_Francisco.jpg",
+    "createdAt": "2026-02-27T07:23:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-002",
+    "tone": "cinematic",
+    "title": "Night Freight: Oakland to San Jose",
+    "panelCount": 5,
+    "firstLocationName": "Oakland Port District",
+    "lastLocationName": "San Jose, CA",
+    "firstCaption": "2:11 AM. Container lights flicker across the water. The van rolls out into the dark with a full load and nowhere to be but south.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/San_Francisco_-_Oakland_Bay_Bridge_At_Night.jpg/960px-San_Francisco_-_Oakland_Bay_Bridge_At_Night.jpg",
+    "createdAt": "2026-02-26T02:11:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-003",
+    "tone": "guidebook",
+    "title": "Bay Bridge to Berkeley: A Field Guide",
+    "panelCount": 4,
+    "firstLocationName": "Embarcadero, SF",
+    "lastLocationName": "Berkeley, CA",
+    "firstCaption": "Departing at 8:45 AM from the Embarcadero — the Bay Bridge toll plaza ahead, traffic index 0.6, light winds from the west.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/SF_Bay_Bridge_view_from_bridge.jpg/960px-SF_Bay_Bridge_view_from_bridge.jpg",
+    "createdAt": "2026-02-25T08:45:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-004",
+    "tone": "playful",
+    "title": "The Great Depot Escape",
+    "panelCount": 3,
+    "firstLocationName": "South San Francisco",
+    "lastLocationName": "Daly City",
+    "firstCaption": "Short trip. Big energy. The van left the depot before anyone had a chance to add more items to the manifest.",
+    "createdAt": "2026-02-24T09:02:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-005",
+    "tone": "cinematic",
+    "title": "Fog, Freeways, and a Very Patient Driver",
+    "panelCount": 6,
+    "firstLocationName": "Sunset District, SF",
+    "lastLocationName": "Half Moon Bay",
+    "firstCaption": "The fog hadn't lifted. It wouldn't for hours. Van 07 pushed west through the grey towards the coast.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Foggy_SF.jpg/960px-Foggy_SF.jpg",
+    "createdAt": "2026-02-23T06:55:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-006",
+    "tone": "guidebook",
+    "title": "Corridor Report: I-880 Southbound",
+    "panelCount": 5,
+    "firstLocationName": "Fremont, CA",
+    "lastLocationName": "San Jose, CA",
+    "firstCaption": "Fremont at 10:15 AM. The I-880 south corridor — 42 km, four distinct traffic zones, and one memorable interchange.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Oakland_California_aerial_view.jpg/960px-Oakland_California_aerial_view.jpg",
+    "createdAt": "2026-02-22T10:15:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-007",
+    "tone": "playful",
+    "title": "Eleven Stops and a Miracle Parking Spot",
+    "panelCount": 5,
+    "firstLocationName": "Chinatown, SF",
+    "lastLocationName": "Richmond District, SF",
+    "firstCaption": "The plan said three stops. The day had other ideas. Stop one: a double-park on Clay Street with emergency flashers blazing.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/San_Francisco_Market_Street_between_4th_and_5th_St.jpg/960px-San_Francisco_Market_Street_between_4th_and_5th_St.jpg",
+    "createdAt": "2026-02-21T11:40:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-008",
+    "tone": "cinematic",
+    "title": "The Last Run Before Maintenance Day",
+    "panelCount": 4,
+    "firstLocationName": "Hayward, CA",
+    "lastLocationName": "Union City, CA",
+    "firstCaption": "Fleet Van 03 was due for service at 8 AM. At 7:15 AM it was still on the road. This is that story.",
+    "createdAt": "2026-02-20T07:15:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-009",
+    "tone": "guidebook",
+    "title": "Golden Gate Approach: A Driver's Reference",
+    "panelCount": 6,
+    "firstLocationName": "Presidio, SF",
+    "lastLocationName": "Marin Headlands",
+    "firstCaption": "Presidio Gate at 7:00 AM. Golden Gate Bridge approach protocol: keep right, watch cyclists, prepare for wind at midspan.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/GoldenGateBridge-001.jpg/960px-GoldenGateBridge-001.jpg",
+    "createdAt": "2026-02-19T07:00:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-010",
+    "tone": "playful",
+    "title": "Bridge Toll Roulette: 47 Attempts, 1 EZ-Pass",
+    "panelCount": 4,
+    "firstLocationName": "Bay Bridge West Span",
+    "lastLocationName": "Jack London Square, Oakland",
+    "firstCaption": "Fleet record: Van 12 crossed the Bay Bridge 47 times this quarter. It has beeped through the toll exactly once. Nobody knows how.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Bay_bridge_views.jpg/960px-Bay_bridge_views.jpg",
+    "createdAt": "2026-02-18T12:30:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-011",
+    "tone": "cinematic",
+    "title": "Rain, Highway 101, and a Delayed Delivery",
+    "panelCount": 5,
+    "firstLocationName": "Redwood City, CA",
+    "lastLocationName": "Palo Alto, CA",
+    "firstCaption": "The rain started at mile 12. By mile 18, the wipers were losing. Van 05 pressed south on 101 through curtains of water.",
+    "createdAt": "2026-02-17T14:22:00.000Z"
+  },
+  {
+    "tripId": "demo-trip-012",
+    "tone": "guidebook",
+    "title": "Outer Sunset Loop: Terrain & Traffic Analysis",
+    "panelCount": 4,
+    "firstLocationName": "Ocean Beach, SF",
+    "lastLocationName": "Balboa Park BART",
+    "firstCaption": "Ocean Beach departure at 3:45 PM. Outer Sunset grid: one-way conflicts at 45th Ave, pedestrian density at Irving Street, fog advisory active.",
+    "firstImageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/San_Francisco_downtown.jpg/960px-San_Francisco_downtown.jpg",
+    "createdAt": "2026-02-16T15:45:00.000Z"
+  }
+]

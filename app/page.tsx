@@ -4,7 +4,43 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import VehicleSelector from "@/components/VehicleSelector";
 import type { VehicleCard, FleetGroup, ApiResponse } from "@/types";
-import { MapPin, Brain, BookOpen, Zap } from "lucide-react";
+import { MapPin, Brain, BookOpen, Zap, Library } from "lucide-react";
+import Link from "next/link";
+import ConnectButton from "@/components/ConnectButton";
+
+// ─── Demo mode banner ─────────────────────────────────────────────────────────
+
+function DemoModeBanner() {
+  const [isDemo, setIsDemo] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetch("/api/geotab/auth")
+      .then((r) => r.json())
+      .then((d: ApiResponse<{ isDemo: boolean }>) => {
+        if (d.ok && d.data) setIsDemo(d.data.isDemo);
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!isDemo) return null;
+
+  return (
+    <div className="mb-8 animate-fade-up" style={{ animationDelay: "150ms" }}>
+      <div className="inline-flex items-center gap-3 rounded-xl border border-[#f5a623]/20 bg-[#f5a623]/[0.06] px-4 py-3">
+        <div className="w-1.5 h-1.5 rounded-full bg-[#f5a623]/60 shrink-0" />
+        <p className="text-[12.5px] font-body text-white/55 leading-snug">
+          You&apos;re viewing <span className="text-[#f5a623]/80 font-semibold">demo data</span>.
+        </p>
+        <Link
+          href="/connect"
+          className="text-[12.5px] font-semibold font-body text-[#f5a623] hover:text-[#f9b93a] transition-colors whitespace-nowrap"
+        >
+          Connect your own fleet →
+        </Link>
+      </div>
+    </div>
+  );
+}
 
 const FEATURES = [
   {
@@ -34,6 +70,13 @@ const FEATURES = [
     desc: "Multi-fleet portfolio",
     href: "/features#fleet-pulse",
     tooltip: "A command-centre view across your entire vehicle portfolio. Compare fleet KPIs side-by-side, spot underperformers, and drill from company level down to a single vehicle in two clicks.",
+  },
+  {
+    icon: Library,
+    label: "Fleet Storybook",
+    desc: "Archived trip stories",
+    href: "/storybook",
+    tooltip: "Every generated story is preserved in the Fleet Storybook — a searchable archive of comic trip narratives. Filter by tone, browse past routes, and share highlight reels with clients or new drivers.",
   },
 ];
 
@@ -101,9 +144,19 @@ export default function HomePage() {
               FleetHappens
             </span>
           </div>
-          <span className="text-[11px] font-semibold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-3 py-1 font-body">
-            Geotab Vibe Coding Challenge
-          </span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.push("/storybook")}
+              className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold text-[rgba(232,237,248,0.5)] hover:text-white transition-colors font-body"
+            >
+              <Library className="h-3 w-3" />
+              Storybook
+            </button>
+            <ConnectButton />
+            <span className="text-[11px] font-semibold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-3 py-1 font-body">
+              Geotab Vibe Coding Challenge
+            </span>
+          </div>
         </div>
       </nav>
 
@@ -123,10 +176,13 @@ export default function HomePage() {
           <span className="block text-[clamp(3rem,8vw,6rem)] text-[#f5a623]">Real stories.</span>
         </h1>
 
-        <p className="font-body text-[rgba(232,237,248,0.55)] text-lg leading-relaxed max-w-lg mb-10 animate-fade-up" style={{ animationDelay: "120ms" }}>
+        <p className="font-body text-[rgba(232,237,248,0.55)] text-lg leading-relaxed max-w-lg mb-6 animate-fade-up" style={{ animationDelay: "120ms" }}>
           Turn raw Geotab trip data into contextual area briefings and
           comic-style route recaps — powered by Direct API and Ace.
         </p>
+
+        {/* Connect your fleet CTA — shown only in demo mode */}
+        <DemoModeBanner />
 
         {/* Feature chips */}
         <div className="flex flex-wrap gap-3 mb-12 stagger animate-fade-up" style={{ animationDelay: "180ms" }}>

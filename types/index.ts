@@ -401,6 +401,40 @@ export interface FleetPulseDetail {
   };
 }
 
+// ─── Location Dossier ─────────────────────────────────────────────────────────
+
+/**
+ * Persistent location profile keyed by a geohash cell.
+ * Accumulates fleet visit history, area intelligence, and amenity data
+ * across all visits to a given area. Grows richer with each fleet visit.
+ */
+export interface LocationDossier {
+  /** Quantized coordinate key: "${lat.toFixed(3)}_${lon.toFixed(3)}" (~110m cell). */
+  geohash: string;
+  lat: number;
+  lon: number;
+  placeName: string;
+  neighborhood?: string;
+  city?: string;
+  /** LLM-generated area description, cached after first generation. */
+  areaBriefing: string;
+  nearbyAmenities: NearbyAmenity[];
+  /** Fleet visit count from Ace (90-day window). Null until Ace enrichment runs. */
+  fleetVisitCount?: number;
+  /** Human-readable fleet visit summary from Ace. */
+  fleetVisitSummary?: string;
+  /** Most common day of week for fleet visits, extracted from Ace. */
+  peakDayOfWeek?: string;
+  /** Number of times this dossier has been accessed via the app. */
+  accessCount: number;
+  /** ISO 8601 — when this dossier was first created. */
+  firstSeenAt: string;
+  /** ISO 8601 — when this dossier was last accessed. */
+  lastSeenAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // ─── AI Assistant types ────────────────────────────────────────────────────────
 
 /** Current page context passed to the assistant with every query. */
@@ -463,4 +497,32 @@ export interface AssistantResponse {
 export interface AssistantQueryRequest {
   query: string;
   context?: AssistantContext;
+}
+
+// ─── Next-Stop Prediction types ───────────────────────────────────────────────
+
+/** A single ranked prediction for a vehicle's likely next stop. */
+export interface StopPrediction {
+  rank: number;
+  locationName: string;
+  /** Normalized likelihood 0–1 based on historical visit frequency. */
+  confidence: number;
+  visitCount: number;
+  avgDwellMinutes?: number;
+  coordinates?: LatLon;
+  /** Hour of day (UTC) when this destination is typically reached. */
+  typicalArrivalHour?: number;
+  /** Pre-loaded context briefing for the top prediction (rank === 1 only). */
+  preloadedBriefing?: StopContext | null;
+}
+
+/** Full result returned by GET /api/predict/next-stop. */
+export interface NextStopPredictionResult {
+  deviceId: string;
+  fromCoordinates: LatLon;
+  predictions: StopPrediction[];
+  /** Total historical trip count used to compute confidence scores. */
+  basedOnTrips: number;
+  queriedAt: string;
+  fromCache?: boolean;
 }

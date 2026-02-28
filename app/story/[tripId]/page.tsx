@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, MapPin } from "lucide-react";
+import { ArrowLeft, Sparkles, MapPin, Library } from "lucide-react";
 import type { ComicStory, ComicTone, TripSummary, StopContext, ApiResponse } from "@/types";
 import ComicStoryRenderer from "@/components/ComicStoryRenderer";
 import { format } from "date-fns";
@@ -204,7 +204,14 @@ export default function StoryPage() {
             {trip?.deviceName ?? deviceName}
           </button>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-3">
+            <button
+              onClick={() => router.push("/storybook")}
+              className="hidden sm:inline-flex items-center gap-1.5 h-7 px-3 rounded-lg text-[11px] text-[rgba(232,237,248,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] border border-transparent hover:border-[rgba(255,255,255,0.08)] transition-all font-body"
+            >
+              <Library className="h-3 w-3" />
+              Storybook
+            </button>
             <div className="flex items-center gap-1.5 text-[11px] text-[rgba(232,237,248,0.28)] font-body">
               <Sparkles className="h-3 w-3 text-[#fb923c]/60" />
               AI-generated · real Geotab data

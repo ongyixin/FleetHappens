@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const result = await reverseGeocode(lat, lon);
+    const result = await reverseGeocode({ lat, lon });
     return NextResponse.json({ data: result });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Geocode failed";

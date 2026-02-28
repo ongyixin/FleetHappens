@@ -54,7 +54,7 @@ export async function buildStopContext(
 
   // Geocode + amenities in parallel — neither blocks the other
   const [geocodeResult, amenitiesResult] = await Promise.allSettled([
-    reverseGeocode(lat, lon),
+    reverseGeocode({ lat, lon }),
     getNearbyAmenities(lat, lon),
   ]);
 

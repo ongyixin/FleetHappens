@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { Truck, BookOpen, Brain, RefreshCw, ChevronLeft, Zap, Circle } from "lucide-react";
+import { Truck, BookOpen, Brain, RefreshCw, ChevronLeft, Zap, Circle, ChevronUp, ChevronDown } from "lucide-react";
 import type {
   TripSummary,
   BreadcrumbPoint,
@@ -11,11 +11,14 @@ import type {
   AceInsight,
   LatLon,
   ApiResponse,
+  LocationDossier,
+  NearbyAmenity,
 } from "@/types";
 import TripList from "@/components/TripList";
 import TripStatsCard from "@/components/TripStatsCard";
 import AceInsightCard, { AceInsightCardSkeleton } from "@/components/AceInsightCard";
-import StopContextPanel from "@/components/StopContextPanel";
+import LocationDossierPanel from "@/components/LocationDossierPanel";
+import NextStopPrediction from "@/components/NextStopPrediction";
 import { cn } from "@/lib/utils";
 
 const TripMap = dynamic(() => import("@/components/TripMap"), {
@@ -50,13 +53,103 @@ function DashboardContent() {
   const [breadcrumbs, setBreadcrumbs]               = useState<BreadcrumbPoint[]>([]);
   const [breadcrumbsLoading, setBreadcrumbsLoading] = useState(false);
 
-  const [selectedStop, setSelectedStop]           = useState<LatLon | null>(null);
-  const [stopContext, setStopContext]             = useState<StopContext | null>(null);
-  const [stopContextLoading, setStopContextLoading] = useState(false);
-  const [storyStops, setStoryStops]               = useState<StopContext[]>([]);
+  const [selectedStop, setSelectedStop]   = useState<LatLon | null>(null);
+  const [dossier, setDossier]             = useState<LocationDossier | null>(null);
+  const [dossierLoading, setDossierLoading] = useState(false);
+  const [dossierPhase, setDossierPhase]   = useState<"fetching" | "briefing" | "enriching" | "ready">("fetching");
+  const [storyStops, setStoryStops]       = useState<StopContext[]>([]);
 
   const [aceInsights, setAceInsights] = useState<AceInsight[]>([]);
   const [aceLoading, setAceLoading]   = useState(true);
+
+  // ── Draggable split between Map and Fleet Intelligence ─────────────────
+  const SNAP_COLLAPSED = 56;   // just the "Fleet Intelligence" header visible
+  const SNAP_DEFAULT   = 240;  // default split showing cards
+  const SNAP_EXPANDED_FRAC = 0.97; // covers the map (minus drag handle)
+
+  const mainRef          = useRef<HTMLDivElement>(null);
+  const [panelHeight, setPanelHeight]     = useState(SNAP_DEFAULT);
+  const [isSnapping, setIsSnapping]       = useState(false);
+  const isDragging       = useRef(false);
+  const dragStartY       = useRef(0);
+  const dragStartHeight  = useRef(0);
+
+  const getSnapPoints = useCallback(() => {
+    const containerH = mainRef.current?.clientHeight ?? 500;
+    return [
+      { height: SNAP_COLLAPSED,                        mode: "map"   as const },
+      { height: SNAP_DEFAULT,                          mode: "split" as const },
+      { height: Math.floor(containerH * SNAP_EXPANDED_FRAC), mode: "intel" as const },
+    ];
+  }, []);
+
+  const snapToNearest = useCallback((height: number) => {
+    const snaps = getSnapPoints();
+    let closest = snaps[0];
+    let minDist = Math.abs(height - closest.height);
+    for (const s of snaps) {
+      const d = Math.abs(height - s.height);
+      if (d < minDist) { minDist = d; closest = s; }
+    }
+    setIsSnapping(true);
+    setPanelHeight(closest.height);
+    setTimeout(() => setIsSnapping(false), 380);
+  }, [getSnapPoints]);
+
+  const handleDragMove = useCallback((clientY: number) => {
+    if (!isDragging.current) return;
+    const delta     = dragStartY.current - clientY; // up = positive = taller panel
+    const containerH = mainRef.current?.clientHeight ?? 500;
+    const maxH      = Math.floor(containerH * 0.97);
+    const newHeight = Math.max(SNAP_COLLAPSED, Math.min(dragStartHeight.current + delta, maxH));
+    setPanelHeight(newHeight);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    snapToNearest(panelHeight);
+  }, [panelHeight, snapToNearest]);
+
+  // Global mouse/touch listeners attached only while dragging
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => handleDragMove(e.clientY);
+    const onTouchMove = (e: TouchEvent) => { if (e.touches[0]) handleDragMove(e.touches[0].clientY); };
+    const onMouseUp   = () => handleDragEnd();
+    const onTouchEnd  = () => handleDragEnd();
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("touchmove", onTouchMove, { passive: true });
+    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("touchend", onTouchEnd);
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [handleDragMove, handleDragEnd]);
+
+  const handleHandleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    isDragging.current    = true;
+    dragStartY.current    = e.clientY;
+    dragStartHeight.current = panelHeight;
+  }, [panelHeight]);
+
+  const handleHandleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!e.touches[0]) return;
+    isDragging.current    = true;
+    dragStartY.current    = e.touches[0].clientY;
+    dragStartHeight.current = panelHeight;
+  }, [panelHeight]);
+
+  const currentMode = (() => {
+    const snaps = getSnapPoints();
+    if (panelHeight <= (snaps[0].height + snaps[1].height) / 2) return "map";
+    if (panelHeight >= (snaps[1].height + snaps[2].height) / 2) return "intel";
+    return "split";
+  })();
+  // ── end drag split ──────────────────────────────────────────────────────
 
   useEffect(() => {
     if (!deviceId) return;
@@ -121,30 +214,98 @@ function DashboardContent() {
     fetchAce();
   }, []);
 
+  /** Build a LocationDossier from a StopContext (pre- or post-Ace enrichment). */
+  function stopContextToDossier(ctx: StopContext, coords: LatLon, existing?: LocationDossier | null): LocationDossier {
+    const now = new Date().toISOString();
+    return {
+      geohash: `${coords.lat.toFixed(3)}_${coords.lon.toFixed(3)}`,
+      lat: coords.lat,
+      lon: coords.lon,
+      placeName: ctx.placeName,
+      neighborhood: ctx.neighborhood,
+      city: ctx.city,
+      areaBriefing: ctx.areaBriefing,
+      nearbyAmenities: ctx.nearbyAmenities as NearbyAmenity[],
+      fleetVisitCount: ctx.fleetVisitCount,
+      fleetVisitSummary: ctx.fleetVisitSummary,
+      accessCount: existing ? existing.accessCount : 1,
+      firstSeenAt: existing?.firstSeenAt ?? now,
+      lastSeenAt: now,
+      createdAt: existing?.createdAt ?? now,
+      updatedAt: now,
+    };
+  }
+
+  /** Convert a LocationDossier back to a StopContext for the story pipeline. */
+  function dossierToStopContext(d: LocationDossier, tripId: string): StopContext {
+    const safe = (n: number) => n.toFixed(4).replace(".", "d").replace("-", "n");
+    return {
+      id: `stop_${tripId}_${safe(d.lat)}_${safe(d.lon)}`,
+      tripId,
+      coordinates: { lat: d.lat, lon: d.lon },
+      placeName: d.placeName,
+      neighborhood: d.neighborhood,
+      city: d.city,
+      areaBriefing: d.areaBriefing,
+      nearbyAmenities: d.nearbyAmenities,
+      fleetVisitCount: d.fleetVisitCount,
+      fleetVisitSummary: d.fleetVisitSummary,
+      generatedAt: d.updatedAt,
+    };
+  }
+
   const handleStopClick = useCallback(async (coords: LatLon) => {
     setSelectedStop(coords);
-    setStopContextLoading(true);
-    setStopContext(null);
+    setDossier(null);
+    setDossierLoading(true);
+    setDossierPhase("fetching");
+
+    // ── Step 1: check BigQuery for an existing dossier (fast ~500ms) ──────
+    try {
+      const res = await fetch(`/api/location/dossier?lat=${coords.lat}&lon=${coords.lon}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) {
+          setDossier(json.data as LocationDossier);
+          setDossierPhase("ready");
+          setDossierLoading(false);
+          return; // Dossier found — show immediately, no Phase 1/2 needed
+        }
+      }
+    } catch { /* BQ unavailable — fall through to Phase 1/2 */ }
+
+    // ── Step 2: no cached dossier — run Phase 1 briefing ─────────────────
+    setDossierPhase("briefing");
     let phase1: StopContext | null = null;
     try {
-      const res  = await fetch("/api/context/briefing", {
+      const res = await fetch("/api/context/briefing", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tripId: selectedTrip?.id ?? "", lat: coords.lat, lon: coords.lon }),
       });
       const json = await res.json();
-      if (json.data) { phase1 = json.data as StopContext; setStopContext(phase1); }
-      else throw new Error(json.error ?? "Briefing failed");
+      if (json.data) {
+        phase1 = json.data as StopContext;
+        setDossier(stopContextToDossier(phase1, coords));
+      } else throw new Error(json.error ?? "Briefing failed");
     } catch {
+      // Fallback data so the panel always shows something
       try {
         const res  = await fetch("/fallback/stop-context.json");
         const data = await res.json();
         const ctx  = (data.contexts as StopContext[])[0];
-        if (ctx) { phase1 = { ...ctx, fromCache: true, coordinates: coords }; setStopContext(phase1); }
-      } catch { setStopContext(null); }
-    } finally { setStopContextLoading(false); }
+        if (ctx) {
+          phase1 = { ...ctx, fromCache: true, coordinates: coords };
+          setDossier(stopContextToDossier(phase1, coords));
+        }
+      } catch { /* panel shows loading state */ }
+    } finally {
+      setDossierLoading(false);
+    }
 
+    // ── Step 3: Phase 2 — Ace enrichment + persist dossier ───────────────
     if (phase1 && !phase1.fromCache) {
+      setDossierPhase("enriching");
       try {
         const res  = await fetch("/api/context/enrich", {
           method: "POST",
@@ -152,14 +313,36 @@ function DashboardContent() {
           body: JSON.stringify({ context: phase1 }),
         });
         const json = await res.json();
-        if (json.data) setStopContext(json.data as StopContext);
-      } catch { /* non-fatal */ }
+        if (json.data) {
+          const enriched = json.data as StopContext;
+          const full = stopContextToDossier(enriched, coords);
+          setDossier(full);
+
+          // Persist to BigQuery (fire and forget — never blocks the UI)
+          fetch("/api/location/dossier", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ stopContext: enriched }),
+          }).catch(() => {});
+        }
+      } catch { /* non-fatal */ } finally {
+        setDossierPhase("ready");
+      }
+    } else {
+      setDossierPhase("ready");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTrip]);
 
-  function handleClosePanel() { setSelectedStop(null); setStopContext(null); }
+  function handleClosePanel() {
+    setSelectedStop(null);
+    setDossier(null);
+    setDossierPhase("fetching");
+  }
 
-  function handleUseInStory(ctx: StopContext) {
+  function handleToggleDossierInStory() {
+    if (!dossier) return;
+    const ctx = dossierToStopContext(dossier, selectedTrip?.id ?? "");
     setStoryStops((prev) => {
       const exists = prev.some((s) => s.id === ctx.id);
       return exists ? prev.filter((s) => s.id !== ctx.id) : [...prev, ctx];
@@ -176,6 +359,11 @@ function DashboardContent() {
   }
 
   const isPanelOpen = selectedStop !== null;
+
+  /** Whether the currently open dossier stop is flagged for the story. */
+  const isPanelStopInStory = dossier && selectedTrip
+    ? storyStops.some((s) => s.id === dossierToStopContext(dossier, selectedTrip.id).id)
+    : false;
 
   return (
     <div className="flex flex-col h-screen bg-[#09090e] overflow-hidden">
@@ -270,7 +458,7 @@ function DashboardContent() {
             <TripList
               trips={trips}
               selectedTripId={selectedTrip?.id ?? null}
-              onSelect={(trip) => { setSelectedTrip(trip); setSelectedStop(null); setStopContext(null); }}
+              onSelect={(trip) => { setSelectedTrip(trip); setSelectedStop(null); setDossier(null); }}
               loading={tripsLoading}
             />
           </div>
@@ -283,9 +471,9 @@ function DashboardContent() {
         </aside>
 
         {/* Right: map + Ace */}
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Map */}
-          <div className="flex-1 p-2.5 min-h-0">
+        <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden">
+          {/* Map — fills remaining space above the intelligence panel */}
+          <div className="flex-1 p-2.5 min-h-0 overflow-hidden">
             <div className="h-full w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
               <TripMap
                 trip={selectedTrip}
@@ -296,8 +484,75 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* Ace insight strip */}
-          <div className="shrink-0 border-t border-[rgba(255,255,255,0.07)] bg-[#101318]">
+          {/* ── Drag handle ──────────────────────────────────────────────────── */}
+          <div
+            className={cn(
+              "shrink-0 h-6 relative flex items-center justify-center select-none z-10",
+              "bg-[#101318] border-y border-[rgba(255,255,255,0.07)]",
+              "cursor-ns-resize group hover:bg-[rgba(245,166,35,0.03)] transition-colors duration-150",
+            )}
+            onMouseDown={handleHandleMouseDown}
+            onTouchStart={handleHandleTouchStart}
+            title="Drag to resize · click to cycle views"
+            onClick={() => {
+              if (isDragging.current) return;
+              const snaps = getSnapPoints();
+              const idx = snaps.findIndex(s => s.mode === currentMode);
+              const next = snaps[(idx + 1) % snaps.length];
+              setIsSnapping(true);
+              setPanelHeight(next.height);
+              setTimeout(() => setIsSnapping(false), 380);
+            }}
+          >
+            {/* Left label: MAP */}
+            <span className={cn(
+              "absolute left-3.5 text-[8.5px] font-bold tracking-[0.16em] uppercase font-body transition-colors duration-150",
+              currentMode === "map"
+                ? "text-[#f5a623]"
+                : "text-[rgba(232,237,248,0.18)] group-hover:text-[rgba(232,237,248,0.4)]",
+            )}>
+              Map
+            </span>
+
+            {/* Center pill + chevrons */}
+            <div className="flex items-center gap-1">
+              <ChevronUp className={cn(
+                "h-2.5 w-2.5 transition-colors duration-150",
+                currentMode === "intel"
+                  ? "text-[rgba(245,166,35,0.7)]"
+                  : "text-[rgba(232,237,248,0.18)] group-hover:text-[rgba(245,166,35,0.5)]",
+              )} />
+              <div className={cn(
+                "w-7 h-[3px] rounded-full transition-all duration-150",
+                "bg-[rgba(255,255,255,0.1)] group-hover:bg-[rgba(245,166,35,0.45)]",
+              )} />
+              <ChevronDown className={cn(
+                "h-2.5 w-2.5 transition-colors duration-150",
+                currentMode === "map"
+                  ? "text-[rgba(245,166,35,0.7)]"
+                  : "text-[rgba(232,237,248,0.18)] group-hover:text-[rgba(245,166,35,0.5)]",
+              )} />
+            </div>
+
+            {/* Right label: FLEET INTELLIGENCE */}
+            <span className={cn(
+              "absolute right-3.5 text-[8.5px] font-bold tracking-[0.16em] uppercase font-body transition-colors duration-150",
+              currentMode === "intel"
+                ? "text-[#f5a623]"
+                : "text-[rgba(232,237,248,0.18)] group-hover:text-[rgba(232,237,248,0.4)]",
+            )}>
+              Fleet Intelligence
+            </span>
+          </div>
+
+          {/* ── Ace insight panel — height controlled by drag ─────────────────── */}
+          <div
+            className="shrink-0 bg-[#101318] overflow-hidden"
+            style={{
+              height: panelHeight,
+              transition: isSnapping ? "height 370ms cubic-bezier(0.34, 1.4, 0.64, 1)" : "none",
+            }}
+          >
             <div className="px-4 pt-3 pb-2 flex items-center gap-2.5">
               <div className="rounded-lg bg-[rgba(245,166,35,0.1)] p-1.5">
                 <Brain className="h-3.5 w-3.5 text-[#f5a623]" />
@@ -314,6 +569,15 @@ function DashboardContent() {
               )}
             </div>
             <div className="px-4 pb-3 flex gap-3 overflow-x-auto">
+              {/* Next-Stop Prediction — shown when a vehicle is selected and has trips */}
+              {deviceId && trips.length > 0 && trips[0]?.endPoint && (
+                <NextStopPrediction
+                  deviceId={deviceId}
+                  currentPosition={trips[0].endPoint}
+                  onStopSelect={(coords) => handleStopClick(coords)}
+                />
+              )}
+
               {aceLoading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <div key={i} className="w-72 shrink-0"><AceInsightCardSkeleton /></div>
@@ -328,20 +592,21 @@ function DashboardContent() {
         </main>
       </div>
 
-      {/* Stop context panel */}
+      {/* Location Dossier panel */}
       {isPanelOpen && (
         <>
           <div
             className="fixed inset-0 bg-black/50 z-40 backdrop-blur-[2px]"
             onClick={handleClosePanel}
           />
-          <StopContextPanel
-            context={stopContext}
-            loading={stopContextLoading}
+          <LocationDossierPanel
+            dossier={dossier}
+            loading={dossierLoading}
+            phase={dossierPhase}
             onClose={handleClosePanel}
             coordinates={selectedStop}
-            useInStory={stopContext ? storyStops.some((s) => s.id === stopContext.id) : false}
-            onUseInStory={handleUseInStory}
+            useInStory={isPanelStopInStory}
+            onToggleUseInStory={handleToggleDossierInStory}
           />
         </>
       )}

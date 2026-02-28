@@ -25,6 +25,8 @@ export const QUERY_KEYS = {
   FLEET_VEHICLE_OUTLIERS: "fleet-vehicle-outliers",
   FLEET_STOP_HOTSPOTS: "fleet-stop-hotspots",
   FLEET_ROUTE_PATTERNS: "fleet-route-patterns",
+  // Predictive queries
+  VEHICLE_NEXT_STOP: "vehicle-next-stop",
 } as const;
 
 export type QueryKey = (typeof QUERY_KEYS)[keyof typeof QUERY_KEYS];
@@ -171,6 +173,27 @@ export const QUERY_TEMPLATES: QueryTemplate[] = [
         `What are the top 5 most common origin-destination pairs for vehicles in ${group} in the last ${days} days? ` +
         "Return columns: origin, destination, trip_count, avg_distance_km, avg_duration_minutes. " +
         "Sort by trip_count descending. Use UTC timezone."
+      );
+    },
+  },
+  {
+    key: QUERY_KEYS.VEHICLE_NEXT_STOP,
+    label: "Predicted Next Stop",
+    description: "Most likely next destinations based on origin location and historical patterns",
+    fallbackFile: "ace-vehicle-next-stop.json",
+    buildQuestion: (opts?: QueryBuildOptions) => {
+      if (!opts?.coordinates) {
+        throw new Error("vehicle-next-stop query requires coordinates");
+      }
+      const { lat, lon } = opts.coordinates;
+      const radius = opts?.radiusKm ?? 2.0;
+      const days = opts?.daysBack ?? 30;
+      return (
+        `For trips that started within ${radius} km of latitude ${lat.toFixed(4)}, ` +
+        `longitude ${lon.toFixed(4)} in the last ${days} days, ` +
+        "what are the top 5 most common destination locations? " +
+        "Return columns: destination_name, visit_count, avg_dwell_minutes, avg_arrival_hour, dest_lat, dest_lon. " +
+        "Sort by visit_count descending. Use UTC timezone."
       );
     },
   },

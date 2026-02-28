@@ -8,6 +8,7 @@ import type { CompanyPulseSummary, AceInsight, VehicleActivity, FleetGroup, ApiR
 import FleetPulseSummaryStrip, { FleetPulseSummaryStripSkeleton } from "@/components/FleetPulseSummaryStrip";
 import FleetCard, { FleetCardSkeleton, mergeAceDistanceData } from "@/components/FleetCard";
 import FleetRankedTable, { FleetRankedTableSkeleton } from "@/components/FleetRankedTable";
+import FleetDailyDigest from "@/components/FleetDailyDigest";
 
 const FleetRegionalMap = dynamic(
   () => import("@/components/FleetRegionalMap"),
@@ -175,6 +176,11 @@ function PulsePageContent() {
         ) : summary ? (
           <FleetPulseSummaryStrip summary={summary} aceInsight={aceInsight} />
         ) : null}
+
+        {/* Daily Digest */}
+        {(summary || summaryLoading) && (
+          <FleetDailyDigest summary={summary} aceInsight={aceInsight} />
+        )}
 
         {/* Section header */}
         <div className="flex items-center justify-between">

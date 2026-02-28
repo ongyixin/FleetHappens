@@ -1,0 +1,16 @@
+{
+  "id": "vehicle-next-stop-fallback",
+  "question": "For trips that started within 2km of a given origin, what are the 5 most common destination locations in the last 30 days?",
+  "columns": ["destination_name", "visit_count", "avg_dwell_minutes", "avg_arrival_hour", "dest_lat", "dest_lon"],
+  "rows": [
+    { "destination_name": "Oakland Distribution Center", "visit_count": 47, "avg_dwell_minutes": 38, "avg_arrival_hour": 10, "dest_lat": 37.8044, "dest_lon": -122.2712 },
+    { "destination_name": "Fremont Warehouse",           "visit_count": 31, "avg_dwell_minutes": 72, "avg_arrival_hour": 14, "dest_lat": 37.5485, "dest_lon": -121.9886 },
+    { "destination_name": "Hayward Logistics Park",      "visit_count": 19, "avg_dwell_minutes": 44, "avg_arrival_hour": 11, "dest_lat": 37.6688, "dest_lon": -122.0808 },
+    { "destination_name": "SF Embarcadero Hub",          "visit_count": 12, "avg_dwell_minutes": 22, "avg_arrival_hour": 9,  "dest_lat": 37.7956, "dest_lon": -122.3933 },
+    { "destination_name": "South SF Depot",              "visit_count": 7,  "avg_dwell_minutes": 18, "avg_arrival_hour": 15, "dest_lat": 37.6547, "dest_lon": -122.4077 }
+  ],
+  "reasoning": "Oakland Distribution Center leads with 47 departures from this origin — 41% of all outbound trips. Typical arrival window is 09:30–10:30 UTC. The Fremont Warehouse run shows longest average dwell (72 min), indicating loading/unloading activity.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

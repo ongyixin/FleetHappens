@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getLogRecords } from "@/lib/geotab/client";
+import { getSessionFromRequest } from "@/lib/geotab/session";
 import { normalizeLogRecord, decimateBreadcrumbs } from "@/lib/geotab/normalize";
 import { withFallback } from "@/lib/cache/fallback";
 import type { ApiResponse, BreadcrumbPoint } from "@/types";
@@ -25,7 +26,20 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     );
   }
 
+  const userCreds = getSessionFromRequest(req);
+
   try {
+    // Per-user: bypass file fallback — return live data or an error
+    if (userCreds) {
+      const rawLogs = await getLogRecords(deviceId, fromDate, toDate, userCreds);
+      const breadcrumbs = decimateBreadcrumbs(rawLogs.map(normalizeLogRecord), 500);
+      return NextResponse.json({
+        ok: true,
+        data: breadcrumbs,
+        fromCache: false,
+      } satisfies ApiResponse<BreadcrumbPoint[]>);
+    }
+
     const { data: rawLogs, fromCache } = await withFallback(
       () => getLogRecords(deviceId, fromDate, toDate),
       `logs-${deviceId}.json`

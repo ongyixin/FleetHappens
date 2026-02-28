@@ -11,6 +11,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getGroups, getDevices, getDeviceStatus } from "@/lib/geotab/client";
+import { getSessionFromRequest } from "@/lib/geotab/session";
 import { normalizeGroup, normalizeDeviceStatus } from "@/lib/geotab/normalize";
 import { withFallback, loadFileFallback } from "@/lib/cache/fallback";
 import { bqWriteFleetSnapshot, isBigQueryEnabled } from "@/lib/bigquery/client";
@@ -21,6 +22,7 @@ import type {
   VehicleActivity,
   VehicleStatus,
   GeotabGroup,
+  GeotabCredentials,
 } from "@/types";
 
 const SYSTEM_GROUP_IDS = new Set([
@@ -47,17 +49,108 @@ function deriveStatus(speedKmh: number, lastSeenMs: number): VehicleStatus {
   return speedKmh > IDLE_SPEED_THRESHOLD ? "active" : "idle";
 }
 
+async function buildFleetDetail(
+  groupId: string,
+  userCreds?: GeotabCredentials | null
+): Promise<FleetPulseDetail> {
+  const [rawGroups, rawDevices, rawStatuses] = await Promise.all([
+    getGroups(userCreds),
+    getDevices(userCreds),
+    getDeviceStatus(undefined, userCreds),
+  ]);
+
+  const statusByDeviceId = new Map(
+    rawStatuses.map((s) => [s.device.id, normalizeDeviceStatus(s)])
+  );
+
+  // Locate the target group
+  let targetGroup: GeotabGroup | undefined = rawGroups.find(
+    (g) => g.id === groupId
+  );
+
+  // Handle synthetic "all" group
+  if (!targetGroup && groupId === "all") {
+    targetGroup = { id: "all", name: "All Vehicles" };
+  }
+
+  if (!targetGroup) {
+    throw new Error(`Group "${groupId}" not found`);
+  }
+
+  // Devices that belong to this group (or all devices for synthetic group)
+  const groupDevices =
+    groupId === "all"
+      ? rawDevices
+      : rawDevices.filter((d) =>
+          (d.groups ?? []).some((g) => g.id === groupId)
+        );
+
+  // Build VehicleActivity list
+  const vehicles: VehicleActivity[] = groupDevices.map((device) => {
+    const status = statusByDeviceId.get(device.id);
+    const lastSeenMs = status ? new Date(status.dateTime).getTime() : 0;
+    const vehicleStatus = status
+      ? deriveStatus(status.speedKmh, lastSeenMs)
+      : "offline";
+
+    return {
+      vehicle: {
+        id: device.id,
+        name: device.name,
+        deviceType: device.deviceType,
+        lastCommunication: device.activeTo,
+        currentPosition: status?.position,
+      },
+      status: vehicleStatus,
+      lastPosition: status?.position,
+    };
+  });
+
+  // Sort: active first, then idle, then offline; alphabetical within each group
+  const statusOrder: Record<VehicleStatus, number> = {
+    active: 0,
+    idle: 1,
+    offline: 2,
+  };
+  vehicles.sort(
+    (a, b) =>
+      statusOrder[a.status] - statusOrder[b.status] ||
+      a.vehicle.name.localeCompare(b.vehicle.name)
+  );
+
+  const vehicleCount =
+    groupId === "all"
+      ? rawDevices.length
+      : rawDevices.filter((d) =>
+          (d.groups ?? []).some((g) => g.id === groupId)
+        ).length;
+
+  return {
+    group: normalizeGroup(targetGroup, vehicleCount),
+    vehicles,
+    outliers: {}, // Ace-powered outliers are loaded separately client-side
+  };
+}
+
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { groupId: string } }
 ): Promise<NextResponse> {
   const { groupId } = params;
+  const userCreds = getSessionFromRequest(req);
 
   try {
-    // When PULSE_DEMO_GROUPS=true, skip the live call and serve fallback data.
-    // Try a group-specific file first (pulse-fleet-g-north.json etc.), then
-    // fall back to pulse-fleet-all.json with the group info patched from the
-    // summary fallback so the correct name/colour is shown.
+    // Per-user session: serve live data directly
+    if (userCreds) {
+      const detail = await buildFleetDetail(groupId, userCreds);
+      return NextResponse.json<ApiResponse<FleetPulseDetail>>({
+        ok: true,
+        data: detail,
+        fromCache: false,
+      });
+    }
+
+    // Demo mode: skip the live call and serve fallback data.
     if (process.env.PULSE_DEMO_GROUPS === "true") {
       const groupSpecific = loadFileFallback<FleetPulseDetail>(
         `pulse-fleet-${groupId}.json`
@@ -96,88 +189,7 @@ export async function GET(
     }
 
     const detail = await withFallback(
-      async (): Promise<FleetPulseDetail> => {
-        const [rawGroups, rawDevices, rawStatuses] = await Promise.all([
-          getGroups(),
-          getDevices(),
-          getDeviceStatus(),
-        ]);
-
-        const statusByDeviceId = new Map(
-          rawStatuses.map((s) => [s.device.id, normalizeDeviceStatus(s)])
-        );
-
-        // Locate the target group
-        let targetGroup: GeotabGroup | undefined = rawGroups.find(
-          (g) => g.id === groupId
-        );
-
-        // Handle synthetic "all" group
-        if (!targetGroup && groupId === "all") {
-          targetGroup = { id: "all", name: "All Vehicles" };
-        }
-
-        if (!targetGroup) {
-          throw new Error(`Group "${groupId}" not found`);
-        }
-
-        // Devices that belong to this group (or all devices for synthetic group)
-        const groupDevices =
-          groupId === "all"
-            ? rawDevices
-            : rawDevices.filter((d) =>
-                (d.groups ?? []).some((g) => g.id === groupId)
-              );
-
-        // Build VehicleActivity list
-        const vehicles: VehicleActivity[] = groupDevices.map((device) => {
-          const status = statusByDeviceId.get(device.id);
-          const lastSeenMs = status
-            ? new Date(status.dateTime).getTime()
-            : 0;
-          const vehicleStatus = status
-            ? deriveStatus(status.speedKmh, lastSeenMs)
-            : "offline";
-
-          return {
-            vehicle: {
-              id: device.id,
-              name: device.name,
-              deviceType: device.deviceType,
-              lastCommunication: device.activeTo,
-              currentPosition: status?.position,
-            },
-            status: vehicleStatus,
-            lastPosition: status?.position,
-          };
-        });
-
-        // Sort: active first, then idle, then offline; alphabetical within each group
-        const statusOrder: Record<VehicleStatus, number> = {
-          active: 0,
-          idle: 1,
-          offline: 2,
-        };
-        vehicles.sort(
-          (a, b) =>
-            statusOrder[a.status] - statusOrder[b.status] ||
-            a.vehicle.name.localeCompare(b.vehicle.name)
-        );
-
-        // Determine vehicleCount for the group normalizer
-        const vehicleCount =
-          groupId === "all"
-            ? rawDevices.length
-            : rawDevices.filter((d) =>
-                (d.groups ?? []).some((g) => g.id === groupId)
-              ).length;
-
-        return {
-          group: normalizeGroup(targetGroup, vehicleCount),
-          vehicles,
-          outliers: {}, // Ace-powered outliers are loaded separately client-side
-        };
-      },
+      () => buildFleetDetail(groupId),
       `pulse-fleet-${groupId}.json`
     );
 

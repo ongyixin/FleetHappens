@@ -1,191 +1,286 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
-import { Map, Brain } from "lucide-react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import {
+  Truck, Brain, BarChart2, Map,
+  ChevronUp, ChevronDown,
+  Maximize2, Minimize2,
+  PanelRightClose, PanelRightOpen,
+} from "lucide-react";
+
+type PanelTab = "activity" | "intelligence" | "trends";
+
+const MIN_WIDTH = 280;
+const DEFAULT_WIDTH = 400;
+// fraction of container for "maximised" snap
+const MAX_SNAP_FRACTION = 0.62;
+// hard cap so the map always has some breathing room
+const DRAG_MAX_FRACTION = 0.72;
 
 interface FleetMapSliderProps {
   mapContent: React.ReactNode;
-  intelContent: React.ReactNode;
+  statsContent?: React.ReactNode;
+  activityContent: React.ReactNode;
+  intelligenceContent: React.ReactNode;
+  trendsContent: React.ReactNode;
 }
 
-type SliderView = "map" | "intel";
+export default function FleetMapSlider({
+  mapContent,
+  statsContent,
+  activityContent,
+  intelligenceContent,
+  trendsContent,
+}: FleetMapSliderProps) {
+  const [activeTab, setActiveTab] = useState<PanelTab>("activity");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [panelWidth, setPanelWidth] = useState(DEFAULT_WIDTH);
+  const [isMaximised, setIsMaximised] = useState(false);
+  const [isMinimised, setIsMinimised] = useState(false);
+  // Suppress CSS transition while the user is actively dragging
+  const [dragging, setDragging] = useState(false);
+  // Whether the viewport is at the desktop breakpoint (≥1024px)
+  const [isDesktop, setIsDesktop] = useState(false);
 
-const HANDLE_HEIGHT = 60;
-const MAP_PEEK = 72;
-
-export default function FleetMapSlider({ mapContent, intelContent }: FleetMapSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [view, setView] = useState<SliderView>("map");
-  const [isDragging, setIsDragging] = useState(false);
-  const [livePanelY, setLivePanelY] = useState<number | null>(null);
-  const [containerH, setContainerH] = useState(600);
+  const pointerDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartWidth = useRef(DEFAULT_WIDTH);
+  // Width to restore when toggling maximise / minimise
+  const savedWidth = useRef(DEFAULT_WIDTH);
 
-  const dragStartY = useRef(0);
-  const dragStartPanelY = useRef(0);
-
+  // Track desktop breakpoint
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setContainerH(el.offsetHeight));
-    ro.observe(el);
-    setContainerH(el.offsetHeight);
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // Clamp panel width whenever the container resizes
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ro = new ResizeObserver(() => {
+      if (!containerRef.current) return;
+      const maxW = Math.floor(containerRef.current.offsetWidth * DRAG_MAX_FRACTION);
+      setPanelWidth((w) => Math.min(Math.max(w, MIN_WIDTH), maxW));
+    });
+    ro.observe(containerRef.current);
     return () => ro.disconnect();
   }, []);
 
-  const mapViewY = containerH - HANDLE_HEIGHT;
-  const intelViewY = MAP_PEEK;
-
-  const snappedY = view === "map" ? mapViewY : intelViewY;
-  const displayY = livePanelY ?? snappedY;
-
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
+  // ── Drag-resize ────────────────────────────────────────────────────────
+  const onDragStart = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
       e.preventDefault();
-      dragStartY.current = e.clientY;
-      dragStartPanelY.current = displayY;
-      setIsDragging(true);
+      pointerDragging.current = true;
+      dragStartX.current = e.clientX;
+      dragStartWidth.current = panelWidth;
+      setDragging(true);
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
     },
-    [displayY]
+    [panelWidth]
   );
 
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent) => {
-      if (!isDragging) return;
-      const delta = e.clientY - dragStartY.current;
-      const newY = Math.max(MAP_PEEK, Math.min(mapViewY, dragStartPanelY.current + delta));
-      setLivePanelY(newY);
+  const onDragMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!pointerDragging.current || !containerRef.current) return;
+      const maxW = Math.floor(containerRef.current.offsetWidth * DRAG_MAX_FRACTION);
+      // dragging left = positive delta = panel grows
+      const delta = dragStartX.current - e.clientX;
+      const next = Math.min(Math.max(dragStartWidth.current + delta, MIN_WIDTH), maxW);
+      setPanelWidth(next);
+      // Exit snap states when user manually resizes
+      setIsMaximised(false);
+      setIsMinimised(false);
     },
-    [isDragging, mapViewY]
+    []
   );
 
-  const handlePointerUp = useCallback(
-    (e: React.PointerEvent) => {
-      if (!isDragging) return;
-      const delta = e.clientY - dragStartY.current;
-      const resolved = dragStartPanelY.current + delta;
-      const mid = (mapViewY + intelViewY) / 2;
-      setView(resolved > mid ? "map" : "intel");
-      setLivePanelY(null);
-      setIsDragging(false);
-    },
-    [isDragging, mapViewY, intelViewY]
-  );
+  const onDragEnd = useCallback(() => {
+    if (!pointerDragging.current) return;
+    pointerDragging.current = false;
+    setDragging(false);
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  }, []);
+
+  // ── Maximise / Minimise ────────────────────────────────────────────────
+  function handleMaximise() {
+    if (isMaximised) {
+      setIsMaximised(false);
+    } else {
+      if (!isMinimised) savedWidth.current = panelWidth;
+      setIsMaximised(true);
+      setIsMinimised(false);
+    }
+  }
+
+  function handleMinimise() {
+    if (isMinimised) {
+      setPanelWidth(savedWidth.current);
+      setIsMinimised(false);
+    } else {
+      if (!isMaximised) savedWidth.current = panelWidth;
+      setPanelWidth(MIN_WIDTH);
+      setIsMinimised(true);
+      setIsMaximised(false);
+    }
+  }
+
+  const tabs: { id: PanelTab; label: string; icon: React.ElementType; color: string }[] = [
+    { id: "activity",     label: "Vehicles",     icon: Truck,     color: "#38bdf8" },
+    { id: "intelligence", label: "Intelligence", icon: Brain,     color: "#f5a623" },
+    { id: "trends",       label: "Trends",       icon: BarChart2, color: "#34d399" },
+  ];
+
+  // Desktop panel style — switches to absolute overlay when maximised
+  const desktopWidthStyle: React.CSSProperties = isDesktop
+    ? isMaximised
+      ? {
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          maxHeight: "100%",
+          zIndex: 770,
+          transition: "none",
+        }
+      : {
+          width: panelWidth,
+          flexShrink: 0,
+          transition: dragging ? "none" : "width 0.22s cubic-bezier(0.16,1,0.3,1)",
+        }
+    : {};
 
   return (
-    <div
-      ref={containerRef}
-      className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.07)]"
-      style={{ height: "calc(100vh - 260px)", minHeight: 520, maxHeight: 820 }}
-    >
-      {/* ── Map layer (always rendered beneath) ── */}
-      <div className="absolute inset-0">{mapContent}</div>
+    <div ref={containerRef} className="relative flex h-full overflow-hidden">
+      {/* ── Left: Map ── */}
+      <div className="relative flex-1 min-w-0">
+        {mapContent}
 
-      {/* ── Map-mode overlay badge ── */}
-      <div
-        className="absolute top-3 left-3 z-[750] pointer-events-none"
-        style={{
-          opacity: view === "map" ? 1 : 0,
-          transition: "opacity 0.3s ease",
-        }}
-      >
-        <div className="flex items-center gap-1.5 bg-[rgba(9,9,14,0.8)] backdrop-blur-md border border-[rgba(56,189,248,0.2)] rounded-lg px-2.5 py-1.5">
-          <Map className="h-3 w-3 text-[#38bdf8]" />
-          <span className="text-[10px] font-display font-bold text-white tracking-wide">Fleet Map</span>
-        </div>
-      </div>
-
-      {/* ── Intelligence panel (slides up from bottom) ── */}
-      {/* z-index must exceed Leaflet's highest internal pane (tooltip = 650)   */}
-      {/* so the handle and Intel toggle always receive pointer events first.   */}
-      <div
-        className="absolute left-0 right-0 bg-[#0b0f17] rounded-t-2xl"
-        style={{
-          top: 0,
-          bottom: 0,
-          zIndex: 700,
-          transform: `translateY(${displayY}px)`,
-          transition: isDragging ? "none" : "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
-          willChange: "transform",
-          boxShadow: "0 -12px 48px rgba(0,0,0,0.7), 0 -1px 0 rgba(255,255,255,0.06)",
-        }}
-      >
-        {/* ── Drag handle ── */}
-        <div
-          className="cursor-grab active:cursor-grabbing touch-none select-none"
-          style={{ height: HANDLE_HEIGHT }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-        >
-          {/* Pill indicator */}
-          <div className="flex justify-center pt-2.5">
-            <div className="w-8 h-1 rounded-full bg-[rgba(255,255,255,0.18)]" />
-          </div>
-
-          <div className="flex items-center justify-between px-4 mt-2">
-            {/* Left: label */}
-            <div className="flex items-center gap-2.5">
-              <div
-                className="h-7 w-7 rounded-xl flex items-center justify-center transition-colors duration-300"
-                style={{
-                  background: view === "intel" ? "rgba(245,166,35,0.15)" : "rgba(255,255,255,0.05)",
-                }}
-              >
-                <Brain
-                  className="h-3.5 w-3.5 transition-colors duration-300"
-                  style={{ color: view === "intel" ? "#f5a623" : "rgba(232,237,248,0.3)" }}
-                />
-              </div>
-              <div>
-                <p className="text-[12px] font-display font-bold text-white leading-none">Fleet Intelligence</p>
-                <p className="text-[10px] text-[rgba(232,237,248,0.35)] font-body mt-0.5 leading-none">
-                  {view === "map" ? "Swipe up to explore insights" : "Swipe down for map view"}
-                </p>
-              </div>
-            </div>
-
-            {/* Right: Map / Intel toggle pills */}
-            <div
-              className="flex items-center rounded-lg p-0.5 gap-0.5"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
-              onClick={(e) => e.stopPropagation()}
-              onPointerDown={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => { setView("map"); setLivePanelY(null); }}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[10px] font-body font-semibold transition-all duration-200"
-                style={{
-                  background: view === "map" ? "rgba(56,189,248,0.15)" : "transparent",
-                  color: view === "map" ? "#38bdf8" : "rgba(232,237,248,0.4)",
-                }}
-              >
-                <Map className="h-2.5 w-2.5" />
-                Map
-              </button>
-              <button
-                onClick={() => { setView("intel"); setLivePanelY(null); }}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[10px] font-body font-semibold transition-all duration-200"
-                style={{
-                  background: view === "intel" ? "rgba(245,166,35,0.15)" : "transparent",
-                  color: view === "intel" ? "#f5a623" : "rgba(232,237,248,0.4)",
-                }}
-              >
-                <Brain className="h-2.5 w-2.5" />
-                Intel
-              </button>
-            </div>
+        {/* Fleet map badge */}
+        <div className="absolute top-3 left-3 z-[750] pointer-events-none">
+          <div className="flex items-center gap-1.5 bg-[rgba(9,9,14,0.8)] backdrop-blur-md border border-[rgba(56,189,248,0.2)] rounded-lg px-2.5 py-1.5">
+            <Map className="h-3 w-3 text-[#38bdf8]" />
+            <span className="text-[10px] font-display font-bold text-white tracking-wide">Fleet Map</span>
           </div>
         </div>
 
-        {/* ── Panel content ── */}
-        <div
-          className="overflow-y-auto"
-          style={{ height: `calc(100% - ${HANDLE_HEIGHT}px)` }}
+        {/* Mobile toggle */}
+        <button
+          className="lg:hidden absolute bottom-5 right-4 z-[750] flex items-center gap-2 bg-[rgba(11,15,23,0.95)] backdrop-blur-md border border-[rgba(255,255,255,0.12)] rounded-xl px-3.5 py-2.5 shadow-lg"
+          onClick={() => setMobileOpen((v) => !v)}
         >
-          <div className="p-4 space-y-5">{intelContent}</div>
-        </div>
+          <Brain className="h-3.5 w-3.5 text-[#f5a623]" />
+          <span className="text-xs font-display font-bold text-white">Fleet Intel</span>
+          {mobileOpen
+            ? <ChevronDown className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)]" />
+            : <ChevronUp   className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)]" />}
+        </button>
       </div>
+
+      {/* ── Drag handle (desktop only, hidden when maximised) ── */}
+      <div
+        className={`shrink-0 w-[5px] items-stretch cursor-col-resize z-[760] group ${isMaximised || !isDesktop ? "hidden" : "flex"}`}
+        onPointerDown={onDragStart}
+        onPointerMove={onDragMove}
+        onPointerUp={onDragEnd}
+        onPointerCancel={onDragEnd}
+      >
+        <div className="w-px mx-auto bg-[rgba(255,255,255,0.07)] group-hover:bg-[rgba(56,189,248,0.4)] group-active:bg-[rgba(56,189,248,0.7)] transition-colors duration-150" />
+      </div>
+
+      {/* ── Intelligence panel ── */}
+      <aside
+        className={[
+          "flex flex-col bg-[#0b0f17]",
+          // Mobile: slide-up bottom sheet
+          "fixed bottom-0 left-0 right-0 z-[800] rounded-t-2xl",
+          "transition-transform duration-300 ease-out",
+          mobileOpen ? "translate-y-0" : "translate-y-full",
+          // Desktop: static, width controlled via inline style
+          "lg:static lg:rounded-none lg:z-auto lg:translate-y-0 lg:transition-none",
+        ].join(" ")}
+        style={{
+          boxShadow: "0 -8px 40px rgba(0,0,0,0.55)",
+          maxHeight: "80dvh",
+          ...desktopWidthStyle,
+        }}
+      >
+        {/* ── Header: stats + tabs + controls ── */}
+        <div className="shrink-0 border-b border-[rgba(255,255,255,0.07)]">
+          {statsContent && (
+            <div className="px-4 pt-3 pb-2.5 border-b border-[rgba(255,255,255,0.05)]">
+              {statsContent}
+            </div>
+          )}
+
+          {/* Tab row */}
+          <div className="flex items-center px-3 gap-1">
+            <div className="flex flex-1 min-w-0 -mb-px overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="flex items-center gap-1.5 px-3 py-2.5 text-[11px] font-body font-semibold border-b-2 transition-all duration-200 whitespace-nowrap shrink-0"
+                  style={{
+                    borderColor: activeTab === tab.id ? tab.color : "transparent",
+                    color: activeTab === tab.id ? tab.color : "rgba(232,237,248,0.4)",
+                  }}
+                >
+                  <tab.icon className="h-3 w-3" />
+                  {/* Hide labels when minimised to keep the thin panel tidy */}
+                  {!isMinimised && <span>{tab.label}</span>}
+                </button>
+              ))}
+            </div>
+
+            {/* Resize controls (desktop only) */}
+            <div className="hidden lg:flex items-center gap-0.5 shrink-0 pb-px">
+              <button
+                onClick={handleMinimise}
+                title={isMinimised ? "Restore panel" : "Collapse panel"}
+                className="h-6 w-6 rounded-md flex items-center justify-center transition-colors duration-150 text-[rgba(232,237,248,0.3)] hover:text-white hover:bg-[rgba(255,255,255,0.07)]"
+              >
+                {isMinimised
+                  ? <PanelRightOpen  className="h-3.5 w-3.5" />
+                  : <PanelRightClose className="h-3.5 w-3.5" />}
+              </button>
+              <button
+                onClick={handleMaximise}
+                title={isMaximised ? "Restore panel" : "Expand panel"}
+                className="h-6 w-6 rounded-md flex items-center justify-center transition-colors duration-150 text-[rgba(232,237,248,0.3)] hover:text-white hover:bg-[rgba(255,255,255,0.07)]"
+              >
+                {isMaximised
+                  ? <Minimize2 className="h-3.5 w-3.5" />
+                  : <Maximize2 className="h-3.5 w-3.5" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Scrollable tab content — hidden while minimised */}
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          {!isMinimised && (
+            <div className="p-4 space-y-4">
+              {activeTab === "activity"     && activityContent}
+              {activeTab === "intelligence" && intelligenceContent}
+              {activeTab === "trends"       && trendsContent}
+            </div>
+          )}
+        </div>
+      </aside>
+
+      {/* Mobile backdrop */}
+      {mobileOpen && (
+        <div
+          className="lg:hidden fixed inset-0 z-[799] bg-black/40 backdrop-blur-[2px]"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
     </div>
   );
 }

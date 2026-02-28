@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
-  ChevronLeft, Truck, Brain, RefreshCw, MapPin, Activity,
+  ChevronLeft, Truck, Brain, RefreshCw,
   Award, TrendingUp, TrendingDown, RotateCcw, AlertTriangle, Zap, BarChart2,
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
@@ -15,7 +15,6 @@ import RoutePatternCard, { RoutePatternCardSkeleton } from "@/components/RoutePa
 import StopHotspotCard, { StopHotspotCardSkeleton } from "@/components/StopHotspotCard";
 import VehicleOutliersCard, { VehicleOutliersCardSkeleton } from "@/components/VehicleOutliersCard";
 import FleetMapSlider from "@/components/FleetMapSlider";
-import { OPEN_PALETTE_EVENT } from "@/components/CommandPalette";
 
 const FleetRegionalMap = dynamic(
   () => import("@/components/FleetRegionalMap"),
@@ -35,22 +34,6 @@ const FleetRegionalMap = dynamic(
   }
 );
 
-function StatBadge({ icon: Icon, value, label, color, bg }: {
-  icon: React.ElementType; value: number | string; label: string;
-  color: string; bg: string;
-}) {
-  return (
-    <div className="flex-1 atlas-card rounded-xl px-4 py-3.5 flex items-center gap-3 animate-fade-up">
-      <div className="h-9 w-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: bg }}>
-        <Icon className="h-4 w-4" style={{ color }} />
-      </div>
-      <div>
-        <p className="text-2xl font-display font-bold text-white leading-none">{value}</p>
-        <p className="text-[11px] text-[rgba(232,237,248,0.45)] mt-0.5 font-body">{label}</p>
-      </div>
-    </div>
-  );
-}
 
 function FleetViewContent() {
   const params  = useParams();
@@ -186,13 +169,195 @@ function FleetViewContent() {
     }));
   }, [mapHotspots]);
 
+  // ── Stats strip: compact KPI row + benchmark chips ──────────────────────
+  const statsContent = (!detailLoading && detail) ? (
+    <div className="space-y-2.5">
+      {/* KPI row */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5">
+          <div className="h-2 w-2 rounded-full bg-[#34d399]" />
+          <span className="text-sm font-display font-bold text-white tabular-nums">{activeCount}</span>
+          <span className="text-[11px] text-[rgba(232,237,248,0.45)] font-body">active</span>
+        </div>
+        <div className="w-px h-3 bg-[rgba(255,255,255,0.1)]" />
+        <div className="flex items-center gap-1.5">
+          <div className="h-2 w-2 rounded-full bg-[#f5a623]" />
+          <span className="text-sm font-display font-bold text-white tabular-nums">{idleCount}</span>
+          <span className="text-[11px] text-[rgba(232,237,248,0.45)] font-body">idle</span>
+        </div>
+        <div className="w-px h-3 bg-[rgba(255,255,255,0.1)]" />
+        <div className="flex items-center gap-1.5">
+          <div className="h-2 w-2 rounded-full bg-[rgba(232,237,248,0.2)]" />
+          <span className="text-sm font-display font-bold text-[rgba(232,237,248,0.5)] tabular-nums">{offlineCount}</span>
+          <span className="text-[11px] text-[rgba(232,237,248,0.35)] font-body">offline</span>
+        </div>
+        <span className="ml-auto text-[11px] text-[rgba(232,237,248,0.3)] font-body">{totalVehicles} total</span>
+      </div>
+
+      {/* Benchmark chips */}
+      {summary && (
+        <div className="flex flex-wrap gap-1.5">
+          {fleetRank != null && fleetRank > 0 && (
+            <span className="inline-flex items-center gap-1 bg-[rgba(245,166,35,0.08)] border border-[rgba(245,166,35,0.18)] rounded-md px-2 py-0.5">
+              <Award className="h-2.5 w-2.5 text-[#f5a623]" />
+              <span className="text-[10px] font-display font-bold text-[#f5a623]">#{fleetRank}</span>
+              <span className="text-[10px] text-[rgba(232,237,248,0.4)] font-body">of {fleetCount} by distance</span>
+            </span>
+          )}
+          {thisFleetActivePct != null && companyAvgActivePct != null && (
+            <span className="inline-flex items-center gap-1 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-md px-2 py-0.5">
+              {thisFleetActivePct >= companyAvgActivePct
+                ? <TrendingUp   className="h-2.5 w-2.5 text-[#34d399]" />
+                : <TrendingDown className="h-2.5 w-2.5 text-[rgba(232,237,248,0.35)]" />}
+              <span className="text-[10px] font-body" style={{ color: thisFleetActivePct >= companyAvgActivePct ? "#34d399" : "rgba(232,237,248,0.5)" }}>
+                {Math.round(thisFleetActivePct)}% active
+              </span>
+              <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">vs {Math.round(companyAvgActivePct)}% avg</span>
+            </span>
+          )}
+          {thisFleetIdlePct != null && companyAvgIdlePct != null && (
+            <span className="inline-flex items-center gap-1 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-md px-2 py-0.5">
+              {isHighIdle
+                ? <AlertTriangle className="h-2.5 w-2.5 text-[#f5a623]" />
+                : <RotateCcw     className="h-2.5 w-2.5 text-[rgba(232,237,248,0.35)]" />}
+              <span className="text-[10px] font-body" style={{ color: isHighIdle ? "#f5a623" : "rgba(232,237,248,0.6)" }}>
+                {thisFleetIdlePct.toFixed(1)}% idle
+              </span>
+              {idleDelta != null && Math.abs(idleDelta) >= 0.5 && (
+                <span className="text-[10px] font-semibold font-body" style={{ color: isHighIdle ? "#f5a623" : "#34d399" }}>
+                  ({idleDelta > 0 ? "+" : ""}{idleDelta.toFixed(1)}pp)
+                </span>
+              )}
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  ) : null;
+
+  // ── Activity tab content ──────────────────────────────────────────────────
+  const activityContent = (
+    <div>
+      <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body mb-3">
+        Click a vehicle to explore its trip history
+      </p>
+      {detailLoading ? (
+        <VehicleActivityTableSkeleton />
+      ) : detail ? (
+        <VehicleActivityTable vehicles={detail.vehicles} onSelectVehicle={handleSelectVehicle} />
+      ) : (
+        <div className="atlas-card rounded-xl p-8 text-center">
+          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Failed to load vehicle data</p>
+          <button onClick={() => router.refresh()} className="mt-3 text-xs btn-ghost h-7 px-3 rounded-lg inline-flex items-center gap-1.5">
+            <RefreshCw className="h-3 w-3" /> Retry
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
+  // ── Intelligence tab content ──────────────────────────────────────────────
+  const intelligenceContent = (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <span className="text-[10px] font-bold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-2 py-0.5 font-body">
+          Ace API
+        </span>
+        {anyAceLoading && (
+          <span className="text-[11px] text-[rgba(232,237,248,0.4)] flex items-center gap-1 font-body">
+            <RefreshCw className="h-2.5 w-2.5 animate-spin" /> Querying…
+          </span>
+        )}
+      </div>
+      {outlierLoading ? <VehicleOutliersCardSkeleton /> : (
+        <VehicleOutliersCard insight={outlierInsight} loading={false} onSelectVehicle={handleOutlierClick} />
+      )}
+      {routeLoading ? <RoutePatternCardSkeleton /> : (
+        <RoutePatternCard insight={routeInsight} loading={false} />
+      )}
+      {hotspotLoading ? <StopHotspotCardSkeleton /> : (
+        <StopHotspotCard insight={hotspotInsight} loading={false} />
+      )}
+    </div>
+  );
+
+  // ── Trends tab content ────────────────────────────────────────────────────
+  const trendsContent = (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-[10px] font-bold text-[#38bdf8] bg-[rgba(56,189,248,0.08)] border border-[rgba(56,189,248,0.2)] rounded-full px-2 py-0.5 font-body">
+          BigQuery
+        </span>
+        <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">30-day history</span>
+        {trendsLoading && <RefreshCw className="h-2.5 w-2.5 animate-spin text-[#38bdf8]" />}
+      </div>
+
+      {trendsLoading ? (
+        <div className="atlas-card rounded-xl h-[160px] animate-pulse" />
+      ) : trends.length === 0 ? (
+        <div className="atlas-card rounded-xl p-6 flex flex-col items-center justify-center gap-2 text-center min-h-[120px]">
+          <BarChart2 className="h-6 w-6 text-[rgba(56,189,248,0.3)]" />
+          <p className="text-xs text-[rgba(232,237,248,0.4)] font-body max-w-xs">
+            No historical snapshots yet. Fleet trends appear here once BigQuery analytics data starts accumulating.
+          </p>
+        </div>
+      ) : (
+        <div className="atlas-card rounded-xl p-4">
+          <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body mb-3">
+            Daily km driven · last {trends.length} data points
+          </p>
+          <ResponsiveContainer width="100%" height={160}>
+            <LineChart data={trends.map((t) => ({
+              date: t.date.slice(5),
+              km: Number((t.metrics as Record<string, unknown>).totalDistanceKm ?? 0),
+            }))}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+              <XAxis
+                dataKey="date"
+                tick={{ fill: "rgba(232,237,248,0.35)", fontSize: 9, fontFamily: "var(--font-jetbrains-mono)" }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                tick={{ fill: "rgba(232,237,248,0.35)", fontSize: 9, fontFamily: "var(--font-jetbrains-mono)" }}
+                tickLine={false}
+                axisLine={false}
+                width={36}
+              />
+              <Tooltip
+                contentStyle={{
+                  background: "#101318",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: "8px",
+                  fontSize: 11,
+                  fontFamily: "var(--font-dm-sans)",
+                  color: "rgba(232,237,248,0.9)",
+                }}
+                formatter={(v: number) => [`${v.toLocaleString()} km`, "Distance"]}
+                labelStyle={{ color: "rgba(232,237,248,0.5)" }}
+              />
+              <Line
+                type="monotone"
+                dataKey="km"
+                stroke="#38bdf8"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, fill: "#38bdf8", strokeWidth: 0 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-[#09090e]">
+    <div className="h-screen bg-[#09090e] flex flex-col overflow-hidden">
       <div className="pointer-events-none fixed inset-0 z-0 atlas-grid-bg opacity-40" />
 
       {/* Header */}
-      <header className="relative z-10 border-b border-[rgba(255,255,255,0.07)] bg-[rgba(9,9,14,0.92)] backdrop-blur-sm sticky top-0">
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-3">
+      <header className="relative z-10 border-b border-[rgba(255,255,255,0.07)] bg-[rgba(9,9,14,0.92)] backdrop-blur-sm shrink-0">
+        <div className="max-w-none px-6 h-14 flex items-center gap-3">
           <button onClick={() => router.push("/")} className="flex items-center gap-2 group shrink-0">
             <div className="w-7 h-7 rounded-lg bg-[#f5a623] flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] group-hover:shadow-[0_2px_12px_rgba(245,166,35,0.5)] transition-shadow">
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
@@ -233,59 +398,8 @@ function FleetViewContent() {
         </div>
       </header>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-6 space-y-5">
-        {/* Fleet KPI stat row */}
-        {!detailLoading && detail && (
-          <div className="flex gap-3 flex-wrap sm:flex-nowrap">
-            <StatBadge icon={Activity}  value={activeCount}  label="Active"  color="#34d399" bg="rgba(52,211,153,0.1)" />
-            <StatBadge icon={RefreshCw} value={idleCount}    label="Idle"    color="#f5a623" bg="rgba(245,166,35,0.1)" />
-            <StatBadge icon={Truck}     value={offlineCount} label="Offline" color="rgba(232,237,248,0.4)" bg="rgba(255,255,255,0.05)" />
-          </div>
-        )}
-
-        {/* Benchmark context strip */}
-        {!detailLoading && detail && summary && (
-          <div className="flex gap-2 flex-wrap animate-fade-in">
-            {fleetRank != null && fleetRank > 0 && (
-              <div className="flex items-center gap-2 atlas-card rounded-lg px-3 py-2">
-                <Award className="h-3.5 w-3.5 text-[#f5a623] shrink-0" />
-                <span className="text-xs font-display font-bold text-white tabular-nums">#{fleetRank}</span>
-                <span className="text-xs text-[rgba(232,237,248,0.4)] font-body">of {fleetCount} fleets by distance</span>
-              </div>
-            )}
-            {thisFleetActivePct != null && companyAvgActivePct != null && (
-              <div className="flex items-center gap-2 atlas-card rounded-lg px-3 py-2">
-                {thisFleetActivePct >= companyAvgActivePct
-                  ? <TrendingUp className="h-3.5 w-3.5 text-[#34d399] shrink-0" />
-                  : <TrendingDown className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)] shrink-0" />}
-                <span className="text-xs font-display font-bold" style={{ color: thisFleetActivePct >= companyAvgActivePct ? "#34d399" : "rgba(232,237,248,0.5)" }}>
-                  {Math.round(thisFleetActivePct)}% active
-                </span>
-                <span className="text-xs text-[rgba(232,237,248,0.4)] font-body">· co. avg {Math.round(companyAvgActivePct)}%</span>
-              </div>
-            )}
-            {thisFleetIdlePct != null && companyAvgIdlePct != null && (
-              <div className="flex items-center gap-2 atlas-card rounded-lg px-3 py-2">
-                {isHighIdle
-                  ? <AlertTriangle className="h-3.5 w-3.5 text-[#f5a623] shrink-0" />
-                  : <RotateCcw className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)] shrink-0" />}
-                <span className="text-xs font-display font-bold" style={{ color: isHighIdle ? "#f5a623" : "rgba(232,237,248,0.7)" }}>
-                  {thisFleetIdlePct.toFixed(1)}% idle
-                </span>
-                <span className="text-xs text-[rgba(232,237,248,0.4)] font-body">
-                  · co. avg {companyAvgIdlePct.toFixed(1)}%
-                  {idleDelta != null && Math.abs(idleDelta) >= 0.5 && (
-                    <span className="ml-1 font-semibold" style={{ color: isHighIdle ? "#f5a623" : "#34d399" }}>
-                      ({idleDelta > 0 ? "+" : ""}{idleDelta.toFixed(1)}pp)
-                    </span>
-                  )}
-                </span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Map + Intelligence slider */}
+      {/* Full-height split view */}
+      <div className="relative z-10 flex-1 min-h-0">
         <FleetMapSlider
           mapContent={
             <FleetRegionalMap
@@ -299,129 +413,10 @@ function FleetViewContent() {
               }}
             />
           }
-          intelContent={
-            <div className="space-y-5">
-              {/* Vehicle activity */}
-              <div>
-                <div className="flex items-center gap-2.5 mb-3">
-                  <Truck className="h-4 w-4 text-[#38bdf8]" />
-                  <h2 className="font-display font-bold text-base text-white">Vehicle Activity</h2>
-                  <p className="text-xs text-[rgba(232,237,248,0.4)] font-body">Click a vehicle to explore its trips</p>
-                </div>
-                {detailLoading ? (
-                  <VehicleActivityTableSkeleton />
-                ) : detail ? (
-                  <VehicleActivityTable vehicles={detail.vehicles} onSelectVehicle={handleSelectVehicle} />
-                ) : (
-                  <div className="atlas-card rounded-xl p-8 text-center">
-                    <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Failed to load vehicle data</p>
-                    <button onClick={() => router.refresh()} className="mt-3 text-xs btn-ghost h-7 px-3 rounded-lg inline-flex items-center gap-1.5">
-                      <RefreshCw className="h-3 w-3" /> Retry
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Ace intelligence cards */}
-              <div>
-                <div className="flex items-center gap-2.5 mb-3">
-                  <Brain className="h-4 w-4 text-[#f5a623]" />
-                  <h2 className="font-display font-bold text-base text-white">Fleet Intelligence</h2>
-                  <span className="text-[10px] font-bold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-2 py-0.5 font-body">
-                    Ace API
-                  </span>
-                  {anyAceLoading && (
-                    <span className="text-[11px] text-[rgba(232,237,248,0.4)] flex items-center gap-1 font-body">
-                      <RefreshCw className="h-2.5 w-2.5 animate-spin" />Querying…
-                    </span>
-                  )}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {outlierLoading ? <VehicleOutliersCardSkeleton /> : (
-                    <VehicleOutliersCard insight={outlierInsight} loading={false} onSelectVehicle={handleOutlierClick} />
-                  )}
-                  {routeLoading ? <RoutePatternCardSkeleton /> : (
-                    <RoutePatternCard insight={routeInsight} loading={false} />
-                  )}
-                  {hotspotLoading ? <StopHotspotCardSkeleton /> : (
-                    <StopHotspotCard insight={hotspotInsight} loading={false} />
-                  )}
-                </div>
-              </div>
-
-              {/* Fleet Trends — BigQuery historical KPI chart */}
-              <div>
-                <div className="flex items-center gap-2.5 mb-3">
-                  <BarChart2 className="h-4 w-4 text-[#38bdf8]" />
-                  <h2 className="font-display font-bold text-base text-white">Fleet Trends</h2>
-                  <span className="text-[10px] font-bold text-[#38bdf8] bg-[rgba(56,189,248,0.08)] border border-[rgba(56,189,248,0.2)] rounded-full px-2 py-0.5 font-body">
-                    BigQuery
-                  </span>
-                  <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">30-day history</span>
-                  {trendsLoading && (
-                    <RefreshCw className="h-2.5 w-2.5 animate-spin text-[#38bdf8] ml-1" />
-                  )}
-                </div>
-
-                {trendsLoading ? (
-                  <div className="atlas-card rounded-xl h-[160px] animate-pulse" />
-                ) : trends.length === 0 ? (
-                  <div className="atlas-card rounded-xl p-6 flex flex-col items-center justify-center gap-2 text-center min-h-[120px]">
-                    <BarChart2 className="h-6 w-6 text-[rgba(56,189,248,0.3)]" />
-                    <p className="text-xs text-[rgba(232,237,248,0.4)] font-body max-w-xs">
-                      No historical snapshots yet. Fleet trends appear here once BigQuery analytics data starts accumulating.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="atlas-card rounded-xl p-4">
-                    <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body mb-3">
-                      Daily km driven · last {trends.length} data points
-                    </p>
-                    <ResponsiveContainer width="100%" height={120}>
-                      <LineChart data={trends.map((t) => ({
-                        date: t.date.slice(5),
-                        km: Number((t.metrics as Record<string, unknown>).totalDistanceKm ?? 0),
-                      }))}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                        <XAxis
-                          dataKey="date"
-                          tick={{ fill: "rgba(232,237,248,0.35)", fontSize: 9, fontFamily: "var(--font-jetbrains-mono)" }}
-                          tickLine={false}
-                          axisLine={false}
-                        />
-                        <YAxis
-                          tick={{ fill: "rgba(232,237,248,0.35)", fontSize: 9, fontFamily: "var(--font-jetbrains-mono)" }}
-                          tickLine={false}
-                          axisLine={false}
-                          width={36}
-                        />
-                        <Tooltip
-                          contentStyle={{
-                            background: "#101318",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "8px",
-                            fontSize: 11,
-                            fontFamily: "var(--font-dm-sans)",
-                            color: "rgba(232,237,248,0.9)",
-                          }}
-                          formatter={(v: number) => [`${v.toLocaleString()} km`, "Distance"]}
-                          labelStyle={{ color: "rgba(232,237,248,0.5)" }}
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="km"
-                          stroke="#38bdf8"
-                          strokeWidth={2}
-                          dot={false}
-                          activeDot={{ r: 4, fill: "#38bdf8", strokeWidth: 0 }}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                )}
-              </div>
-            </div>
-          }
+          statsContent={statsContent}
+          activityContent={activityContent}
+          intelligenceContent={intelligenceContent}
+          trendsContent={trendsContent}
         />
       </div>
     </div>

@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getDeviceStatus } from "@/lib/geotab/client";
+import { getSessionFromRequest } from "@/lib/geotab/session";
 import { normalizeDeviceStatus } from "@/lib/geotab/normalize";
 import { withFallback } from "@/lib/cache/fallback";
 import type { ApiResponse } from "@/types";
@@ -14,8 +15,16 @@ import type { ApiResponse } from "@/types";
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = req.nextUrl;
   const deviceId = searchParams.get("deviceId");
+  const userCreds = getSessionFromRequest(req);
 
   try {
+    // Per-user: bypass file fallback so demo status data is never returned
+    if (userCreds) {
+      const statuses = await getDeviceStatus(deviceId ? [deviceId] : undefined, userCreds);
+      const data = statuses.map(normalizeDeviceStatus);
+      return NextResponse.json({ ok: true, data, fromCache: false } satisfies ApiResponse<typeof data>);
+    }
+
     const { data: statuses, fromCache } = await withFallback(
       () => getDeviceStatus(deviceId ? [deviceId] : undefined),
       "status.json"

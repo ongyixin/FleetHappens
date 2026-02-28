@@ -37,7 +37,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
   }
 
   return (
-    <aside className="fixed right-0 top-0 bottom-0 w-80 z-50 flex flex-col bg-[#0d1018] border-l border-[rgba(255,255,255,0.09)] shadow-[-8px_0_32px_rgba(0,0,0,0.5)] panel-open overflow-y-auto">
+    <aside className="fixed right-0 top-14 bottom-0 w-80 z-50 flex flex-col bg-[#0d1018] border-l border-[rgba(255,255,255,0.09)] shadow-[-8px_0_32px_rgba(0,0,0,0.5)] panel-open overflow-y-auto">
       {/* Amber top accent */}
       <div className="shrink-0 h-[2px] bg-gradient-to-r from-[#f5a623] via-[#fb923c] to-transparent" />
 
