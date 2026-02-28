@@ -12,6 +12,7 @@ const nextConfig = {
       // redirect server-side so no API key is embedded in client-facing URLs.
       { protocol: "https", hostname: "**.googleusercontent.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "upload.wikimedia.org" },
     ],
   },
   webpack: (config) => {

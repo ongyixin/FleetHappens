@@ -7,6 +7,52 @@ import type { ComicStory, ComicTone, TripSummary, StopContext, ApiResponse } fro
 import ComicStoryRenderer from "@/components/ComicStoryRenderer";
 import { format } from "date-fns";
 
+// ─── Geocode helpers ──────────────────────────────────────────────────────────
+
+interface GeocodeData {
+  placeName?: string;
+  neighborhood?: string;
+  city?: string;
+}
+
+/** Reverse-geocode a lat/lon via the server-side route. Never throws. */
+async function geocodeName(lat: number, lon: number): Promise<GeocodeData> {
+  try {
+    const res = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`);
+    if (!res.ok) return {};
+    const json = await res.json();
+    return (json.data as GeocodeData) ?? {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Build a human-readable location label from geocode data.
+ * Priority: "Neighbourhood, City" → "City" → "Place Name" → fallback
+ */
+function buildLocationLabel(geo: GeocodeData, fallback: string): string {
+  if (geo.neighborhood && geo.city) return `${geo.neighborhood}, ${geo.city}`;
+  if (geo.city) return geo.city;
+  if (geo.neighborhood) return geo.neighborhood;
+  if (geo.placeName) return geo.placeName;
+  return fallback;
+}
+
+/** Resolve start + end location names for a trip in parallel. */
+async function resolveLocationNames(
+  trip: TripSummary
+): Promise<{ startName: string; endName: string }> {
+  const [startGeo, endGeo] = await Promise.all([
+    geocodeName(trip.startPoint.lat, trip.startPoint.lon),
+    geocodeName(trip.endPoint.lat, trip.endPoint.lon),
+  ]);
+  return {
+    startName: buildLocationLabel(startGeo, "Departure"),
+    endName: buildLocationLabel(endGeo, "Destination"),
+  };
+}
+
 export default function StoryPage() {
   const params       = useParams();
   const searchParams = useSearchParams();
@@ -22,6 +68,8 @@ export default function StoryPage() {
   const [generating, setGenerating] = useState(false);
   const [enriching, setEnriching] = useState(false);
   const [tone, setTone]           = useState<ComicTone>("playful");
+  const [startName, setStartName] = useState<string>("Departure");
+  const [endName, setEndName]     = useState<string>("Destination");
 
   useEffect(() => {
     async function fetchTrip() {
@@ -81,12 +129,25 @@ export default function StoryPage() {
       if (raw) stopContexts = JSON.parse(raw) as StopContext[];
     } catch { /* unavailable */ }
 
+    // Resolve real place names for start/end before generating — runs in
+    // parallel with no UI blocking. Falls back to "Departure"/"Destination".
+    const { startName: resolvedStart, endName: resolvedEnd } =
+      await resolveLocationNames(trip);
+    setStartName(resolvedStart);
+    setEndName(resolvedEnd);
+
     let generatedStory: ComicStory | null = null;
     try {
       const res = await fetch("/api/story/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trip, tone: selectedTone, startLocationName: trip.deviceName ?? "Departure", endLocationName: "Destination", stopContexts }),
+        body: JSON.stringify({
+          trip,
+          tone: selectedTone,
+          startLocationName: resolvedStart,
+          endLocationName: resolvedEnd,
+          stopContexts,
+        }),
       });
       if (!res.ok) throw new Error("API error");
       const json = await res.json();
@@ -178,7 +239,9 @@ export default function StoryPage() {
         {trip && (
           <div className="flex items-center gap-3 text-sm text-[rgba(232,237,248,0.42)] font-body animate-fade-in mb-10" style={{ animationDelay: "120ms" }}>
             <MapPin className="h-3.5 w-3.5 text-[#fb923c]/60 shrink-0" />
-            <span>{trip.deviceName}</span>
+            <span className="font-semibold text-[rgba(232,237,248,0.6)]">{startName}</span>
+            <span className="text-[rgba(255,255,255,0.25)]">→</span>
+            <span className="font-semibold text-[rgba(232,237,248,0.6)]">{endName}</span>
             <span className="text-[rgba(255,255,255,0.15)]">·</span>
             <span className="font-data">{format(new Date(trip.start), "MMM d, yyyy")}</span>
             <span className="text-[rgba(255,255,255,0.15)]">·</span>

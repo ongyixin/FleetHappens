@@ -40,6 +40,7 @@ function DashboardContent() {
   const deviceId   = searchParams.get("deviceId")   ?? "";
   const deviceName = searchParams.get("deviceName") ?? "Vehicle";
   const groupId    = searchParams.get("groupId")    ?? "";
+  const groupName  = searchParams.get("groupName")  ?? "";
 
   const [trips, setTrips]                 = useState<TripSummary[]>([]);
   const [tripsLoading, setTripsLoading]   = useState(true);
@@ -196,16 +197,16 @@ function DashboardContent() {
 
           <div className="w-px h-4 bg-[rgba(255,255,255,0.1)]" />
 
-          {/* Back to Fleet Pulse */}
+          {/* Back to Region */}
           {groupId && (
             <>
               <button
                 onClick={() => router.push(`/pulse/${groupId}`)}
-                className="flex items-center gap-1.5 text-[rgba(232,237,248,0.45)] hover:text-white transition-colors text-xs font-body"
+                className="flex items-center gap-1.5 text-[rgba(232,237,248,0.55)] hover:text-white transition-colors text-xs font-body"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
                 <Zap className="h-3 w-3" />
-                <span className="hidden sm:inline">Fleet</span>
+                <span>{groupName || "Region"}</span>
               </button>
               <span className="text-[rgba(255,255,255,0.2)] text-xs">/</span>
             </>

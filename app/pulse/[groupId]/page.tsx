@@ -140,7 +140,10 @@ function FleetViewContent() {
   }, [groupId]);
 
   function handleSelectVehicle(vehicleId: string, vehicleName: string) {
-    router.push(`/dashboard?deviceId=${vehicleId}&deviceName=${encodeURIComponent(vehicleName)}&groupId=${groupId}`);
+    const groupName = detail?.group.name ?? "";
+    const params = new URLSearchParams({ deviceId: vehicleId, deviceName: vehicleName, groupId });
+    if (groupName) params.set("groupName", groupName);
+    router.push(`/dashboard?${params.toString()}`);
   }
   function handleOutlierClick(vehicleName: string) {
     if (!detail) return;
@@ -226,16 +229,6 @@ function FleetViewContent() {
                 Ace loading…
               </span>
             )}
-            {/* AI assistant pill */}
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PALETTE_EVENT))}
-              aria-label="Ask fleet AI (⌘K)"
-              className="flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-[11px] font-semibold font-body transition-all duration-150 bg-[rgba(245,166,35,0.08)] border border-[rgba(245,166,35,0.2)] text-[rgba(245,166,35,0.7)] hover:bg-[rgba(245,166,35,0.14)] hover:text-[#f5a623] hover:border-[rgba(245,166,35,0.35)]"
-            >
-              <Brain className="h-3 w-3" />
-              <span className="hidden sm:inline">Ask AI</span>
-              <kbd className="hidden sm:inline ml-0.5 text-[9px] opacity-50">⌘K</kbd>
-            </button>
           </div>
         </div>
       </header>

@@ -250,6 +250,13 @@ export type StoryPanelImage =
       source: "fallback";
     };
 
+/** A single photo in the area photo gallery for a comic panel. */
+export interface AreaPhoto {
+  url: string;
+  caption?: string;
+  attribution?: string;
+}
+
 export interface ComicPanel {
   panelNumber: number;
   sceneType: SceneType;
@@ -263,6 +270,8 @@ export interface ComicPanel {
   dwellLabel?: string;
   /** Populated by the image-enrichment step after story text is generated. */
   image?: StoryPanelImage;
+  /** Curated area photos for the photos gallery toggle view. */
+  areaPhotos?: AreaPhoto[];
 }
 
 export interface ComicStory {

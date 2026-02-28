@@ -13,7 +13,24 @@
         "speechBubble": "Coffee? Nah. Miles? Let's go.",
         "mapAnchor": { "lat": 37.7749, "lon": -122.4194 },
         "timeLabel": "7:18 AM",
-        "distanceLabel": "0 km"
+        "distanceLabel": "0 km",
+        "areaPhotos": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/The_skyline_of_downtown_San_Francisco.jpg/960px-The_skyline_of_downtown_San_Francisco.jpg",
+            "caption": "Downtown San Francisco skyline",
+            "attribution": "© Wikimedia Commons / CC BY-SA"
+          },
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/San_Francisco_Market_Street_between_4th_and_5th_St.jpg/960px-San_Francisco_Market_Street_between_4th_and_5th_St.jpg",
+            "caption": "Market Street, San Francisco",
+            "attribution": "© Wikimedia Commons / CC BY-SA"
+          },
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/San_Francisco_downtown.jpg/960px-San_Francisco_downtown.jpg",
+            "caption": "San Francisco from the air",
+            "attribution": "© Wikimedia Commons / Public Domain"
+          }
+        ]
       },
       {
         "panelNumber": 2,
@@ -24,7 +41,29 @@
         "mapAnchor": { "lat": 37.7943, "lon": -122.3680 },
         "timeLabel": "7:38 AM",
         "distanceLabel": "18.2 km",
-        "speedLabel": "112 km/h peak"
+        "speedLabel": "112 km/h peak",
+        "areaPhotos": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/SF_Bay_Bridge_view_from_bridge.jpg/960px-SF_Bay_Bridge_view_from_bridge.jpg",
+            "caption": "View from the Bay Bridge deck",
+            "attribution": "© Wikimedia Commons / CC BY-SA"
+          },
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Bay_bridge_views.jpg/960px-Bay_bridge_views.jpg",
+            "caption": "Bay Bridge panorama",
+            "attribution": "© Wikimedia Commons / CC BY-SA"
+          },
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/San_Francisco_-_Oakland_Bay_Bridge_At_Night.jpg/960px-San_Francisco_-_Oakland_Bay_Bridge_At_Night.jpg",
+            "caption": "Bay Bridge from Rincon Park",
+            "attribution": "© Wikimedia Commons / CC BY-SA"
+          },
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/The_Oakland_Bay_Bridge.jpg/960px-The_Oakland_Bay_Bridge.jpg",
+            "caption": "Bay Bridge from Coit Tower garden",
+            "attribution": "Nadia Prigoda / CC BY 2.0"
+          }
+        ]
       },
       {
         "panelNumber": 3,
@@ -34,7 +73,19 @@
         "speechBubble": "Quick stop. Fleet-approved.",
         "mapAnchor": { "lat": 37.7956, "lon": -122.3934 },
         "timeLabel": "7:49 AM",
-        "distanceLabel": "24.1 km"
+        "distanceLabel": "24.1 km",
+        "areaPhotos": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Jack_London_Square_Amtrak_Station_%2815203435428%29.jpg/960px-Jack_London_Square_Amtrak_Station_%2815203435428%29.jpg",
+            "caption": "Jack London Square waterfront station",
+            "attribution": "Tony Webster / CC BY 2.0"
+          },
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Oakland_California_aerial_view.jpg/960px-Oakland_California_aerial_view.jpg",
+            "caption": "Oakland and the Bay from above",
+            "attribution": "US Army Corps of Engineers / Public Domain"
+          }
+        ]
       },
       {
         "panelNumber": 4,
@@ -44,7 +95,19 @@
         "speechBubble": "That's a wrap. Same time tomorrow?",
         "mapAnchor": { "lat": 37.8715, "lon": -122.2730 },
         "timeLabel": "9:42 AM",
-        "distanceLabel": "47.8 km"
+        "distanceLabel": "47.8 km",
+        "areaPhotos": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Telegraph-Ave-Berkeley.jpg",
+            "caption": "Telegraph Avenue street life",
+            "attribution": "Minesweeper / GNU FDL"
+          },
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Oakland_California_aerial_view.jpg/960px-Oakland_California_aerial_view.jpg",
+            "caption": "East Bay from the air",
+            "attribution": "US Army Corps of Engineers / Public Domain"
+          }
+        ]
       }
     ],
     "createdAt": "2026-02-28T10:00:00Z"
