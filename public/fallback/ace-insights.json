@@ -1,0 +1,71 @@
+{
+  "insights": [
+    {
+      "id": "ace-001",
+      "question": "Top 10 vehicles by total distance in the last 14 days",
+      "columns": ["device_name", "total_distance_km", "trip_count"],
+      "rows": [
+        { "device_name": "Truck 04 — Patel", "total_distance_km": 3842, "trip_count": 47 },
+        { "device_name": "Van 01 — Martinez", "total_distance_km": 3519, "trip_count": 43 },
+        { "device_name": "Truck 02 — Chen", "total_distance_km": 3201, "trip_count": 39 },
+        { "device_name": "Van 05 — Nguyen", "total_distance_km": 2987, "trip_count": 36 },
+        { "device_name": "Truck 06 — Robinson", "total_distance_km": 2734, "trip_count": 33 },
+        { "device_name": "Van 03 — Okafor", "total_distance_km": 2412, "trip_count": 29 }
+      ],
+      "reasoning": "Patel's Truck 04 leads the fleet in distance over the past 14 days, covering 3,842 km across 47 trips — averaging 81.7 km per trip. The top 3 vehicles account for 58% of total fleet distance.",
+      "queriedAt": "2026-02-28T06:00:00Z",
+      "totalRowCount": 6,
+      "fromCache": true
+    },
+    {
+      "id": "ace-002",
+      "question": "Average idle time percentage by day of the week",
+      "columns": ["day_of_week", "avg_idle_pct", "avg_idle_minutes"],
+      "rows": [
+        { "day_of_week": "Monday", "avg_idle_pct": 18.2, "avg_idle_minutes": 14 },
+        { "day_of_week": "Tuesday", "avg_idle_pct": 16.8, "avg_idle_minutes": 12 },
+        { "day_of_week": "Wednesday", "avg_idle_pct": 21.4, "avg_idle_minutes": 17 },
+        { "day_of_week": "Thursday", "avg_idle_pct": 19.7, "avg_idle_minutes": 15 },
+        { "day_of_week": "Friday", "avg_idle_pct": 24.1, "avg_idle_minutes": 19 },
+        { "day_of_week": "Saturday", "avg_idle_pct": 12.3, "avg_idle_minutes": 8 },
+        { "day_of_week": "Sunday", "avg_idle_pct": 8.9, "avg_idle_minutes": 6 }
+      ],
+      "reasoning": "Friday shows the highest idle time at 24.1%, likely correlating with end-of-week deliveries and increased traffic. Weekend patterns show significantly lower idle times, suggesting operational differences.",
+      "queriedAt": "2026-02-28T06:00:00Z",
+      "totalRowCount": 7,
+      "fromCache": true
+    },
+    {
+      "id": "ace-003",
+      "question": "Top 5 most common trip end locations in the last 30 days",
+      "columns": ["location_name", "visit_count", "avg_dwell_minutes"],
+      "rows": [
+        { "location_name": "Oakland Distribution Center", "visit_count": 94, "avg_dwell_minutes": 28 },
+        { "location_name": "San Jose Tech Campus", "visit_count": 71, "avg_dwell_minutes": 45 },
+        { "location_name": "Fremont Warehouse", "visit_count": 63, "avg_dwell_minutes": 22 },
+        { "location_name": "Berkeley Service Hub", "visit_count": 52, "avg_dwell_minutes": 18 },
+        { "location_name": "Palo Alto Office Park", "visit_count": 41, "avg_dwell_minutes": 34 }
+      ],
+      "reasoning": "The Oakland Distribution Center is the fleet's primary endpoint, with 94 visits in 30 days. San Jose Tech Campus shows the highest average dwell time at 45 minutes, indicating longer service calls.",
+      "queriedAt": "2026-02-28T06:00:00Z",
+      "totalRowCount": 5,
+      "fromCache": true
+    },
+    {
+      "id": "ace-004",
+      "question": "Fleet average trip duration this month",
+      "columns": ["metric", "value"],
+      "rows": [
+        { "metric": "Avg trip duration (min)", "value": 87 },
+        { "metric": "Median trip duration (min)", "value": 74 },
+        { "metric": "Longest trip (min)", "value": 312 },
+        { "metric": "Shortest trip (min)", "value": 8 },
+        { "metric": "Total trips", "value": 1247 }
+      ],
+      "reasoning": "This month's fleet average trip duration is 87 minutes. The median of 74 minutes suggests a right skew from a handful of long-haul runs. The fleet completed 1,247 trips total.",
+      "queriedAt": "2026-02-28T06:00:00Z",
+      "totalRowCount": 5,
+      "fromCache": true
+    }
+  ]
+}

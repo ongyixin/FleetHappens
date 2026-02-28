@@ -1,0 +1,21 @@
+{
+  "id": "fleet-stop-hotspots-fallback",
+  "question": "What are the top 10 most visited stop locations in the last 30 days?",
+  "columns": ["location_name", "visit_count", "avg_dwell_minutes", "lat", "lon"],
+  "rows": [
+    { "location_name": "Distribution Center A", "visit_count": 87, "avg_dwell_minutes": 42, "lat": 37.7749, "lon": -122.4194 },
+    { "location_name": "Client Site — Embarcadero", "visit_count": 64, "avg_dwell_minutes": 28, "lat": 37.7956, "lon": -122.3933 },
+    { "location_name": "Warehouse North",       "visit_count": 53, "avg_dwell_minutes": 65, "lat": 37.8044, "lon": -122.2712 },
+    { "location_name": "Service Center B",      "visit_count": 41, "avg_dwell_minutes": 35, "lat": 37.7599, "lon": -122.4148 },
+    { "location_name": "Airport Cargo Terminal","visit_count": 38, "avg_dwell_minutes": 52, "lat": 37.6213, "lon": -122.3789 },
+    { "location_name": "Downtown Hub",          "visit_count": 32, "avg_dwell_minutes": 18, "lat": 37.7894, "lon": -122.3988 },
+    { "location_name": "Fuel Stop — I-80",      "visit_count": 28, "avg_dwell_minutes": 12, "lat": 37.8399, "lon": -122.2987 },
+    { "location_name": "Customer Site — SoMa",  "visit_count": 25, "avg_dwell_minutes": 47, "lat": 37.7792, "lon": -122.4050 },
+    { "location_name": "Staging Yard East",     "visit_count": 21, "avg_dwell_minutes": 78, "lat": 37.7519, "lon": -122.3862 },
+    { "location_name": "Regional Office",       "visit_count": 18, "avg_dwell_minutes": 55, "lat": 37.8025, "lon": -122.4104 }
+  ],
+  "reasoning": "Most frequent trip end locations by visit count from Trip table, last 30 days.",
+  "queriedAt": "2026-02-28T00:00:00Z",
+  "totalRowCount": 10,
+  "fromCache": true
+}

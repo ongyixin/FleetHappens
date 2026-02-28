@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm off-white base — operational dashboard feel */
+    --background: 34 18% 96%;
+    --foreground: 222 47% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 10%;
+    --primary: 215 78% 46%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 34 10% 93%;
+    --secondary-foreground: 222 47% 10%;
+    --muted: 34 10% 93%;
+    --muted-foreground: 215 14% 47%;
+    --accent: 34 10% 93%;
+    --accent-foreground: 222 47% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 30 8% 90%;
+    --input: 30 8% 90%;
+    --ring: 215 78% 46%;
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Leaflet map container — must have explicit height */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Comic panel image enrichment shimmer */
+@keyframes shimmer {
+  to { transform: translateX(200%); }
+}
+
+/* Stop marker pulse animation */
+@keyframes stop-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.85; }
+}
+.stop-marker-pulse {
+  animation: stop-pulse 2s ease-in-out infinite;
+}
+
+/* Smooth panel open */
+.panel-open {
+  animation: slide-in-right 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card elevation system */
+.card-base {
+  background: white;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(14, 36, 64, 0.04), 0 1px 2px rgba(14, 36, 64, 0.03);
+}
+
+.card-raised {
+  background: white;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(14, 36, 64, 0.06), 0 2px 4px rgba(14, 36, 64, 0.04);
+}

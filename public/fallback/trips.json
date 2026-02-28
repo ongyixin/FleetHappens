@@ -1,0 +1,47 @@
+[
+  {
+    "id": "fallback-trip-1",
+    "deviceId": "fallback-device-1",
+    "deviceName": "Demo Truck 01",
+    "start": "2024-01-10T08:15:00Z",
+    "stop": "2024-01-10T09:42:00Z",
+    "distanceMeters": 42300,
+    "distanceKm": 42.3,
+    "drivingDuration": "01:18:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 52,
+    "maxSpeedKmh": 108,
+    "startPoint": { "lat": 43.6532, "lon": -79.3832 },
+    "endPoint": { "lat": 43.8861, "lon": -79.2394 }
+  },
+  {
+    "id": "fallback-trip-2",
+    "deviceId": "fallback-device-1",
+    "deviceName": "Demo Truck 01",
+    "start": "2024-01-09T14:05:00Z",
+    "stop": "2024-01-09T15:30:00Z",
+    "distanceMeters": 28100,
+    "distanceKm": 28.1,
+    "drivingDuration": "01:10:00",
+    "idlingDuration": "00:15:00",
+    "averageSpeedKmh": 44,
+    "maxSpeedKmh": 96,
+    "startPoint": { "lat": 43.8861, "lon": -79.2394 },
+    "endPoint": { "lat": 43.6532, "lon": -79.3832 }
+  },
+  {
+    "id": "fallback-trip-3",
+    "deviceId": "fallback-device-2",
+    "deviceName": "Demo Van 02",
+    "start": "2024-01-10T07:30:00Z",
+    "stop": "2024-01-10T08:55:00Z",
+    "distanceMeters": 35600,
+    "distanceKm": 35.6,
+    "drivingDuration": "01:05:00",
+    "idlingDuration": "00:20:00",
+    "averageSpeedKmh": 48,
+    "maxSpeedKmh": 100,
+    "startPoint": { "lat": 43.6629, "lon": -79.3957 },
+    "endPoint": { "lat": 43.7745, "lon": -79.5060 }
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "id": "ace-top-vehicles-fallback",
+  "question": "What are the top 10 vehicles by total distance in the last 14 days? Return columns: device_name, total_distance_km, trip_count. Sort by total_distance_km descending. Use UTC timezone.",
+  "columns": ["device_name", "total_distance_km", "trip_count"],
+  "rows": [
+    { "device_name": "Truck 04 — Patel",     "total_distance_km": 3842, "trip_count": 47 },
+    { "device_name": "Van 01 — Martinez",    "total_distance_km": 3519, "trip_count": 43 },
+    { "device_name": "Truck 02 — Chen",      "total_distance_km": 3201, "trip_count": 39 },
+    { "device_name": "Van 05 — Nguyen",      "total_distance_km": 2987, "trip_count": 36 },
+    { "device_name": "Truck 06 — Robinson",  "total_distance_km": 2734, "trip_count": 33 },
+    { "device_name": "Van 03 — Okafor",      "total_distance_km": 2412, "trip_count": 29 },
+    { "device_name": "Truck 08 — Larson",    "total_distance_km": 2198, "trip_count": 26 },
+    { "device_name": "Van 07 — Kim",         "total_distance_km": 1876, "trip_count": 22 },
+    { "device_name": "Truck 10 — Walsh",     "total_distance_km": 1643, "trip_count": 19 },
+    { "device_name": "Van 09 — Diallo",      "total_distance_km": 1401, "trip_count": 16 }
+  ],
+  "reasoning": "Truck 04 (Patel) leads the fleet in distance over the past 14 days, covering 3,842 km across 47 trips — averaging 81.7 km per trip. The top 3 vehicles account for 58% of total fleet distance. Trucks consistently outpace vans, likely due to longer-haul routes.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 10,
+  "fromCache": true
+}

@@ -1,0 +1,16 @@
+{
+  "id": "ace-trip-duration-fallback",
+  "question": "What are the fleet trip duration statistics for this month? Return columns: metric, value. Include: average trip duration in minutes, median trip duration in minutes, longest trip in minutes, shortest trip in minutes, total trip count. Use UTC timezone.",
+  "columns": ["metric", "value"],
+  "rows": [
+    { "metric": "Avg trip duration (min)",    "value": 87 },
+    { "metric": "Median trip duration (min)", "value": 74 },
+    { "metric": "Longest trip (min)",         "value": 312 },
+    { "metric": "Shortest trip (min)",        "value": 8 },
+    { "metric": "Total trips",                "value": 1247 }
+  ],
+  "reasoning": "This month's fleet average trip duration is 87 minutes, with a median of 74 minutes — the right skew is driven by a handful of long-haul runs up to 312 minutes. The fleet completed 1,247 trips in total. The 13-minute gap between mean and median suggests optimisation potential by identifying and routing the outlier long-duration trips more efficiently.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

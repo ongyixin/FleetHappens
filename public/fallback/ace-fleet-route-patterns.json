@@ -1,0 +1,16 @@
+{
+  "id": "fleet-route-patterns-fallback",
+  "question": "What are the top 5 most common origin-destination pairs in the last 14 days?",
+  "columns": ["origin", "destination", "trip_count", "avg_distance_km", "avg_duration_minutes"],
+  "rows": [
+    { "origin": "Distribution Center A", "destination": "Client Site — Embarcadero", "trip_count": 34, "avg_distance_km": 18.2, "avg_duration_minutes": 32 },
+    { "origin": "Warehouse North",       "destination": "Distribution Center A",     "trip_count": 28, "avg_distance_km": 24.7, "avg_duration_minutes": 41 },
+    { "origin": "Regional Office",       "destination": "Customer Site — SoMa",      "trip_count": 21, "avg_distance_km": 9.4,  "avg_duration_minutes": 22 },
+    { "origin": "Staging Yard East",     "destination": "Airport Cargo Terminal",    "trip_count": 17, "avg_distance_km": 31.1, "avg_duration_minutes": 48 },
+    { "origin": "Service Center B",      "destination": "Warehouse North",           "trip_count": 14, "avg_distance_km": 12.8, "avg_duration_minutes": 27 }
+  ],
+  "reasoning": "Top origin-destination pairs by trip frequency from Trip table, last 14 days.",
+  "queriedAt": "2026-02-28T00:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

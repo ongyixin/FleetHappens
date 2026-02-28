@@ -1,0 +1,74 @@
+[
+  {
+    "id": "stop_demo001_37d7749_n122d4194",
+    "tripId": "demo_trip_001",
+    "coordinates": { "lat": 37.7956, "lon": -122.3942 },
+    "placeName": "Ferry Building Marketplace",
+    "neighborhood": "Embarcadero",
+    "areaBriefing": "The Ferry Building anchors San Francisco's Embarcadero waterfront — a converted transit hub turned gourmet market with artisan food vendors, a farmers market, and sweeping views of the Bay Bridge. Parking is limited on the Embarcadero itself; the nearest garage is at 75 Howard St (~400m south), and fuel is available at the Shell station on Folsom (~800m).",
+    "fleetVisitCount": 14,
+    "fleetVisitSummary": "14 fleet visits in the last 90 days, mostly on weekdays across 4 vehicles.",
+    "nearbyAmenities": [
+      { "name": "Peet's Coffee", "category": "food", "distanceMeters": 120 },
+      { "name": "Hog Island Oyster Co.", "category": "food", "distanceMeters": 180 },
+      { "name": "75 Howard Garage", "category": "parking", "distanceMeters": 410 },
+      { "name": "Shell Station Folsom", "category": "fuel", "distanceMeters": 790 }
+    ],
+    "generatedAt": "2026-02-28T08:00:00.000Z",
+    "fromCache": true
+  },
+  {
+    "id": "stop_demo002_37d3382_n121d8863",
+    "tripId": "demo_trip_001",
+    "coordinates": { "lat": 37.3382, "lon": -121.8863 },
+    "placeName": "San Jose Convention Center",
+    "neighborhood": "Downtown San Jose",
+    "areaBriefing": "Downtown San Jose's convention and tech district sits at the heart of Silicon Valley, walkable to hotels, restaurants, and SAP Center. Street parking is metered on most blocks; the San Jose Convention Center garage on Market St offers day rates (~250m), and there's a Shell on W Santa Clara for fuel (~600m).",
+    "fleetVisitCount": 22,
+    "fleetVisitSummary": "22 fleet visits in the last 90 days, mostly on Tuesdays and Thursdays across 6 vehicles.",
+    "nearbyAmenities": [
+      { "name": "Philz Coffee", "category": "food", "distanceMeters": 210 },
+      { "name": "Convention Center Garage", "category": "parking", "distanceMeters": 260 },
+      { "name": "Flames Eatery", "category": "food", "distanceMeters": 350 },
+      { "name": "Shell – W Santa Clara", "category": "fuel", "distanceMeters": 590 }
+    ],
+    "generatedAt": "2026-02-28T08:00:00.000Z",
+    "fromCache": true
+  },
+  {
+    "id": "stop_demo003_39d7392_n104d9903",
+    "tripId": "demo_trip_002",
+    "coordinates": { "lat": 39.7392, "lon": -104.9903 },
+    "placeName": "Denver Union Station",
+    "neighborhood": "LoDo (Lower Downtown)",
+    "areaBriefing": "Denver Union Station is the city's grand Beaux-Arts transit hub turned mixed-use landmark in the heart of LoDo, surrounded by craft breweries, restaurants, and the 16th Street pedestrian mall. The Station has a dedicated rideshare and short-term drop-off zone on Wynkoop St; the nearest full-service fuel stop is the Conoco on Blake St (~700m northeast).",
+    "fleetVisitCount": 9,
+    "fleetVisitSummary": "9 fleet visits in the last 90 days, mostly on Fridays across 3 vehicles.",
+    "nearbyAmenities": [
+      { "name": "Snooze AM Eatery", "category": "food", "distanceMeters": 190 },
+      { "name": "Tattered Cover Café", "category": "food", "distanceMeters": 310 },
+      { "name": "Union Station Garage", "category": "parking", "distanceMeters": 380 },
+      { "name": "Conoco – Blake St", "category": "fuel", "distanceMeters": 710 }
+    ],
+    "generatedAt": "2026-02-28T08:00:00.000Z",
+    "fromCache": true
+  },
+  {
+    "id": "stop_demo004_41d8827_n87d6233",
+    "tripId": "demo_trip_002",
+    "coordinates": { "lat": 41.8827, "lon": -87.6233 },
+    "placeName": "McCormick Place",
+    "neighborhood": "Near South Side",
+    "areaBriefing": "McCormick Place is the largest convention complex in North America, located on Chicago's lakefront just south of the museum campus — a major freight and event logistics hub. The West Building dock entrance on 23rd St handles most fleet deliveries; the BP station on S Lake Shore Dr (~550m north) is the closest fuel, and a large surface lot sits adjacent to the North Building.",
+    "fleetVisitCount": 31,
+    "fleetVisitSummary": "31 fleet visits in the last 90 days, mostly on Mondays and Wednesdays across 8 vehicles.",
+    "nearbyAmenities": [
+      { "name": "Spoken Café (North Bldg)", "category": "food", "distanceMeters": 160 },
+      { "name": "McCormick North Lot", "category": "parking", "distanceMeters": 220 },
+      { "name": "BP – S Lake Shore Dr", "category": "fuel", "distanceMeters": 550 },
+      { "name": "McDonald's – Cermak", "category": "food", "distanceMeters": 720 }
+    ],
+    "generatedAt": "2026-02-28T08:00:00.000Z",
+    "fromCache": true
+  }
+]

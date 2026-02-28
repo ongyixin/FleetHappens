@@ -1,0 +1,63 @@
+{
+  "group": {
+    "id": "all",
+    "name": "All Vehicles",
+    "vehicleCount": 4,
+    "color": "#3b82f6"
+  },
+  "vehicles": [
+    {
+      "vehicle": {
+        "id": "b1",
+        "name": "Fleet Van 01",
+        "deviceType": "GO9",
+        "lastCommunication": "2026-02-28T12:00:00Z"
+      },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T11:45:00Z",
+      "distanceTodayKm": 142,
+      "tripCountToday": 4,
+      "lastPosition": { "lat": 37.7749, "lon": -122.4194 }
+    },
+    {
+      "vehicle": {
+        "id": "b2",
+        "name": "Fleet Truck 02",
+        "deviceType": "GO9",
+        "lastCommunication": "2026-02-28T10:30:00Z"
+      },
+      "status": "idle",
+      "lastTripEnd": "2026-02-28T10:15:00Z",
+      "distanceTodayKm": 89,
+      "tripCountToday": 3,
+      "lastPosition": { "lat": 37.7956, "lon": -122.3933 }
+    },
+    {
+      "vehicle": {
+        "id": "b3",
+        "name": "Fleet Car 03",
+        "deviceType": "GO9",
+        "lastCommunication": "2026-02-27T16:45:00Z"
+      },
+      "status": "offline",
+      "lastTripEnd": "2026-02-27T16:30:00Z",
+      "distanceTodayKm": 0,
+      "tripCountToday": 0,
+      "lastPosition": { "lat": 37.8044, "lon": -122.2712 }
+    },
+    {
+      "vehicle": {
+        "id": "b4",
+        "name": "Fleet Van 04",
+        "deviceType": "GO9",
+        "lastCommunication": "2026-02-28T08:15:00Z"
+      },
+      "status": "idle",
+      "lastTripEnd": "2026-02-28T08:00:00Z",
+      "distanceTodayKm": 56,
+      "tripCountToday": 2,
+      "lastPosition": { "lat": 37.7599, "lon": -122.4148 }
+    }
+  ],
+  "outliers": {}
+}

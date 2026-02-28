@@ -1,0 +1,16 @@
+{
+  "id": "ace-mock-top-vehicles",
+  "question": "What are the top 10 vehicles by total distance driven in the last 14 days?",
+  "columns": ["device_name", "total_distance_km"],
+  "rows": [
+    { "device_name": "Fleet Van 01", "total_distance_km": 1842 },
+    { "device_name": "Fleet Truck 02", "total_distance_km": 1574 },
+    { "device_name": "Fleet Car 03", "total_distance_km": 1230 },
+    { "device_name": "Fleet Van 04", "total_distance_km": 987 },
+    { "device_name": "Fleet Truck 05", "total_distance_km": 812 }
+  ],
+  "reasoning": "Ranked by total_distance_km over the last 14 days across all tracked vehicles.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

@@ -1,0 +1,16 @@
+{
+  "id": "ace-mock-stop-locations",
+  "question": "What are the top 5 most common trip end locations for the fleet in the last 30 days?",
+  "columns": ["location_name", "visit_count", "avg_dwell_minutes"],
+  "rows": [
+    { "location_name": "San Francisco Embarcadero", "visit_count": 47, "avg_dwell_minutes": 24 },
+    { "location_name": "Oakland Distribution Hub",  "visit_count": 38, "avg_dwell_minutes": 55 },
+    { "location_name": "SFO Airport Terminal 2",    "visit_count": 29, "avg_dwell_minutes": 18 },
+    { "location_name": "San Jose Convention Ctr",   "visit_count": 21, "avg_dwell_minutes": 34 },
+    { "location_name": "Berkeley Marina",           "visit_count": 14, "avg_dwell_minutes": 41 }
+  ],
+  "reasoning": "The Embarcadero is the most visited end location, driven by daily delivery routes.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

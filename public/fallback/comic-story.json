@@ -1,0 +1,52 @@
+{
+  "story": {
+    "id": "story-001",
+    "tripId": "trip-001",
+    "title": "The Bay Crossing",
+    "tone": "playful",
+    "panels": [
+      {
+        "panelNumber": 1,
+        "sceneType": "opening",
+        "locationName": "San Francisco, CA",
+        "caption": "7:18 AM. The city is just waking up as Van 01 rolls out from the depot — 47.8 km of Bay Area roads waiting to be covered.",
+        "speechBubble": "Coffee? Nah. Miles? Let's go.",
+        "mapAnchor": { "lat": 37.7749, "lon": -122.4194 },
+        "timeLabel": "7:18 AM",
+        "distanceLabel": "0 km"
+      },
+      {
+        "panelNumber": 2,
+        "sceneType": "journey",
+        "locationName": "Bay Bridge Approach",
+        "caption": "Hitting 112 km/h on the I-80 stretch — 14 minutes and the skyline is already in the rearview. Today's route means business.",
+        "speechBubble": null,
+        "mapAnchor": { "lat": 37.7943, "lon": -122.3680 },
+        "timeLabel": "7:38 AM",
+        "distanceLabel": "18.2 km",
+        "speedLabel": "112 km/h peak"
+      },
+      {
+        "panelNumber": 3,
+        "sceneType": "highlight",
+        "locationName": "Jack London Square, Oakland",
+        "caption": "A 7-minute pause at Jack London Square — the fleet's 14th visit to this waterfront spot this quarter. The baristas at Forge already know the order.",
+        "speechBubble": "Quick stop. Fleet-approved.",
+        "mapAnchor": { "lat": 37.7956, "lon": -122.3934 },
+        "timeLabel": "7:49 AM",
+        "distanceLabel": "24.1 km"
+      },
+      {
+        "panelNumber": 4,
+        "sceneType": "arrival",
+        "locationName": "Temescal, North Oakland",
+        "caption": "9:42 AM. 47.8 km covered, 2 hours 24 minutes on the road. Temescal marks the end — another route in the books for Van 01.",
+        "speechBubble": "That's a wrap. Same time tomorrow?",
+        "mapAnchor": { "lat": 37.8715, "lon": -122.2730 },
+        "timeLabel": "9:42 AM",
+        "distanceLabel": "47.8 km"
+      }
+    ],
+    "createdAt": "2026-02-28T10:00:00Z"
+  }
+}

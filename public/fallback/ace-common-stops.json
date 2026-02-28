@@ -1,0 +1,16 @@
+{
+  "id": "ace-common-stops-fallback",
+  "question": "What are the top 5 most common trip end locations in the last 30 days? Return columns: location_name, visit_count, avg_dwell_minutes. Sort by visit_count descending. Use UTC timezone.",
+  "columns": ["location_name", "visit_count", "avg_dwell_minutes"],
+  "rows": [
+    { "location_name": "Oakland Distribution Center", "visit_count": 94, "avg_dwell_minutes": 28 },
+    { "location_name": "San Jose Tech Campus",        "visit_count": 71, "avg_dwell_minutes": 45 },
+    { "location_name": "Fremont Warehouse",           "visit_count": 63, "avg_dwell_minutes": 22 },
+    { "location_name": "Berkeley Service Hub",        "visit_count": 52, "avg_dwell_minutes": 18 },
+    { "location_name": "Palo Alto Office Park",       "visit_count": 41, "avg_dwell_minutes": 34 }
+  ],
+  "reasoning": "The Oakland Distribution Center is the fleet's primary endpoint with 94 visits over 30 days — more than any other location. San Jose Tech Campus stands out with the highest average dwell time (45 min), indicating extended service calls. Together the top 5 locations account for approximately 73% of all trip endpoints.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

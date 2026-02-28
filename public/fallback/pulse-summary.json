@@ -1,0 +1,67 @@
+{
+  "fleets": [
+    {
+      "group": {
+        "id": "g-north",
+        "name": "North Region",
+        "vehicleCount": 12,
+        "color": "#3b82f6"
+      },
+      "totalDistanceKm": 8420,
+      "totalTrips": 214,
+      "activeVehicles": 9,
+      "totalVehicles": 12,
+      "avgIdlePct": 14.2,
+      "periodDays": 7
+    },
+    {
+      "group": {
+        "id": "g-south",
+        "name": "South Region",
+        "vehicleCount": 9,
+        "color": "#10b981"
+      },
+      "totalDistanceKm": 6130,
+      "totalTrips": 178,
+      "activeVehicles": 7,
+      "totalVehicles": 9,
+      "avgIdlePct": 11.8,
+      "periodDays": 7
+    },
+    {
+      "group": {
+        "id": "g-east",
+        "name": "East Region",
+        "vehicleCount": 7,
+        "color": "#f59e0b"
+      },
+      "totalDistanceKm": 4890,
+      "totalTrips": 132,
+      "activeVehicles": 5,
+      "totalVehicles": 7,
+      "avgIdlePct": 17.5,
+      "periodDays": 7
+    },
+    {
+      "group": {
+        "id": "g-west",
+        "name": "West Region",
+        "vehicleCount": 5,
+        "color": "#8b5cf6"
+      },
+      "totalDistanceKm": 3210,
+      "totalTrips": 97,
+      "activeVehicles": 4,
+      "totalVehicles": 5,
+      "avgIdlePct": 9.3,
+      "periodDays": 7
+    }
+  ],
+  "totals": {
+    "vehicles": 33,
+    "activeVehicles": 25,
+    "distanceKm": 22650,
+    "trips": 621,
+    "avgIdlePct": 13.2
+  }
+}

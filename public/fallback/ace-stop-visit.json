@@ -1,0 +1,17 @@
+{
+  "id": "ace-stop-visit-fallback",
+  "question": "How many trips ended within 1 km of latitude 37.7956, longitude -122.3934 in the last 90 days? Return columns: trip_count, first_visit_date, last_visit_date, most_common_day_of_week. Use UTC timezone.",
+  "columns": ["trip_count", "first_visit_date", "last_visit_date", "most_common_day_of_week"],
+  "rows": [
+    {
+      "trip_count": 14,
+      "first_visit_date": "2025-12-03",
+      "last_visit_date": "2026-02-27",
+      "most_common_day_of_week": "Wednesday"
+    }
+  ],
+  "reasoning": "This area has received 14 fleet visits in the last 90 days, with trips concentrated mid-week (Wednesday most common). The consistent visit pattern suggests this is a recurring service or delivery location rather than an ad-hoc stop.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 1,
+  "fromCache": true
+}

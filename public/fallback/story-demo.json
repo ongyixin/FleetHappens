@@ -1,0 +1,50 @@
+{
+  "id": "fallback-demo-001",
+  "tripId": "demo-trip-001",
+  "title": "From the Mission to the Marina — The Long Way",
+  "tone": "playful",
+  "panels": [
+    {
+      "panelNumber": 1,
+      "sceneType": "opening",
+      "locationName": "Mission District, San Francisco",
+      "caption": "Wheels rolling at 7:23 AM from the Mission — coffee was still brewing when the engine turned over.",
+      "speechBubble": "Early start. No traffic. Let's go.",
+      "mapAnchor": { "lat": 37.7599, "lon": -122.4148 },
+      "timeLabel": "7:23 AM",
+      "distanceLabel": "83.4 km trip",
+      "speedLabel": "max 97 km/h"
+    },
+    {
+      "panelNumber": 2,
+      "sceneType": "journey",
+      "locationName": "Bay Bridge approach, I-80",
+      "caption": "The Bay Bridge at 7:41 AM — averaging 88 km/h through the toll plaza, the skyline rising on the left.",
+      "mapAnchor": { "lat": 37.7983, "lon": -122.3778 },
+      "timeLabel": "7:41 AM",
+      "distanceLabel": "~18 km in",
+      "speedLabel": "88 km/h"
+    },
+    {
+      "panelNumber": 3,
+      "sceneType": "highlight",
+      "locationName": "Embarcadero, San Francisco",
+      "caption": "A 22-minute stop at the Embarcadero — the fleet's 14th visit to this waterfront district this quarter. The Bay Bridge looms, lunch spots hum, and someone probably got a flat white.",
+      "speechBubble": "14th time here. The baristas know the order.",
+      "mapAnchor": { "lat": 37.7955, "lon": -122.3937 },
+      "timeLabel": "8:09 AM",
+      "dwellLabel": "22 min stop"
+    },
+    {
+      "panelNumber": 4,
+      "sceneType": "arrival",
+      "locationName": "Marina District, San Francisco",
+      "caption": "Arrival at the Marina at 9:52 AM — 83.4 km door to door, average 72 km/h. Mission accomplished.",
+      "mapAnchor": { "lat": 37.8035, "lon": -122.4367 },
+      "timeLabel": "9:52 AM",
+      "distanceLabel": "83.4 km",
+      "speedLabel": "avg 72 km/h · 1h 29m"
+    }
+  ],
+  "createdAt": "2026-02-28T07:23:00.000Z"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "ace-custom-fallback",
+  "question": "Custom Ace query",
+  "columns": ["result"],
+  "rows": [
+    { "result": "Ace is not available at this time. Showing cached data." }
+  ],
+  "reasoning": "This is a placeholder result shown when Ace is unavailable and no specific cached result exists for this query.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 1,
+  "fromCache": true
+}

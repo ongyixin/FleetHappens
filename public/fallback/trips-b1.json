@@ -1,0 +1,41 @@
+[
+  {
+    "id": "t1",
+    "device": { "id": "b1" },
+    "start": "2026-02-28T08:05:00Z",
+    "stop": "2026-02-28T09:42:00Z",
+    "distance": 52300,
+    "drivingDuration": "01:37:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeed": 54,
+    "maximumSpeed": 112,
+    "startPoint": { "x": -122.4194, "y": 37.7749 },
+    "stopPoint":  { "x": -122.2712, "y": 37.8716 }
+  },
+  {
+    "id": "t2",
+    "device": { "id": "b1" },
+    "start": "2026-02-27T14:00:00Z",
+    "stop": "2026-02-27T15:28:00Z",
+    "distance": 38100,
+    "drivingDuration": "01:28:00",
+    "idlingDuration": "00:03:00",
+    "averageSpeed": 43,
+    "maximumSpeed": 97,
+    "startPoint": { "x": -122.2712, "y": 37.8716 },
+    "stopPoint":  { "x": -122.4194, "y": 37.7749 }
+  },
+  {
+    "id": "t3",
+    "device": { "id": "b1" },
+    "start": "2026-02-26T09:15:00Z",
+    "stop": "2026-02-26T11:05:00Z",
+    "distance": 89400,
+    "drivingDuration": "01:50:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeed": 62,
+    "maximumSpeed": 125,
+    "startPoint": { "x": -122.4194, "y": 37.7749 },
+    "stopPoint":  { "x": -121.8863, "y": 37.3382 }
+  }
+]

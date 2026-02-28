@@ -1,0 +1,16 @@
+{
+  "id": "fleet-vehicle-outliers-fallback",
+  "question": "What are the top 5 vehicles by total distance in the last 7 days?",
+  "columns": ["device_name", "total_distance_km", "trip_count", "avg_idle_pct"],
+  "rows": [
+    { "device_name": "Fleet Van 01",   "total_distance_km": 980, "trip_count": 28, "avg_idle_pct": 12.1 },
+    { "device_name": "Fleet Truck 02", "total_distance_km": 842, "trip_count": 21, "avg_idle_pct": 15.4 },
+    { "device_name": "Fleet Car 03",   "total_distance_km": 710, "trip_count": 35, "avg_idle_pct": 8.7  },
+    { "device_name": "Fleet Van 04",   "total_distance_km": 634, "trip_count": 19, "avg_idle_pct": 18.2 },
+    { "device_name": "Fleet Car 05",   "total_distance_km": 521, "trip_count": 24, "avg_idle_pct": 10.9 }
+  ],
+  "reasoning": "Top 5 vehicles by total_distance_km in the last 7 days from VehicleKPI_Daily.",
+  "queriedAt": "2026-02-28T00:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

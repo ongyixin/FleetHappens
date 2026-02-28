@@ -1,0 +1,40 @@
+{
+  "contexts": [
+    {
+      "id": "ctx-001",
+      "tripId": "trip-001",
+      "coordinates": { "lat": 37.7956, "lon": -122.3934 },
+      "placeName": "Jack London Square",
+      "neighborhood": "Oakland Waterfront",
+      "areaBriefing": "Jack London Square sits at the confluence of the Oakland Estuary and San Francisco Bay, a lively waterfront district named after the author who grew up nearby. It's a hub for restaurants, a farmers market on Sundays, and ferry service to San Francisco — a practical stop for lunch or a quick meeting. Your fleet has visited this area frequently, making it a well-known waypoint for the North District team.",
+      "fleetVisitCount": 14,
+      "fleetVisitSummary": "14 fleet visits in the last 90 days — mostly Tuesday through Thursday",
+      "nearbyAmenities": [
+        { "name": "Chevron Oakland Estuary", "category": "fuel", "distanceMeters": 380 },
+        { "name": "Forge Pizza", "category": "food", "distanceMeters": 210 },
+        { "name": "Waterfront Hotel Parking", "category": "parking", "distanceMeters": 150 },
+        { "name": "Oak Ferry Terminal", "category": "rest", "distanceMeters": 480 }
+      ],
+      "generatedAt": "2026-02-28T06:00:00Z",
+      "fromCache": true
+    },
+    {
+      "id": "ctx-002",
+      "tripId": "trip-001",
+      "coordinates": { "lat": 37.8324, "lon": -122.2892 },
+      "placeName": "Temescal District",
+      "neighborhood": "North Oakland",
+      "areaBriefing": "Temescal is one of Oakland's most vibrant neighborhoods — a dense corridor of independent restaurants, coffee roasters, and design studios along Telegraph Avenue. Practically speaking, it offers excellent parking on side streets and multiple quick-service food options within a block. Drivers stopping here tend to stay longer than average, likely due to the easy amenities.",
+      "fleetVisitCount": 8,
+      "fleetVisitSummary": "8 fleet visits in the last 90 days — mostly late mornings",
+      "nearbyAmenities": [
+        { "name": "Arizmendi Bakery", "category": "food", "distanceMeters": 95 },
+        { "name": "Temescal Shell Station", "category": "fuel", "distanceMeters": 620 },
+        { "name": "Telegraph Ave Street Parking", "category": "parking", "distanceMeters": 50 },
+        { "name": "Timeless Coffee", "category": "rest", "distanceMeters": 180 }
+      ],
+      "generatedAt": "2026-02-28T06:00:00Z",
+      "fromCache": true
+    }
+  ]
+}

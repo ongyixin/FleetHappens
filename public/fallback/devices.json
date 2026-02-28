@@ -1,0 +1,34 @@
+[
+  {
+    "id": "b1",
+    "name": "Fleet Van 01",
+    "deviceType": "GO9",
+    "serialNumber": "G9-000001",
+    "activeFrom": "2024-01-01T00:00:00Z",
+    "activeTo": "2026-02-28T12:00:00Z"
+  },
+  {
+    "id": "b2",
+    "name": "Fleet Truck 02",
+    "deviceType": "GO9",
+    "serialNumber": "G9-000002",
+    "activeFrom": "2024-01-01T00:00:00Z",
+    "activeTo": "2026-02-28T10:30:00Z"
+  },
+  {
+    "id": "b3",
+    "name": "Fleet Car 03",
+    "deviceType": "GO9",
+    "serialNumber": "G9-000003",
+    "activeFrom": "2024-01-01T00:00:00Z",
+    "activeTo": "2026-02-27T16:45:00Z"
+  },
+  {
+    "id": "b4",
+    "name": "Fleet Van 04",
+    "deviceType": "GO9",
+    "serialNumber": "G9-000004",
+    "activeFrom": "2024-01-01T00:00:00Z",
+    "activeTo": "2026-02-28T08:15:00Z"
+  }
+]

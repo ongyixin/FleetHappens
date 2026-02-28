@@ -1,0 +1,21 @@
+[
+  { "dateTime": "2024-01-10T08:15:00Z", "lat": 43.6532, "lon": -79.3832, "speedKmh": 0, "heading": 45 },
+  { "dateTime": "2024-01-10T08:17:00Z", "lat": 43.6580, "lon": -79.3790, "speedKmh": 45, "heading": 50 },
+  { "dateTime": "2024-01-10T08:19:00Z", "lat": 43.6635, "lon": -79.3745, "speedKmh": 60, "heading": 48 },
+  { "dateTime": "2024-01-10T08:21:00Z", "lat": 43.6700, "lon": -79.3690, "speedKmh": 72, "heading": 42 },
+  { "dateTime": "2024-01-10T08:23:00Z", "lat": 43.6770, "lon": -79.3620, "speedKmh": 85, "heading": 38 },
+  { "dateTime": "2024-01-10T08:25:00Z", "lat": 43.6845, "lon": -79.3540, "speedKmh": 96, "heading": 35 },
+  { "dateTime": "2024-01-10T08:27:00Z", "lat": 43.6920, "lon": -79.3455, "speedKmh": 100, "heading": 33 },
+  { "dateTime": "2024-01-10T08:30:00Z", "lat": 43.7010, "lon": -79.3350, "speedKmh": 108, "heading": 30 },
+  { "dateTime": "2024-01-10T08:35:00Z", "lat": 43.7140, "lon": -79.3210, "speedKmh": 95, "heading": 28 },
+  { "dateTime": "2024-01-10T08:40:00Z", "lat": 43.7290, "lon": -79.3060, "speedKmh": 88, "heading": 25 },
+  { "dateTime": "2024-01-10T08:45:00Z", "lat": 43.7450, "lon": -79.2900, "speedKmh": 90, "heading": 22 },
+  { "dateTime": "2024-01-10T08:50:00Z", "lat": 43.7620, "lon": -79.2730, "speedKmh": 82, "heading": 20 },
+  { "dateTime": "2024-01-10T08:55:00Z", "lat": 43.7800, "lon": -79.2580, "speedKmh": 70, "heading": 18 },
+  { "dateTime": "2024-01-10T09:00:00Z", "lat": 43.7990, "lon": -79.2490, "speedKmh": 55, "heading": 15 },
+  { "dateTime": "2024-01-10T09:10:00Z", "lat": 43.8200, "lon": -79.2430, "speedKmh": 40, "heading": 12 },
+  { "dateTime": "2024-01-10T09:20:00Z", "lat": 43.8430, "lon": -79.2400, "speedKmh": 48, "heading": 10 },
+  { "dateTime": "2024-01-10T09:30:00Z", "lat": 43.8640, "lon": -79.2392, "speedKmh": 35, "heading": 8 },
+  { "dateTime": "2024-01-10T09:38:00Z", "lat": 43.8780, "lon": -79.2393, "speedKmh": 20, "heading": 5 },
+  { "dateTime": "2024-01-10T09:42:00Z", "lat": 43.8861, "lon": -79.2394, "speedKmh": 0, "heading": 0 }
+]

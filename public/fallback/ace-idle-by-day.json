@@ -1,0 +1,18 @@
+{
+  "id": "ace-idle-by-day-fallback",
+  "question": "What is the average idle time percentage for each day of the week over the last 30 days? Return columns: day_of_week, avg_idle_pct, avg_idle_minutes. Order by day of week (Monday first). Use UTC timezone.",
+  "columns": ["day_of_week", "avg_idle_pct", "avg_idle_minutes"],
+  "rows": [
+    { "day_of_week": "Monday",    "avg_idle_pct": 18.2, "avg_idle_minutes": 14 },
+    { "day_of_week": "Tuesday",   "avg_idle_pct": 16.8, "avg_idle_minutes": 12 },
+    { "day_of_week": "Wednesday", "avg_idle_pct": 21.4, "avg_idle_minutes": 17 },
+    { "day_of_week": "Thursday",  "avg_idle_pct": 19.7, "avg_idle_minutes": 15 },
+    { "day_of_week": "Friday",    "avg_idle_pct": 24.1, "avg_idle_minutes": 19 },
+    { "day_of_week": "Saturday",  "avg_idle_pct": 12.3, "avg_idle_minutes":  8 },
+    { "day_of_week": "Sunday",    "avg_idle_pct":  8.9, "avg_idle_minutes":  6 }
+  ],
+  "reasoning": "Friday shows the highest idle time at 24.1%, likely correlating with end-of-week delivery congestion and increased urban traffic. Weekend patterns show significantly lower idle times, suggesting lighter operational activity. Wednesday's mid-week spike (21.4%) may relate to scheduled service calls.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 7,
+  "fromCache": true
+}

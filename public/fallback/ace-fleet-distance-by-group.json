@@ -1,0 +1,15 @@
+{
+  "id": "fleet-distance-by-group-fallback",
+  "question": "What is the total distance in km and trip count per group in the last 7 days?",
+  "columns": ["group_name", "total_distance_km", "trip_count", "vehicle_count"],
+  "rows": [
+    { "group_name": "North Region", "total_distance_km": 8420, "trip_count": 214, "vehicle_count": 12 },
+    { "group_name": "South Region", "total_distance_km": 6130, "trip_count": 178, "vehicle_count": 9 },
+    { "group_name": "East Region",  "total_distance_km": 4890, "trip_count": 132, "vehicle_count": 7 },
+    { "group_name": "West Region",  "total_distance_km": 3210, "trip_count": 97,  "vehicle_count": 5 }
+  ],
+  "reasoning": "Aggregated from VehicleKPI_Daily joined to Groups for the last 7 days.",
+  "queriedAt": "2026-02-28T00:00:00Z",
+  "totalRowCount": 4,
+  "fromCache": true
+}
