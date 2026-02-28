@@ -32,9 +32,10 @@ const PanelSchema = z.object({
   distanceLabel: z.string().optional(),
   speedLabel: z.string().optional(),
   dwellLabel: z.string().optional(),
-  // Accept (and preserve) any existing image field; the enricher will skip
-  // panels that already have an image.
+  // Accept (and preserve) any existing image / areaPhotos fields so that
+  // re-enrichment passes don't lose already-resolved data.
   image: z.any().optional(),
+  areaPhotos: z.any().optional(),
 });
 
 const RequestSchema = z.object({

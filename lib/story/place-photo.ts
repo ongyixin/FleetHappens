@@ -8,7 +8,8 @@
  * Owner: Story Image Enrichment
  */
 
-import type { StoryPanelImage } from "@/types";
+import type { StoryPanelImage, AreaPhoto } from "@/types";
+import type { NearbyPhotoRef } from "./place-resolution";
 
 // Module-level cache keyed on photo_reference — these are stable for a given
 // place and don't change between requests in a demo session.
@@ -97,4 +98,66 @@ export function buildMapImage(): StoryPanelImage {
  */
 export function buildFallbackImage(label?: string): StoryPanelImage {
   return { kind: "fallback", label, source: "fallback" };
+}
+
+/**
+ * Resolves multiple photo references in parallel and returns them as an
+ * `AreaPhoto[]` for use in the panel gallery toggle.
+ *
+ * Failed or null-resolved references are silently dropped so the array only
+ * contains photos that actually loaded.
+ */
+export async function resolveMultiplePhotoUrls(
+  photoReferences: string[],
+  placeName?: string,
+  htmlAttributions?: string[]
+): Promise<AreaPhoto[]> {
+  if (!photoReferences.length) return [];
+
+  const attribution = htmlAttributions?.[0]
+    ? stripHtml(htmlAttributions[0])
+    : undefined;
+
+  const settled = await Promise.allSettled(
+    photoReferences.map((ref) => resolvePhotoUrl(ref))
+  );
+
+  return settled
+    .filter(
+      (r): r is PromiseFulfilledResult<string> =>
+        r.status === "fulfilled" && !!r.value
+    )
+    .map((r) => ({
+      url: r.value,
+      caption: placeName,
+      attribution,
+    }));
+}
+
+/**
+ * Resolves an array of NearbyPhotoRefs (each from a different nearby place)
+ * into AreaPhotos, resolving each photo URL in parallel.
+ *
+ * Each photo gets its own place name as caption and per-place attribution,
+ * giving the gallery visual variety across different nearby landmarks.
+ */
+export async function resolveGalleryPhotos(
+  nearbyRefs: NearbyPhotoRef[]
+): Promise<AreaPhoto[]> {
+  if (!nearbyRefs.length) return [];
+
+  const settled = await Promise.allSettled(
+    nearbyRefs.map((ref) => resolvePhotoUrl(ref.photoReference))
+  );
+
+  return settled
+    .filter(
+      (r): r is PromiseFulfilledResult<string> =>
+        r.status === "fulfilled" && !!r.value
+    )
+    .map((r, i) => ({
+      url: r.value,
+      caption: nearbyRefs[i].placeName,
+      attribution: nearbyRefs[i].attribution,
+    }));
 }

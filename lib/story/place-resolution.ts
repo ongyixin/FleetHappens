@@ -12,13 +12,26 @@ import type { LatLon } from "@/types";
 
 export interface PlaceResolution {
   placeId: string;
+  /** Primary photo reference (first available). */
   photoReference: string;
+  /** All photo references from the resolved place, up to 5. */
+  allPhotoReferences: string[];
   name: string;
   htmlAttributions?: string[];
 }
 
-// Module-level LRU-style cache — keyed on ~110 m rounded coordinates.
-const _cache = new Map<string, PlaceResolution | null>();
+// ─── Shared types ─────────────────────────────────────────────────────────────
+
+/** A single photo reference sourced from a nearby place, ready for gallery use. */
+export interface NearbyPhotoRef {
+  photoReference: string;
+  placeName: string;
+  attribution?: string;
+}
+
+// Module-level LRU-style caches — keyed on ~110 m rounded coordinates.
+const _cache        = new Map<string, PlaceResolution | null>();
+const _nearbyCache  = new Map<string, NearbyPhotoRef[]>();
 
 function cacheKey(coords: LatLon): string {
   return `${coords.lat.toFixed(3)},${coords.lon.toFixed(3)}`;
@@ -93,12 +106,13 @@ export async function resolvePlace(
       return null;
     }
 
-    const photo = candidate.photos[0];
+    const photos = candidate.photos.slice(0, 5);
     const resolution: PlaceResolution = {
       placeId: candidate.place_id,
-      photoReference: photo.photo_reference,
+      photoReference: photos[0].photo_reference,
+      allPhotoReferences: photos.map((p) => p.photo_reference),
       name: candidate.name,
-      htmlAttributions: photo.html_attributions,
+      htmlAttributions: photos[0].html_attributions,
     };
 
     _cache.set(key, resolution);
@@ -107,5 +121,86 @@ export async function resolvePlace(
     console.warn("[place-resolution] request failed:", err);
     _cache.set(key, null);
     return null;
+  }
+}
+
+// ─── Broad nearby photo search (for gallery areaPhotos) ───────────────────────
+
+/**
+ * Returns up to `maxPhotos` photo references from the most-photographed
+ * nearby places within `radiusMeters` of `coords`.
+ *
+ * Unlike `resolvePlace`, this search uses NO keyword — it finds any notable
+ * POI near the coordinates, making it reliable for neighbourhood-level names
+ * like "Mission District, San Francisco" where a keyword search would fail.
+ *
+ * One photo reference is taken from each matched place to ensure variety.
+ */
+export async function resolveNearbyPhotos(
+  coords: LatLon,
+  maxPhotos = 5,
+  radiusMeters = 1500
+): Promise<NearbyPhotoRef[]> {
+  const key = `broad:${cacheKey(coords)}`;
+  if (_nearbyCache.has(key)) return _nearbyCache.get(key)!;
+
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  if (!apiKey) {
+    _nearbyCache.set(key, []);
+    return [];
+  }
+
+  try {
+    const url = new URL(
+      "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+    );
+    url.searchParams.set("location", `${coords.lat},${coords.lon}`);
+    url.searchParams.set("radius", String(radiusMeters));
+    url.searchParams.set("type", "point_of_interest");
+    // rankby=prominence would be ideal but conflicts with radius — omit for now.
+    url.searchParams.set("key", apiKey);
+
+    const res = await fetch(url.toString());
+    if (!res.ok) throw new Error(`Places Nearby Search ${res.status}`);
+
+    const data: {
+      status: string;
+      results?: Array<{
+        name: string;
+        photos?: Array<{
+          photo_reference: string;
+          html_attributions?: string[];
+        }>;
+      }>;
+    } = await res.json();
+
+    if (data.status === "REQUEST_DENIED" || data.status === "INVALID_REQUEST") {
+      console.warn("[place-resolution] resolveNearbyPhotos API error:", data.status);
+      _nearbyCache.set(key, []);
+      return [];
+    }
+
+    const refs: NearbyPhotoRef[] = [];
+    for (const place of (data.results ?? [])) {
+      if (refs.length >= maxPhotos) break;
+      const photo = place.photos?.[0];
+      if (!photo) continue;
+      const rawAttr = photo.html_attributions?.[0];
+      const attribution = rawAttr
+        ? rawAttr.replace(/<[^>]+>/g, "")
+        : undefined;
+      refs.push({
+        photoReference: photo.photo_reference,
+        placeName: place.name,
+        attribution,
+      });
+    }
+
+    _nearbyCache.set(key, refs);
+    return refs;
+  } catch (err) {
+    console.warn("[place-resolution] resolveNearbyPhotos failed:", err);
+    _nearbyCache.set(key, []);
+    return [];
   }
 }
