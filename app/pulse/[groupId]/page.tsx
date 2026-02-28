@@ -4,143 +4,100 @@ import { useState, useEffect, useCallback, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
-  Route,
-  Zap,
-  ChevronLeft,
-  Truck,
-  Brain,
-  RefreshCw,
-  MapPin,
-  Activity,
-  Award,
-  TrendingUp,
-  TrendingDown,
-  RotateCcw,
-  AlertTriangle,
+  ChevronLeft, Truck, Brain, RefreshCw, MapPin, Activity,
+  Award, TrendingUp, TrendingDown, RotateCcw, AlertTriangle, Zap,
 } from "lucide-react";
-import type {
-  FleetPulseDetail,
-  AceInsight,
-  VehicleActivity,
-  CompanyPulseSummary,
-  ApiResponse,
-} from "@/types";
-import VehicleActivityTable, {
-  VehicleActivityTableSkeleton,
-} from "@/components/VehicleActivityTable";
-import RoutePatternCard, {
-  RoutePatternCardSkeleton,
-} from "@/components/RoutePatternCard";
-import StopHotspotCard, {
-  StopHotspotCardSkeleton,
-} from "@/components/StopHotspotCard";
-import VehicleOutliersCard, {
-  VehicleOutliersCardSkeleton,
-} from "@/components/VehicleOutliersCard";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import type { FleetPulseDetail, AceInsight, VehicleActivity, CompanyPulseSummary, ApiResponse } from "@/types";
+import VehicleActivityTable, { VehicleActivityTableSkeleton } from "@/components/VehicleActivityTable";
+import RoutePatternCard, { RoutePatternCardSkeleton } from "@/components/RoutePatternCard";
+import StopHotspotCard, { StopHotspotCardSkeleton } from "@/components/StopHotspotCard";
+import VehicleOutliersCard, { VehicleOutliersCardSkeleton } from "@/components/VehicleOutliersCard";
 
-// Map component (no SSR)
 const FleetRegionalMap = dynamic(
   () => import("@/components/FleetRegionalMap"),
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-full rounded-xl border border-border bg-muted/30 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-6 w-6 rounded-full border-2 border-fleet-blue border-t-transparent animate-spin" />
-          <p className="text-xs text-muted-foreground">Loading map…</p>
+      <div className="w-full h-full rounded-xl border border-[rgba(255,255,255,0.07)] bg-[#101318] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="relative w-8 h-8">
+            <div className="absolute inset-0 rounded-full border-2 border-[rgba(245,166,35,0.2)]" />
+            <div className="absolute inset-0 rounded-full border-2 border-t-[#f5a623] border-transparent animate-spin" />
+          </div>
+          <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body">Loading map…</p>
         </div>
       </div>
     ),
   }
 );
 
+function StatBadge({ icon: Icon, value, label, color, bg }: {
+  icon: React.ElementType; value: number | string; label: string;
+  color: string; bg: string;
+}) {
+  return (
+    <div className="flex-1 atlas-card rounded-xl px-4 py-3.5 flex items-center gap-3 animate-fade-up">
+      <div className="h-9 w-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: bg }}>
+        <Icon className="h-4 w-4" style={{ color }} />
+      </div>
+      <div>
+        <p className="text-2xl font-display font-bold text-white leading-none">{value}</p>
+        <p className="text-[11px] text-[rgba(232,237,248,0.45)] mt-0.5 font-body">{label}</p>
+      </div>
+    </div>
+  );
+}
+
 function FleetViewContent() {
-  const params = useParams();
-  const router = useRouter();
+  const params  = useParams();
+  const router  = useRouter();
   const groupId = String(params.groupId ?? "");
 
-  // Fleet detail state
-  const [detail, setDetail] = useState<FleetPulseDetail | null>(null);
-  const [detailLoading, setDetailLoading] = useState(true);
-
-  // Company summary for benchmarking
-  const [summary, setSummary] = useState<CompanyPulseSummary | null>(null);
-
-  // Ace analytics state
+  const [detail, setDetail]                 = useState<FleetPulseDetail | null>(null);
+  const [detailLoading, setDetailLoading]   = useState(true);
+  const [summary, setSummary]               = useState<CompanyPulseSummary | null>(null);
   const [outlierInsight, setOutlierInsight] = useState<AceInsight | null>(null);
   const [outlierLoading, setOutlierLoading] = useState(true);
-
-  const [routeInsight, setRouteInsight] = useState<AceInsight | null>(null);
-  const [routeLoading, setRouteLoading] = useState(true);
-
+  const [routeInsight, setRouteInsight]     = useState<AceInsight | null>(null);
+  const [routeLoading, setRouteLoading]     = useState(true);
   const [hotspotInsight, setHotspotInsight] = useState<AceInsight | null>(null);
   const [hotspotLoading, setHotspotLoading] = useState(true);
 
-  // ── Load fleet detail ───────────────────────────────────────────────────────
-
   useEffect(() => {
     if (!groupId) return;
-
     async function loadDetail() {
       setDetailLoading(true);
       try {
-        const res = await fetch(`/api/pulse/fleet/${groupId}`);
+        const res  = await fetch(`/api/pulse/fleet/${groupId}`);
         const data = (await res.json()) as ApiResponse<FleetPulseDetail>;
-        if (data.ok) {
-          setDetail(data.data);
-        } else {
-          throw new Error(data.error);
-        }
+        if (data.ok) setDetail(data.data); else throw new Error(data.error);
       } catch {
         try {
           const res = await fetch(`/fallback/pulse-fleet-${groupId}.json`);
-          if (res.ok) {
-            const data = (await res.json()) as FleetPulseDetail;
-            setDetail(data);
-          } else {
-            // Fall back to generic "all" fleet fallback
+          if (res.ok) { setDetail((await res.json()) as FleetPulseDetail); }
+          else {
             const res2 = await fetch("/fallback/pulse-fleet-all.json");
             const data = (await res2.json()) as FleetPulseDetail;
             setDetail({ ...data, group: { ...data.group, id: groupId } });
           }
-        } catch {
-          setDetail(null);
-        }
-      } finally {
-        setDetailLoading(false);
-      }
+        } catch { setDetail(null); }
+      } finally { setDetailLoading(false); }
     }
     loadDetail();
   }, [groupId]);
 
-  // ── Load company summary for benchmarking ─────────────────────────────────
-
   useEffect(() => {
-    fetch("/api/pulse/summary")
-      .then((r) => r.json())
-      .then((data: ApiResponse<CompanyPulseSummary>) => {
-        if (data.ok) setSummary(data.data);
-      })
+    fetch("/api/pulse/summary").then((r) => r.json())
+      .then((data: ApiResponse<CompanyPulseSummary>) => { if (data.ok) setSummary(data.data); })
       .catch(() => {});
   }, []);
 
-  // ── Load Ace analytics (parallel, non-blocking) ────────────────────────────
-
   const groupName = detail?.group.name;
-
   const loadAceQuery = useCallback(
-    async (
-      queryKey: string,
-      fallbackFile: string,
-      setter: (v: AceInsight | null) => void,
-      loadingSetter: (v: boolean) => void
-    ) => {
+    async (queryKey: string, fallbackFile: string, setter: (v: AceInsight | null) => void, loadingSetter: (v: boolean) => void) => {
       loadingSetter(true);
       try {
-        const res = await fetch("/api/ace/query", {
+        const res  = await fetch("/api/ace/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ queryKey, groupName }),
@@ -151,269 +108,143 @@ function FleetViewContent() {
         try {
           const res = await fetch(`/fallback/${fallbackFile}`);
           setter(res.ok ? ((await res.json()) as AceInsight) : null);
-        } catch {
-          setter(null);
-        }
-      } finally {
-        loadingSetter(false);
-      }
+        } catch { setter(null); }
+      } finally { loadingSetter(false); }
     },
     [groupName]
   );
 
   useEffect(() => {
     if (!groupName) return;
-
-    loadAceQuery(
-      "fleet-vehicle-outliers",
-      "ace-fleet-vehicle-outliers.json",
-      setOutlierInsight,
-      setOutlierLoading
-    );
-    loadAceQuery(
-      "fleet-route-patterns",
-      "ace-fleet-route-patterns.json",
-      setRouteInsight,
-      setRouteLoading
-    );
-    loadAceQuery(
-      "fleet-stop-hotspots",
-      "ace-fleet-stop-hotspots.json",
-      setHotspotInsight,
-      setHotspotLoading
-    );
+    loadAceQuery("fleet-vehicle-outliers",  "ace-fleet-vehicle-outliers.json",  setOutlierInsight, setOutlierLoading);
+    loadAceQuery("fleet-route-patterns",    "ace-fleet-route-patterns.json",    setRouteInsight,   setRouteLoading);
+    loadAceQuery("fleet-stop-hotspots",     "ace-fleet-stop-hotspots.json",     setHotspotInsight, setHotspotLoading);
   }, [groupName, loadAceQuery]);
 
-  // ── Navigation helpers ────────────────────────────────────────────────────
-
   function handleSelectVehicle(vehicleId: string, vehicleName: string) {
-    router.push(
-      `/dashboard?deviceId=${vehicleId}&deviceName=${encodeURIComponent(vehicleName)}&groupId=${groupId}`
-    );
+    router.push(`/dashboard?deviceId=${vehicleId}&deviceName=${encodeURIComponent(vehicleName)}&groupId=${groupId}`);
   }
-
-  // For outlier card — look up vehicle ID by name
   function handleOutlierClick(vehicleName: string) {
     if (!detail) return;
-    const match = detail.vehicles.find(
-      (v) => v.vehicle.name === vehicleName
-    );
-    if (match) {
-      handleSelectVehicle(match.vehicle.id, match.vehicle.name);
-    }
+    const match = detail.vehicles.find((v) => v.vehicle.name === vehicleName);
+    if (match) handleSelectVehicle(match.vehicle.id, match.vehicle.name);
   }
 
-  // Stats derived from detail
-  const activeCount = detail?.vehicles.filter((v) => v.status === "active").length ?? 0;
-  const idleCount = detail?.vehicles.filter((v) => v.status === "idle").length ?? 0;
-  const offlineCount = detail?.vehicles.filter((v) => v.status === "offline").length ?? 0;
+  const activeCount   = detail?.vehicles.filter((v) => v.status === "active").length  ?? 0;
+  const idleCount     = detail?.vehicles.filter((v) => v.status === "idle").length    ?? 0;
+  const offlineCount  = detail?.vehicles.filter((v) => v.status === "offline").length ?? 0;
   const totalVehicles = detail?.vehicles.length ?? 0;
   const anyAceLoading = outlierLoading || routeLoading || hotspotLoading;
 
   const mapVehicles: VehicleActivity[] = detail?.vehicles ?? [];
   const mapGroups = detail ? [detail.group] : [];
 
-  // ── Company benchmarks ──────────────────────────────────────────────────────
-
-  const sortedFleets = summary
-    ? [...summary.fleets].sort((a, b) => b.totalDistanceKm - a.totalDistanceKm)
-    : null;
-  const fleetRank = sortedFleets
-    ? sortedFleets.findIndex((f) => f.group.id === groupId) + 1
-    : null;
-  const fleetCount = sortedFleets?.length ?? 0;
-
+  const sortedFleets     = summary ? [...summary.fleets].sort((a, b) => b.totalDistanceKm - a.totalDistanceKm) : null;
+  const fleetRank        = sortedFleets ? sortedFleets.findIndex((f) => f.group.id === groupId) + 1 : null;
+  const fleetCount       = sortedFleets?.length ?? 0;
   const thisFleetSummary = summary?.fleets.find((f) => f.group.id === groupId);
-  const companyAvgActivePct =
-    summary && summary.totals.vehicles > 0
-      ? (summary.totals.activeVehicles / summary.totals.vehicles) * 100
-      : null;
-  const thisFleetActivePct =
-    totalVehicles > 0 ? (activeCount / totalVehicles) * 100 : null;
-  const companyAvgIdlePct = summary?.totals.avgIdlePct ?? null;
-  const thisFleetIdlePct = thisFleetSummary?.avgIdlePct ?? null;
-  const idleDelta =
-    thisFleetIdlePct != null && companyAvgIdlePct != null
-      ? thisFleetIdlePct - companyAvgIdlePct
-      : null;
-  const isHighIdle = idleDelta != null && idleDelta > 2;
-
-  // ── Hotspot map pins (extracted from Ace insight) ──────────────────────────
+  const companyAvgActivePct = summary && summary.totals.vehicles > 0 ? (summary.totals.activeVehicles / summary.totals.vehicles) * 100 : null;
+  const thisFleetActivePct  = totalVehicles > 0 ? (activeCount / totalVehicles) * 100 : null;
+  const companyAvgIdlePct   = summary?.totals.avgIdlePct ?? null;
+  const thisFleetIdlePct    = thisFleetSummary?.avgIdlePct ?? null;
+  const idleDelta           = thisFleetIdlePct != null && companyAvgIdlePct != null ? thisFleetIdlePct - companyAvgIdlePct : null;
+  const isHighIdle          = idleDelta != null && idleDelta > 2;
 
   const mapHotspots = hotspotInsight?.rows
     .filter((r) => Number(r["lat"] ?? 0) !== 0 && Number(r["lon"] ?? 0) !== 0)
-    .map((r) => ({
-      lat: Number(r["lat"]),
-      lon: Number(r["lon"]),
-      name: String(r["location_name"] ?? "Stop"),
-      visits: Number(r["visit_count"] ?? 0),
-    })) ?? [];
+    .map((r) => ({ lat: Number(r["lat"]), lon: Number(r["lon"]), name: String(r["location_name"] ?? "Stop"), visits: Number(r["visit_count"] ?? 0) })) ?? [];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top nav */}
-      <header className="bg-white border-b border-border sticky top-0 z-20 shadow-[0_1px_0_hsl(30,8%,90%)]">
+    <div className="min-h-screen bg-[#09090e]">
+      <div className="pointer-events-none fixed inset-0 z-0 atlas-grid-bg opacity-40" />
+
+      {/* Header */}
+      <header className="relative z-10 border-b border-[rgba(255,255,255,0.07)] bg-[rgba(9,9,14,0.92)] backdrop-blur-sm sticky top-0">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-3">
-          <button
-            onClick={() => router.push("/")}
-            className="flex items-center gap-2 shrink-0 group"
-          >
-            <div className="w-7 h-7 rounded-lg bg-fleet-navy flex items-center justify-center shadow-sm group-hover:bg-fleet-navy/90 transition-colors">
-              <Route className="h-3.5 w-3.5 text-white" />
+          <button onClick={() => router.push("/")} className="flex items-center gap-2 group shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-[#f5a623] flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] group-hover:shadow-[0_2px_12px_rgba(245,166,35,0.5)] transition-shadow">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7 C2 4 4 2 7 2 S12 4 12 7 L7 12 L2 7Z" fill="#09090e" />
+              </svg>
             </div>
-            <span className="font-bold text-fleet-navy tracking-tight text-sm hidden sm:block">
-              FleetHappens
-            </span>
+            <span className="font-display font-bold text-white text-sm hidden sm:block">FleetHappens</span>
           </button>
 
-          <Separator orientation="vertical" className="h-5 mx-0.5" />
+          <div className="w-px h-4 bg-[rgba(255,255,255,0.1)]" />
 
-          {/* Breadcrumb */}
-          <button
-            onClick={() => router.push("/pulse")}
-            className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm"
-          >
+          <button onClick={() => router.push("/pulse")} className="flex items-center gap-1.5 text-[rgba(232,237,248,0.45)] hover:text-white transition-colors text-xs font-body">
             <ChevronLeft className="h-3.5 w-3.5" />
             <Zap className="h-3 w-3" />
             <span className="hidden sm:inline">Fleet Pulse</span>
           </button>
-          <span className="text-muted-foreground text-sm">/</span>
+          <span className="text-[rgba(255,255,255,0.2)] text-xs">/</span>
           <div className="flex items-center gap-2 min-w-0">
-            <Truck className="h-3.5 w-3.5 text-fleet-blue shrink-0" />
-            <span className="font-semibold text-sm text-foreground truncate">
+            <Truck className="h-3.5 w-3.5 text-[#38bdf8] shrink-0" />
+            <span className="font-display font-bold text-sm text-white truncate">
               {detailLoading ? "Loading…" : (detail?.group.name ?? groupId)}
             </span>
             {!detailLoading && detail && (
-              <Badge variant="secondary" className="text-xs shrink-0">
-                {totalVehicles} vehicles
-              </Badge>
+              <span className="text-[10px] font-data text-[rgba(232,237,248,0.4)] bg-[rgba(255,255,255,0.05)] px-2 py-0.5 rounded-full shrink-0">
+                {totalVehicles}v
+              </span>
             )}
           </div>
 
-          {/* Right side */}
           <div className="ml-auto flex items-center gap-2 shrink-0">
             {anyAceLoading && (
-              <Badge variant="secondary" className="text-xs gap-1">
-                <RefreshCw className="h-2.5 w-2.5 animate-spin" />
+              <span className="flex items-center gap-1.5 text-[11px] text-[rgba(232,237,248,0.4)] font-body">
+                <RefreshCw className="h-2.5 w-2.5 animate-spin text-[#f5a623]" />
                 Ace loading…
-              </Badge>
+              </span>
             )}
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-        {/* Fleet KPI mini-strip */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-6 space-y-5">
+        {/* Fleet KPI stat row */}
         {!detailLoading && detail && (
           <div className="flex gap-3 flex-wrap sm:flex-nowrap">
-            {[
-              {
-                label: "Active",
-                value: activeCount,
-                color: "#059669",
-                bg: "rgb(236 253 245)",
-                icon: Activity,
-              },
-              {
-                label: "Idle",
-                value: idleCount,
-                color: "#f59e0b",
-                bg: "rgb(255 251 235)",
-                icon: RefreshCw,
-              },
-              {
-                label: "Offline",
-                value: offlineCount,
-                color: "#9ca3af",
-                bg: "rgb(249 250 251)",
-                icon: Truck,
-              },
-            ].map(({ label, value, color, bg, icon: Icon }) => (
-              <div
-                key={label}
-                className="flex-1 bg-white border border-border rounded-xl px-4 py-3 flex items-center gap-3 shadow-[0_1px_3px_rgba(14,36,64,0.04)]"
-              >
-                <div
-                  className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: bg }}
-                >
-                  <Icon className="h-3.5 w-3.5" style={{ color }} />
-                </div>
-                <div>
-                  <p className="text-xl font-bold text-fleet-navy tabular-nums leading-none">
-                    {value}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
-                </div>
-              </div>
-            ))}
+            <StatBadge icon={Activity}  value={activeCount}  label="Active"  color="#34d399" bg="rgba(52,211,153,0.1)" />
+            <StatBadge icon={RefreshCw} value={idleCount}    label="Idle"    color="#f5a623" bg="rgba(245,166,35,0.1)" />
+            <StatBadge icon={Truck}     value={offlineCount} label="Offline" color="rgba(232,237,248,0.4)" bg="rgba(255,255,255,0.05)" />
           </div>
         )}
 
-        {/* Company benchmark context strip */}
+        {/* Benchmark context strip */}
         {!detailLoading && detail && summary && (
-          <div className="flex gap-2 flex-wrap">
-            {/* Fleet rank */}
+          <div className="flex gap-2 flex-wrap animate-fade-in">
             {fleetRank != null && fleetRank > 0 && (
-              <div className="flex items-center gap-1.5 bg-white border border-border rounded-lg px-3 py-2 text-xs shadow-[0_1px_3px_rgba(14,36,64,0.04)]">
-                <Award className="h-3.5 w-3.5 text-fleet-amber shrink-0" />
-                <span className="font-semibold text-foreground tabular-nums">
-                  #{fleetRank}
-                </span>
-                <span className="text-muted-foreground">
-                  of {fleetCount} fleets by distance
-                </span>
+              <div className="flex items-center gap-2 atlas-card rounded-lg px-3 py-2">
+                <Award className="h-3.5 w-3.5 text-[#f5a623] shrink-0" />
+                <span className="text-xs font-display font-bold text-white tabular-nums">#{fleetRank}</span>
+                <span className="text-xs text-[rgba(232,237,248,0.4)] font-body">of {fleetCount} fleets by distance</span>
               </div>
             )}
-
-            {/* Active % vs company avg */}
             {thisFleetActivePct != null && companyAvgActivePct != null && (
-              <div className="flex items-center gap-1.5 bg-white border border-border rounded-lg px-3 py-2 text-xs shadow-[0_1px_3px_rgba(14,36,64,0.04)]">
-                {thisFleetActivePct >= companyAvgActivePct ? (
-                  <TrendingUp className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                ) : (
-                  <TrendingDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                )}
-                <span
-                  className="font-semibold tabular-nums"
-                  style={{
-                    color:
-                      thisFleetActivePct >= companyAvgActivePct
-                        ? "#059669"
-                        : "#9ca3af",
-                  }}
-                >
+              <div className="flex items-center gap-2 atlas-card rounded-lg px-3 py-2">
+                {thisFleetActivePct >= companyAvgActivePct
+                  ? <TrendingUp className="h-3.5 w-3.5 text-[#34d399] shrink-0" />
+                  : <TrendingDown className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)] shrink-0" />}
+                <span className="text-xs font-display font-bold" style={{ color: thisFleetActivePct >= companyAvgActivePct ? "#34d399" : "rgba(232,237,248,0.5)" }}>
                   {Math.round(thisFleetActivePct)}% active
                 </span>
-                <span className="text-muted-foreground">
-                  · co. avg {Math.round(companyAvgActivePct)}%
-                </span>
+                <span className="text-xs text-[rgba(232,237,248,0.4)] font-body">· co. avg {Math.round(companyAvgActivePct)}%</span>
               </div>
             )}
-
-            {/* Idle % vs company avg */}
             {thisFleetIdlePct != null && companyAvgIdlePct != null && (
-              <div className="flex items-center gap-1.5 bg-white border border-border rounded-lg px-3 py-2 text-xs shadow-[0_1px_3px_rgba(14,36,64,0.04)]">
-                {isHighIdle ? (
-                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500 shrink-0" />
-                ) : (
-                  <RotateCcw className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                )}
-                <span
-                  className="font-semibold tabular-nums"
-                  style={{ color: isHighIdle ? "#d97706" : "#374151" }}
-                >
+              <div className="flex items-center gap-2 atlas-card rounded-lg px-3 py-2">
+                {isHighIdle
+                  ? <AlertTriangle className="h-3.5 w-3.5 text-[#f5a623] shrink-0" />
+                  : <RotateCcw className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)] shrink-0" />}
+                <span className="text-xs font-display font-bold" style={{ color: isHighIdle ? "#f5a623" : "rgba(232,237,248,0.7)" }}>
                   {thisFleetIdlePct.toFixed(1)}% idle
                 </span>
-                <span className="text-muted-foreground">
+                <span className="text-xs text-[rgba(232,237,248,0.4)] font-body">
                   · co. avg {companyAvgIdlePct.toFixed(1)}%
                   {idleDelta != null && Math.abs(idleDelta) >= 0.5 && (
-                    <span
-                      className="ml-1 font-medium"
-                      style={{ color: isHighIdle ? "#d97706" : "#059669" }}
-                    >
-                      ({idleDelta > 0 ? "+" : ""}
-                      {idleDelta.toFixed(1)}pp)
+                    <span className="ml-1 font-semibold" style={{ color: isHighIdle ? "#f5a623" : "#34d399" }}>
+                      ({idleDelta > 0 ? "+" : ""}{idleDelta.toFixed(1)}pp)
                     </span>
                   )}
                 </span>
@@ -422,109 +253,72 @@ function FleetViewContent() {
           </div>
         )}
 
-        {/* Main content: left panel (table + Ace cards) + right panel (map) */}
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6">
-          {/* Left: vehicle activity + Ace cards */}
-          <div className="space-y-6">
-            {/* Vehicle activity table */}
+        {/* Main grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-5">
+          <div className="space-y-5">
+            {/* Vehicle activity */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Truck className="h-4 w-4 text-fleet-navy" />
-                <h2 className="text-sm font-bold text-fleet-navy">
-                  Vehicle Activity
-                </h2>
-                <p className="text-xs text-muted-foreground">
-                  Click a vehicle to explore its trips
-                </p>
+              <div className="flex items-center gap-2.5 mb-3">
+                <Truck className="h-4 w-4 text-[#38bdf8]" />
+                <h2 className="font-display font-bold text-base text-white">Vehicle Activity</h2>
+                <p className="text-xs text-[rgba(232,237,248,0.4)] font-body">Click a vehicle to explore its trips</p>
               </div>
               {detailLoading ? (
                 <VehicleActivityTableSkeleton />
               ) : detail ? (
-                <VehicleActivityTable
-                  vehicles={detail.vehicles}
-                  onSelectVehicle={handleSelectVehicle}
-                />
+                <VehicleActivityTable vehicles={detail.vehicles} onSelectVehicle={handleSelectVehicle} />
               ) : (
-                <div className="bg-white border border-border rounded-xl p-8 text-center">
-                  <p className="text-sm text-muted-foreground">
-                    Failed to load vehicle data
-                  </p>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="mt-2"
-                    onClick={() => router.refresh()}
-                  >
-                    <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
-                    Retry
-                  </Button>
+                <div className="atlas-card rounded-xl p-8 text-center">
+                  <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Failed to load vehicle data</p>
+                  <button onClick={() => router.refresh()} className="mt-3 text-xs btn-ghost h-7 px-3 rounded-lg inline-flex items-center gap-1.5">
+                    <RefreshCw className="h-3 w-3" /> Retry
+                  </button>
                 </div>
               )}
             </div>
 
-            {/* Ace cards row */}
+            {/* Ace intelligence cards */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Brain className="h-4 w-4 text-fleet-amber" />
-                <h2 className="text-sm font-bold text-fleet-navy">
-                  Fleet Intelligence
-                </h2>
-                <Badge variant="amber" className="text-xs">Ace API</Badge>
+              <div className="flex items-center gap-2.5 mb-3">
+                <Brain className="h-4 w-4 text-[#f5a623]" />
+                <h2 className="font-display font-bold text-base text-white">Fleet Intelligence</h2>
+                <span className="text-[10px] font-bold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-2 py-0.5 font-body">
+                  Ace API
+                </span>
                 {anyAceLoading && (
-                  <Badge variant="secondary" className="text-xs gap-1">
-                    <RefreshCw className="h-2.5 w-2.5 animate-spin" />
-                    Querying…
-                  </Badge>
+                  <span className="text-[11px] text-[rgba(232,237,248,0.4)] flex items-center gap-1 font-body">
+                    <RefreshCw className="h-2.5 w-2.5 animate-spin" />Querying…
+                  </span>
                 )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {outlierLoading ? (
-                  <VehicleOutliersCardSkeleton />
-                ) : (
-                  <VehicleOutliersCard
-                    insight={outlierInsight}
-                    loading={false}
-                    onSelectVehicle={handleOutlierClick}
-                  />
+                {outlierLoading ? <VehicleOutliersCardSkeleton /> : (
+                  <VehicleOutliersCard insight={outlierInsight} loading={false} onSelectVehicle={handleOutlierClick} />
                 )}
-                {routeLoading ? (
-                  <RoutePatternCardSkeleton />
-                ) : (
-                  <RoutePatternCard
-                    insight={routeInsight}
-                    loading={false}
-                  />
+                {routeLoading ? <RoutePatternCardSkeleton /> : (
+                  <RoutePatternCard insight={routeInsight} loading={false} />
                 )}
-                {hotspotLoading ? (
-                  <StopHotspotCardSkeleton />
-                ) : (
-                  <StopHotspotCard
-                    insight={hotspotInsight}
-                    loading={false}
-                  />
+                {hotspotLoading ? <StopHotspotCardSkeleton /> : (
+                  <StopHotspotCard insight={hotspotInsight} loading={false} />
                 )}
               </div>
             </div>
           </div>
 
-          {/* Right: fleet map */}
+          {/* Map */}
           <div className="xl:h-[600px] h-80">
             <div className="flex items-center gap-2 mb-3">
-              <MapPin className="h-4 w-4 text-fleet-navy" />
-              <h2 className="text-sm font-bold text-fleet-navy">
-                Vehicle Positions
-              </h2>
-              <p className="text-xs text-muted-foreground">Last known</p>
+              <MapPin className="h-4 w-4 text-[#f5a623]" />
+              <h2 className="font-display font-bold text-base text-white">Vehicle Positions</h2>
+              <p className="text-xs text-[rgba(232,237,248,0.4)] font-body">Last known</p>
             </div>
-            <div className="h-[calc(100%-32px)]">
+            <div className="h-[calc(100%-32px)] rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
               <FleetRegionalMap
                 vehicles={mapVehicles}
                 groups={mapGroups}
                 hotspots={mapHotspots}
                 onVehicleClick={(vehicleId) => {
-                  const v = detail?.vehicles.find(
-                    (v) => v.vehicle.id === vehicleId
-                  );
+                  const v = detail?.vehicles.find((v) => v.vehicle.id === vehicleId);
                   if (v) handleSelectVehicle(v.vehicle.id, v.vehicle.name);
                 }}
               />
@@ -540,12 +334,13 @@ export default function FleetViewPage() {
   return (
     <Suspense
       fallback={
-        <div className="h-screen flex items-center justify-center">
-          <div className="flex flex-col items-center gap-3">
-            <div className="h-8 w-8 rounded-full border-2 border-fleet-blue border-t-transparent animate-spin" />
-            <p className="text-sm text-muted-foreground">
-              Loading fleet view…
-            </p>
+        <div className="h-screen bg-[#09090e] flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative w-10 h-10">
+              <div className="absolute inset-0 rounded-full border-2 border-[rgba(245,166,35,0.2)]" />
+              <div className="absolute inset-0 rounded-full border-2 border-t-[#f5a623] border-transparent animate-spin" />
+            </div>
+            <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Loading fleet view…</p>
           </div>
         </div>
       }

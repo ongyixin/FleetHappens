@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const syne = Syne({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-syne",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -21,8 +36,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="min-h-screen bg-background">{children}</div>
+      <body className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
+        <div className="min-h-screen bg-[#09090e]">{children}</div>
       </body>
     </html>
   );

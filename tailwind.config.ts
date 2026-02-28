@@ -16,6 +16,11 @@ const config: Config = {
       screens: { "2xl": "1400px" },
     },
     extend: {
+      fontFamily: {
+        display: ["var(--font-syne)", "Syne", "sans-serif"],
+        body:    ["var(--font-dm-sans)", "DM Sans", "sans-serif"],
+        data:    ["var(--font-jetbrains)", "JetBrains Mono", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -50,14 +55,26 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Brand tokens
+        // Obsidian Atlas brand palette
+        atlas: {
+          base:    "#09090e",
+          surface: "#101318",
+          card:    "#17191f",
+          raised:  "#1c202b",
+        },
+        // Semantic accent colors
+        amber:   "#f5a623",
+        cyan:    "#38bdf8",
+        emerald: "#34d399",
+        orange:  "#fb923c",
+        // Legacy fleet tokens (keep for map/status compat)
         fleet: {
-          navy: "#0e2440",   // deep brand navy — headings, brand mark
-          blue: "#1a56db",   // interactive blue — buttons, links, active states
-          teal: "#059669",   // live status green
-          amber: "#f59e0b",  // warm amber — Ace / data highlights
-          orange: "#ea7c1e", // warm orange — story / motion / editorial accent
-          slate: "#374151",  // secondary text
+          navy:   "#0e2440",
+          blue:   "#1a56db",
+          teal:   "#059669",
+          amber:  "#f59e0b",
+          orange: "#ea7c1e",
+          slate:  "#374151",
         },
       },
       borderRadius: {
@@ -78,18 +95,28 @@ const config: Config = {
         },
         "slide-in-right": {
           from: { transform: "translateX(100%)", opacity: "0" },
-          to: { transform: "translateX(0)", opacity: "1" },
+          to:   { transform: "translateX(0)",    opacity: "1" },
         },
         "fade-up": {
-          from: { transform: "translateY(8px)", opacity: "0" },
-          to: { transform: "translateY(0)", opacity: "1" },
+          from: { transform: "translateY(12px)", opacity: "0" },
+          to:   { transform: "translateY(0)",    opacity: "1" },
+        },
+        "fade-in": {
+          from: { opacity: "0" },
+          to:   { opacity: "1" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(245,166,35,0.4)" },
+          "50%":       { boxShadow: "0 0 0 8px rgba(245,166,35,0)" },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "slide-in-right": "slide-in-right 0.28s cubic-bezier(0.16, 1, 0.3, 1)",
-        "fade-up": "fade-up 0.3s ease-out",
+        "accordion-down":   "accordion-down 0.2s ease-out",
+        "accordion-up":     "accordion-up 0.2s ease-out",
+        "slide-in-right":   "slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        "fade-up":          "fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "fade-in":          "fade-in 0.3s ease both",
+        "glow-pulse":       "glow-pulse 2s ease-in-out infinite",
       },
     },
   },

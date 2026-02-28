@@ -1,17 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChevronRight,
-  ChevronUp,
-  ChevronDown,
-  ChevronsUpDown,
-  Circle,
-  Search,
-} from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { ChevronUp, ChevronDown, ChevronsUpDown, Search } from "lucide-react";
 import type { VehicleActivity, VehicleStatus } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 
@@ -23,69 +13,34 @@ interface VehicleActivityTableProps {
   onSelectVehicle: (vehicleId: string, vehicleName: string) => void;
 }
 
-const STATUS_ORDER: Record<VehicleStatus, number> = {
-  active: 0,
-  idle: 1,
-  offline: 2,
+const STATUS_ORDER: Record<VehicleStatus, number> = { active: 0, idle: 1, offline: 2 };
+
+const STATUS_CONFIG: Record<VehicleStatus, { label: string; color: string; bg: string; border: string }> = {
+  active:  { label: "Active",  color: "#34d399", bg: "rgba(52,211,153,0.1)",  border: "rgba(52,211,153,0.25)" },
+  idle:    { label: "Idle",    color: "#f5a623", bg: "rgba(245,166,35,0.1)",  border: "rgba(245,166,35,0.25)" },
+  offline: { label: "Offline", color: "rgba(232,237,248,0.4)", bg: "rgba(255,255,255,0.05)", border: "rgba(255,255,255,0.1)" },
 };
 
-const STATUS_CONFIG: Record<
-  VehicleStatus,
-  { label: string; dotColor: string; badgeClass: string }
-> = {
-  active: {
-    label: "Active",
-    dotColor: "#059669",
-    badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  },
-  idle: {
-    label: "Idle",
-    dotColor: "#f59e0b",
-    badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
-  },
-  offline: {
-    label: "Offline",
-    dotColor: "#9ca3af",
-    badgeClass: "bg-gray-50 text-gray-500 border-gray-200",
-  },
-};
-
-function SortIcon({
-  column,
-  current,
-  direction,
-}: {
-  column: SortKey;
-  current: SortKey;
-  direction: SortDir;
-}) {
-  if (column !== current) {
-    return <ChevronsUpDown className="h-3 w-3 text-muted-foreground/40" />;
-  }
-  return direction === "asc" ? (
-    <ChevronUp className="h-3 w-3 text-fleet-blue" />
-  ) : (
-    <ChevronDown className="h-3 w-3 text-fleet-blue" />
-  );
+function SortIcon({ column, current, direction }: { column: SortKey; current: SortKey; direction: SortDir }) {
+  if (column !== current) return <ChevronsUpDown className="h-3 w-3 text-[rgba(232,237,248,0.25)]" />;
+  return direction === "asc"
+    ? <ChevronUp className="h-3 w-3 text-[#f5a623]" />
+    : <ChevronDown className="h-3 w-3 text-[#f5a623]" />;
 }
 
 export function VehicleActivityTableSkeleton() {
   return (
-    <div className="bg-white border border-border rounded-xl overflow-hidden shadow-[0_1px_3px_rgba(14,36,64,0.04)]">
-      <div className="px-4 py-3 border-b border-border flex items-center gap-3">
-        <Skeleton className="h-8 flex-1 rounded-lg" />
-        <Skeleton className="h-8 w-24 rounded-lg" />
+    <div className="atlas-card rounded-xl overflow-hidden">
+      <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.07)] flex items-center gap-3">
+        <div className="h-8 flex-1 rounded-lg skeleton-shimmer" />
       </div>
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-[rgba(255,255,255,0.05)]">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex items-center gap-4 px-4 py-3">
-            <Skeleton className="h-8 w-8 rounded-lg shrink-0" />
-            <Skeleton className="h-4 w-36 flex-1" />
-            <Skeleton className="h-5 w-16 rounded-full" />
-            <Skeleton className="h-4 w-24 hidden sm:block" />
-            <Skeleton className="h-4 w-16 hidden md:block" />
-            <Skeleton className="h-4 w-12 hidden lg:block" />
-            <Skeleton className="h-4 w-4" />
+            <div className="h-4 w-32 rounded skeleton-shimmer flex-1" />
+            <div className="h-5 w-16 rounded-full skeleton-shimmer" />
+            <div className="h-4 w-20 rounded skeleton-shimmer" />
+            <div className="h-4 w-16 rounded skeleton-shimmer" />
           </div>
         ))}
       </div>
@@ -93,199 +48,111 @@ export function VehicleActivityTableSkeleton() {
   );
 }
 
-export default function VehicleActivityTable({
-  vehicles,
-  onSelectVehicle,
-}: VehicleActivityTableProps) {
-  const [sortKey, setSortKey] = useState<SortKey>("status");
-  const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [search, setSearch] = useState("");
+export default function VehicleActivityTable({ vehicles, onSelectVehicle }: VehicleActivityTableProps) {
+  const [sortKey, setSortKey]   = useState<SortKey>("status");
+  const [sortDir, setSortDir]   = useState<SortDir>("asc");
+  const [searchQuery, setSearchQuery] = useState("");
 
   function handleSort(key: SortKey) {
-    if (key === sortKey) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    } else {
-      setSortKey(key);
-      setSortDir(key === "status" ? "asc" : "desc");
-    }
+    if (key === sortKey) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir(key === "status" ? "asc" : "desc"); }
   }
 
   const filtered = vehicles.filter((v) =>
-    v.vehicle.name.toLowerCase().includes(search.toLowerCase())
+    !searchQuery || v.vehicle.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const sorted = [...filtered].sort((a, b) => {
     let cmp = 0;
-    switch (sortKey) {
-      case "name":
-        cmp = a.vehicle.name.localeCompare(b.vehicle.name);
-        break;
-      case "status":
-        cmp = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
-        break;
-      case "lastTrip":
-        cmp =
-          (a.lastTripEnd ? new Date(a.lastTripEnd).getTime() : 0) -
-          (b.lastTripEnd ? new Date(b.lastTripEnd).getTime() : 0);
-        break;
-      case "distance":
-        cmp = (a.distanceTodayKm ?? 0) - (b.distanceTodayKm ?? 0);
-        break;
-      case "trips":
-        cmp = (a.tripCountToday ?? 0) - (b.tripCountToday ?? 0);
-        break;
-    }
+    if (sortKey === "name")     cmp = a.vehicle.name.localeCompare(b.vehicle.name);
+    if (sortKey === "status")   cmp = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+    if (sortKey === "lastTrip") cmp = new Date(a.lastTripEnd ?? 0).getTime() - new Date(b.lastTripEnd ?? 0).getTime();
+    if (sortKey === "distance") cmp = (a.distanceTodayKm ?? 0) - (b.distanceTodayKm ?? 0);
+    if (sortKey === "trips")    cmp = (a.tripCountToday ?? 0) - (b.tripCountToday ?? 0);
     return sortDir === "asc" ? cmp : -cmp;
   });
 
-  const cols: { key: SortKey; label: string; align?: "right"; hidden?: string }[] = [
-    { key: "name", label: "Vehicle" },
-    { key: "status", label: "Status" },
-    { key: "lastTrip", label: "Last Trip", hidden: "hidden sm:table-cell" },
-    { key: "distance", label: "Distance (today)", align: "right", hidden: "hidden md:table-cell" },
-    { key: "trips", label: "Trips (today)", align: "right", hidden: "hidden lg:table-cell" },
+  const cols: { key: SortKey; label: string; align?: "right" }[] = [
+    { key: "name",     label: "Vehicle" },
+    { key: "status",   label: "Status" },
+    { key: "lastTrip", label: "Last Seen", align: "right" },
+    { key: "distance", label: "Distance (today)", align: "right" },
+    { key: "trips",    label: "Trips (today)", align: "right" },
   ];
 
-  const statusCounts = vehicles.reduce(
-    (acc, v) => {
-      acc[v.status] = (acc[v.status] ?? 0) + 1;
-      return acc;
-    },
-    {} as Record<VehicleStatus, number>
-  );
-
   return (
-    <div className="bg-white border border-border rounded-xl overflow-hidden shadow-[0_1px_3px_rgba(14,36,64,0.04)]">
-      {/* Table toolbar */}
-      <div className="px-4 py-3 border-b border-border flex items-center gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+    <div className="atlas-card rounded-xl overflow-hidden">
+      {/* Search toolbar */}
+      <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.07)] flex items-center gap-3">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[rgba(232,237,248,0.3)]" />
           <input
             type="text"
             placeholder="Search vehicles…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 text-sm border border-border rounded-lg bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-fleet-blue/40"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-8 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-lg pl-9 pr-3 text-xs font-body text-white placeholder:text-[rgba(232,237,248,0.3)] focus:outline-none focus:border-[rgba(245,166,35,0.4)] focus:bg-[rgba(245,166,35,0.04)] transition-all"
           />
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          {(["active", "idle", "offline"] as VehicleStatus[]).map((s) => (
-            <div key={s} className="flex items-center gap-1 text-xs">
-              <Circle
-                className="h-2 w-2 fill-current"
-                style={{ color: STATUS_CONFIG[s].dotColor }}
-              />
-              <span className="text-muted-foreground tabular-nums">
-                {statusCounts[s] ?? 0}
-              </span>
-            </div>
-          ))}
-        </div>
+        <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-data shrink-0">
+          {filtered.length} vehicles
+        </span>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border bg-muted/30">
+            <tr className="border-b border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)]">
               {cols.map((col) => (
-                <th
-                  key={col.key}
-                  className={cn(
-                    "px-4 py-3",
-                    col.align === "right" ? "text-right" : "text-left",
-                    col.hidden
-                  )}
-                >
+                <th key={col.key} className={`px-4 py-3 ${col.align === "right" ? "text-right" : "text-left"}`}>
                   <button
                     onClick={() => handleSort(col.key)}
-                    className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                    className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.35)] hover:text-[rgba(232,237,248,0.65)] transition-colors font-body"
                   >
                     {col.label}
-                    <SortIcon
-                      column={col.key}
-                      current={sortKey}
-                      direction={sortDir}
-                    />
+                    <SortIcon column={col.key} current={sortKey} direction={sortDir} />
                   </button>
                 </th>
               ))}
-              <th className="px-4 py-3 w-8" />
+              <th className="px-4 py-3" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
-            {sorted.length === 0 && (
-              <tr>
-                <td
-                  colSpan={cols.length + 1}
-                  className="px-4 py-8 text-center text-sm text-muted-foreground"
-                >
-                  No vehicles found
-                </td>
-              </tr>
-            )}
+          <tbody className="divide-y divide-[rgba(255,255,255,0.05)]">
             {sorted.map((v) => {
-              const cfg = STATUS_CONFIG[v.status];
-              const lastSeen = v.lastTripEnd
-                ? formatDistanceToNow(new Date(v.lastTripEnd), {
-                    addSuffix: true,
-                  })
-                : v.vehicle.lastCommunication
-                ? formatDistanceToNow(new Date(v.vehicle.lastCommunication), {
-                    addSuffix: true,
-                  })
-                : "—";
-
+              const sc = STATUS_CONFIG[v.status];
               return (
                 <tr
                   key={v.vehicle.id}
-                  onClick={() =>
-                    onSelectVehicle(v.vehicle.id, v.vehicle.name)
-                  }
-                  className="hover:bg-muted/20 transition-colors cursor-pointer group"
+                  onClick={() => onSelectVehicle(v.vehicle.id, v.vehicle.name)}
+                  className="hover:bg-[rgba(255,255,255,0.03)] transition-colors cursor-pointer group"
                 >
-                  {/* Name */}
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-2.5">
-                      <div
-                        className="h-2 w-2 rounded-full shrink-0"
-                        style={{ backgroundColor: cfg.dotColor }}
-                      />
-                      <span className="font-semibold text-foreground truncate max-w-[180px]">
-                        {v.vehicle.name}
-                      </span>
-                    </div>
+                    <span className="font-body font-semibold text-white text-[13px]">{v.vehicle.name}</span>
+                    {v.vehicle.deviceType && (
+                      <p className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">{v.vehicle.deviceType}</p>
+                    )}
                   </td>
-                  {/* Status */}
                   <td className="px-4 py-3">
-                    <Badge
-                      className={cn(
-                        "text-xs font-medium border",
-                        cfg.badgeClass
-                      )}
-                    >
-                      {cfg.label}
-                    </Badge>
+                    <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold font-body"
+                      style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.border}` }}>
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: sc.color }} />
+                      {sc.label}
+                    </span>
                   </td>
-                  {/* Last trip */}
-                  <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">
-                    {lastSeen}
+                  <td className="px-4 py-3 text-right text-[11px] font-data text-[rgba(232,237,248,0.45)]">
+                    {v.lastTripEnd ? formatDistanceToNow(new Date(v.lastTripEnd), { addSuffix: true }) : "—"}
                   </td>
-                  {/* Distance */}
-                  <td className="px-4 py-3 text-right tabular-nums font-medium hidden md:table-cell">
-                    {v.distanceTodayKm != null && v.distanceTodayKm > 0
-                      ? `${v.distanceTodayKm} km`
-                      : <span className="text-muted-foreground">—</span>}
+                  <td className="px-4 py-3 text-right font-data tabular-nums font-semibold text-white text-[12px]">
+                    {v.distanceTodayKm != null ? `${v.distanceTodayKm.toLocaleString()} km` : "—"}
                   </td>
-                  {/* Trip count */}
-                  <td className="px-4 py-3 text-right tabular-nums text-muted-foreground hidden lg:table-cell">
-                    {v.tripCountToday != null && v.tripCountToday > 0
-                      ? v.tripCountToday
-                      : "—"}
+                  <td className="px-4 py-3 text-right font-data tabular-nums text-[rgba(232,237,248,0.55)] text-[12px]">
+                    {v.tripCountToday != null ? v.tripCountToday.toLocaleString() : "—"}
                   </td>
-                  {/* Arrow */}
-                  <td className="px-4 py-3">
-                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-fleet-blue transition-colors" />
+                  <td className="px-4 py-3 text-right">
+                    <svg className="h-4 w-4 text-[rgba(232,237,248,0.2)] group-hover:text-[#f5a623] transition-colors ml-auto"
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
                   </td>
                 </tr>
               );

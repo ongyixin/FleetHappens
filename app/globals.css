@@ -4,49 +4,51 @@
 
 @layer base {
   :root {
-    /* Warm off-white base — operational dashboard feel */
-    --background: 34 18% 96%;
-    --foreground: 222 47% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 10%;
-    --primary: 215 78% 46%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 34 10% 93%;
-    --secondary-foreground: 222 47% 10%;
-    --muted: 34 10% 93%;
-    --muted-foreground: 215 14% 47%;
-    --accent: 34 10% 93%;
-    --accent-foreground: 222 47% 10%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 30 8% 90%;
-    --input: 30 8% 90%;
-    --ring: 215 78% 46%;
+    /* Obsidian Atlas — dark cartographic design system */
+    --background: 228 25% 5%;
+    --foreground: 220 30% 93%;
+    --card: 226 22% 8%;
+    --card-foreground: 220 30% 93%;
+    --popover: 226 22% 8%;
+    --popover-foreground: 220 30% 93%;
+    --primary: 37 91% 55%;
+    --primary-foreground: 228 25% 5%;
+    --secondary: 226 18% 14%;
+    --secondary-foreground: 220 30% 78%;
+    --muted: 226 18% 14%;
+    --muted-foreground: 220 18% 52%;
+    --accent: 226 18% 14%;
+    --accent-foreground: 220 30% 93%;
+    --destructive: 0 62% 60%;
+    --destructive-foreground: 220 30% 93%;
+    --border: 226 18% 13%;
+    --input: 226 18% 13%;
+    --ring: 37 91% 55%;
     --radius: 0.625rem;
-  }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    /* Brand tokens */
+    --amber: #f5a623;
+    --cyan: #38bdf8;
+    --emerald: #34d399;
+    --orange: #fb923c;
+    --red: #f87171;
+
+    /* Surface layers */
+    --surface-0: #09090e;
+    --surface-1: #101318;
+    --surface-2: #171b24;
+    --surface-3: #1e2330;
+
+    /* Text */
+    --text-primary: #e8edf8;
+    --text-secondary: rgba(232, 237, 248, 0.62);
+    --text-muted: rgba(232, 237, 248, 0.38);
+    --text-faint: rgba(232, 237, 248, 0.18);
+
+    /* Borders */
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --border-default: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -54,48 +56,216 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--surface-0);
+    color: var(--text-primary);
+    font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-syne), 'Syne', sans-serif;
   }
 }
 
-/* Leaflet map container — must have explicit height */
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+
+/* ── Leaflet map container ─────────────────────────────────────────────────── */
 .leaflet-container {
   height: 100%;
   width: 100%;
   z-index: 1;
+  border-radius: inherit;
 }
 
-/* Comic panel image enrichment shimmer */
+/* ── Animations ─────────────────────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes slide-in-bottom {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
 @keyframes shimmer {
-  to { transform: translateX(200%); }
+  from { transform: translateX(-200%); }
+  to   { transform: translateX(200%);  }
 }
 
-/* Stop marker pulse animation */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(245,166,35,0); }
+}
+
 @keyframes stop-pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.85; }
-}
-.stop-marker-pulse {
-  animation: stop-pulse 2s ease-in-out infinite;
+  0%, 100% { transform: scale(1);    opacity: 1;    }
+  50%       { transform: scale(1.15); opacity: 0.85; }
 }
 
-/* Smooth panel open */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes scan-line {
+  0%   { top: 0%;   opacity: 0.6; }
+  90%  { top: 100%; opacity: 0.6; }
+  100% { top: 100%; opacity: 0;   }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Animation utilities ────────────────────────────────────────────────────── */
+.animate-fade-up    { animation: fade-up    0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in    { animation: fade-in    0.3s ease both; }
+.animate-slide-in-right { animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-slide-in-bottom { animation: slide-in-bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+.animate-stop-pulse { animation: stop-pulse 2s ease-in-out infinite; }
+.animate-spin-slow  { animation: spin-slow  3s linear infinite; }
+.animate-count-up   { animation: count-up   0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Staggered entrance — add to list items */
+.stagger > *:nth-child(1)  { animation-delay: 0ms; }
+.stagger > *:nth-child(2)  { animation-delay: 60ms; }
+.stagger > *:nth-child(3)  { animation-delay: 120ms; }
+.stagger > *:nth-child(4)  { animation-delay: 180ms; }
+.stagger > *:nth-child(5)  { animation-delay: 240ms; }
+.stagger > *:nth-child(6)  { animation-delay: 300ms; }
+.stagger > *:nth-child(7)  { animation-delay: 360ms; }
+.stagger > *:nth-child(8)  { animation-delay: 420ms; }
+.stagger > *:nth-child(n+9) { animation-delay: 480ms; }
+
+/* ── Surface components ─────────────────────────────────────────────────────── */
+
+/* Subtle grid/dot texture overlay */
+.atlas-grid-bg {
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Card with inset top highlight */
+.atlas-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: calc(var(--radius) + 2px);
+}
+
+.atlas-card-raised {
+  background: var(--surface-2);
+  border: 1px solid var(--border-default);
+  border-radius: calc(var(--radius) + 2px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* Amber accent border */
+.atlas-amber-border {
+  border-color: rgba(245,166,35,0.35);
+  box-shadow: 0 0 0 1px rgba(245,166,35,0.15), inset 0 0 24px rgba(245,166,35,0.04);
+}
+
+/* Loading skeleton shimmer */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* ── Typography utilities ───────────────────────────────────────────────────── */
+.font-display   { font-family: var(--font-syne), 'Syne', sans-serif; }
+.font-body      { font-family: var(--font-dm-sans), 'DM Sans', sans-serif; }
+.font-data      { font-family: var(--font-jetbrains), 'JetBrains Mono', monospace; }
+
+/* ── Noise texture ─────────────────────────────────────────────────────────── */
+.atlas-noise {
+  position: relative;
+}
+.atlas-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* ── Panel open animation ───────────────────────────────────────────────────── */
 .panel-open {
-  animation: slide-in-right 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Card elevation system */
-.card-base {
-  background: white;
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  box-shadow: 0 1px 3px rgba(14, 36, 64, 0.04), 0 1px 2px rgba(14, 36, 64, 0.03);
+/* ── Amber glow button ──────────────────────────────────────────────────────── */
+.btn-amber {
+  background: var(--amber);
+  color: #09090e;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  box-shadow: 0 4px 16px rgba(245,166,35,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: all 0.15s ease;
+}
+.btn-amber:hover {
+  background: #f9b93a;
+  box-shadow: 0 6px 20px rgba(245,166,35,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+  transform: translateY(-1px);
+}
+.btn-amber:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(245,166,35,0.3);
+}
+.btn-amber:disabled {
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
 }
 
-.card-raised {
-  background: white;
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  box-shadow: 0 4px 12px rgba(14, 36, 64, 0.06), 0 2px 4px rgba(14, 36, 64, 0.04);
+/* ── Ghost button ───────────────────────────────────────────────────────────── */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s ease;
 }
+.btn-ghost:hover {
+  border-color: var(--border-strong);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-primary);
+}
+
+/* ── Status dots ────────────────────────────────────────────────────────────── */
+.status-active  { background: #34d399; box-shadow: 0 0 0 3px rgba(52,211,153,0.2); }
+.status-idle    { background: #f5a623; box-shadow: 0 0 0 3px rgba(245,166,35,0.2); }
+.status-offline { background: rgba(255,255,255,0.25); }
