@@ -1,0 +1,108 @@
+{
+  "group": {
+    "id": "g-south",
+    "name": "South Region",
+    "vehicleCount": 9,
+    "color": "#10b981"
+  },
+  "vehicles": [
+    {
+      "vehicle": { "id": "s1", "name": "Truck 14 — Ahmed", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:51:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:38:00Z",
+      "distanceTodayKm": 174,
+      "tripCountToday": 5,
+      "lastPosition": { "lat": 37.3382, "lon": -121.8863 }
+    },
+    {
+      "vehicle": { "id": "s2", "name": "Van 13 — Santos", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:44:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:30:00Z",
+      "distanceTodayKm": 158,
+      "tripCountToday": 6,
+      "lastPosition": { "lat": 37.3541, "lon": -121.9552 }
+    },
+    {
+      "vehicle": { "id": "s3", "name": "Truck 16 — Park", "deviceType": "GO9", "lastCommunication": "2026-02-28T12:58:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T12:45:00Z",
+      "distanceTodayKm": 139,
+      "tripCountToday": 4,
+      "lastPosition": { "lat": 37.4419, "lon": -122.1430 }
+    },
+    {
+      "vehicle": { "id": "s4", "name": "Van 15 — Williams", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:12:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:00:00Z",
+      "distanceTodayKm": 122,
+      "tripCountToday": 4,
+      "lastPosition": { "lat": 37.4323, "lon": -121.8996 }
+    },
+    {
+      "vehicle": { "id": "s5", "name": "Truck 18 — Hassan", "deviceType": "GO9", "lastCommunication": "2026-02-28T11:37:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T11:22:00Z",
+      "distanceTodayKm": 108,
+      "tripCountToday": 3,
+      "lastPosition": { "lat": 37.3688, "lon": -121.9250 }
+    },
+    {
+      "vehicle": { "id": "s6", "name": "Van 17 — Reyes", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:28:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:15:00Z",
+      "distanceTodayKm": 93,
+      "tripCountToday": 3,
+      "lastPosition": { "lat": 37.4000, "lon": -121.9750 }
+    },
+    {
+      "vehicle": { "id": "s7", "name": "Truck 20 — Tanaka", "deviceType": "GO9", "lastCommunication": "2026-02-28T10:55:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T10:40:00Z",
+      "distanceTodayKm": 77,
+      "tripCountToday": 2,
+      "lastPosition": { "lat": 37.3200, "lon": -121.9400 }
+    },
+    {
+      "vehicle": { "id": "s8", "name": "Van 19 — Miller", "deviceType": "GO9", "lastCommunication": "2026-02-28T09:22:00Z" },
+      "status": "idle",
+      "lastTripEnd": "2026-02-28T09:10:00Z",
+      "distanceTodayKm": 52,
+      "tripCountToday": 2,
+      "lastPosition": { "lat": 37.3750, "lon": -122.0000 }
+    },
+    {
+      "vehicle": { "id": "s9", "name": "Truck 22 — Kovacs", "deviceType": "GO9", "lastCommunication": "2026-02-27T18:05:00Z" },
+      "status": "offline",
+      "lastTripEnd": "2026-02-27T17:52:00Z",
+      "distanceTodayKm": 0,
+      "tripCountToday": 0,
+      "lastPosition": { "lat": 37.4100, "lon": -122.0500 }
+    }
+  ],
+  "outliers": {
+    "topDistance": {
+      "vehicle": { "id": "s1", "name": "Truck 14 — Ahmed", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:51:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:38:00Z",
+      "distanceTodayKm": 174,
+      "tripCountToday": 5,
+      "lastPosition": { "lat": 37.3382, "lon": -121.8863 }
+    },
+    "topIdle": {
+      "vehicle": { "id": "s5", "name": "Truck 18 — Hassan", "deviceType": "GO9", "lastCommunication": "2026-02-28T11:37:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T11:22:00Z",
+      "distanceTodayKm": 108,
+      "tripCountToday": 3,
+      "lastPosition": { "lat": 37.3688, "lon": -121.9250 }
+    },
+    "topTrips": {
+      "vehicle": { "id": "s2", "name": "Van 13 — Santos", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:44:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:30:00Z",
+      "distanceTodayKm": 158,
+      "tripCountToday": 6,
+      "lastPosition": { "lat": 37.3541, "lon": -121.9552 }
+    }
+  }
+}

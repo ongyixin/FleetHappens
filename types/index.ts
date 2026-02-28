@@ -391,3 +391,67 @@ export interface FleetPulseDetail {
     topTrips?: VehicleActivity;
   };
 }
+
+// ─── AI Assistant types ────────────────────────────────────────────────────────
+
+/** Current page context passed to the assistant with every query. */
+export interface AssistantContext {
+  currentPage: "home" | "pulse" | "fleet-detail" | "dashboard" | "story" | "features";
+  currentFleetId?: string;
+  currentFleetName?: string;
+  currentDeviceId?: string;
+  currentDeviceName?: string;
+  currentTripId?: string;
+}
+
+/** Classified intent from the LLM or keyword fallback router. */
+export interface AssistantIntent {
+  intent: "navigate" | "lookup" | "explain" | "unknown";
+  entity?: {
+    type: "fleet" | "vehicle" | "trip" | "page";
+    /** Raw name extracted from the query (before entity resolution). */
+    name: string;
+  };
+  /** The metric the user is asking about. */
+  metric?: "distance" | "idle" | "trips" | "active" | "status" | "speed";
+  /** Relative timeframe extracted from the query. */
+  timeframe?: string;
+  /** Target page for navigate intent. */
+  targetPage?: "home" | "pulse" | "fleet-detail" | "dashboard" | "story" | "features";
+}
+
+/** Navigation action the assistant can perform. */
+export interface AssistantAction {
+  type: "navigate";
+  url: string;
+  label: string;
+}
+
+/** Structured data snippet optionally included in the response. */
+export interface AssistantDataSnippet {
+  metric: string;
+  value: string | number;
+  unit?: string;
+  /** Optional secondary values (e.g. "of total") */
+  context?: string;
+}
+
+/** Full response returned by POST /api/assistant/query. */
+export interface AssistantResponse {
+  /** The natural-language answer to show in the palette. */
+  text: string;
+  /** Optional navigation action — shown as a button in the result card. */
+  action?: AssistantAction;
+  /** Optional structured data snippet for quick-scan reading. */
+  data?: AssistantDataSnippet;
+  /** Follow-up query suggestions shown below the result. */
+  suggestions?: string[];
+  /** True if the response came from the keyword fallback (LLM was unavailable). */
+  fromFallback?: boolean;
+}
+
+/** Request body accepted by POST /api/assistant/query. */
+export interface AssistantQueryRequest {
+  query: string;
+  context?: AssistantContext;
+}

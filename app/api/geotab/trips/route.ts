@@ -88,7 +88,22 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const explicitFromDate = searchParams.get("fromDate");
   const toDate = searchParams.get("toDate") ?? new Date().toISOString();
 
-  // Resolve device name once (non-blocking)
+  // Demo mode: skip all live calls — serve file fallback immediately.
+  if (process.env.PULSE_DEMO_GROUPS === "true") {
+    const fallbackRaw =
+      loadTripsFallback(`trips-${deviceId}.json`, deviceId, deviceId) ??
+      loadTripsFallback("trips.json", deviceId, deviceId) ??
+      [];
+    const fallbackTrips = rebaseIfStale(fallbackRaw);
+    return NextResponse.json({
+      ok: true,
+      data: fallbackTrips,
+      fromCache: true,
+      dateRangeDays: 365,
+    } satisfies ApiResponse<TripSummary[]>);
+  }
+
+  // Resolve device name for normalisation (non-blocking live lookup)
   let deviceName = deviceId;
   try {
     const devices: GeotabDevice[] = await getDevices();

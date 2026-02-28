@@ -1,16 +1,16 @@
 {
   "id": "fleet-route-patterns-fallback",
-  "question": "What are the top 5 most common origin-destination pairs in the last 14 days?",
+  "question": "What are the top 5 most repeated origin-destination pairs in the last 14 days?",
   "columns": ["origin", "destination", "trip_count", "avg_distance_km", "avg_duration_minutes"],
   "rows": [
-    { "origin": "Distribution Center A", "destination": "Client Site — Embarcadero", "trip_count": 34, "avg_distance_km": 18.2, "avg_duration_minutes": 32 },
-    { "origin": "Warehouse North",       "destination": "Distribution Center A",     "trip_count": 28, "avg_distance_km": 24.7, "avg_duration_minutes": 41 },
-    { "origin": "Regional Office",       "destination": "Customer Site — SoMa",      "trip_count": 21, "avg_distance_km": 9.4,  "avg_duration_minutes": 22 },
-    { "origin": "Staging Yard East",     "destination": "Airport Cargo Terminal",    "trip_count": 17, "avg_distance_km": 31.1, "avg_duration_minutes": 48 },
-    { "origin": "Service Center B",      "destination": "Warehouse North",           "trip_count": 14, "avg_distance_km": 12.8, "avg_duration_minutes": 27 }
+    { "origin": "Oakland Distribution Center", "destination": "SF Embarcadero Hub",    "trip_count": 89, "avg_distance_km": 14.3, "avg_duration_minutes": 28 },
+    { "origin": "Oakland Distribution Center", "destination": "Hayward Logistics Park", "trip_count": 67, "avg_distance_km": 22.1, "avg_duration_minutes": 38 },
+    { "origin": "Fremont Warehouse",           "destination": "San Jose Tech Campus",   "trip_count": 54, "avg_distance_km": 31.7, "avg_duration_minutes": 44 },
+    { "origin": "SF Embarcadero Hub",          "destination": "South SF Depot",         "trip_count": 41, "avg_distance_km": 12.8, "avg_duration_minutes": 24 },
+    { "origin": "Milpitas Cold Storage",       "destination": "Palo Alto Office Park",  "trip_count": 28, "avg_distance_km": 19.4, "avg_duration_minutes": 31 }
   ],
-  "reasoning": "Top origin-destination pairs by trip frequency from Trip table, last 14 days.",
-  "queriedAt": "2026-02-28T00:00:00Z",
+  "reasoning": "The Oakland → SF Embarcadero corridor is the fleet's busiest lane at 89 runs in 14 days — averaging 6.4 trips per day. The Fremont → San Jose run at 31.7 km average is the longest routine corridor; consolidating loads here could reduce per-km cost by an estimated 18%. The Milpitas → Palo Alto route (28 trips) shows opportunity for scheduled batching — 85% of those runs leave within a 40-minute window each morning.",
+  "queriedAt": "2026-02-28T06:00:00Z",
   "totalRowCount": 5,
   "fromCache": true
 }

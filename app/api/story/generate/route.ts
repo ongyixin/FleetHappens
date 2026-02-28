@@ -14,6 +14,7 @@ import { deriveStoryBeats } from "@/lib/story/beats";
 import { buildStoryPrompt } from "@/lib/story/prompts";
 import { parseLLMOutput } from "@/lib/story/validate";
 import { ComicToneSchema } from "@/lib/story/schema";
+import { bqGetStory, bqSetStory, isBigQueryEnabled } from "@/lib/bigquery/client";
 import type { ComicStory, ComicPanel, ComicTone, TripSummary, StopContext, BreadcrumbPoint } from "@/types";
 
 // ─── Request schema ───────────────────────────────────────────────────────────
@@ -49,8 +50,13 @@ const RequestSchema = z.object({
 });
 
 // ─── LLM caller ───────────────────────────────────────────────────────────────
+// Provider priority: Vertex AI Gemini > Claude > OpenAI
+// JSON mode is used wherever possible to avoid markdown-wrapping issues.
 
 async function callLLM(prompt: string): Promise<string> {
+  if (process.env.GOOGLE_CLOUD_PROJECT) {
+    return callGemini(prompt);
+  }
   if (process.env.ANTHROPIC_API_KEY) {
     return callAnthropic(prompt);
   }
@@ -58,8 +64,33 @@ async function callLLM(prompt: string): Promise<string> {
     return callOpenAI(prompt);
   }
   throw new Error(
-    "No LLM provider configured. Set ANTHROPIC_API_KEY or OPENAI_API_KEY in .env."
+    "No LLM provider configured. Set GOOGLE_CLOUD_PROJECT (Vertex AI), ANTHROPIC_API_KEY, or OPENAI_API_KEY in .env."
   );
+}
+
+async function callGemini(prompt: string): Promise<string> {
+  const { VertexAI } = await import("@google-cloud/vertexai");
+
+  const project = process.env.GOOGLE_CLOUD_PROJECT!;
+  const location = process.env.GOOGLE_CLOUD_LOCATION ?? "us-central1";
+
+  const vertexAI = new VertexAI({ project, location });
+  const model = vertexAI.getGenerativeModel({
+    model: "gemini-1.5-pro",
+    generationConfig: {
+      maxOutputTokens: 1024,
+      temperature: 0.7,
+      responseMimeType: "application/json",
+    },
+  });
+
+  const result = await model.generateContent({
+    contents: [{ role: "user", parts: [{ text: prompt }] }],
+  });
+
+  const text = result.response.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+  if (!text) throw new Error("Vertex AI Gemini returned empty response");
+  return text;
 }
 
 async function callAnthropic(prompt: string): Promise<string> {
@@ -179,7 +210,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     breadcrumbs = [],
   } = input;
 
-  // 2. Derive the 4 story beats from structured trip data
+  // 2a. Check BigQuery for a persisted story before calling the LLM
+  if (isBigQueryEnabled()) {
+    const cached = await bqGetStory<ComicStory>(trip.id, tone);
+    if (cached) {
+      return NextResponse.json({ data: { ...cached, fromCache: true } });
+    }
+  }
+
+  // 2b. Derive the 4 story beats from structured trip data
   const beats = deriveStoryBeats({
     trip: trip as TripSummary,
     startLocationName,
@@ -219,6 +258,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       panels,
       createdAt: new Date().toISOString(),
     };
+
+    // Persist the generated story to BigQuery (non-blocking)
+    if (isBigQueryEnabled()) {
+      bqSetStory(trip.id, tone, story).catch(() => {});
+    }
   } catch (llmErr) {
     console.error("[story/generate] LLM failed, using fallback:", llmErr);
 

@@ -86,7 +86,7 @@ function DashboardContent() {
       if (!selectedTrip) return;
       setBreadcrumbsLoading(true);
       try {
-        const res  = await fetch(`/api/geotab/logs?deviceId=${selectedTrip.deviceId}&from=${selectedTrip.start}&to=${selectedTrip.stop}`);
+        const res  = await fetch(`/api/geotab/logs?deviceId=${selectedTrip.deviceId}&fromDate=${selectedTrip.start}&toDate=${selectedTrip.stop}`);
         const data = (await res.json()) as ApiResponse<BreadcrumbPoint[]>;
         if (data.ok) setBreadcrumbs(data.data); else throw new Error(data.error);
       } catch {

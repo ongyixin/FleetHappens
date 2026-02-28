@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
+import { CommandPalette, CommandPaletteTrigger } from "@/components/CommandPalette";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -37,7 +39,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
-        <div className="min-h-screen bg-[#09090e]">{children}</div>
+        <div className="min-h-screen bg-[#09090e]">
+          {children}
+          {/* Global command palette — Cmd+K from any page */}
+          <Suspense fallback={null}>
+            <CommandPalette />
+            <CommandPaletteTrigger />
+          </Suspense>
+        </div>
       </body>
     </html>
   );

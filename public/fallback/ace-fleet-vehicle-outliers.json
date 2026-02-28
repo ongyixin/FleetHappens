@@ -1,16 +1,16 @@
 {
   "id": "fleet-vehicle-outliers-fallback",
-  "question": "What are the top 5 vehicles by total distance in the last 7 days?",
+  "question": "Which vehicles are statistical outliers by distance, idle time, or trip count this week?",
   "columns": ["device_name", "total_distance_km", "trip_count", "avg_idle_pct"],
   "rows": [
-    { "device_name": "Fleet Van 01",   "total_distance_km": 980, "trip_count": 28, "avg_idle_pct": 12.1 },
-    { "device_name": "Fleet Truck 02", "total_distance_km": 842, "trip_count": 21, "avg_idle_pct": 15.4 },
-    { "device_name": "Fleet Car 03",   "total_distance_km": 710, "trip_count": 35, "avg_idle_pct": 8.7  },
-    { "device_name": "Fleet Van 04",   "total_distance_km": 634, "trip_count": 19, "avg_idle_pct": 18.2 },
-    { "device_name": "Fleet Car 05",   "total_distance_km": 521, "trip_count": 24, "avg_idle_pct": 10.9 }
+    { "device_name": "Truck 04 — Patel",     "total_distance_km": 980, "trip_count": 28, "avg_idle_pct": 11.3 },
+    { "device_name": "Van 05 — Nguyen",      "total_distance_km": 842, "trip_count": 34, "avg_idle_pct": 8.7  },
+    { "device_name": "Truck 02 — Chen",      "total_distance_km": 791, "trip_count": 22, "avg_idle_pct": 13.1 },
+    { "device_name": "Truck 06 — Robinson",  "total_distance_km": 634, "trip_count": 18, "avg_idle_pct": 27.4 },
+    { "device_name": "Van 01 — Martinez",    "total_distance_km": 521, "trip_count": 24, "avg_idle_pct": 9.6  }
   ],
-  "reasoning": "Top 5 vehicles by total_distance_km in the last 7 days from VehicleKPI_Daily.",
-  "queriedAt": "2026-02-28T00:00:00Z",
+  "reasoning": "Patel (Truck 04) leads by total distance at 980 km — 16% above the next-highest vehicle, suggesting a longer daily route corridor. Nguyen (Van 05) has the most trips (34) with the lowest idle rate (8.7%), pointing to tight urban delivery loops with minimal wait time. Robinson (Truck 06) is the fleet's idle outlier at 27.4% — nearly 2× the fleet average of 14.2% — likely driven by extended loading dock waits at the Fremont Warehouse. Consider re-routing Robinson to a site with a dedicated unloading bay.",
+  "queriedAt": "2026-02-28T06:00:00Z",
   "totalRowCount": 5,
   "fromCache": true
 }

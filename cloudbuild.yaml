@@ -1,0 +1,63 @@
+# Cloud Build pipeline: build image → push to Artifact Registry → deploy to Cloud Run
+#
+# Trigger this manually or connect to a GitHub repo in Cloud Build.
+#
+# Required substitutions (set in the trigger or pass with --substitutions):
+#   _REGION      — GCP region, e.g. us-central1
+#   _SERVICE     — Cloud Run service name, e.g. fleethappens
+#   _REPO        — Artifact Registry repo name, e.g. fleethappens
+#
+# Secrets are stored in Secret Manager and referenced in the Cloud Run deploy step.
+# Add them once with:
+#   gcloud secrets create GEOTAB_PASSWORD --data-file=-
+
+substitutions:
+  _REGION: us-central1
+  _SERVICE: fleethappens
+  _REPO: fleethappens
+  # After the first deploy, set this to the actual Cloud Run URL in the trigger substitutions.
+  # Format: https://<service>-<hash>-uc.a.run.app
+  _APP_URL: ""
+
+steps:
+  # 1. Build the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - build
+      - -t
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA"
+      - -t
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest"
+      - .
+
+  # 2. Push to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - push
+      - "--all-tags"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}"
+
+  # 3. Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - "${_SERVICE}"
+      - "--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA"
+      - "--region=${_REGION}"
+      - "--platform=managed"
+      - "--allow-unauthenticated"
+      - "--memory=512Mi"
+      - "--cpu=1"
+      - "--min-instances=0"
+      - "--max-instances=10"
+      - "--set-env-vars=GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=${_REGION},BIGQUERY_DATASET=fleethappens,PULSE_DEMO_GROUPS=false"
+      - "--set-secrets=GEOTAB_DATABASE=GEOTAB_DATABASE:latest,GEOTAB_USERNAME=GEOTAB_USERNAME:latest,GEOTAB_PASSWORD=GEOTAB_PASSWORD:latest,GEOTAB_SERVER=GEOTAB_SERVER:latest,GOOGLE_MAPS_API_KEY=GOOGLE_MAPS_API_KEY:latest"
+
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest"
+
+options:
+  logging: CLOUD_LOGGING_ONLY

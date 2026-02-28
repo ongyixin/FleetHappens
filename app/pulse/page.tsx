@@ -239,7 +239,9 @@ function PulsePageContent() {
               vehicles={mapVehicles}
               groups={mapGroups}
               onVehicleClick={(vehicleId) => {
-                if (summary) router.push(`/dashboard?deviceId=${vehicleId}`);
+                const vehicle = mapVehicles.find((v) => v.vehicle.id === vehicleId);
+                const name = vehicle?.vehicle.name ?? vehicleId;
+                router.push(`/dashboard?deviceId=${vehicleId}&deviceName=${encodeURIComponent(name)}`);
               }}
             />
           </div>

@@ -3,11 +3,63 @@
 **Role:** Tech Lead / Orchestrator Agent  
 **Last updated:** 2026-02-28  
 **Project:** FleetHappens — Fleet Route Intelligence, Context Narration & Trip Storytelling  
-**Stack:** Next.js 14 App Router · TypeScript · Tailwind CSS · shadcn/ui · Leaflet · Geotab APIs · Claude/OpenAI
+**Stack:** Next.js 14 App Router · TypeScript · Tailwind CSS · shadcn/ui · Leaflet · Geotab APIs · **Vertex AI Gemini** · Cloud Run · BigQuery
 
 ---
 
 ## 1. Repo Structure
+
+## Google Cloud Integration (3 Pillars)
+
+### Pillar 1 — Vertex AI Gemini (Primary LLM)
+
+Provider priority: **Gemini > Claude > OpenAI**
+
+- `lib/llm/client.ts` — `generateText()` uses `@google-cloud/vertexai` when `GOOGLE_CLOUD_PROJECT` is set
+  - `gemini-1.5-pro` for story generation (quality, JSON mode)
+  - `gemini-2.0-flash-001` for context briefings and assistant (speed)
+  - Falls back to Claude then OpenAI when `GOOGLE_CLOUD_PROJECT` is not set
+- `app/api/story/generate/route.ts` — `callGemini()` is the first-priority LLM; uses `responseMimeType: "application/json"` to eliminate markdown-stripping
+- Auth: Application Default Credentials (local dev); service account on Cloud Run
+
+### Pillar 2 — Cloud Run Deployment
+
+- `Dockerfile` — Multi-stage build using Next.js standalone output; runs as non-root `nextjs` user
+- `.dockerignore` — Excludes secrets, build artifacts, dev tooling
+- `cloudbuild.yaml` — Cloud Build pipeline: build → Artifact Registry → Cloud Run deploy
+- `next.config.mjs` — `output: "standalone"` enabled
+- **Deployment command (one-shot):**
+  ```bash
+  gcloud run deploy fleethappens --source . --region us-central1 --allow-unauthenticated \
+    --set-env-vars "GOOGLE_CLOUD_PROJECT=<project>" \
+    --set-secrets "GEOTAB_PASSWORD=GEOTAB_PASSWORD:latest,GOOGLE_MAPS_API_KEY=GOOGLE_MAPS_API_KEY:latest"
+  ```
+- Environment variables: non-sensitive as plain `--set-env-vars`; secrets via Secret Manager + `--set-secrets`
+
+### Pillar 3 — BigQuery Analytics Cache
+
+- `lib/bigquery/client.ts` — thin wrapper; tables auto-created on first write
+  - `ace_cache` — Ace query results with TTL (replaces 30-min in-memory-only cache)
+  - `trip_stories` — Persisted comic stories (avoid re-calling LLM for same trip+tone)
+  - `fleet_snapshots` — Daily fleet KPI snapshots (powers Fleet Trends chart)
+- `app/api/ace/query/route.ts` — Checks BigQuery before calling Ace; write-through on fresh results
+- `app/api/story/generate/route.ts` — Checks BigQuery before calling LLM; writes story after generation
+- `app/api/pulse/fleet/[groupId]/route.ts` — Writes daily snapshot on each fresh fleet load
+- `app/api/analytics/trends/route.ts` — `GET /api/analytics/trends?groupId=<id>&days=30` — reads `fleet_snapshots`
+- `app/pulse/[groupId]/page.tsx` — "Fleet Trends" section: recharts `LineChart` powered by BigQuery
+- BigQuery is **opt-in**: all code paths check `isBigQueryEnabled()` and fall back gracefully if not configured
+
+### Required Environment Variables
+
+| Variable | Purpose | Required? |
+|---|---|---|
+| `GOOGLE_CLOUD_PROJECT` | GCP project ID — enables Vertex AI + BigQuery | Primary LLM |
+| `GOOGLE_CLOUD_LOCATION` | GCP region (default: `us-central1`) | Optional |
+| `BIGQUERY_DATASET` | BigQuery dataset name (default: `fleethappens`) | Optional |
+| `ANTHROPIC_API_KEY` | Claude fallback LLM | Only if no GCP project |
+| `OPENAI_API_KEY` | OpenAI fallback LLM | Only if no GCP/Claude |
+
+---
 
 ```
 fleethappens/
@@ -54,8 +106,10 @@ fleethappens/
 │   │   ├── geocode.ts                    ← Google → Nominatim fallback
 │   │   └── places.ts                     ← Google Places → Overpass fallback
 │   ├── llm/
-│   │   ├── client.ts                     ← Claude → OpenAI fallback
+│   │   ├── client.ts                     ← Gemini (Vertex AI) → Claude → OpenAI
 │   │   └── prompts.ts                    ← all prompt templates
+│   ├── bigquery/
+│   │   └── client.ts                     ← ace_cache / trip_stories / fleet_snapshots
 │   └── cache/
 │       └── fallback.ts                   ← withFallback() + loadFallback()
 ├── types/
@@ -264,23 +318,27 @@ LLM-generated story, always 4 panels. Produced by `/api/story/generate`.
 **Files owned:**
 - `lib/llm/client.ts`
 - `lib/llm/prompts.ts`
+- `lib/bigquery/client.ts`
 - `app/api/story/generate/route.ts`
+- `app/api/analytics/trends/route.ts`
 - `components/ComicStoryRenderer.tsx`
 - `components/ComicPanelCard.tsx`
 - `app/story/[tripId]/page.tsx`
 
 **Key tasks:**
-1. Test story generation end-to-end — verify LLM returns valid JSON array (not markdown-wrapped)
-2. Add JSON extraction guard in `generate/route.ts` — strip ` ```json ``` ` wrappers if present
+1. Set `GOOGLE_CLOUD_PROJECT` in `.env.local` and run `gcloud auth application-default login` to activate Vertex AI Gemini
+2. Test story generation with Gemini — JSON mode (`responseMimeType: "application/json"`) means no markdown stripping needed; verify `parseLLMOutput()` still handles it correctly
 3. Tune `buildComicStoryPrompt()` for each tone (guidebook/playful/cinematic)
 4. Verify all 4 panels have valid `mapAnchor` coordinates from trip data (not invented)
 5. Test stops with context briefings produce richer panel 3 captions
 6. Pre-generate story fallback JSON for 3 demo trips × 3 tones = 9 files
+7. Test BigQuery story cache: generate a story, check it's persisted, then request it again and verify `fromCache: true`
 
 **Architecture rule:**
 - LLM generates panel *text* only — no image generation
 - `mapAnchor` values must come from `trip.startPoint`, `trip.endPoint`, or `stopContext.coordinates` — never from LLM output alone
 - Validate panel count = 4 and `sceneType` values are valid before returning to client
+- Gemini JSON mode eliminates the markdown-stripping problem; the `parseLLMOutput()` guard remains as a safety net
 
 ---
 

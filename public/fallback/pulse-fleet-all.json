@@ -59,5 +59,30 @@
       "lastPosition": { "lat": 37.7599, "lon": -122.4148 }
     }
   ],
-  "outliers": {}
+  "outliers": {
+    "topDistance": {
+      "vehicle": { "id": "b1", "name": "Fleet Van 01", "deviceType": "GO9", "lastCommunication": "2026-02-28T12:00:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T11:45:00Z",
+      "distanceTodayKm": 142,
+      "tripCountToday": 4,
+      "lastPosition": { "lat": 37.7749, "lon": -122.4194 }
+    },
+    "topIdle": {
+      "vehicle": { "id": "b4", "name": "Fleet Van 04", "deviceType": "GO9", "lastCommunication": "2026-02-28T08:15:00Z" },
+      "status": "idle",
+      "lastTripEnd": "2026-02-28T08:00:00Z",
+      "distanceTodayKm": 56,
+      "tripCountToday": 2,
+      "lastPosition": { "lat": 37.7599, "lon": -122.4148 }
+    },
+    "topTrips": {
+      "vehicle": { "id": "b1", "name": "Fleet Van 01", "deviceType": "GO9", "lastCommunication": "2026-02-28T12:00:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T11:45:00Z",
+      "distanceTodayKm": 142,
+      "tripCountToday": 4,
+      "lastPosition": { "lat": 37.7749, "lon": -122.4194 }
+    }
+  }
 }

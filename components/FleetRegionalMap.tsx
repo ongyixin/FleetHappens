@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import "leaflet/dist/leaflet.css";
+import { useEffect, useRef, useCallback } from "react";
 import type { VehicleActivity, FleetGroup } from "@/types";
 
 export interface HotspotPin {
@@ -10,10 +11,17 @@ export interface HotspotPin {
   visits?: number;
 }
 
+export interface RouteLine {
+  from: [number, number];
+  to: [number, number];
+  label?: string;
+}
+
 interface FleetRegionalMapProps {
   vehicles: VehicleActivity[];
   groups: FleetGroup[];
   hotspots?: HotspotPin[];
+  routeLines?: RouteLine[];
   onVehicleClick?: (vehicleId: string) => void;
 }
 
@@ -25,11 +33,18 @@ export default function FleetRegionalMap({
   vehicles,
   groups,
   hotspots,
+  routeLines,
   onVehicleClick,
 }: FleetRegionalMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const roRef = useRef<any>(null);
+
+  const invalidateSize = useCallback(() => {
+    if (mapRef.current) mapRef.current.invalidateSize();
+  }, []);
 
   const groupColorById = new Map<string, string>(
     groups.map((g) => [g.id, g.color ?? "#1a56db"])
@@ -75,9 +90,10 @@ export default function FleetRegionalMap({
         attributionControl: false,
       });
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap contributors",
-      }).addTo(map);
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        { attribution: "© OpenStreetMap contributors © CARTO", subdomains: "abcd", maxZoom: 19 }
+      ).addTo(map);
 
       L.control.attribution({ prefix: false }).addTo(map);
 
@@ -136,10 +152,40 @@ export default function FleetRegionalMap({
         }
       }
 
+      // Route polylines
+      for (const route of (routeLines ?? [])) {
+        L.polyline([route.from, route.to], {
+          color: "#38bdf8", weight: 10, opacity: 0.08,
+        }).addTo(map);
+        L.polyline([route.from, route.to], {
+          color: "#38bdf8", weight: 2, opacity: 0.55, dashArray: "8 12",
+        }).addTo(map);
+      }
+
       mapRef.current = map;
+
+      // Force Leaflet to recalculate container size after the first paint,
+      // fixing the "partial tile squares" glitch when the container was
+      // zero-sized or incorrectly measured at init time.
+      requestAnimationFrame(() => {
+        if (mapRef.current) mapRef.current.invalidateSize();
+      });
+
+      // Keep the map sized correctly whenever the container resizes
+      // (e.g. when the FleetMapSlider panel slides up/down).
+      if (mapContainerRef.current) {
+        roRef.current = new ResizeObserver(() => {
+          if (mapRef.current) mapRef.current.invalidateSize();
+        });
+        roRef.current.observe(mapContainerRef.current);
+      }
     });
 
     return () => {
+      if (roRef.current) {
+        roRef.current.disconnect();
+        roRef.current = null;
+      }
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
@@ -149,16 +195,16 @@ export default function FleetRegionalMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update markers when vehicles or hotspots change (after initial load)
+  // Update markers when vehicles, hotspots, or routes change (after initial load)
   useEffect(() => {
     if (!mapRef.current) return;
     import("leaflet").then((L) => {
       const map = mapRef.current;
       if (!map) return;
 
-      // Remove existing circle markers (vehicles + hotspots)
+      // Remove existing circle markers (vehicles + hotspots) and polylines (routes)
       map.eachLayer((layer: unknown) => {
-        if (layer instanceof L.CircleMarker) map.removeLayer(layer);
+        if (layer instanceof L.CircleMarker || layer instanceof L.Polyline) map.removeLayer(layer);
       });
 
       const statusColors: Record<string, string> = {
@@ -219,36 +265,49 @@ export default function FleetRegionalMap({
           // ignore
         }
       }
+
+      // Route polylines
+      for (const route of (routeLines ?? [])) {
+        L.polyline([route.from, route.to], {
+          color: "#38bdf8", weight: 10, opacity: 0.08,
+        }).addTo(map);
+        L.polyline([route.from, route.to], {
+          color: "#38bdf8", weight: 2, opacity: 0.55, dashArray: "8 12",
+        }).addTo(map);
+      }
     });
-  }, [vehicles, onVehicleClick, hotspots]);
+  }, [vehicles, onVehicleClick, hotspots, routeLines]);
 
   return (
     <div className="relative w-full h-full rounded-xl overflow-hidden border border-border">
       <div ref={mapContainerRef} className="w-full h-full" />
       {/* Legend */}
-      <div className="absolute bottom-3 left-3 z-[400] bg-white/90 backdrop-blur-sm border border-border rounded-lg px-3 py-2 flex items-center gap-3 text-xs shadow-sm">
+      <div className="absolute bottom-3 left-3 z-[400] bg-[rgba(9,9,14,0.85)] backdrop-blur-sm border border-[rgba(255,255,255,0.1)] rounded-lg px-3 py-2 flex items-center gap-3 text-xs shadow-lg">
         {[
-          { label: "Active", color: "#059669" },
-          { label: "Idle", color: "#f59e0b" },
+          { label: "Active", color: "#34d399" },
+          { label: "Idle", color: "#f5a623" },
           { label: "Offline", color: "#9ca3af" },
         ].map(({ label, color }) => (
           <div key={label} className="flex items-center gap-1.5">
-            <span
-              className="h-2.5 w-2.5 rounded-full"
-              style={{ backgroundColor: color }}
-            />
-            <span className="text-muted-foreground">{label}</span>
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+            <span className="text-[rgba(232,237,248,0.6)] font-body">{label}</span>
           </div>
         ))}
         {(hotspots ?? []).length > 0 && (
           <>
-            <span className="w-px h-3 bg-border" />
+            <span className="w-px h-3 bg-[rgba(255,255,255,0.15)]" />
             <div className="flex items-center gap-1.5">
-              <span
-                className="h-3 w-3 rounded-full border-2 opacity-70"
-                style={{ backgroundColor: "#ea7c1e", borderColor: "#c2620a" }}
-              />
-              <span className="text-muted-foreground">Stop hotspot</span>
+              <span className="h-3 w-3 rounded-full border-2 opacity-70" style={{ backgroundColor: "#ea7c1e", borderColor: "#c2620a" }} />
+              <span className="text-[rgba(232,237,248,0.6)] font-body">Hotspot</span>
+            </div>
+          </>
+        )}
+        {(routeLines ?? []).length > 0 && (
+          <>
+            <span className="w-px h-3 bg-[rgba(255,255,255,0.15)]" />
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block w-5 h-0.5 rounded-full opacity-70" style={{ background: "repeating-linear-gradient(90deg,#38bdf8 0,#38bdf8 4px,transparent 4px,transparent 8px)" }} />
+              <span className="text-[rgba(232,237,248,0.6)] font-body">Route</span>
             </div>
           </>
         )}

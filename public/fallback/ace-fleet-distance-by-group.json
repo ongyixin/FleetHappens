@@ -8,7 +8,7 @@
     { "group_name": "East Region",  "total_distance_km": 4890, "trip_count": 132, "vehicle_count": 7 },
     { "group_name": "West Region",  "total_distance_km": 3210, "trip_count": 97,  "vehicle_count": 5 }
   ],
-  "reasoning": "Aggregated from VehicleKPI_Daily joined to Groups for the last 7 days.",
+  "reasoning": "North Region leads the fleet at 8,420 km — 37% above South Region and nearly 2.6× East Region. North's 12 vehicles average 701 km/vehicle vs. West's 642 km/vehicle, but West's 5 vehicles run the highest utilisation rate at 80% active. East Region shows the most concerning metric: 17.5% average idle time vs. fleet avg of 13.2%, warranting a scheduling review for the Fremont–Hayward corridor.",
   "queriedAt": "2026-02-28T00:00:00Z",
   "totalRowCount": 4,
   "fromCache": true

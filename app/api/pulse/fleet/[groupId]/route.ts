@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getGroups, getDevices, getDeviceStatus } from "@/lib/geotab/client";
 import { normalizeGroup, normalizeDeviceStatus } from "@/lib/geotab/normalize";
 import { withFallback, loadFileFallback } from "@/lib/cache/fallback";
+import { bqWriteFleetSnapshot, isBigQueryEnabled } from "@/lib/bigquery/client";
 import type {
   ApiResponse,
   CompanyPulseSummary,
@@ -179,6 +180,18 @@ export async function GET(
       },
       `pulse-fleet-${groupId}.json`
     );
+
+    // Write a daily snapshot to BigQuery for trend history (non-blocking, fresh data only)
+    if (!detail.fromCache && isBigQueryEnabled()) {
+      const activeVehicles = detail.data.vehicles.filter((v) => v.status === "active").length;
+      const idleVehicles   = detail.data.vehicles.filter((v) => v.status === "idle").length;
+      bqWriteFleetSnapshot(groupId, {
+        totalVehicles: detail.data.vehicles.length,
+        activeVehicles,
+        idleVehicles,
+        offlineVehicles: detail.data.vehicles.length - activeVehicles - idleVehicles,
+      }).catch(() => {});
+    }
 
     const response: ApiResponse<FleetPulseDetail> = {
       ok: true,

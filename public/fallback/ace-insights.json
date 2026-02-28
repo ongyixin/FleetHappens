@@ -40,13 +40,13 @@
       "question": "Top 5 most common trip end locations in the last 30 days",
       "columns": ["location_name", "visit_count", "avg_dwell_minutes"],
       "rows": [
-        { "location_name": "Oakland Distribution Center", "visit_count": 94, "avg_dwell_minutes": 28 },
-        { "location_name": "San Jose Tech Campus", "visit_count": 71, "avg_dwell_minutes": 45 },
-        { "location_name": "Fremont Warehouse", "visit_count": 63, "avg_dwell_minutes": 22 },
-        { "location_name": "Berkeley Service Hub", "visit_count": 52, "avg_dwell_minutes": 18 },
-        { "location_name": "Palo Alto Office Park", "visit_count": 41, "avg_dwell_minutes": 34 }
+        { "location_name": "Oakland Distribution Center", "visit_count": 247, "avg_dwell_minutes": 38 },
+        { "location_name": "San Jose Tech Campus",        "visit_count": 189, "avg_dwell_minutes": 51 },
+        { "location_name": "Fremont Warehouse",           "visit_count": 163, "avg_dwell_minutes": 72 },
+        { "location_name": "SF Embarcadero Hub",          "visit_count": 141, "avg_dwell_minutes": 22 },
+        { "location_name": "Hayward Logistics Park",      "visit_count": 118, "avg_dwell_minutes": 44 }
       ],
-      "reasoning": "The Oakland Distribution Center is the fleet's primary endpoint, with 94 visits in 30 days. San Jose Tech Campus shows the highest average dwell time at 45 minutes, indicating longer service calls.",
+      "reasoning": "Oakland Distribution Center leads with 247 visits — the undisputed operational hub. Fremont Warehouse has the highest average dwell time at 72 minutes, creating a bottleneck that inflates idle rates for vehicles assigned to that lane. The SF Embarcadero Hub is the fastest-turnover location at 22 min avg dwell.",
       "queriedAt": "2026-02-28T06:00:00Z",
       "totalRowCount": 5,
       "fromCache": true

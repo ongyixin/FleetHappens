@@ -1,0 +1,76 @@
+{
+  "group": {
+    "id": "g-west",
+    "name": "West Region",
+    "vehicleCount": 5,
+    "color": "#8b5cf6"
+  },
+  "vehicles": [
+    {
+      "vehicle": { "id": "w1", "name": "Truck 32 — Nakamura", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:53:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:40:00Z",
+      "distanceTodayKm": 147,
+      "tripCountToday": 4,
+      "lastPosition": { "lat": 37.7749, "lon": -122.4194 }
+    },
+    {
+      "vehicle": { "id": "w2", "name": "Van 31 — Oliveira", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:18:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:05:00Z",
+      "distanceTodayKm": 129,
+      "tripCountToday": 5,
+      "lastPosition": { "lat": 37.7894, "lon": -122.3988 }
+    },
+    {
+      "vehicle": { "id": "w3", "name": "Truck 34 — Schreiber", "deviceType": "GO9", "lastCommunication": "2026-02-28T12:10:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T11:58:00Z",
+      "distanceTodayKm": 104,
+      "tripCountToday": 3,
+      "lastPosition": { "lat": 37.7008, "lon": -122.4630 }
+    },
+    {
+      "vehicle": { "id": "w4", "name": "Van 33 — Osei", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:42:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:28:00Z",
+      "distanceTodayKm": 88,
+      "tripCountToday": 3,
+      "lastPosition": { "lat": 37.6547, "lon": -122.4077 }
+    },
+    {
+      "vehicle": { "id": "w5", "name": "Truck 36 — Volkov", "deviceType": "GO9", "lastCommunication": "2026-02-28T09:48:00Z" },
+      "status": "idle",
+      "lastTripEnd": "2026-02-28T09:35:00Z",
+      "distanceTodayKm": 41,
+      "tripCountToday": 1,
+      "lastPosition": { "lat": 37.7200, "lon": -122.4400 }
+    }
+  ],
+  "outliers": {
+    "topDistance": {
+      "vehicle": { "id": "w1", "name": "Truck 32 — Nakamura", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:53:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:40:00Z",
+      "distanceTodayKm": 147,
+      "tripCountToday": 4,
+      "lastPosition": { "lat": 37.7749, "lon": -122.4194 }
+    },
+    "topIdle": {
+      "vehicle": { "id": "w5", "name": "Truck 36 — Volkov", "deviceType": "GO9", "lastCommunication": "2026-02-28T09:48:00Z" },
+      "status": "idle",
+      "lastTripEnd": "2026-02-28T09:35:00Z",
+      "distanceTodayKm": 41,
+      "tripCountToday": 1,
+      "lastPosition": { "lat": 37.7200, "lon": -122.4400 }
+    },
+    "topTrips": {
+      "vehicle": { "id": "w2", "name": "Van 31 — Oliveira", "deviceType": "GO9", "lastCommunication": "2026-02-28T13:18:00Z" },
+      "status": "active",
+      "lastTripEnd": "2026-02-28T13:05:00Z",
+      "distanceTodayKm": 129,
+      "tripCountToday": 5,
+      "lastPosition": { "lat": 37.7894, "lon": -122.3988 }
+    }
+  }
+}

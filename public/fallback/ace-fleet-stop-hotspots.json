@@ -1,21 +1,21 @@
 {
   "id": "fleet-stop-hotspots-fallback",
-  "question": "What are the top 10 most visited stop locations in the last 30 days?",
+  "question": "What are the top 10 most visited stop locations across the fleet in the last 30 days?",
   "columns": ["location_name", "visit_count", "avg_dwell_minutes", "lat", "lon"],
   "rows": [
-    { "location_name": "Distribution Center A", "visit_count": 87, "avg_dwell_minutes": 42, "lat": 37.7749, "lon": -122.4194 },
-    { "location_name": "Client Site — Embarcadero", "visit_count": 64, "avg_dwell_minutes": 28, "lat": 37.7956, "lon": -122.3933 },
-    { "location_name": "Warehouse North",       "visit_count": 53, "avg_dwell_minutes": 65, "lat": 37.8044, "lon": -122.2712 },
-    { "location_name": "Service Center B",      "visit_count": 41, "avg_dwell_minutes": 35, "lat": 37.7599, "lon": -122.4148 },
-    { "location_name": "Airport Cargo Terminal","visit_count": 38, "avg_dwell_minutes": 52, "lat": 37.6213, "lon": -122.3789 },
-    { "location_name": "Downtown Hub",          "visit_count": 32, "avg_dwell_minutes": 18, "lat": 37.7894, "lon": -122.3988 },
-    { "location_name": "Fuel Stop — I-80",      "visit_count": 28, "avg_dwell_minutes": 12, "lat": 37.8399, "lon": -122.2987 },
-    { "location_name": "Customer Site — SoMa",  "visit_count": 25, "avg_dwell_minutes": 47, "lat": 37.7792, "lon": -122.4050 },
-    { "location_name": "Staging Yard East",     "visit_count": 21, "avg_dwell_minutes": 78, "lat": 37.7519, "lon": -122.3862 },
-    { "location_name": "Regional Office",       "visit_count": 18, "avg_dwell_minutes": 55, "lat": 37.8025, "lon": -122.4104 }
+    { "location_name": "Oakland Distribution Center", "visit_count": 247, "avg_dwell_minutes": 38, "lat": 37.8044, "lon": -122.2712 },
+    { "location_name": "San Jose Tech Campus",        "visit_count": 189, "avg_dwell_minutes": 51, "lat": 37.3382, "lon": -121.8863 },
+    { "location_name": "Fremont Warehouse",           "visit_count": 163, "avg_dwell_minutes": 72, "lat": 37.5485, "lon": -121.9886 },
+    { "location_name": "SF Embarcadero Hub",          "visit_count": 141, "avg_dwell_minutes": 22, "lat": 37.7956, "lon": -122.3933 },
+    { "location_name": "Hayward Logistics Park",      "visit_count": 118, "avg_dwell_minutes": 44, "lat": 37.6688, "lon": -122.0808 },
+    { "location_name": "Berkeley Service Center",     "visit_count": 97,  "avg_dwell_minutes": 29, "lat": 37.8716, "lon": -122.2727 },
+    { "location_name": "SFO Cargo Terminal",          "visit_count": 84,  "avg_dwell_minutes": 58, "lat": 37.6213, "lon": -122.3789 },
+    { "location_name": "Milpitas Cold Storage",       "visit_count": 71,  "avg_dwell_minutes": 65, "lat": 37.4323, "lon": -121.8996 },
+    { "location_name": "South SF Depot",              "visit_count": 59,  "avg_dwell_minutes": 18, "lat": 37.6547, "lon": -122.4077 },
+    { "location_name": "Palo Alto Office Park",       "visit_count": 43,  "avg_dwell_minutes": 34, "lat": 37.4419, "lon": -122.1430 }
   ],
-  "reasoning": "Most frequent trip end locations by visit count from Trip table, last 30 days.",
-  "queriedAt": "2026-02-28T00:00:00Z",
+  "reasoning": "Oakland Distribution Center dominates with 247 visits — the clear operational hub. The Fremont Warehouse averages 72 min per visit, the highest dwell time in the fleet, and is where Robinson's idle spike originates. San Jose Tech Campus (51 min avg dwell) shows concentrated afternoon service windows, 78% of visits occurring 13:00–17:00. SFO Cargo requires the most coordination overhead at 58 min avg, yet visit frequency has grown 22% month-over-month. Consider adding a second scheduled slot at Fremont to reduce queuing.",
+  "queriedAt": "2026-02-28T06:00:00Z",
   "totalRowCount": 10,
   "fromCache": true
 }
