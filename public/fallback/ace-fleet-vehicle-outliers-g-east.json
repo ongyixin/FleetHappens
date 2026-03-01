@@ -1,0 +1,16 @@
+{
+  "id": "fleet-vehicle-outliers-g-east",
+  "question": "Which East Region vehicles are statistical outliers by distance, idle time, or trip count this week?",
+  "columns": ["device_name", "total_distance_km", "trip_count", "avg_idle_pct"],
+  "rows": [
+    { "device_name": "Truck 24 — Thompson",  "total_distance_km": 843, "trip_count": 34, "avg_idle_pct": 9.2  },
+    { "device_name": "Van 23 — Gonzalez",    "total_distance_km": 712, "trip_count": 31, "avg_idle_pct": 8.6  },
+    { "device_name": "Truck 26 — Andersen",  "total_distance_km": 601, "trip_count": 21, "avg_idle_pct": 33.8 },
+    { "device_name": "Van 25 — Ibrahim",     "total_distance_km": 487, "trip_count": 27, "avg_idle_pct": 10.1 },
+    { "device_name": "Truck 28 — Murphy",    "total_distance_km": 334, "trip_count": 14, "avg_idle_pct": 13.4 }
+  ],
+  "reasoning": "Thompson (Truck 24) tops the East Region at 843 km total with 34 trips — driven by the Fremont–Dublin–Pleasanton corridor. Gonzalez (Van 23) is the efficiency leader at 8.6% idle across 31 trips. Andersen (Truck 26) is the region's most severe idle outlier at 33.8% — nearly 2× the region average of 17.5% — consistently accumulating dwell time at Fremont Warehouse and Livermore Park. Ibrahim runs a steady urban pattern at 10.1% idle. Murphy's lower numbers (14 trips, 334 km) reflect a lighter route assignment in the Livermore corridor; consider load-balancing with Thompson.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

@@ -15,6 +15,7 @@ import { buildStoryPrompt } from "@/lib/story/prompts";
 import { parseLLMOutput } from "@/lib/story/validate";
 import { ComicToneSchema } from "@/lib/story/schema";
 import { bqGetStory, bqSetStory, isBigQueryEnabled } from "@/lib/bigquery/client";
+import { isLLMEnabled } from "@/lib/llm/client";
 import type { ComicStory, ComicPanel, ComicTone, TripSummary, StopContext, BreadcrumbPoint } from "@/types";
 
 // ─── Request schema ───────────────────────────────────────────────────────────
@@ -54,6 +55,7 @@ const RequestSchema = z.object({
 // JSON mode is used wherever possible to avoid markdown-wrapping issues.
 
 async function callLLM(prompt: string): Promise<string> {
+  if (!isLLMEnabled()) throw new Error("LLM disabled via LLM_ENABLED=false");
   if (process.env.GOOGLE_CLOUD_PROJECT) {
     return callGemini(prompt);
   }

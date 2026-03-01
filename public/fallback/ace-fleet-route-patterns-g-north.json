@@ -1,0 +1,16 @@
+{
+  "id": "fleet-route-patterns-g-north",
+  "question": "What are the top origin-destination pairs for the North Region fleet in the last 14 days?",
+  "columns": ["origin", "destination", "trip_count", "avg_distance_km", "avg_duration_minutes"],
+  "rows": [
+    { "origin": "Oakland DC",       "destination": "Berkeley SC",      "trip_count": 94, "avg_distance_km": 11.8, "avg_duration_minutes": 23 },
+    { "origin": "Berkeley SC",      "destination": "Richmond Depot",   "trip_count": 76, "avg_distance_km": 17.3, "avg_duration_minutes": 31 },
+    { "origin": "Oakland DC",       "destination": "Alameda Terminal", "trip_count": 61, "avg_distance_km": 7.1,  "avg_duration_minutes": 16 },
+    { "origin": "Emeryville Hub",   "destination": "Oakland DC",       "trip_count": 48, "avg_distance_km": 5.9,  "avg_duration_minutes": 13 },
+    { "origin": "San Leandro WH",   "destination": "Castro Valley",    "trip_count": 34, "avg_distance_km": 9.4,  "avg_duration_minutes": 19 }
+  ],
+  "reasoning": "The Oakland DC → Berkeley SC corridor is the North Region's busiest lane at 94 runs in 14 days (6.7/day). The Berkeley → Richmond reverse leg (76 trips) confirms a daily shuttle pattern between these two hubs. Oakland → Alameda at 7.1 km average is the shortest routine run — efficient but high-frequency, suited for batching. The San Leandro → Castro Valley lane serves as the southern exit route for n6 and n10; consolidating loads before this leg could reduce total runs by an estimated 20%.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "n11-t1",
+    "deviceId": "n11",
+    "deviceName": "Truck 12 — Fernandez",
+    "start": "2026-02-28T09:35:00.000Z",
+    "stop": "2026-02-28T09:49:00.000Z",
+    "distanceMeters": 5100,
+    "distanceKm": 5.1,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n11-t2",
+    "deviceId": "n11",
+    "deviceName": "Truck 12 — Fernandez",
+    "start": "2026-02-27T11:31:00.000Z",
+    "stop": "2026-02-27T11:42:00.000Z",
+    "distanceMeters": 4700,
+    "distanceKm": 4.7,
+    "drivingDuration": "00:05:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 106,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  }
+]

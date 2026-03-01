@@ -1,0 +1,44 @@
+[
+  {
+    "id": "w5-t1",
+    "deviceId": "w5",
+    "deviceName": "Truck 36 — Volkov",
+    "start": "2026-02-28T09:03:00.000Z",
+    "stop": "2026-02-28T09:25:00.000Z",
+    "distanceMeters": 11700,
+    "distanceKm": 11.7,
+    "drivingDuration": "00:15:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 48,
+    "maxSpeedKmh": 86,
+    "startPoint": {
+      "lat": 37.7311,
+      "lon": -122.3892
+    },
+    "endPoint": {
+      "lat": 37.6547,
+      "lon": -122.4077
+    }
+  },
+  {
+    "id": "w5-t2",
+    "deviceId": "w5",
+    "deviceName": "Truck 36 — Volkov",
+    "start": "2026-02-27T11:41:00.000Z",
+    "stop": "2026-02-27T11:52:00.000Z",
+    "distanceMeters": 6100,
+    "distanceKm": 6.1,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 108,
+    "startPoint": {
+      "lat": 37.6547,
+      "lon": -122.4077
+    },
+    "endPoint": {
+      "lat": 37.6213,
+      "lon": -122.3789
+    }
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "n8-t1",
+    "deviceId": "n8",
+    "deviceName": "Van 07 — Kim",
+    "start": "2026-02-28T09:22:00.000Z",
+    "stop": "2026-02-28T09:54:00.000Z",
+    "distanceMeters": 18200,
+    "distanceKm": 18.2,
+    "drivingDuration": "00:25:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 74,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    }
+  },
+  {
+    "id": "n8-t2",
+    "deviceId": "n8",
+    "deviceName": "Van 07 — Kim",
+    "start": "2026-02-28T11:52:00.000Z",
+    "stop": "2026-02-28T12:10:00.000Z",
+    "distanceMeters": 9700,
+    "distanceKm": 9.7,
+    "drivingDuration": "00:13:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  },
+  {
+    "id": "n8-t3",
+    "deviceId": "n8",
+    "deviceName": "Van 07 — Kim",
+    "start": "2026-02-28T13:45:00.000Z",
+    "stop": "2026-02-28T14:32:00.000Z",
+    "distanceMeters": 27800,
+    "distanceKm": 27.8,
+    "drivingDuration": "00:38:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 44,
+    "maxSpeedKmh": 75,
+    "startPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n8-t4",
+    "deviceId": "n8",
+    "deviceName": "Van 07 — Kim",
+    "start": "2026-02-27T11:49:00.000Z",
+    "stop": "2026-02-27T12:00:00.000Z",
+    "distanceMeters": 5100,
+    "distanceKm": 5.1,
+    "drivingDuration": "00:07:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 95,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    }
+  }
+]

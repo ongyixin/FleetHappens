@@ -1,0 +1,191 @@
+[
+  {
+    "id": "n2-t1",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-28T07:25:00.000Z",
+    "stop": "2026-02-28T07:35:00.000Z",
+    "distanceMeters": 4700,
+    "distanceKm": 4.7,
+    "drivingDuration": "00:05:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 102,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n2-t2",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-28T08:23:00.000Z",
+    "stop": "2026-02-28T08:54:00.000Z",
+    "distanceMeters": 18200,
+    "distanceKm": 18.2,
+    "drivingDuration": "00:22:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    }
+  },
+  {
+    "id": "n2-t3",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-28T09:04:00.000Z",
+    "stop": "2026-02-28T09:24:00.000Z",
+    "distanceMeters": 13600,
+    "distanceKm": 13.6,
+    "drivingDuration": "00:14:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    },
+    "endPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    }
+  },
+  {
+    "id": "n2-t4",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-28T10:19:00.000Z",
+    "stop": "2026-02-28T10:34:00.000Z",
+    "distanceMeters": 9900,
+    "distanceKm": 9.9,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 100,
+    "startPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  },
+  {
+    "id": "n2-t5",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-28T11:30:00.000Z",
+    "stop": "2026-02-28T12:23:00.000Z",
+    "distanceMeters": 32300,
+    "distanceKm": 32.3,
+    "drivingDuration": "00:42:00",
+    "idlingDuration": "00:11:00",
+    "averageSpeedKmh": 46,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  },
+  {
+    "id": "n2-t6",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-28T13:45:00.000Z",
+    "stop": "2026-02-28T14:03:00.000Z",
+    "distanceMeters": 9700,
+    "distanceKm": 9.7,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    },
+    "endPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    }
+  },
+  {
+    "id": "n2-t7",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-28T15:48:00.000Z",
+    "stop": "2026-02-28T16:17:00.000Z",
+    "distanceMeters": 18200,
+    "distanceKm": 18.2,
+    "drivingDuration": "00:25:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 81,
+    "startPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n2-t8",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-27T09:01:00.000Z",
+    "stop": "2026-02-27T09:13:00.000Z",
+    "distanceMeters": 5500,
+    "distanceKm": 5.5,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 104,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    }
+  },
+  {
+    "id": "n2-t9",
+    "deviceId": "n2",
+    "deviceName": "Van 01 — Martinez",
+    "start": "2026-02-27T13:10:00.000Z",
+    "stop": "2026-02-27T13:21:00.000Z",
+    "distanceMeters": 7100,
+    "distanceKm": 7.1,
+    "drivingDuration": "00:07:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 103,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  }
+]

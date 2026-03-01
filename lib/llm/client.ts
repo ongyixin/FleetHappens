@@ -8,6 +8,15 @@
  *       speeds, or Geotab facts. It only narrates structured inputs.
  */
 
+/**
+ * Returns false when LLM_ENABLED is explicitly set to "false".
+ * Import this in any route that makes its own LLM calls so the kill-switch
+ * is enforced consistently across all three AI features.
+ */
+export function isLLMEnabled(): boolean {
+  return process.env.LLM_ENABLED !== "false";
+}
+
 interface LLMMessage {
   role: "user" | "assistant";
   content: string;
@@ -25,6 +34,10 @@ export async function generateText(
   messages: LLMMessage[],
   options: LLMOptions = {}
 ): Promise<string> {
+  if (!isLLMEnabled()) {
+    throw new Error("LLM disabled via LLM_ENABLED=false");
+  }
+
   const { maxTokens = 1024, temperature = 0.7, jsonMode = false } = options;
 
   if (process.env.GOOGLE_CLOUD_PROJECT) {

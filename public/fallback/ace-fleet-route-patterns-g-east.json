@@ -1,0 +1,16 @@
+{
+  "id": "fleet-route-patterns-g-east",
+  "question": "What are the top origin-destination pairs for the East Region fleet in the last 14 days?",
+  "columns": ["origin", "destination", "trip_count", "avg_distance_km", "avg_duration_minutes"],
+  "rows": [
+    { "origin": "Fremont WH",        "destination": "Dublin Distrib",    "trip_count": 81, "avg_distance_km": 23.8, "avg_duration_minutes": 38 },
+    { "origin": "Hayward Logistics", "destination": "Castro Valley Hub", "trip_count": 67, "avg_distance_km": 11.2, "avg_duration_minutes": 21 },
+    { "origin": "Dublin Distrib",    "destination": "Pleasanton Ctr",    "trip_count": 52, "avg_distance_km": 9.3,  "avg_duration_minutes": 17 },
+    { "origin": "Union City Depot",  "destination": "Newark Distrib",    "trip_count": 38, "avg_distance_km": 7.4,  "avg_duration_minutes": 15 },
+    { "origin": "Pleasanton Ctr",    "destination": "Livermore Park",    "trip_count": 24, "avg_distance_km": 13.0, "avg_duration_minutes": 23 }
+  ],
+  "reasoning": "Fremont → Dublin is the East Region's longest and busiest corridor at 23.8 km avg and 81 runs — Thompson (e1) drives this lane exclusively. The Hayward → Castro Valley run (67 trips, 11.2 km) is a daily shuttle shared by Gonzalez (e2) and Ibrahim (e4). Dublin → Pleasanton at 9.3 km is the tightest loop in the corridor; consolidation could cut this lane by 30%. The Pleasanton → Livermore lane (24 trips) is exclusively driven by Andersen (e3) — the same vehicle with the region's highest idle rate, suggesting the Livermore site contributes to dwell time.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

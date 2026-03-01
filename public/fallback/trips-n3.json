@@ -1,0 +1,170 @@
+[
+  {
+    "id": "n3-t1",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-28T07:42:00.000Z",
+    "stop": "2026-02-28T08:09:00.000Z",
+    "distanceMeters": 13100,
+    "distanceKm": 13.1,
+    "drivingDuration": "00:13:00",
+    "idlingDuration": "00:14:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 91,
+    "startPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    },
+    "endPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    }
+  },
+  {
+    "id": "n3-t2",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-28T09:18:00.000Z",
+    "stop": "2026-02-28T09:45:00.000Z",
+    "distanceMeters": 21700,
+    "distanceKm": 21.7,
+    "drivingDuration": "00:22:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 106,
+    "startPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    },
+    "endPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    }
+  },
+  {
+    "id": "n3-t3",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-28T10:21:00.000Z",
+    "stop": "2026-02-28T10:33:00.000Z",
+    "distanceMeters": 5500,
+    "distanceKm": 5.5,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n3-t4",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-28T11:24:00.000Z",
+    "stop": "2026-02-28T11:38:00.000Z",
+    "distanceMeters": 4700,
+    "distanceKm": 4.7,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 99,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  },
+  {
+    "id": "n3-t5",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-28T12:22:00.000Z",
+    "stop": "2026-02-28T12:32:00.000Z",
+    "distanceMeters": 6400,
+    "distanceKm": 6.4,
+    "drivingDuration": "00:07:00",
+    "idlingDuration": "00:03:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 99,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    }
+  },
+  {
+    "id": "n3-t6",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-28T14:25:00.000Z",
+    "stop": "2026-02-28T14:47:00.000Z",
+    "distanceMeters": 13100,
+    "distanceKm": 13.1,
+    "drivingDuration": "00:15:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 51,
+    "maxSpeedKmh": 91,
+    "startPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    },
+    "endPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    }
+  },
+  {
+    "id": "n3-t7",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-27T08:21:00.000Z",
+    "stop": "2026-02-27T08:54:00.000Z",
+    "distanceMeters": 21700,
+    "distanceKm": 21.7,
+    "drivingDuration": "00:28:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n3-t8",
+    "deviceId": "n3",
+    "deviceName": "Truck 02 — Chen",
+    "start": "2026-02-27T12:53:00.000Z",
+    "stop": "2026-02-27T13:32:00.000Z",
+    "distanceMeters": 27800,
+    "distanceKm": 27.8,
+    "drivingDuration": "00:30:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  }
+]

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { Truck, BookOpen, Brain, RefreshCw, ChevronLeft, Zap, Circle, ChevronUp, ChevronDown } from "lucide-react";
+import { Truck, BookOpen, Brain, RefreshCw, ChevronLeft, Zap, Circle, ChevronUp, ChevronDown, Maximize2, Minimize2, ArrowLeft } from "lucide-react";
 import type {
   TripSummary,
   BreadcrumbPoint,
@@ -13,12 +13,16 @@ import type {
   ApiResponse,
   LocationDossier,
   NearbyAmenity,
+  NextStopPredictionResult,
 } from "@/types";
 import TripList from "@/components/TripList";
 import TripStatsCard from "@/components/TripStatsCard";
 import AceInsightCard, { AceInsightCardSkeleton } from "@/components/AceInsightCard";
+import AceInsightExpandedCard from "@/components/AceInsightExpandedCard";
 import LocationDossierPanel from "@/components/LocationDossierPanel";
+import StreetViewPanel from "@/components/StreetViewPanel";
 import NextStopPrediction from "@/components/NextStopPrediction";
+import NextStopExpandedCard from "@/components/NextStopExpandedCard";
 import { cn } from "@/lib/utils";
 
 const TripMap = dynamic(() => import("@/components/TripMap"), {
@@ -62,13 +66,22 @@ function DashboardContent() {
   const [aceInsights, setAceInsights] = useState<AceInsight[]>([]);
   const [aceLoading, setAceLoading]   = useState(true);
 
+  // Captured from NextStopPrediction's onResultLoaded — used by the expanded view
+  const [nextStopResult, setNextStopResult] = useState<NextStopPredictionResult | null>(null);
+
+  // ── Street View panel ───────────────────────────────────────────────────
+  const [streetViewCoords, setStreetViewCoords] = useState<LatLon | null>(null);
+
+  // ── Expanded intelligence card ──────────────────────────────────────────
+  // null = column grid view; 'next-stop' = Next Stop panel; string = insight id
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
   // ── Draggable split between Map and Fleet Intelligence ─────────────────
   const SNAP_COLLAPSED = 56;   // just the "Fleet Intelligence" header visible
-  const SNAP_DEFAULT   = 240;  // default split showing cards
   const SNAP_EXPANDED_FRAC = 0.97; // covers the map (minus drag handle)
 
   const mainRef          = useRef<HTMLDivElement>(null);
-  const [panelHeight, setPanelHeight]     = useState(SNAP_DEFAULT);
+  const [panelHeight, setPanelHeight]     = useState(SNAP_COLLAPSED);
   const [isSnapping, setIsSnapping]       = useState(false);
   const isDragging       = useRef(false);
   const dragStartY       = useRef(0);
@@ -77,8 +90,7 @@ function DashboardContent() {
   const getSnapPoints = useCallback(() => {
     const containerH = mainRef.current?.clientHeight ?? 500;
     return [
-      { height: SNAP_COLLAPSED,                        mode: "map"   as const },
-      { height: SNAP_DEFAULT,                          mode: "split" as const },
+      { height: SNAP_COLLAPSED,                              mode: "map"   as const },
       { height: Math.floor(containerH * SNAP_EXPANDED_FRAC), mode: "intel" as const },
     ];
   }, []);
@@ -146,8 +158,7 @@ function DashboardContent() {
   const currentMode = (() => {
     const snaps = getSnapPoints();
     if (panelHeight <= (snaps[0].height + snaps[1].height) / 2) return "map";
-    if (panelHeight >= (snaps[1].height + snaps[2].height) / 2) return "intel";
-    return "split";
+    return "intel";
   })();
   // ── end drag split ──────────────────────────────────────────────────────
 
@@ -477,9 +488,19 @@ function DashboardContent() {
             <div className="h-full w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
               <TripMap
                 trip={selectedTrip}
+                allTrips={trips}
                 breadcrumbs={breadcrumbs}
                 selectedStop={selectedStop}
-                onStopClick={handleStopClick}
+                onStopClick={(coords) => {
+                  setStreetViewCoords(null);
+                  handleStopClick(coords);
+                }}
+                onRouteClick={(coords) => {
+                  setSelectedStop(null);
+                  setDossier(null);
+                  setStreetViewCoords(coords);
+                }}
+                streetViewCoords={streetViewCoords}
               />
             </div>
           </div>
@@ -545,15 +566,16 @@ function DashboardContent() {
             </span>
           </div>
 
-          {/* ── Ace insight panel — height controlled by drag ─────────────────── */}
+          {/* ── Fleet Intelligence panel — height controlled by drag ─────────── */}
           <div
-            className="shrink-0 bg-[#101318] overflow-hidden"
+            className="shrink-0 bg-[#101318] flex flex-col overflow-hidden"
             style={{
               height: panelHeight,
               transition: isSnapping ? "height 370ms cubic-bezier(0.34, 1.4, 0.64, 1)" : "none",
             }}
           >
-            <div className="px-4 pt-3 pb-2 flex items-center gap-2.5">
+            {/* Panel header */}
+            <div className="px-4 pt-3 pb-2 flex items-center gap-2.5 shrink-0">
               <div className="rounded-lg bg-[rgba(245,166,35,0.1)] p-1.5">
                 <Brain className="h-3.5 w-3.5 text-[#f5a623]" />
               </div>
@@ -567,27 +589,118 @@ function DashboardContent() {
                   Querying…
                 </span>
               )}
-            </div>
-            <div className="px-4 pb-3 flex gap-3 overflow-x-auto">
-              {/* Next-Stop Prediction — shown when a vehicle is selected and has trips */}
-              {deviceId && trips.length > 0 && trips[0]?.endPoint && (
-                <NextStopPrediction
-                  deviceId={deviceId}
-                  currentPosition={trips[0].endPoint}
-                  onStopSelect={(coords) => handleStopClick(coords)}
-                />
-              )}
 
-              {aceLoading
-                ? Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="w-72 shrink-0"><AceInsightCardSkeleton /></div>
-                  ))
-                : aceInsights.slice(0, 4).map((insight) => (
-                    <div key={insight.id} className="w-72 shrink-0">
-                      <AceInsightCard insight={insight} />
-                    </div>
-                  ))}
+              {/* Collapse button — visible when a card is maximised */}
+              {expandedCard !== null && (
+                <button
+                  onClick={() => setExpandedCard(null)}
+                  className="ml-auto flex items-center gap-1.5 h-7 px-3 rounded-lg text-[11px] font-semibold font-body text-[rgba(232,237,248,0.55)] hover:text-white bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.09)] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.14)] transition-all duration-150"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  All columns
+                </button>
+              )}
             </div>
+
+            {/* ── Column grid view ──────────────────────────────────────────── */}
+            {expandedCard === null && (
+              <div className="px-4 pb-3 flex gap-3 overflow-x-auto min-h-0">
+                {/* Next-Stop Prediction column */}
+                {deviceId && trips.length > 0 && trips[0]?.endPoint && (
+                  <div className="relative group/intel w-80 shrink-0">
+                    <NextStopPrediction
+                      deviceId={deviceId}
+                      currentPosition={trips[0].endPoint}
+                      onStopSelect={(coords) => handleStopClick(coords)}
+                      onResultLoaded={setNextStopResult}
+                    />
+                    {/* Expand overlay button */}
+                    <button
+                      onClick={() => setExpandedCard("next-stop")}
+                      className={cn(
+                        "absolute top-2 right-2 z-20 flex items-center justify-center w-6 h-6 rounded-md",
+                        "bg-[rgba(13,17,23,0.85)] border border-[rgba(45,212,191,0.2)] text-[rgba(45,212,191,0.6)]",
+                        "opacity-0 group-hover/intel:opacity-100 hover:!opacity-100",
+                        "hover:bg-[rgba(45,212,191,0.12)] hover:border-[rgba(45,212,191,0.45)] hover:text-[#2dd4bf]",
+                        "transition-all duration-150 backdrop-blur-sm",
+                      )}
+                      title="Maximise"
+                    >
+                      <Maximize2 className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+
+                {/* Ace insight columns */}
+                {aceLoading
+                  ? Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="w-72 shrink-0"><AceInsightCardSkeleton /></div>
+                    ))
+                  : aceInsights.slice(0, 4).map((insight) => (
+                      <div key={insight.id} className="relative group/intel w-72 shrink-0">
+                        <AceInsightCard insight={insight} />
+                        {/* Expand overlay button */}
+                        <button
+                          onClick={() => setExpandedCard(insight.id)}
+                          className={cn(
+                            "absolute top-2 right-2 z-20 flex items-center justify-center w-6 h-6 rounded-md",
+                            "bg-[rgba(16,19,24,0.85)] border border-[rgba(245,166,35,0.18)] text-[rgba(245,166,35,0.55)]",
+                            "opacity-0 group-hover/intel:opacity-100 hover:!opacity-100",
+                            "hover:bg-[rgba(245,166,35,0.1)] hover:border-[rgba(245,166,35,0.4)] hover:text-[#f5a623]",
+                            "transition-all duration-150 backdrop-blur-sm",
+                          )}
+                          title="Maximise"
+                        >
+                          <Maximize2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+              </div>
+            )}
+
+            {/* ── Maximised single-card view ────────────────────────────────── */}
+            {expandedCard !== null && (
+              <div
+                className="flex-1 px-4 pb-3 overflow-y-auto min-h-0"
+                style={{ animation: "intel-expand 220ms cubic-bezier(0.22, 1, 0.36, 1) both" }}
+              >
+                {expandedCard === "next-stop" && (
+                  nextStopResult ? (
+                    <NextStopExpandedCard result={nextStopResult} />
+                  ) : deviceId && trips.length > 0 && trips[0]?.endPoint ? (
+                    // Fallback: compact card while result is still loading
+                    <NextStopPrediction
+                      deviceId={deviceId}
+                      currentPosition={trips[0].endPoint}
+                      onStopSelect={(coords) => handleStopClick(coords)}
+                      onResultLoaded={setNextStopResult}
+                      className="w-full"
+                    />
+                  ) : null
+                )}
+
+                {expandedCard !== "next-stop" && (() => {
+                  const insight = aceInsights.find((i) => i.id === expandedCard);
+                  if (!insight) return null;
+                  return (
+                    <div className="w-full">
+                      <AceInsightExpandedCard insight={insight} />
+                    </div>
+                  );
+                })()}
+
+                {/* Minimise pill at bottom */}
+                <div className="flex justify-center mt-4 pb-1">
+                  <button
+                    onClick={() => setExpandedCard(null)}
+                    className="inline-flex items-center gap-1.5 h-7 px-4 rounded-full text-[11px] font-semibold font-body text-[rgba(232,237,248,0.4)] hover:text-white bg-[rgba(255,255,255,0.04)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.07)] hover:border-[rgba(255,255,255,0.13)] transition-all duration-150"
+                  >
+                    <Minimize2 className="h-3 w-3" />
+                    Back to columns
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </div>
@@ -607,6 +720,20 @@ function DashboardContent() {
             coordinates={selectedStop}
             useInStory={isPanelStopInStory}
             onToggleUseInStory={handleToggleDossierInStory}
+          />
+        </>
+      )}
+
+      {/* Street View panel */}
+      {streetViewCoords && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 z-[55] backdrop-blur-[2px]"
+            onClick={() => setStreetViewCoords(null)}
+          />
+          <StreetViewPanel
+            coords={streetViewCoords}
+            onClose={() => setStreetViewCoords(null)}
           />
         </>
       )}

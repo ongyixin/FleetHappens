@@ -1,0 +1,149 @@
+[
+  {
+    "id": "s3-t1",
+    "deviceId": "s3",
+    "deviceName": "Truck 16 — Park",
+    "start": "2026-02-28T08:43:00.000Z",
+    "stop": "2026-02-28T09:29:00.000Z",
+    "distanceMeters": 29000,
+    "distanceKm": 29,
+    "drivingDuration": "00:31:00",
+    "idlingDuration": "00:15:00",
+    "averageSpeedKmh": 56,
+    "maxSpeedKmh": 106,
+    "startPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    },
+    "endPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    }
+  },
+  {
+    "id": "s3-t2",
+    "deviceId": "s3",
+    "deviceName": "Truck 16 — Park",
+    "start": "2026-02-28T10:30:00.000Z",
+    "stop": "2026-02-28T11:12:00.000Z",
+    "distanceMeters": 34300,
+    "distanceKm": 34.3,
+    "drivingDuration": "00:35:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s3-t3",
+    "deviceId": "s3",
+    "deviceName": "Truck 16 — Park",
+    "start": "2026-02-28T11:22:00.000Z",
+    "stop": "2026-02-28T11:35:00.000Z",
+    "distanceMeters": 6500,
+    "distanceKm": 6.5,
+    "drivingDuration": "00:08:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 52,
+    "maxSpeedKmh": 99,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    }
+  },
+  {
+    "id": "s3-t4",
+    "deviceId": "s3",
+    "deviceName": "Truck 16 — Park",
+    "start": "2026-02-28T12:51:00.000Z",
+    "stop": "2026-02-28T13:13:00.000Z",
+    "distanceMeters": 12700,
+    "distanceKm": 12.7,
+    "drivingDuration": "00:13:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 103,
+    "startPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    },
+    "endPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    }
+  },
+  {
+    "id": "s3-t5",
+    "deviceId": "s3",
+    "deviceName": "Truck 16 — Park",
+    "start": "2026-02-28T14:43:00.000Z",
+    "stop": "2026-02-28T15:21:00.000Z",
+    "distanceMeters": 22700,
+    "distanceKm": 22.7,
+    "drivingDuration": "00:32:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 42,
+    "maxSpeedKmh": 86,
+    "startPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    },
+    "endPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    }
+  },
+  {
+    "id": "s3-t6",
+    "deviceId": "s3",
+    "deviceName": "Truck 16 — Park",
+    "start": "2026-02-27T09:32:00.000Z",
+    "stop": "2026-02-27T09:53:00.000Z",
+    "distanceMeters": 14200,
+    "distanceKm": 14.2,
+    "drivingDuration": "00:16:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 52,
+    "maxSpeedKmh": 100,
+    "startPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s3-t7",
+    "deviceId": "s3",
+    "deviceName": "Truck 16 — Park",
+    "start": "2026-02-27T13:55:00.000Z",
+    "stop": "2026-02-27T14:22:00.000Z",
+    "distanceMeters": 17900,
+    "distanceKm": 17.9,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 105,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.2358,
+      "lon": -121.9624
+    }
+  }
+]

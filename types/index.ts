@@ -181,8 +181,10 @@ export interface AceQueryRequest {
   radiusKm?: number;
   /** Days back for fleet-scoped and stop-visit queries (default varies by query). */
   daysBack?: number;
-  /** Fleet group name — required for fleet-scoped Pulse queries. */
+  /** Fleet group name — used in the Ace prompt for fleet-scoped queries. */
   groupName?: string;
+  /** Fleet group ID (e.g. "g-north") — used to resolve per-group fallback files. */
+  groupId?: string;
 }
 
 // ─── Amenity types ─────────────────────────────────────────────────────────
@@ -447,9 +449,17 @@ export interface AssistantContext {
   currentTripId?: string;
 }
 
+/** Analysis topic for the "analyze" intent. */
+export type AnalysisTopic =
+  | "route_efficiency"
+  | "anomalies"
+  | "fleet_comparison"
+  | "vehicle_patterns"
+  | "general";
+
 /** Classified intent from the LLM or keyword fallback router. */
 export interface AssistantIntent {
-  intent: "navigate" | "lookup" | "explain" | "unknown";
+  intent: "navigate" | "lookup" | "explain" | "analyze" | "conversational" | "off_topic" | "unknown";
   entity?: {
     type: "fleet" | "vehicle" | "trip" | "page";
     /** Raw name extracted from the query (before entity resolution). */
@@ -461,6 +471,8 @@ export interface AssistantIntent {
   timeframe?: string;
   /** Target page for navigate intent. */
   targetPage?: "home" | "pulse" | "fleet-detail" | "dashboard" | "story" | "features";
+  /** Analysis sub-topic for the "analyze" intent. */
+  analysisTopic?: AnalysisTopic;
 }
 
 /** Navigation action the assistant can perform. */
@@ -491,6 +503,8 @@ export interface AssistantResponse {
   suggestions?: string[];
   /** True if the response came from the keyword fallback (LLM was unavailable). */
   fromFallback?: boolean;
+  /** Data sources used to ground the response (for analyze intent). */
+  sources?: string[];
 }
 
 /** Request body accepted by POST /api/assistant/query. */
@@ -501,11 +515,27 @@ export interface AssistantQueryRequest {
 
 // ─── Next-Stop Prediction types ───────────────────────────────────────────────
 
+/** Raw signal scores used to compute a prediction's confidence. */
+export interface PredictionSignals {
+  /** Visit-frequency share of total historical trips (0–1). */
+  frequency: number;
+  /** Gaussian proximity to the destination's typical arrival hour (0–1). */
+  temporal: number;
+  /** Exponential decay from most-recent visit date (0–1). */
+  recency: number;
+  /** Route-pattern chain match score (0–1). */
+  sequence: number;
+}
+
 /** A single ranked prediction for a vehicle's likely next stop. */
 export interface StopPrediction {
   rank: number;
   locationName: string;
-  /** Normalized likelihood 0–1 based on historical visit frequency. */
+  /**
+   * Normalized likelihood 0–1.
+   * Computed from multi-signal scoring (frequency + temporal + recency + sequence),
+   * optionally re-ranked by LLM reasoning.
+   */
   confidence: number;
   visitCount: number;
   avgDwellMinutes?: number;
@@ -514,6 +544,15 @@ export interface StopPrediction {
   typicalArrivalHour?: number;
   /** Pre-loaded context briefing for the top prediction (rank === 1 only). */
   preloadedBriefing?: StopContext | null;
+  /** LLM-generated one-sentence explanation for this prediction. */
+  reasoning?: string;
+  /**
+   * LLM-detected anomaly in the vehicle's current pattern relative to history.
+   * Only present on rank-1 prediction when a meaningful deviation is detected.
+   */
+  anomaly?: string;
+  /** Raw signal breakdown used to compute this prediction's score. */
+  signals?: PredictionSignals;
 }
 
 /** Full result returned by GET /api/predict/next-stop. */
@@ -525,4 +564,34 @@ export interface NextStopPredictionResult {
   basedOnTrips: number;
   queriedAt: string;
   fromCache?: boolean;
+  /** True when LLM re-ranking was applied to the predictions. */
+  fromLLM?: boolean;
+}
+
+// ─── Fleet Digest AI types ────────────────────────────────────────────────────
+
+/** A forward-looking prediction about a fleet metric trend. */
+export interface DigestPrediction {
+  metric: string;
+  direction: "up" | "down" | "stable";
+  /** Human-readable magnitude, e.g. "2–3%" or "~50 km". */
+  magnitude: string;
+  /** LLM confidence 0–1. */
+  confidence: number;
+  /** Short explanation of why this trend is expected. */
+  reasoning: string;
+}
+
+/** An anomaly detected in the fleet's current operating pattern. */
+export interface DigestAnomaly {
+  severity: "warning" | "critical";
+  /** The metric or dimension the anomaly relates to. */
+  metric: string;
+  text: string;
+}
+
+/** An actionable recommendation produced by the digest analyst. */
+export interface DigestRecommendation {
+  priority: "high" | "medium" | "low";
+  text: string;
 }

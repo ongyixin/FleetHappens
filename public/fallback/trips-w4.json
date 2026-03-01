@@ -1,0 +1,65 @@
+[
+  {
+    "id": "w4-t1",
+    "deviceId": "w4",
+    "deviceName": "Van 33 — Osei",
+    "start": "2026-02-28T09:24:00.000Z",
+    "stop": "2026-02-28T09:32:00.000Z",
+    "distanceMeters": 1700,
+    "distanceKm": 1.7,
+    "drivingDuration": "00:02:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 98,
+    "startPoint": {
+      "lat": 37.7599,
+      "lon": -122.4148
+    },
+    "endPoint": {
+      "lat": 37.7633,
+      "lon": -122.401
+    }
+  },
+  {
+    "id": "w4-t2",
+    "deviceId": "w4",
+    "deviceName": "Van 33 — Osei",
+    "start": "2026-02-28T11:48:00.000Z",
+    "stop": "2026-02-28T12:02:00.000Z",
+    "distanceMeters": 4900,
+    "distanceKm": 4.9,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 89,
+    "startPoint": {
+      "lat": 37.7633,
+      "lon": -122.401
+    },
+    "endPoint": {
+      "lat": 37.7956,
+      "lon": -122.3933
+    }
+  },
+  {
+    "id": "w4-t3",
+    "deviceId": "w4",
+    "deviceName": "Van 33 — Osei",
+    "start": "2026-02-27T12:19:00.000Z",
+    "stop": "2026-02-27T12:30:00.000Z",
+    "distanceMeters": 5900,
+    "distanceKm": 5.9,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 100,
+    "startPoint": {
+      "lat": 37.7956,
+      "lon": -122.3933
+    },
+    "endPoint": {
+      "lat": 37.7599,
+      "lon": -122.4148
+    }
+  }
+]

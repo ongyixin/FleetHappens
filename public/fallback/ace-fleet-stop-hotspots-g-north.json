@@ -1,0 +1,19 @@
+{
+  "id": "fleet-stop-hotspots-g-north",
+  "question": "What are the top stop locations for the North Region fleet in the last 30 days?",
+  "columns": ["location_name", "visit_count", "avg_dwell_minutes", "lat", "lon"],
+  "rows": [
+    { "location_name": "Oakland Distribution Center", "visit_count": 247, "avg_dwell_minutes": 38, "lat": 37.8044, "lon": -122.2712 },
+    { "location_name": "Berkeley Service Center",     "visit_count": 189, "avg_dwell_minutes": 29, "lat": 37.8716, "lon": -122.2727 },
+    { "location_name": "Richmond Depot",              "visit_count": 154, "avg_dwell_minutes": 45, "lat": 37.9358, "lon": -122.3477 },
+    { "location_name": "Emeryville Hub",              "visit_count": 131, "avg_dwell_minutes": 22, "lat": 37.8317, "lon": -122.2911 },
+    { "location_name": "Alameda Terminal",            "visit_count": 108, "avg_dwell_minutes": 41, "lat": 37.7738, "lon": -122.2519 },
+    { "location_name": "San Leandro Warehouse",       "visit_count": 87,  "avg_dwell_minutes": 54, "lat": 37.7238, "lon": -122.1561 },
+    { "location_name": "Piedmont Yard",               "visit_count": 63,  "avg_dwell_minutes": 18, "lat": 37.8239, "lon": -122.2320 },
+    { "location_name": "Castro Valley Hub",           "visit_count": 44,  "avg_dwell_minutes": 33, "lat": 37.6909, "lon": -122.0857 }
+  ],
+  "reasoning": "Oakland Distribution Center anchors the North Region at 247 visits — the undisputed hub for inter-depot transfers. Berkeley Service Center (189 visits, 29 min avg dwell) is the primary maintenance and top-off stop. Richmond Depot carries the longest average dwell at 45 min, consistent with loading dock queuing. San Leandro Warehouse's 54 min avg dwell flags it as a consolidation bottleneck; scheduling a second unloading bay slot could cut wait time by ~30%. Castro Valley sees lower volume (44 visits) but serves as the southernmost anchor for n6 and n8 routes.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 8,
+  "fromCache": true
+}

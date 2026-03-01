@@ -1,0 +1,86 @@
+[
+  {
+    "id": "s6-t1",
+    "deviceId": "s6",
+    "deviceName": "Van 17 — Reyes",
+    "start": "2026-02-28T09:50:00.000Z",
+    "stop": "2026-02-28T10:06:00.000Z",
+    "distanceMeters": 10000,
+    "distanceKm": 10,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 89,
+    "startPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    },
+    "endPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    }
+  },
+  {
+    "id": "s6-t2",
+    "deviceId": "s6",
+    "deviceName": "Van 17 — Reyes",
+    "start": "2026-02-28T11:33:00.000Z",
+    "stop": "2026-02-28T11:57:00.000Z",
+    "distanceMeters": 14200,
+    "distanceKm": 14.2,
+    "drivingDuration": "00:16:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 54,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s6-t3",
+    "deviceId": "s6",
+    "deviceName": "Van 17 — Reyes",
+    "start": "2026-02-28T13:27:00.000Z",
+    "stop": "2026-02-28T13:38:00.000Z",
+    "distanceMeters": 6500,
+    "distanceKm": 6.5,
+    "drivingDuration": "00:07:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 94,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    }
+  },
+  {
+    "id": "s6-t4",
+    "deviceId": "s6",
+    "deviceName": "Van 17 — Reyes",
+    "start": "2026-02-27T10:16:00.000Z",
+    "stop": "2026-02-27T10:52:00.000Z",
+    "distanceMeters": 28200,
+    "distanceKm": 28.2,
+    "drivingDuration": "00:31:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 54,
+    "maxSpeedKmh": 99,
+    "startPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    },
+    "endPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    }
+  }
+]

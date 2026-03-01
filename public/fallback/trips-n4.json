@@ -1,0 +1,191 @@
+[
+  {
+    "id": "n4-t1",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T06:29:00.000Z",
+    "stop": "2026-02-28T06:40:00.000Z",
+    "distanceMeters": 5100,
+    "distanceKm": 5.1,
+    "drivingDuration": "00:07:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 44,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n4-t2",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T07:19:00.000Z",
+    "stop": "2026-02-28T07:56:00.000Z",
+    "distanceMeters": 27800,
+    "distanceKm": 27.8,
+    "drivingDuration": "00:30:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 94,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  },
+  {
+    "id": "n4-t3",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T08:16:00.000Z",
+    "stop": "2026-02-28T08:32:00.000Z",
+    "distanceMeters": 9700,
+    "distanceKm": 9.7,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 51,
+    "maxSpeedKmh": 85,
+    "startPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    },
+    "endPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    }
+  },
+  {
+    "id": "n4-t4",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T09:08:00.000Z",
+    "stop": "2026-02-28T09:25:00.000Z",
+    "distanceMeters": 13600,
+    "distanceKm": 13.6,
+    "drivingDuration": "00:14:00",
+    "idlingDuration": "00:03:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 94,
+    "startPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    },
+    "endPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    }
+  },
+  {
+    "id": "n4-t5",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T10:56:00.000Z",
+    "stop": "2026-02-28T11:13:00.000Z",
+    "distanceMeters": 9900,
+    "distanceKm": 9.9,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 95,
+    "startPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  },
+  {
+    "id": "n4-t6",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T11:27:00.000Z",
+    "stop": "2026-02-28T11:37:00.000Z",
+    "distanceMeters": 4700,
+    "distanceKm": 4.7,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 86,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n4-t7",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T13:52:00.000Z",
+    "stop": "2026-02-28T14:06:00.000Z",
+    "distanceMeters": 5500,
+    "distanceKm": 5.5,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 106,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    }
+  },
+  {
+    "id": "n4-t8",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-28T15:03:00.000Z",
+    "stop": "2026-02-28T15:19:00.000Z",
+    "distanceMeters": 7900,
+    "distanceKm": 7.9,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 79,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    }
+  },
+  {
+    "id": "n4-t9",
+    "deviceId": "n4",
+    "deviceName": "Van 05 — Nguyen",
+    "start": "2026-02-27T10:08:00.000Z",
+    "stop": "2026-02-27T10:45:00.000Z",
+    "distanceMeters": 23300,
+    "distanceKm": 23.3,
+    "drivingDuration": "00:31:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 85,
+    "startPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  }
+]

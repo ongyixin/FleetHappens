@@ -1,0 +1,16 @@
+{
+  "id": "fleet-vehicle-outliers-g-south",
+  "question": "Which South Region vehicles are statistical outliers by distance, idle time, or trip count this week?",
+  "columns": ["device_name", "total_distance_km", "trip_count", "avg_idle_pct"],
+  "rows": [
+    { "device_name": "Truck 14 — Ahmed",    "total_distance_km": 892, "trip_count": 36, "avg_idle_pct": 10.4 },
+    { "device_name": "Van 13 — Santos",     "total_distance_km": 754, "trip_count": 39, "avg_idle_pct": 8.1  },
+    { "device_name": "Truck 16 — Park",     "total_distance_km": 681, "trip_count": 27, "avg_idle_pct": 12.7 },
+    { "device_name": "Truck 18 — Hassan",   "total_distance_km": 523, "trip_count": 22, "avg_idle_pct": 31.6 },
+    { "device_name": "Van 15 — Williams",   "total_distance_km": 498, "trip_count": 28, "avg_idle_pct": 9.3  }
+  ],
+  "reasoning": "Ahmed (Truck 14) leads total distance at 892 km with a balanced 10.4% idle rate. Santos (Van 13) has the most trips (39) at the region's lowest idle rate (8.1%) — the South Region's efficiency benchmark. Hassan (Truck 18) is the critical outlier at 31.6% idle — nearly 3× the region average of 11.8% — driven by extended waits at Milpitas Cold Storage loading bays. Park carries an above-average idle rate at 12.7% despite solid distance numbers. Reducing Hassan's Milpitas dwell by scheduling a dedicated slot could recover ~45 min of productive driving time per day.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

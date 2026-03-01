@@ -1,0 +1,128 @@
+[
+  {
+    "id": "w2-t1",
+    "deviceId": "w2",
+    "deviceName": "Van 31 — Oliveira",
+    "start": "2026-02-28T08:53:00.000Z",
+    "stop": "2026-02-28T09:07:00.000Z",
+    "distanceMeters": 6100,
+    "distanceKm": 6.1,
+    "drivingDuration": "00:07:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 87,
+    "startPoint": {
+      "lat": 37.6547,
+      "lon": -122.4077
+    },
+    "endPoint": {
+      "lat": 37.6213,
+      "lon": -122.3789
+    }
+  },
+  {
+    "id": "w2-t2",
+    "deviceId": "w2",
+    "deviceName": "Van 31 — Oliveira",
+    "start": "2026-02-28T09:29:00.000Z",
+    "stop": "2026-02-28T09:54:00.000Z",
+    "distanceMeters": 14800,
+    "distanceKm": 14.8,
+    "drivingDuration": "00:20:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 79,
+    "startPoint": {
+      "lat": 37.6213,
+      "lon": -122.3789
+    },
+    "endPoint": {
+      "lat": 37.6879,
+      "lon": -122.4702
+    }
+  },
+  {
+    "id": "w2-t3",
+    "deviceId": "w2",
+    "deviceName": "Van 31 — Oliveira",
+    "start": "2026-02-28T10:47:00.000Z",
+    "stop": "2026-02-28T11:03:00.000Z",
+    "distanceMeters": 8700,
+    "distanceKm": 8.7,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 52,
+    "maxSpeedKmh": 85,
+    "startPoint": {
+      "lat": 37.6879,
+      "lon": -122.4702
+    },
+    "endPoint": {
+      "lat": 37.7124,
+      "lon": -122.4036
+    }
+  },
+  {
+    "id": "w2-t4",
+    "deviceId": "w2",
+    "deviceName": "Van 31 — Oliveira",
+    "start": "2026-02-28T11:07:00.000Z",
+    "stop": "2026-02-28T11:15:00.000Z",
+    "distanceMeters": 3300,
+    "distanceKm": 3.3,
+    "drivingDuration": "00:04:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 46,
+    "maxSpeedKmh": 88,
+    "startPoint": {
+      "lat": 37.7124,
+      "lon": -122.4036
+    },
+    "endPoint": {
+      "lat": 37.7311,
+      "lon": -122.3892
+    }
+  },
+  {
+    "id": "w2-t5",
+    "deviceId": "w2",
+    "deviceName": "Van 31 — Oliveira",
+    "start": "2026-02-28T13:27:00.000Z",
+    "stop": "2026-02-28T13:51:00.000Z",
+    "distanceMeters": 11700,
+    "distanceKm": 11.7,
+    "drivingDuration": "00:16:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.7311,
+      "lon": -122.3892
+    },
+    "endPoint": {
+      "lat": 37.6547,
+      "lon": -122.4077
+    }
+  },
+  {
+    "id": "w2-t6",
+    "deviceId": "w2",
+    "deviceName": "Van 31 — Oliveira",
+    "start": "2026-02-27T10:11:00.000Z",
+    "stop": "2026-02-27T10:36:00.000Z",
+    "distanceMeters": 15800,
+    "distanceKm": 15.8,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 51,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.6547,
+      "lon": -122.4077
+    },
+    "endPoint": {
+      "lat": 37.7599,
+      "lon": -122.4148
+    }
+  }
+]

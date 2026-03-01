@@ -43,21 +43,26 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const fallbackKey = body.queryKey ?? "custom";
+  const groupId = body.groupId ?? null;
   const groupSlug = body.groupName
     ? body.groupName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
     : null;
-  const cacheKey = groupSlug
+  const cacheKey = groupId
+    ? `ace-${fallbackKey}-${groupId}.json`
+    : groupSlug
     ? `ace-${fallbackKey}-${groupSlug}.json`
     : `ace-${fallbackKey}.json`;
 
   // Demo mode: serve file fallback immediately — no live Ace call.
-  // Try the group-specific file first (e.g. ace-fleet-vehicle-outliers-north-region.json),
-  // then the canonical fallback for this query key (e.g. ace-fleet-vehicle-outliers.json),
-  // then a bare ace-<key>.json as a last resort.
+  // Resolution order:
+  //   1. groupId-keyed file  (e.g. ace-fleet-stop-hotspots-g-north.json)  ← preferred
+  //   2. groupSlug-keyed file (e.g. ace-fleet-stop-hotspots-north-region.json)
+  //   3. canonical fallback  (e.g. ace-fleet-stop-hotspots.json)
   if (process.env.PULSE_DEMO_GROUPS === "true") {
     const canonicalFile = getFallbackFile(fallbackKey);
     const data =
-      (groupSlug ? loadFileFallback<AceInsight>(cacheKey) : null) ??
+      (groupId   ? loadFileFallback<AceInsight>(`ace-${fallbackKey}-${groupId}.json`)   : null) ??
+      (groupSlug ? loadFileFallback<AceInsight>(`ace-${fallbackKey}-${groupSlug}.json`) : null) ??
       loadFileFallback<AceInsight>(canonicalFile) ??
       loadFileFallback<AceInsight>(`ace-${fallbackKey}.json`);
 

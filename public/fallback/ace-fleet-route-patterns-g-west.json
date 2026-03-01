@@ -1,0 +1,16 @@
+{
+  "id": "fleet-route-patterns-g-west",
+  "question": "What are the top origin-destination pairs for the West Region fleet in the last 14 days?",
+  "columns": ["origin", "destination", "trip_count", "avg_distance_km", "avg_duration_minutes"],
+  "rows": [
+    { "origin": "SF Embarcadero",    "destination": "Mission District",  "trip_count": 73, "avg_distance_km": 4.9,  "avg_duration_minutes": 14 },
+    { "origin": "SFO Cargo",         "destination": "South SF Depot",    "trip_count": 61, "avg_distance_km": 6.8,  "avg_duration_minutes": 16 },
+    { "origin": "South SF Depot",    "destination": "Daly City Hub",     "trip_count": 49, "avg_distance_km": 5.4,  "avg_duration_minutes": 13 },
+    { "origin": "Bayview Depot",     "destination": "South SF Depot",    "trip_count": 37, "avg_distance_km": 11.7, "avg_duration_minutes": 24 },
+    { "origin": "Mission District",  "destination": "Potrero Hill",      "trip_count": 28, "avg_distance_km": 3.2,  "avg_duration_minutes": 10 }
+  ],
+  "reasoning": "SF Embarcadero → Mission District is the West Region's most-run lane at 73 trips — short at 4.9 km but driven by Nakamura (w1) and Oliveira (w2) making multiple daily passes. SFO Cargo → South SF is the critical cargo-offload corridor; flight schedule dependency makes timing critical. The Mission → Potrero micro-run at 3.2 km is the shortest in the region — ideal for EV transition as range anxiety is minimal. Bayview → South SF at 11.7 km is the longest regular lane; Schreiber (w3) drives this exclusively and shows the best fuel efficiency in the region.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "e3-t1",
+    "deviceId": "e3",
+    "deviceName": "Truck 26 — Andersen",
+    "start": "2026-02-28T08:07:00.000Z",
+    "stop": "2026-02-28T08:39:00.000Z",
+    "distanceMeters": 9300,
+    "distanceKm": 9.3,
+    "drivingDuration": "00:12:00",
+    "idlingDuration": "00:20:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 80,
+    "startPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    },
+    "endPoint": {
+      "lat": 37.6624,
+      "lon": -121.8747
+    }
+  },
+  {
+    "id": "e3-t2",
+    "deviceId": "e3",
+    "deviceName": "Truck 26 — Andersen",
+    "start": "2026-02-28T10:31:00.000Z",
+    "stop": "2026-02-28T11:15:00.000Z",
+    "distanceMeters": 13000,
+    "distanceKm": 13,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:25:00",
+    "averageSpeedKmh": 42,
+    "maxSpeedKmh": 79,
+    "startPoint": {
+      "lat": 37.6624,
+      "lon": -121.8747
+    },
+    "endPoint": {
+      "lat": 37.6819,
+      "lon": -121.7681
+    }
+  },
+  {
+    "id": "e3-t3",
+    "deviceId": "e3",
+    "deviceName": "Truck 26 — Andersen",
+    "start": "2026-02-28T12:39:00.000Z",
+    "stop": "2026-02-28T13:22:00.000Z",
+    "distanceMeters": 20100,
+    "distanceKm": 20.1,
+    "drivingDuration": "00:25:00",
+    "idlingDuration": "00:18:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.6819,
+      "lon": -121.7681
+    },
+    "endPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    }
+  },
+  {
+    "id": "e3-t4",
+    "deviceId": "e3",
+    "deviceName": "Truck 26 — Andersen",
+    "start": "2026-02-28T14:05:00.000Z",
+    "stop": "2026-02-28T14:58:00.000Z",
+    "distanceMeters": 23800,
+    "distanceKm": 23.8,
+    "drivingDuration": "00:31:00",
+    "idlingDuration": "00:22:00",
+    "averageSpeedKmh": 46,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    },
+    "endPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    }
+  },
+  {
+    "id": "e3-t5",
+    "deviceId": "e3",
+    "deviceName": "Truck 26 — Andersen",
+    "start": "2026-02-27T09:36:00.000Z",
+    "stop": "2026-02-27T10:17:00.000Z",
+    "distanceMeters": 21800,
+    "distanceKm": 21.8,
+    "drivingDuration": "00:24:00",
+    "idlingDuration": "00:17:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 103,
+    "startPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    },
+    "endPoint": {
+      "lat": 37.6624,
+      "lon": -121.8747
+    }
+  }
+]

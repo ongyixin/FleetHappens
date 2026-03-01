@@ -1,0 +1,107 @@
+[
+  {
+    "id": "n7-t1",
+    "deviceId": "n7",
+    "deviceName": "Truck 08 — Larson",
+    "start": "2026-02-28T08:15:00.000Z",
+    "stop": "2026-02-28T08:37:00.000Z",
+    "distanceMeters": 13100,
+    "distanceKm": 13.1,
+    "drivingDuration": "00:16:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 85,
+    "startPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    },
+    "endPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    }
+  },
+  {
+    "id": "n7-t2",
+    "deviceId": "n7",
+    "deviceName": "Truck 08 — Larson",
+    "start": "2026-02-28T09:19:00.000Z",
+    "stop": "2026-02-28T09:35:00.000Z",
+    "distanceMeters": 6400,
+    "distanceKm": 6.4,
+    "drivingDuration": "00:08:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 95,
+    "startPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  },
+  {
+    "id": "n7-t3",
+    "deviceId": "n7",
+    "deviceName": "Truck 08 — Larson",
+    "start": "2026-02-28T11:08:00.000Z",
+    "stop": "2026-02-28T11:36:00.000Z",
+    "distanceMeters": 17000,
+    "distanceKm": 17,
+    "drivingDuration": "00:23:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 83,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    }
+  },
+  {
+    "id": "n7-t4",
+    "deviceId": "n7",
+    "deviceName": "Truck 08 — Larson",
+    "start": "2026-02-28T13:04:00.000Z",
+    "stop": "2026-02-28T13:37:00.000Z",
+    "distanceMeters": 21700,
+    "distanceKm": 21.7,
+    "drivingDuration": "00:22:00",
+    "idlingDuration": "00:11:00",
+    "averageSpeedKmh": 60,
+    "maxSpeedKmh": 106,
+    "startPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    },
+    "endPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    }
+  },
+  {
+    "id": "n7-t5",
+    "deviceId": "n7",
+    "deviceName": "Truck 08 — Larson",
+    "start": "2026-02-27T10:04:00.000Z",
+    "stop": "2026-02-27T10:18:00.000Z",
+    "distanceMeters": 5500,
+    "distanceKm": 5.5,
+    "drivingDuration": "00:08:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 80,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  }
+]

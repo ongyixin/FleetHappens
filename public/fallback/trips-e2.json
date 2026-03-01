@@ -1,0 +1,149 @@
+[
+  {
+    "id": "e2-t1",
+    "deviceId": "e2",
+    "deviceName": "Van 23 — Gonzalez",
+    "start": "2026-02-28T08:45:00.000Z",
+    "stop": "2026-02-28T08:55:00.000Z",
+    "distanceMeters": 3400,
+    "distanceKm": 3.4,
+    "drivingDuration": "00:04:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  },
+  {
+    "id": "e2-t2",
+    "deviceId": "e2",
+    "deviceName": "Van 23 — Gonzalez",
+    "start": "2026-02-28T09:11:00.000Z",
+    "stop": "2026-02-28T09:38:00.000Z",
+    "distanceMeters": 17200,
+    "distanceKm": 17.2,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 101,
+    "startPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    },
+    "endPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    }
+  },
+  {
+    "id": "e2-t3",
+    "deviceId": "e2",
+    "deviceName": "Van 23 — Gonzalez",
+    "start": "2026-02-28T10:35:00.000Z",
+    "stop": "2026-02-28T10:50:00.000Z",
+    "distanceMeters": 9600,
+    "distanceKm": 9.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    },
+    "endPoint": {
+      "lat": 37.52,
+      "lon": -122.04
+    }
+  },
+  {
+    "id": "e2-t4",
+    "deviceId": "e2",
+    "deviceName": "Van 23 — Gonzalez",
+    "start": "2026-02-28T11:34:00.000Z",
+    "stop": "2026-02-28T11:50:00.000Z",
+    "distanceMeters": 7500,
+    "distanceKm": 7.5,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.52,
+      "lon": -122.04
+    },
+    "endPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    }
+  },
+  {
+    "id": "e2-t5",
+    "deviceId": "e2",
+    "deviceName": "Van 23 — Gonzalez",
+    "start": "2026-02-28T12:08:00.000Z",
+    "stop": "2026-02-28T12:44:00.000Z",
+    "distanceMeters": 23800,
+    "distanceKm": 23.8,
+    "drivingDuration": "00:27:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 52,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    },
+    "endPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    }
+  },
+  {
+    "id": "e2-t6",
+    "deviceId": "e2",
+    "deviceName": "Van 23 — Gonzalez",
+    "start": "2026-02-28T14:13:00.000Z",
+    "stop": "2026-02-28T14:38:00.000Z",
+    "distanceMeters": 17900,
+    "distanceKm": 17.9,
+    "drivingDuration": "00:21:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 81,
+    "startPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    },
+    "endPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    }
+  },
+  {
+    "id": "e2-t7",
+    "deviceId": "e2",
+    "deviceName": "Van 23 — Gonzalez",
+    "start": "2026-02-27T10:11:00.000Z",
+    "stop": "2026-02-27T10:40:00.000Z",
+    "distanceMeters": 22900,
+    "distanceKm": 22.9,
+    "drivingDuration": "00:24:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 99,
+    "startPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    },
+    "endPoint": {
+      "lat": 37.52,
+      "lon": -122.04
+    }
+  }
+]

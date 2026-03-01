@@ -1,0 +1,19 @@
+{
+  "id": "fleet-stop-hotspots-g-west",
+  "question": "What are the top stop locations for the West Region fleet in the last 30 days?",
+  "columns": ["location_name", "visit_count", "avg_dwell_minutes", "lat", "lon"],
+  "rows": [
+    { "location_name": "SF Embarcadero Hub",   "visit_count": 174, "avg_dwell_minutes": 22, "lat": 37.7956, "lon": -122.3933 },
+    { "location_name": "SFO Cargo Terminal",   "visit_count": 143, "avg_dwell_minutes": 58, "lat": 37.6213, "lon": -122.3789 },
+    { "location_name": "South SF Depot",       "visit_count": 118, "avg_dwell_minutes": 34, "lat": 37.6547, "lon": -122.4077 },
+    { "location_name": "Mission District",     "visit_count": 97,  "avg_dwell_minutes": 19, "lat": 37.7599, "lon": -122.4148 },
+    { "location_name": "Daly City Hub",        "visit_count": 79,  "avg_dwell_minutes": 28, "lat": 37.6879, "lon": -122.4702 },
+    { "location_name": "Potrero Hill",         "visit_count": 61,  "avg_dwell_minutes": 16, "lat": 37.7633, "lon": -122.4010 },
+    { "location_name": "Bayview Depot",        "visit_count": 44,  "avg_dwell_minutes": 31, "lat": 37.7311, "lon": -122.3892 },
+    { "location_name": "Visitacion Valley",    "visit_count": 28,  "avg_dwell_minutes": 24, "lat": 37.7124, "lon": -122.4036 }
+  ],
+  "reasoning": "SF Embarcadero is the West Region's primary dispatch point at 174 visits, but its 22 min avg dwell reflects rapid load-and-go operations. SFO Cargo Terminal carries the longest dwell at 58 min due to cargo check-in procedures — Nakamura (w1) and Oliveira (w2) account for 74% of visits here. Mission District's 19 min avg dwell is the fastest stop in the region. Daly City Hub at 79 visits serves as the southernmost anchor; Schreiber (w3) routes almost exclusively through this corridor.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 8,
+  "fromCache": true
+}

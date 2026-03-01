@@ -12,7 +12,9 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
     "@google-cloud/bigquery": "^8.1.1",
+    "@google-cloud/text-to-speech": "^6.4.0",
     "@google-cloud/vertexai": "^1.10.0",
+    "@googlemaps/js-api-loader": "^2.0.2",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-select": "^2.1.1",

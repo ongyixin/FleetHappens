@@ -1,0 +1,128 @@
+[
+  {
+    "id": "e4-t1",
+    "deviceId": "e4",
+    "deviceName": "Van 25 — Ibrahim",
+    "start": "2026-02-28T08:13:00.000Z",
+    "stop": "2026-02-28T08:41:00.000Z",
+    "distanceMeters": 17200,
+    "distanceKm": 17.2,
+    "drivingDuration": "00:22:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 81,
+    "startPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  },
+  {
+    "id": "e4-t2",
+    "deviceId": "e4",
+    "deviceName": "Van 25 — Ibrahim",
+    "start": "2026-02-28T09:44:00.000Z",
+    "stop": "2026-02-28T09:54:00.000Z",
+    "distanceMeters": 3400,
+    "distanceKm": 3.4,
+    "drivingDuration": "00:03:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 60,
+    "maxSpeedKmh": 109,
+    "startPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    },
+    "endPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    }
+  },
+  {
+    "id": "e4-t3",
+    "deviceId": "e4",
+    "deviceName": "Van 25 — Ibrahim",
+    "start": "2026-02-28T11:01:00.000Z",
+    "stop": "2026-02-28T11:35:00.000Z",
+    "distanceMeters": 22900,
+    "distanceKm": 22.9,
+    "drivingDuration": "00:29:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 94,
+    "startPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    },
+    "endPoint": {
+      "lat": 37.52,
+      "lon": -122.04
+    }
+  },
+  {
+    "id": "e4-t4",
+    "deviceId": "e4",
+    "deviceName": "Van 25 — Ibrahim",
+    "start": "2026-02-28T12:19:00.000Z",
+    "stop": "2026-02-28T12:39:00.000Z",
+    "distanceMeters": 9600,
+    "distanceKm": 9.6,
+    "drivingDuration": "00:12:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 89,
+    "startPoint": {
+      "lat": 37.52,
+      "lon": -122.04
+    },
+    "endPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    }
+  },
+  {
+    "id": "e4-t5",
+    "deviceId": "e4",
+    "deviceName": "Van 25 — Ibrahim",
+    "start": "2026-02-28T14:17:00.000Z",
+    "stop": "2026-02-28T14:31:00.000Z",
+    "distanceMeters": 7600,
+    "distanceKm": 7.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 82,
+    "startPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    },
+    "endPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    }
+  },
+  {
+    "id": "e4-t6",
+    "deviceId": "e4",
+    "deviceName": "Van 25 — Ibrahim",
+    "start": "2026-02-27T10:28:00.000Z",
+    "stop": "2026-02-27T11:05:00.000Z",
+    "distanceMeters": 23800,
+    "distanceKm": 23.8,
+    "drivingDuration": "00:31:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 46,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    },
+    "endPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    }
+  }
+]

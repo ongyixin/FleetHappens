@@ -1,0 +1,191 @@
+[
+  {
+    "id": "e1-t1",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-28T07:50:00.000Z",
+    "stop": "2026-02-28T08:25:00.000Z",
+    "distanceMeters": 23800,
+    "distanceKm": 23.8,
+    "drivingDuration": "00:27:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 87,
+    "startPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    },
+    "endPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    }
+  },
+  {
+    "id": "e1-t2",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-28T08:43:00.000Z",
+    "stop": "2026-02-28T09:00:00.000Z",
+    "distanceMeters": 9300,
+    "distanceKm": 9.3,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 52,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    },
+    "endPoint": {
+      "lat": 37.6624,
+      "lon": -121.8747
+    }
+  },
+  {
+    "id": "e1-t3",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-28T09:06:00.000Z",
+    "stop": "2026-02-28T09:33:00.000Z",
+    "distanceMeters": 13000,
+    "distanceKm": 13,
+    "drivingDuration": "00:16:00",
+    "idlingDuration": "00:11:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 97,
+    "startPoint": {
+      "lat": 37.6624,
+      "lon": -121.8747
+    },
+    "endPoint": {
+      "lat": 37.6819,
+      "lon": -121.7681
+    }
+  },
+  {
+    "id": "e1-t4",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-28T10:51:00.000Z",
+    "stop": "2026-02-28T11:39:00.000Z",
+    "distanceMeters": 33000,
+    "distanceKm": 33,
+    "drivingDuration": "00:43:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 46,
+    "maxSpeedKmh": 85,
+    "startPoint": {
+      "lat": 37.6819,
+      "lon": -121.7681
+    },
+    "endPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    }
+  },
+  {
+    "id": "e1-t5",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-28T11:44:00.000Z",
+    "stop": "2026-02-28T12:16:00.000Z",
+    "distanceMeters": 21100,
+    "distanceKm": 21.1,
+    "drivingDuration": "00:25:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 98,
+    "startPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    },
+    "endPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    }
+  },
+  {
+    "id": "e1-t6",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-28T12:16:00.000Z",
+    "stop": "2026-02-28T12:39:00.000Z",
+    "distanceMeters": 13900,
+    "distanceKm": 13.9,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 77,
+    "startPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    },
+    "endPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    }
+  },
+  {
+    "id": "e1-t7",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-28T13:57:00.000Z",
+    "stop": "2026-02-28T14:13:00.000Z",
+    "distanceMeters": 7600,
+    "distanceKm": 7.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 48,
+    "maxSpeedKmh": 81,
+    "startPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    },
+    "endPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    }
+  },
+  {
+    "id": "e1-t8",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-27T09:27:00.000Z",
+    "stop": "2026-02-27T09:57:00.000Z",
+    "distanceMeters": 24300,
+    "distanceKm": 24.3,
+    "drivingDuration": "00:25:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  },
+  {
+    "id": "e1-t9",
+    "deviceId": "e1",
+    "deviceName": "Truck 24 — Thompson",
+    "start": "2026-02-27T13:57:00.000Z",
+    "stop": "2026-02-27T14:23:00.000Z",
+    "distanceMeters": 17900,
+    "distanceKm": 17.9,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 56,
+    "maxSpeedKmh": 95,
+    "startPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    },
+    "endPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    }
+  }
+]

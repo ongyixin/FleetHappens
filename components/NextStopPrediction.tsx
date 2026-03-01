@@ -4,8 +4,12 @@
  * NextStopPrediction
  *
  * Displays ranked next-stop predictions for the selected vehicle, powered by
- * Ace historical route patterns. The #1 prediction arrives with a pre-loaded
- * context briefing so zero loading is needed when the vehicle arrives.
+ * multi-signal scoring + LLM re-ranking. Each prediction includes:
+ *   - Confidence bar
+ *   - LLM-generated reasoning sentence
+ *   - Signal breakdown (frequency / temporal / recency / sequence)
+ *   - Anomaly badge on rank-1 if a pattern break is detected
+ *   - Pre-loaded area briefing for the top prediction
  *
  * Visual identity: instrument-panel / cockpit aesthetic — dark viridian on
  * charcoal, with a thin cyan horizon-line accent. Forward motion through
@@ -13,7 +17,10 @@
  */
 
 import { useEffect, useState, useRef } from "react";
-import { Navigation, Clock, MapPin, Zap, ChevronRight, Loader2, TriangleAlert } from "lucide-react";
+import {
+  Navigation, Clock, MapPin, Zap, ChevronRight,
+  Loader2, TriangleAlert, Brain, BarChart3,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NextStopPredictionResult, StopPrediction, LatLon } from "@/types";
 
@@ -25,16 +32,18 @@ interface NextStopPredictionProps {
   currentPosition: LatLon;
   /** Called when user taps a prediction (opens stop context panel). */
   onStopSelect?: (coords: LatLon, locationName: string) => void;
+  /** Called once the API result is loaded — lets parents capture it without re-fetching. */
+  onResultLoaded?: (result: NextStopPredictionResult) => void;
   className?: string;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const CONFIDENCE_LABELS: [number, string][] = [
-  [0.6, "Very Likely"],
+  [0.6,  "Very Likely"],
   [0.35, "Likely"],
   [0.15, "Possible"],
-  [0, "Low Signal"],
+  [0,    "Low Signal"],
 ];
 
 function confidenceLabel(c: number): string {
@@ -45,7 +54,7 @@ function confidenceLabel(c: number): string {
 }
 
 function formatHour(h: number): string {
-  const period = h < 12 ? "AM" : "PM";
+  const period  = h < 12 ? "AM" : "PM";
   const display = h % 12 === 0 ? 12 : h % 12;
   return `~${display}${period}`;
 }
@@ -59,7 +68,7 @@ function ConfidenceBar({ value, rank }: { value: number; rank: number }) {
     return () => clearTimeout(t);
   }, [rank]);
 
-  const pct = Math.round(value * 100);
+  const pct   = Math.round(value * 100);
   const color =
     rank === 1
       ? "bg-[#2dd4bf]"
@@ -82,6 +91,89 @@ function ConfidenceBar({ value, rank }: { value: number; rank: number }) {
   );
 }
 
+// ─── Signal breakdown bar ─────────────────────────────────────────────────────
+
+interface SignalBarProps {
+  signals: NonNullable<StopPrediction["signals"]>;
+  rank: number;
+}
+
+function SignalBreakdown({ signals, rank }: SignalBarProps) {
+  const [animated, setAnimated] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 200 + rank * 140);
+    return () => clearTimeout(t);
+  }, [rank]);
+
+  const bars: Array<{ key: keyof typeof signals; label: string; color: string }> = [
+    { key: "frequency", label: "Freq",  color: "rgba(45,212,191,0.8)" },
+    { key: "temporal",  label: "Time",  color: "rgba(56,189,248,0.8)"  },
+    { key: "recency",   label: "Recnt", color: "rgba(167,139,250,0.8)" },
+    { key: "sequence",  label: "Seq",   color: "rgba(245,166,35,0.8)"  },
+  ];
+
+  return (
+    <div className="mt-1.5">
+      <div className="flex items-center gap-1 mb-1">
+        <BarChart3 className="w-2.5 h-2.5 text-[rgba(45,212,191,0.4)]" />
+        <span className="text-[9px] font-data uppercase tracking-[0.14em] text-[rgba(232,237,248,0.25)]">
+          Signal breakdown
+        </span>
+      </div>
+      <div className="space-y-0.5">
+        {bars.map(({ key, label, color }) => {
+          const pct = Math.round(signals[key] * 100);
+          return (
+            <div key={key} className="flex items-center gap-1.5">
+              <span
+                className="w-7 text-[8.5px] font-data shrink-0"
+                style={{ color: "rgba(232,237,248,0.3)" }}
+              >
+                {label}
+              </span>
+              <div className="flex-1 h-[3px] bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-600 ease-out"
+                  style={{
+                    width: animated ? `${pct}%` : "0%",
+                    background: color,
+                    transitionDuration: "600ms",
+                  }}
+                />
+              </div>
+              <span
+                className="w-6 text-[8.5px] font-data text-right shrink-0 tabular-nums"
+                style={{ color: "rgba(232,237,248,0.28)" }}
+              >
+                {pct}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Anomaly badge ────────────────────────────────────────────────────────────
+
+function AnomalyBadge({ text }: { text: string }) {
+  return (
+    <div
+      className="mt-2 flex items-start gap-1.5 rounded-md px-2 py-1.5"
+      style={{
+        background: "rgba(251,146,60,0.08)",
+        border: "1px solid rgba(251,146,60,0.22)",
+      }}
+    >
+      <TriangleAlert className="w-3 h-3 text-[#fb923c] shrink-0 mt-0.5" />
+      <p className="text-[10px] text-[rgba(251,146,60,0.85)] font-body leading-snug">
+        {text}
+      </p>
+    </div>
+  );
+}
+
 // ─── Prediction row ───────────────────────────────────────────────────────────
 
 function PredictionRow({
@@ -89,14 +181,19 @@ function PredictionRow({
   expanded,
   onClick,
   showPreloaded,
+  fromLLM,
 }: {
   prediction: StopPrediction;
   expanded: boolean;
   onClick: () => void;
   showPreloaded: boolean;
+  fromLLM: boolean;
 }) {
-  const isTop = prediction.rank === 1;
+  const isTop      = prediction.rank === 1;
   const hasBriefing = !!prediction.preloadedBriefing?.areaBriefing;
+  const hasSignals  = !!prediction.signals;
+  const hasReasoning = !!prediction.reasoning;
+  const hasAnomaly  = isTop && !!prediction.anomaly;
 
   return (
     <button
@@ -140,6 +237,12 @@ function PredictionRow({
                 Pre-loaded
               </span>
             )}
+            {fromLLM && isTop && (
+              <span className="shrink-0 inline-flex items-center gap-1 text-[8px] font-bold font-data uppercase tracking-wider text-[rgba(167,139,250,0.85)] bg-[rgba(167,139,250,0.1)] border border-[rgba(167,139,250,0.2)] rounded px-1.5 py-0.5">
+                <Brain className="w-2 h-2" />
+                AI
+              </span>
+            )}
           </div>
 
           {/* Confidence bar */}
@@ -172,6 +275,21 @@ function PredictionRow({
               </span>
             )}
           </div>
+
+          {/* LLM reasoning sentence */}
+          {hasReasoning && (
+            <p className="mt-1.5 text-[11px] text-[rgba(232,237,248,0.5)] font-body leading-snug italic">
+              {prediction.reasoning}
+            </p>
+          )}
+
+          {/* Anomaly badge */}
+          {hasAnomaly && <AnomalyBadge text={prediction.anomaly!} />}
+
+          {/* Signal breakdown — shown when expanded or for non-top rows inline */}
+          {hasSignals && (expanded || !isTop) && (
+            <SignalBreakdown signals={prediction.signals!} rank={prediction.rank} />
+          )}
         </div>
 
         {/* Chevron */}
@@ -212,6 +330,13 @@ function PredictionRow({
                 ))}
               </div>
             )}
+        </div>
+      )}
+
+      {/* Expanded signal breakdown for top prediction */}
+      {isTop && expanded && hasSignals && (
+        <div className="mt-3 pt-3 border-t border-[rgba(45,212,191,0.08)]">
+          <SignalBreakdown signals={prediction.signals!} rank={1} />
         </div>
       )}
     </button>
@@ -267,11 +392,12 @@ export default function NextStopPrediction({
   deviceId,
   currentPosition,
   onStopSelect,
+  onResultLoaded,
   className,
 }: NextStopPredictionProps) {
-  const [result, setResult] = useState<NextStopPredictionResult | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [result, setResult]       = useState<NextStopPredictionResult | null>(null);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState<string | null>(null);
   const [expandedTop, setExpandedTop] = useState(true);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -292,7 +418,9 @@ export default function NextStopPrediction({
       .then((json) => {
         if (controller.signal.aborted) return;
         if (json.ok) {
-          setResult(json.data as NextStopPredictionResult);
+          const r = json.data as NextStopPredictionResult;
+          setResult(r);
+          onResultLoaded?.(r);
         } else {
           setError(json.error ?? "Prediction unavailable");
         }
@@ -314,22 +442,27 @@ export default function NextStopPrediction({
                 locationName: String(row.destination_name ?? `Destination ${i + 1}`),
                 confidence: totalVisits > 0 ? (Number(row.visit_count) || 0) / totalVisits : 0,
                 visitCount: Number(row.visit_count) || 0,
-                avgDwellMinutes: row.avg_dwell_minutes !== undefined ? Number(row.avg_dwell_minutes) : undefined,
-                typicalArrivalHour: row.avg_arrival_hour !== undefined ? Number(row.avg_arrival_hour) : undefined,
+                avgDwellMinutes:
+                  row.avg_dwell_minutes !== undefined ? Number(row.avg_dwell_minutes) : undefined,
+                typicalArrivalHour:
+                  row.avg_arrival_hour !== undefined ? Number(row.avg_arrival_hour) : undefined,
                 coordinates:
                   destLat !== undefined && destLon !== undefined
                     ? { lat: destLat, lon: destLon }
                     : undefined,
               };
             });
-            setResult({
+            const fallbackResult: NextStopPredictionResult = {
               deviceId,
               fromCoordinates: currentPosition,
               predictions,
               basedOnTrips: totalVisits,
               queriedAt: new Date().toISOString(),
               fromCache: true,
-            });
+              fromLLM: false,
+            };
+            setResult(fallbackResult);
+            onResultLoaded?.(fallbackResult);
             setError(null);
           })
           .catch(() => {});
@@ -342,6 +475,7 @@ export default function NextStopPrediction({
   }, [deviceId, currentPosition.lat, currentPosition.lon]);
 
   const predictions = result?.predictions ?? [];
+  const fromLLM     = result?.fromLLM ?? false;
 
   return (
     <div
@@ -366,16 +500,24 @@ export default function NextStopPrediction({
           </div>
           {loading && <Loader2 className="w-3 h-3 text-[rgba(45,212,191,0.5)] animate-spin shrink-0" />}
           {!loading && result && (
-            <span
-              className={cn(
-                "text-[9px] font-bold font-data uppercase tracking-wider px-1.5 py-0.5 rounded border shrink-0",
-                result.fromCache
-                  ? "text-[rgba(232,237,248,0.3)] border-[rgba(255,255,255,0.08)] bg-transparent"
-                  : "text-[#2dd4bf] border-[rgba(45,212,191,0.25)] bg-[rgba(45,212,191,0.06)]"
+            <div className="flex items-center gap-1.5 shrink-0">
+              {fromLLM && (
+                <span className="text-[9px] font-bold font-data uppercase tracking-wider px-1.5 py-0.5 rounded border shrink-0 text-[rgba(167,139,250,0.9)] border-[rgba(167,139,250,0.25)] bg-[rgba(167,139,250,0.07)] flex items-center gap-1">
+                  <Brain className="w-2 h-2" />
+                  LLM
+                </span>
               )}
-            >
-              {result.fromCache ? "Cached" : "Live"}
-            </span>
+              <span
+                className={cn(
+                  "text-[9px] font-bold font-data uppercase tracking-wider px-1.5 py-0.5 rounded border shrink-0",
+                  result.fromCache
+                    ? "text-[rgba(232,237,248,0.3)] border-[rgba(255,255,255,0.08)] bg-transparent"
+                    : "text-[#2dd4bf] border-[rgba(45,212,191,0.25)] bg-[rgba(45,212,191,0.06)]"
+                )}
+              >
+                {result.fromCache ? "Cached" : "Live"}
+              </span>
+            </div>
           )}
         </div>
 
@@ -387,7 +529,7 @@ export default function NextStopPrediction({
         )}
         {loading && (
           <p className="text-[10px] text-[rgba(45,212,191,0.4)] mt-1.5 font-body flex items-center gap-1">
-            <span>Querying Ace route patterns</span>
+            <span>Querying Ace · scoring signals · reasoning…</span>
             <span className="inline-flex gap-0.5">
               {[0, 1, 2].map((i) => (
                 <span
@@ -422,6 +564,7 @@ export default function NextStopPrediction({
               prediction={p}
               expanded={p.rank === 1 && expandedTop}
               showPreloaded={!loading}
+              fromLLM={fromLLM}
               onClick={() => {
                 if (p.rank === 1) setExpandedTop((v) => !v);
                 if (p.coordinates && onStopSelect) {

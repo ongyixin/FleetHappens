@@ -1,0 +1,65 @@
+[
+  {
+    "id": "e5-t1",
+    "deviceId": "e5",
+    "deviceName": "Truck 28 — Murphy",
+    "start": "2026-02-28T08:14:00.000Z",
+    "stop": "2026-02-28T08:34:00.000Z",
+    "distanceMeters": 13000,
+    "distanceKm": 13,
+    "drivingDuration": "00:13:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.6819,
+      "lon": -121.7681
+    },
+    "endPoint": {
+      "lat": 37.6624,
+      "lon": -121.8747
+    }
+  },
+  {
+    "id": "e5-t2",
+    "deviceId": "e5",
+    "deviceName": "Truck 28 — Murphy",
+    "start": "2026-02-28T10:06:00.000Z",
+    "stop": "2026-02-28T10:21:00.000Z",
+    "distanceMeters": 9300,
+    "distanceKm": 9.3,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 103,
+    "startPoint": {
+      "lat": 37.6624,
+      "lon": -121.8747
+    },
+    "endPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    }
+  },
+  {
+    "id": "e5-t3",
+    "deviceId": "e5",
+    "deviceName": "Truck 28 — Murphy",
+    "start": "2026-02-27T11:45:00.000Z",
+    "stop": "2026-02-27T12:15:00.000Z",
+    "distanceMeters": 23800,
+    "distanceKm": 23.8,
+    "drivingDuration": "00:24:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    },
+    "endPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    }
+  }
+]

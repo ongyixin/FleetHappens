@@ -1,0 +1,19 @@
+{
+  "id": "fleet-stop-hotspots-g-east",
+  "question": "What are the top stop locations for the East Region fleet in the last 30 days?",
+  "columns": ["location_name", "visit_count", "avg_dwell_minutes", "lat", "lon"],
+  "rows": [
+    { "location_name": "Fremont Warehouse",    "visit_count": 198, "avg_dwell_minutes": 72, "lat": 37.5485, "lon": -121.9886 },
+    { "location_name": "Hayward Logistics Park","visit_count": 163, "avg_dwell_minutes": 44, "lat": 37.6688, "lon": -122.0808 },
+    { "location_name": "Dublin Distribution",  "visit_count": 134, "avg_dwell_minutes": 31, "lat": 37.7016, "lon": -121.9358 },
+    { "location_name": "Union City Depot",     "visit_count": 112, "avg_dwell_minutes": 38, "lat": 37.5840, "lon": -122.0342 },
+    { "location_name": "Newark Distribution",  "visit_count": 89,  "avg_dwell_minutes": 28, "lat": 37.5200, "lon": -122.0400 },
+    { "location_name": "Pleasanton Center",    "visit_count": 67,  "avg_dwell_minutes": 41, "lat": 37.6624, "lon": -121.8747 },
+    { "location_name": "Castro Valley Hub",    "visit_count": 51,  "avg_dwell_minutes": 25, "lat": 37.6909, "lon": -122.0857 },
+    { "location_name": "Livermore Park",       "visit_count": 33,  "avg_dwell_minutes": 57, "lat": 37.6819, "lon": -121.7681 }
+  ],
+  "reasoning": "Fremont Warehouse leads with 198 visits and the highest dwell time at 72 min — loading dock queuing is the root cause; Andersen (e3) accounts for a disproportionate share of idle minutes here. Hayward Logistics (163 visits) is the secondary hub serving e2 and e4 daily. Dublin Distribution at 31 min avg dwell is the fastest-turnaround stop in the region, ideal for consolidation. Livermore Park's 57 min avg dwell on just 33 visits suggests delivery complexity at the site — worth investigating for route optimisation.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 8,
+  "fromCache": true
+}

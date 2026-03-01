@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { LayoutGrid, List, RefreshCw, Brain, Zap } from "lucide-react";
+import { LayoutGrid, List, RefreshCw, Brain, Zap, Maximize2, Minimize2 } from "lucide-react";
 import type { CompanyPulseSummary, AceInsight, VehicleActivity, FleetGroup, ApiResponse } from "@/types";
 import FleetPulseSummaryStrip, { FleetPulseSummaryStripSkeleton } from "@/components/FleetPulseSummaryStrip";
 import FleetCard, { FleetCardSkeleton, mergeAceDistanceData } from "@/components/FleetCard";
@@ -40,6 +40,7 @@ function PulsePageContent() {
   const [mapVehicles, setMapVehicles] = useState<VehicleActivity[]>([]);
   const [mapGroups, setMapGroups]     = useState<FleetGroup[]>([]);
   const [viewMode, setViewMode]       = useState<ViewMode>("cards");
+  const [mapMaximised, setMapMaximised] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -109,7 +110,7 @@ function PulsePageContent() {
       <div className="pointer-events-none fixed inset-0 z-0 atlas-grid-bg opacity-40" />
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-10 border-b border-[rgba(255,255,255,0.07)] bg-[rgba(9,9,14,0.92)] backdrop-blur-sm">
+      <header className="sticky top-0 z-50 border-b border-[rgba(255,255,255,0.07)] bg-[rgba(9,9,14,0.92)] backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-3">
           {/* Brand */}
           <button
@@ -201,8 +202,10 @@ function PulsePageContent() {
         </div>
 
         {/* Main grid: fleet list + map */}
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-5">
-          <div>
+        <div className={`grid gap-5 ${mapMaximised ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-[1fr_360px]"}`}>
+
+          {/* Fleet list — rendered first in DOM always; CSS order swaps when maximised */}
+          <div className={mapMaximised ? "order-2" : "order-1"}>
             {summaryLoading ? (
               viewMode === "cards" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -213,7 +216,7 @@ function PulsePageContent() {
               )
             ) : summary ? (
               viewMode === "cards" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 stagger">
+                <div className={`grid gap-4 stagger ${mapMaximised ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-2"}`}>
                   {summary.fleets.map((fleet) => (
                     <FleetCard
                       key={fleet.group.id}
@@ -240,7 +243,11 @@ function PulsePageContent() {
           </div>
 
           {/* Regional map */}
-          <div className="xl:h-[480px] h-80">
+          <div
+            className={`relative order-1 transition-[height] duration-300 ${
+              mapMaximised ? "h-[65vh]" : "xl:h-[480px] h-80"
+            }`}
+          >
             <FleetRegionalMap
               vehicles={mapVehicles}
               groups={mapGroups}
@@ -250,6 +257,18 @@ function PulsePageContent() {
                 router.push(`/dashboard?deviceId=${vehicleId}&deviceName=${encodeURIComponent(name)}`);
               }}
             />
+
+            {/* Maximise / minimise toggle */}
+            <button
+              onClick={() => setMapMaximised((v) => !v)}
+              aria-label={mapMaximised ? "Minimise map" : "Maximise map"}
+              className="absolute top-3 right-3 z-[400] w-7 h-7 rounded-md flex items-center justify-center bg-[rgba(9,9,14,0.75)] border border-[rgba(255,255,255,0.1)] text-[rgba(232,237,248,0.55)] hover:text-[rgba(232,237,248,0.9)] hover:bg-[rgba(9,9,14,0.92)] hover:border-[rgba(245,166,35,0.4)] transition-all duration-150 backdrop-blur-sm shadow-lg"
+            >
+              {mapMaximised
+                ? <Minimize2 className="w-3.5 h-3.5" />
+                : <Maximize2 className="w-3.5 h-3.5" />
+              }
+            </button>
           </div>
         </div>
       </div>

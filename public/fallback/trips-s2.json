@@ -1,0 +1,170 @@
+[
+  {
+    "id": "s2-t1",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-28T07:47:00.000Z",
+    "stop": "2026-02-28T08:02:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 54,
+    "maxSpeedKmh": 86,
+    "startPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s2-t2",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-28T08:22:00.000Z",
+    "stop": "2026-02-28T09:08:00.000Z",
+    "distanceMeters": 34300,
+    "distanceKm": 34.3,
+    "drivingDuration": "00:35:00",
+    "idlingDuration": "00:11:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 95,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    }
+  },
+  {
+    "id": "s2-t3",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-28T10:00:00.000Z",
+    "stop": "2026-02-28T10:44:00.000Z",
+    "distanceMeters": 28200,
+    "distanceKm": 28.2,
+    "drivingDuration": "00:38:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 83,
+    "startPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    },
+    "endPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    }
+  },
+  {
+    "id": "s2-t4",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-28T11:36:00.000Z",
+    "stop": "2026-02-28T11:44:00.000Z",
+    "distanceMeters": 4200,
+    "distanceKm": 4.2,
+    "drivingDuration": "00:04:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 105,
+    "startPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    },
+    "endPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    }
+  },
+  {
+    "id": "s2-t5",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-28T12:44:00.000Z",
+    "stop": "2026-02-28T13:06:00.000Z",
+    "distanceMeters": 10100,
+    "distanceKm": 10.1,
+    "drivingDuration": "00:14:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 78,
+    "startPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    },
+    "endPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    }
+  },
+  {
+    "id": "s2-t6",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-28T13:48:00.000Z",
+    "stop": "2026-02-28T14:03:00.000Z",
+    "distanceMeters": 7800,
+    "distanceKm": 7.8,
+    "drivingDuration": "00:09:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    },
+    "endPoint": {
+      "lat": 37.2358,
+      "lon": -121.9624
+    }
+  },
+  {
+    "id": "s2-t7",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-28T15:56:00.000Z",
+    "stop": "2026-02-28T16:19:00.000Z",
+    "distanceMeters": 17900,
+    "distanceKm": 17.9,
+    "drivingDuration": "00:18:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.2358,
+      "lon": -121.9624
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s2-t8",
+    "deviceId": "s2",
+    "deviceName": "Van 13 — Santos",
+    "start": "2026-02-27T10:52:00.000Z",
+    "stop": "2026-02-27T11:16:00.000Z",
+    "distanceMeters": 14200,
+    "distanceKm": 14.2,
+    "drivingDuration": "00:17:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 51,
+    "maxSpeedKmh": 84,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    }
+  }
+]

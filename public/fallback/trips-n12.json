@@ -1,0 +1,44 @@
+[
+  {
+    "id": "n12-t1",
+    "deviceId": "n12",
+    "deviceName": "Van 11 — Johansson",
+    "start": "2026-02-27T13:49:00.000Z",
+    "stop": "2026-02-27T14:05:00.000Z",
+    "distanceMeters": 10100,
+    "distanceKm": 10.1,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 56,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n12-t2",
+    "deviceId": "n12",
+    "deviceName": "Van 11 — Johansson",
+    "start": "2026-02-25T10:11:00.000Z",
+    "stop": "2026-02-25T10:41:00.000Z",
+    "distanceMeters": 21700,
+    "distanceKm": 21.7,
+    "drivingDuration": "00:23:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 98,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    }
+  }
+]

@@ -2,8 +2,15 @@
  * GET /api/predict/next-stop
  *
  * Predicts the most likely next stop(s) for a vehicle based on its current
- * position and historical Ace route patterns. Pre-loads the context briefing
- * for the #1 prediction so it is ready the moment the vehicle arrives.
+ * position and historical Ace route patterns.
+ *
+ * Prediction pipeline:
+ *   1. Query Ace for common destinations from this origin
+ *   2. Score candidates with multi-signal engine (frequency + temporal +
+ *      recency + sequence)
+ *   3. Send top candidates to LLM for re-ranking, reasoning, and anomaly
+ *      detection (3 s budget — falls back to scored order on timeout)
+ *   4. Pre-load context briefing for the #1 prediction (best-effort)
  *
  * Query params:
  *   deviceId   — Geotab device ID (used for cache keying)
@@ -16,6 +23,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runInsightQuery } from "@/lib/ace/client";
 import { QUERY_KEYS } from "@/lib/ace/queries";
+import { scoreCandidates, type ScoreContext } from "@/lib/predict/score";
+import { generateText } from "@/lib/llm/client";
 import type {
   ApiResponse,
   NextStopPredictionResult,
@@ -26,9 +35,10 @@ import type {
 
 export const dynamic = "force-dynamic";
 
-// Briefing fetch has a 12s timeout — it's best-effort; we never block the
-// prediction response waiting indefinitely.
 const BRIEFING_TIMEOUT_MS = 12_000;
+const LLM_REASONING_TIMEOUT_MS = 5_000;
+
+// ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = req.nextUrl;
@@ -54,79 +64,72 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    // ── 1. Query Ace for common destinations from this origin ──────────────
+    // ── 1. Query Ace for common destinations from this origin ───────────────
     const aceInsight = await runInsightQuery(QUERY_KEYS.VEHICLE_NEXT_STOP, {
       coordinates: { lat, lon },
       radiusKm: 2.0,
       daysBack: 30,
     });
 
-    // ── 2. Parse rows into StopPrediction objects ─────────────────────────
     const rows = aceInsight.rows as Array<Record<string, string | number>>;
-    const totalVisits = rows.reduce(
-      (sum, r) => sum + (Number(r.visit_count) || 0),
-      0
-    );
-    const currentHour = new Date().getUTCHours();
 
-    const rawPredictions: StopPrediction[] = rows
-      .slice(0, 5)
-      .map((row, i) => {
-        const visitCount = Number(row.visit_count) || 0;
-        const typicalArrivalHour =
-          row.avg_arrival_hour !== undefined
-            ? Number(row.avg_arrival_hour)
-            : undefined;
+    // ── 2. Multi-signal scoring ─────────────────────────────────────────────
+    const now = new Date();
+    const scoreCtx: ScoreContext = {
+      currentHour: now.getUTCHours(),
+      currentDayOfWeek: now.getUTCDay(),
+      lastTripOrigin: { lat, lon },
+    };
 
-        // Base confidence from visit frequency
-        let confidence = totalVisits > 0 ? visitCount / totalVisits : 0;
+    const scored = scoreCandidates(rows, scoreCtx);
 
-        // +10% boost if this destination matches the current time-of-day window
-        if (
-          typicalArrivalHour !== undefined &&
-          Math.abs(typicalArrivalHour - currentHour) <= 2
-        ) {
-          confidence = Math.min(0.97, confidence * 1.1);
-        }
+    // ── 3. LLM re-ranking + reasoning (3 s budget, best-effort) ────────────
+    const [llmResult] = await Promise.allSettled([
+      llmReasonWithTimeout(scored, scoreCtx, LLM_REASONING_TIMEOUT_MS),
+    ]);
 
-        const destLat =
-          row.dest_lat !== undefined ? Number(row.dest_lat) : undefined;
-        const destLon =
-          row.dest_lon !== undefined ? Number(row.dest_lon) : undefined;
+    const fromLLM = llmResult.status === "fulfilled" && llmResult.value !== null;
+    const llmOutput: LLMOutput | null = fromLLM ? llmResult.value! : null;
 
-        return {
-          rank: i + 1,
-          locationName: String(row.destination_name ?? row.location_name ?? `Destination ${i + 1}`),
-          confidence,
-          visitCount,
-          avgDwellMinutes:
-            row.avg_dwell_minutes !== undefined
-              ? Number(row.avg_dwell_minutes)
-              : undefined,
-          typicalArrivalHour,
-          coordinates:
-            destLat !== undefined && destLon !== undefined && !isNaN(destLat) && !isNaN(destLon)
-              ? { lat: destLat, lon: destLon }
-              : undefined,
-        };
-      })
+    // ── 4. Build final predictions ──────────────────────────────────────────
+    const rawPredictions: StopPrediction[] = scored.slice(0, 5).map((c, i) => {
+      const llmEntry = llmOutput?.predictions?.find(
+        (e: LLMPredictionEntry) => e.rank === i + 1 || e.locationName === c.locationName
+      );
+
+      return {
+        rank: i + 1,
+        locationName: c.locationName,
+        confidence: llmEntry?.confidence ?? Math.min(0.97, c.rawScore),
+        visitCount: c.visitCount,
+        avgDwellMinutes: c.avgDwellMinutes,
+        typicalArrivalHour: c.typicalArrivalHour,
+        coordinates: c.coordinates,
+        signals: c.signals,
+        reasoning: llmEntry?.reasoning,
+        ...(i === 0 && llmOutput?.anomaly
+          ? { anomaly: llmOutput.anomaly }
+          : {}),
+      };
+    });
+
+    // Re-sort by LLM-adjusted confidence (LLM may have re-ranked)
+    const predictions: StopPrediction[] = rawPredictions
       .sort((a, b) => b.confidence - a.confidence)
       .map((p, i) => ({ ...p, rank: i + 1 }));
 
-    // ── 3. Pre-load briefing for the top prediction (best-effort) ─────────
-    const top = rawPredictions[0];
-    let preloadedBriefing: StopContext | null = null;
-
+    // ── 5. Pre-load briefing for the top prediction (best-effort) ───────────
+    const top = predictions[0];
     if (top?.coordinates) {
-      preloadedBriefing = await fetchBriefingWithTimeout(
-        top.coordinates,
-        deviceId
-      );
+      const briefing = await fetchBriefingWithTimeout(top.coordinates, deviceId);
+      if (briefing) {
+        predictions[0] = { ...predictions[0], preloadedBriefing: briefing };
+      }
     }
 
-    // Attach pre-loaded briefing to rank-1 prediction
-    const predictions: StopPrediction[] = rawPredictions.map((p) =>
-      p.rank === 1 ? { ...p, preloadedBriefing } : p
+    const totalVisits = rows.reduce(
+      (sum, r) => sum + (Number(r.visit_count) || 0),
+      0
     );
 
     const result: NextStopPredictionResult = {
@@ -136,6 +139,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       basedOnTrips: totalVisits,
       queriedAt: aceInsight.queriedAt,
       fromCache: aceInsight.fromCache,
+      fromLLM,
     };
 
     return NextResponse.json({ ok: true, data: result } satisfies ApiResponse<NextStopPredictionResult>);
@@ -143,13 +147,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const message = err instanceof Error ? err.message : String(err);
     console.error("[predict/next-stop] error:", message);
 
-    // Return fallback data so the UI always has something to render
     try {
       const fallback = await loadFallback(lat, lon, deviceId);
-      return NextResponse.json({
-        ok: true,
-        data: fallback,
-      } satisfies ApiResponse<NextStopPredictionResult>);
+      return NextResponse.json({ ok: true, data: fallback } satisfies ApiResponse<NextStopPredictionResult>);
     } catch {
       return NextResponse.json(
         { ok: false, error: message } satisfies ApiResponse<never>,
@@ -159,7 +159,132 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   }
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── LLM reasoning ────────────────────────────────────────────────────────────
+
+interface LLMPredictionEntry {
+  rank: number;
+  locationName: string;
+  confidence: number;
+  reasoning: string;
+}
+
+interface LLMOutput {
+  predictions: LLMPredictionEntry[];
+  anomaly?: string;
+}
+
+async function llmReasonWithTimeout(
+  candidates: ReturnType<typeof scoreCandidates>,
+  ctx: ScoreContext,
+  timeoutMs: number
+): Promise<LLMOutput | null> {
+  try {
+    const result = await Promise.race([
+      callLLMForReasoning(candidates, ctx),
+      new Promise<null>((_, reject) =>
+        setTimeout(() => reject(new Error("LLM timeout")), timeoutMs)
+      ),
+    ]);
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+async function callLLMForReasoning(
+  candidates: ReturnType<typeof scoreCandidates>,
+  ctx: ScoreContext
+): Promise<LLMOutput | null> {
+  if (!candidates.length) return null;
+
+  const now = new Date();
+  const dayName = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][ctx.currentDayOfWeek];
+  const isWeekend = ctx.currentDayOfWeek === 0 || ctx.currentDayOfWeek === 6;
+  const timeOfDay =
+    ctx.currentHour < 6  ? "early morning" :
+    ctx.currentHour < 12 ? "morning" :
+    ctx.currentHour < 17 ? "afternoon" :
+    ctx.currentHour < 21 ? "evening" : "night";
+
+  const candidatesList = candidates.slice(0, 5).map((c, i) => ({
+    rank: i + 1,
+    name: c.locationName,
+    visitCount: c.visitCount,
+    typicalArrivalHour: c.typicalArrivalHour,
+    avgDwellMinutes: c.avgDwellMinutes,
+    signals: {
+      frequency: +(c.signals.frequency * 100).toFixed(0),
+      temporal: +(c.signals.temporal * 100).toFixed(0),
+      recency: +(c.signals.recency * 100).toFixed(0),
+      sequence: +(c.signals.sequence * 100).toFixed(0),
+    },
+    multiSignalScore: +(c.rawScore * 100).toFixed(0),
+  }));
+
+  const systemPrompt = `You are a fleet route intelligence analyst. 
+You reason about where a vehicle is most likely heading next based on multi-signal scoring of its historical trip patterns.
+You are concise, precise, and grounded in the data. You never invent facts.
+Return only valid JSON with no markdown.`;
+
+  const userPrompt = `Vehicle prediction request:
+
+Context:
+- Current time: ${ctx.currentHour}:00 UTC (${timeOfDay} ${dayName}${isWeekend ? ", weekend" : ", weekday"})
+- Date: ${now.toISOString().split("T")[0]}
+
+Candidates (pre-scored, ranked by multi-signal score):
+${JSON.stringify(candidatesList, null, 2)}
+
+Signal key (0–100 scale):
+- frequency: share of historical trips to this destination
+- temporal: how well current hour matches typical arrival hour (Gaussian, σ=3h)
+- recency: how recently visited (14-day half-life decay)
+- sequence: route-chain pattern match score
+
+Task:
+1. Re-rank the candidates if temporal or recency signals strongly contradict the frequency leader
+   (e.g. frequency winner never visited on weekends but it's Saturday → demote it)
+2. Assign a calibrated confidence score (0.0–0.97) reflecting true likelihood
+3. Write a 1-sentence reasoning per prediction (≤15 words, cite the strongest signal)
+4. Detect any anomaly in the vehicle's current pattern vs its norms (optional, only if compelling)
+
+Return this exact JSON structure:
+{
+  "predictions": [
+    { "rank": 1, "locationName": "...", "confidence": 0.0, "reasoning": "..." },
+    { "rank": 2, "locationName": "...", "confidence": 0.0, "reasoning": "..." }
+  ],
+  "anomaly": "one sentence or null"
+}`;
+
+  const raw = await generateText(systemPrompt, [{ role: "user", content: userPrompt }], {
+    maxTokens: 512,
+    temperature: 0.3,
+    jsonMode: true,
+  });
+
+  const cleaned = raw.replace(/```json\n?|\n?```/g, "").trim();
+  const parsed = JSON.parse(cleaned) as {
+    predictions?: Array<{ rank?: number; locationName?: string; confidence?: number; reasoning?: string }>;
+    anomaly?: string | null;
+  };
+
+  if (!Array.isArray(parsed.predictions)) return null;
+
+  return {
+    predictions: parsed.predictions
+      .filter((p) => p.locationName && typeof p.confidence === "number")
+      .map((p, i) => ({
+        rank: p.rank ?? i + 1,
+        locationName: String(p.locationName),
+        confidence: Math.min(0.97, Math.max(0, Number(p.confidence))),
+        reasoning: p.reasoning ? String(p.reasoning) : "",
+      })),
+    anomaly: parsed.anomaly && parsed.anomaly !== "null" ? String(parsed.anomaly) : undefined,
+  };
+}
+
+// ─── Briefing pre-load ────────────────────────────────────────────────────────
 
 async function fetchBriefingWithTimeout(
   coords: LatLon,
@@ -191,6 +316,8 @@ async function fetchBriefingWithTimeout(
   }
 }
 
+// ─── Fallback ─────────────────────────────────────────────────────────────────
+
 async function loadFallback(
   lat: number,
   lon: number,
@@ -206,23 +333,22 @@ async function loadFallback(
   const rows = data.rows ?? [];
   const totalVisits = rows.reduce((s, r) => s + (Number(r.visit_count) || 0), 0);
 
-  const predictions: StopPrediction[] = rows.slice(0, 5).map((row, i) => {
-    const visitCount = Number(row.visit_count) || 0;
-    const destLat = row.dest_lat !== undefined ? Number(row.dest_lat) : undefined;
-    const destLon = row.dest_lon !== undefined ? Number(row.dest_lon) : undefined;
-    return {
-      rank: i + 1,
-      locationName: String(row.destination_name ?? `Destination ${i + 1}`),
-      confidence: totalVisits > 0 ? visitCount / totalVisits : 0,
-      visitCount,
-      avgDwellMinutes: row.avg_dwell_minutes !== undefined ? Number(row.avg_dwell_minutes) : undefined,
-      typicalArrivalHour: row.avg_arrival_hour !== undefined ? Number(row.avg_arrival_hour) : undefined,
-      coordinates:
-        destLat !== undefined && destLon !== undefined && !isNaN(destLat) && !isNaN(destLon)
-          ? { lat: destLat, lon: destLon }
-          : undefined,
-    };
+  const now = new Date();
+  const scored = scoreCandidates(rows, {
+    currentHour: now.getUTCHours(),
+    currentDayOfWeek: now.getUTCDay(),
   });
+
+  const predictions: StopPrediction[] = scored.slice(0, 5).map((c, i) => ({
+    rank: i + 1,
+    locationName: c.locationName,
+    confidence: Math.min(0.97, c.rawScore),
+    visitCount: c.visitCount,
+    avgDwellMinutes: c.avgDwellMinutes,
+    typicalArrivalHour: c.typicalArrivalHour,
+    coordinates: c.coordinates,
+    signals: c.signals,
+  }));
 
   return {
     deviceId,
@@ -231,5 +357,6 @@ async function loadFallback(
     basedOnTrips: totalVisits,
     queriedAt: new Date().toISOString(),
     fromCache: true,
+    fromLLM: false,
   };
 }

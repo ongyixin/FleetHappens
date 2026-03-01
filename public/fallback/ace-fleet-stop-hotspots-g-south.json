@@ -1,0 +1,19 @@
+{
+  "id": "fleet-stop-hotspots-g-south",
+  "question": "What are the top stop locations for the South Region fleet in the last 30 days?",
+  "columns": ["location_name", "visit_count", "avg_dwell_minutes", "lat", "lon"],
+  "rows": [
+    { "location_name": "SJ Tech Campus",      "visit_count": 221, "avg_dwell_minutes": 51, "lat": 37.3382, "lon": -121.8863 },
+    { "location_name": "Santa Clara Depot",   "visit_count": 178, "avg_dwell_minutes": 27, "lat": 37.3541, "lon": -121.9552 },
+    { "location_name": "Milpitas Cold Storage","visit_count": 152, "avg_dwell_minutes": 65, "lat": 37.4323, "lon": -121.8996 },
+    { "location_name": "Sunnyvale Service Ctr","visit_count": 119, "avg_dwell_minutes": 34, "lat": 37.3688, "lon": -121.9250 },
+    { "location_name": "Palo Alto Office Park","visit_count": 94,  "avg_dwell_minutes": 43, "lat": 37.4419, "lon": -122.1430 },
+    { "location_name": "Campbell Hub",        "visit_count": 71,  "avg_dwell_minutes": 38, "lat": 37.2871, "lon": -121.9520 },
+    { "location_name": "Los Gatos Center",    "visit_count": 48,  "avg_dwell_minutes": 29, "lat": 37.2358, "lon": -121.9624 },
+    { "location_name": "Morgan Hill Depot",   "visit_count": 22,  "avg_dwell_minutes": 72, "lat": 37.1305, "lon": -121.6544 }
+  ],
+  "reasoning": "SJ Tech Campus is the South Region's highest-volume stop at 221 visits, averaging 51 min dwell — dominated by afternoon service windows (13:00–17:00 UTC). Milpitas Cold Storage logs the highest dwell time at 65 min, consistent with temperature-controlled loading constraints; Hassan's idle spike originates here. Campbell Hub and Los Gatos Center form the southern corridor serving s5 and s7. Morgan Hill Depot is an outlier at 72 min avg dwell despite low visit count — likely a single driver pattern worth reviewing.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 8,
+  "fromCache": true
+}

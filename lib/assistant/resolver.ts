@@ -27,6 +27,7 @@ import {
   fuzzyMatchVehicle,
   suggestFleets,
 } from "./intents";
+import { resolveAnalyze } from "./analyze";
 import { generateText } from "@/lib/llm/client";
 
 // ─── Internal fetch helpers ───────────────────────────────────────────────────
@@ -143,6 +144,8 @@ export async function resolveIntent(
       return resolveLookup(intent, context, rawQuery);
     case "explain":
       return resolveExplain(intent, context);
+    case "analyze":
+      return resolveAnalyze(intent, context, rawQuery);
     case "unknown":
     default:
       return resolveUnknown(rawQuery);

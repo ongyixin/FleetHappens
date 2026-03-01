@@ -1,0 +1,65 @@
+[
+  {
+    "id": "n9-t1",
+    "deviceId": "n9",
+    "deviceName": "Truck 10 — Walsh",
+    "start": "2026-02-28T08:37:00.000Z",
+    "stop": "2026-02-28T08:49:00.000Z",
+    "distanceMeters": 4700,
+    "distanceKm": 4.7,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 48,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n9-t2",
+    "deviceId": "n9",
+    "deviceName": "Truck 10 — Walsh",
+    "start": "2026-02-28T10:31:00.000Z",
+    "stop": "2026-02-28T10:50:00.000Z",
+    "distanceMeters": 5500,
+    "distanceKm": 5.5,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:13:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 97,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    }
+  },
+  {
+    "id": "n9-t3",
+    "deviceId": "n9",
+    "deviceName": "Truck 10 — Walsh",
+    "start": "2026-02-27T09:16:00.000Z",
+    "stop": "2026-02-27T09:31:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 88,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    }
+  }
+]

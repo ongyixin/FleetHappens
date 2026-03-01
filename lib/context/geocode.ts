@@ -9,16 +9,43 @@
 
 import type { GeocodeResult } from "@/types";
 
+// ─── In-process coordinate cache ────────────────────────────────────────────
+// Key: "${lat.toFixed(3)}_${lon.toFixed(3)}" (~110 m grid cell).
+// Geocoding results are stable; 24-hour TTL is conservative.
+
+const GEOCODE_TTL_MS = 24 * 60 * 60 * 1000;
+
+interface GeocodeEntry {
+  result: GeocodeResult;
+  cachedAt: number;
+}
+
+const geocodeCache = new Map<string, GeocodeEntry>();
+
+function cacheKey(lat: number, lon: number): string {
+  return `${lat.toFixed(3)}_${lon.toFixed(3)}`;
+}
+
 // ─── Public entry point ─────────────────────────────────────────────────────
 
 export async function reverseGeocode(lat: number, lon: number): Promise<GeocodeResult> {
+  const key = cacheKey(lat, lon);
+  const cached = geocodeCache.get(key);
+  if (cached && Date.now() - cached.cachedAt < GEOCODE_TTL_MS) {
+    return cached.result;
+  }
+
+  let result: GeocodeResult;
   if (process.env.GOOGLE_MAPS_API_KEY) {
-    return reverseGeocodeGoogle(lat, lon);
+    result = await reverseGeocodeGoogle(lat, lon);
+  } else if (process.env.MAPBOX_ACCESS_TOKEN) {
+    result = await reverseGeocodeMapbox(lat, lon);
+  } else {
+    result = await reverseGeocodeNominatim(lat, lon);
   }
-  if (process.env.MAPBOX_ACCESS_TOKEN) {
-    return reverseGeocodeMapbox(lat, lon);
-  }
-  return reverseGeocodeNominatim(lat, lon);
+
+  geocodeCache.set(key, { result, cachedAt: Date.now() });
+  return result;
 }
 
 // ─── Google Maps ─────────────────────────────────────────────────────────────

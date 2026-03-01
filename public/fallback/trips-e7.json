@@ -1,0 +1,44 @@
+[
+  {
+    "id": "e7-t1",
+    "deviceId": "e7",
+    "deviceName": "Truck 30 — Chowdhury",
+    "start": "2026-02-27T15:57:00.000Z",
+    "stop": "2026-02-27T16:13:00.000Z",
+    "distanceMeters": 7500,
+    "distanceKm": 7.5,
+    "drivingDuration": "00:09:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 85,
+    "startPoint": {
+      "lat": 37.5485,
+      "lon": -121.9886
+    },
+    "endPoint": {
+      "lat": 37.52,
+      "lon": -122.04
+    }
+  },
+  {
+    "id": "e7-t2",
+    "deviceId": "e7",
+    "deviceName": "Truck 30 — Chowdhury",
+    "start": "2026-02-25T10:28:00.000Z",
+    "stop": "2026-02-25T10:57:00.000Z",
+    "distanceMeters": 17900,
+    "distanceKm": 17.9,
+    "drivingDuration": "00:24:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 44,
+    "maxSpeedKmh": 76,
+    "startPoint": {
+      "lat": 37.7016,
+      "lon": -121.9358
+    },
+    "endPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    }
+  }
+]

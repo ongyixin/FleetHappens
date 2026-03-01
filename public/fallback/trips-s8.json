@@ -1,0 +1,44 @@
+[
+  {
+    "id": "s8-t1",
+    "deviceId": "s8",
+    "deviceName": "Van 19 — Miller",
+    "start": "2026-02-28T09:25:00.000Z",
+    "stop": "2026-02-28T10:05:00.000Z",
+    "distanceMeters": 28200,
+    "distanceKm": 28.2,
+    "drivingDuration": "00:35:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 48,
+    "maxSpeedKmh": 91,
+    "startPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    },
+    "endPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    }
+  },
+  {
+    "id": "s8-t2",
+    "deviceId": "s8",
+    "deviceName": "Van 19 — Miller",
+    "start": "2026-02-27T11:46:00.000Z",
+    "stop": "2026-02-27T11:57:00.000Z",
+    "distanceMeters": 4200,
+    "distanceKm": 4.2,
+    "drivingDuration": "00:05:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 46,
+    "maxSpeedKmh": 94,
+    "startPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    },
+    "endPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    }
+  }
+]

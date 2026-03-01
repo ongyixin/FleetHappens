@@ -1,0 +1,44 @@
+[
+  {
+    "id": "e6-t1",
+    "deviceId": "e6",
+    "deviceName": "Van 27 — Petrov",
+    "start": "2026-02-28T09:37:00.000Z",
+    "stop": "2026-02-28T09:54:00.000Z",
+    "distanceMeters": 9600,
+    "distanceKm": 9.6,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 52,
+    "maxSpeedKmh": 95,
+    "startPoint": {
+      "lat": 37.52,
+      "lon": -122.04
+    },
+    "endPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    }
+  },
+  {
+    "id": "e6-t2",
+    "deviceId": "e6",
+    "deviceName": "Van 27 — Petrov",
+    "start": "2026-02-27T11:50:00.000Z",
+    "stop": "2026-02-27T12:10:00.000Z",
+    "distanceMeters": 13900,
+    "distanceKm": 13.9,
+    "drivingDuration": "00:15:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 87,
+    "startPoint": {
+      "lat": 37.584,
+      "lon": -122.0342
+    },
+    "endPoint": {
+      "lat": 37.6688,
+      "lon": -122.0808
+    }
+  }
+]

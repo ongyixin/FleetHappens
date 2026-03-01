@@ -9,6 +9,11 @@
  *   - CommandPaletteTrigger renders a lightweight pill button that fires the event
  *   - This avoids duplicate dialog instances across pages
  *
+ * Voice features:
+ *   - STT: Web Speech API (Google-backed in Chrome) — mic button in input bar
+ *   - TTS: Google Cloud Text-to-Speech (/api/tts) — auto-plays on voice input,
+ *          manual replay via speaker button; toggle in footer
+ *
  * Design system: Obsidian Atlas — dark cartographic theme, amber accents.
  */
 
@@ -32,6 +37,9 @@ import {
   Sparkles,
   AlertCircle,
   Bot,
+  Mic,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import type {
   AssistantResponse,
@@ -43,6 +51,36 @@ import { getContextualSuggestions } from "@/lib/assistant/suggestions";
 // ─── Custom event name ────────────────────────────────────────────────────────
 
 export const OPEN_PALETTE_EVENT = "openCommandPalette";
+
+// ─── Web Speech API type shim ─────────────────────────────────────────────────
+// SpeechRecognitionEvent / SpeechRecognitionErrorEvent are not always included
+// in the TypeScript DOM lib, so we define minimal shapes here.
+
+type SpeechRecognitionResultItem = { transcript: string; confidence: number };
+type SpeechRecognitionResult = { [index: number]: SpeechRecognitionResultItem; isFinal: boolean; length: number };
+type SpeechRecognitionResultList = { [index: number]: SpeechRecognitionResult; length: number };
+
+type WebSpeechResultEvent = { results: SpeechRecognitionResultList };
+type WebSpeechErrorEvent  = { error: string; message?: string };
+
+type AnySpeechRecognition = {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  continuous: boolean;
+  onresult: ((e: WebSpeechResultEvent) => void) | null;
+  onend: (() => void) | null;
+  onerror: ((e: WebSpeechErrorEvent) => void) | null;
+  start: () => void;
+  stop: () => void;
+  abort: () => void;
+};
+
+function getSpeechRecognition(): (new () => AnySpeechRecognition) | null {
+  if (typeof window === "undefined") return null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition ?? null;
+}
 
 // ─── Context builder ──────────────────────────────────────────────────────────
 
@@ -121,6 +159,18 @@ function SuggestionIcon({ text }: { text: string }) {
   return <Sparkles className="w-3 h-3" />;
 }
 
+// ─── TTS sound-wave bars ──────────────────────────────────────────────────────
+
+function SoundWaveBars({ color = "var(--amber)" }: { color?: string }) {
+  return (
+    <div className="flex items-end gap-[2px] h-3.5" aria-hidden>
+      <span className="sound-bar sound-bar-1 h-full" style={{ backgroundColor: color }} />
+      <span className="sound-bar sound-bar-2 h-full" style={{ backgroundColor: color }} />
+      <span className="sound-bar sound-bar-3 h-full" style={{ backgroundColor: color }} />
+    </div>
+  );
+}
+
 // ─── Result card ──────────────────────────────────────────────────────────────
 
 interface ResultCardProps {
@@ -128,9 +178,22 @@ interface ResultCardProps {
   isSelected: boolean;
   onAction: (url: string) => void;
   onSuggestion: (text: string) => void;
+  isSpeaking: boolean;
+  ttsEnabled: boolean;
+  onSpeak: () => void;
+  onStopSpeak: () => void;
 }
 
-function ResultCard({ response, isSelected, onAction, onSuggestion }: ResultCardProps) {
+function ResultCard({
+  response,
+  isSelected,
+  onAction,
+  onSuggestion,
+  isSpeaking,
+  ttsEnabled,
+  onSpeak,
+  onStopSpeak,
+}: ResultCardProps) {
   return (
     <div className="animate-fade-up">
       {/* Answer text */}
@@ -144,9 +207,13 @@ function ResultCard({ response, isSelected, onAction, onSuggestion }: ResultCard
         `}
       >
         <div className="flex items-start gap-3">
-          {/* Icon */}
+          {/* Bot icon / speaking animation */}
           <div className="mt-0.5 flex-shrink-0 w-7 h-7 rounded-lg bg-[rgba(245,166,35,0.12)] border border-[rgba(245,166,35,0.2)] flex items-center justify-center">
-            <Sparkles className="w-3.5 h-3.5 text-[var(--amber)]" />
+            {isSpeaking ? (
+              <SoundWaveBars />
+            ) : (
+              <Sparkles className="w-3.5 h-3.5 text-[var(--amber)]" />
+            )}
           </div>
 
           <div className="flex-1 min-w-0">
@@ -180,7 +247,37 @@ function ResultCard({ response, isSelected, onAction, onSuggestion }: ResultCard
                 keyword match
               </p>
             )}
+
+            {/* Data provenance for analyze responses */}
+            {response.sources && response.sources.length > 0 && (
+              <p className="mt-1.5 text-[10px] text-[var(--text-faint)] font-data leading-snug">
+                Based on: {response.sources.join(" · ")}
+              </p>
+            )}
           </div>
+
+          {/* TTS speaker toggle */}
+          {ttsEnabled && (
+            <button
+              onClick={isSpeaking ? onStopSpeak : onSpeak}
+              title={isSpeaking ? "Stop speaking" : "Read aloud"}
+              className={`
+                flex-shrink-0 mt-0.5 w-6 h-6 rounded-md flex items-center justify-center
+                transition-all duration-150
+                ${isSpeaking
+                  ? "text-[var(--amber)] bg-[rgba(245,166,35,0.12)]"
+                  : "text-[var(--text-faint)] hover:text-[var(--amber)] hover:bg-[rgba(245,166,35,0.08)]"
+                }
+              `}
+              aria-label={isSpeaking ? "Stop speaking" : "Read aloud"}
+            >
+              {isSpeaking ? (
+                <VolumeX className="w-3.5 h-3.5" />
+              ) : (
+                <Volume2 className="w-3.5 h-3.5" />
+              )}
+            </button>
+          )}
         </div>
 
         {/* Action button */}
@@ -305,11 +402,29 @@ export function CommandPalette() {
   const [error, setError] = useState<string | null>(null);
   const [isSelected] = useState(true);
 
+  // ── Voice state ────────────────────────────────────────────────────────────
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
+  const [sttAvailable, setSttAvailable] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const recognitionRef = useRef<AnySpeechRecognition | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // True when the current query came from voice input → triggers TTS auto-play
+  const voiceInputRef = useRef(false);
+
   const router = useRouter();
   const context = useAssistantContext();
   const suggestions = getContextualSuggestions(context);
+
+  // ── Detect STT availability + restore TTS preference ──────────────────────
+  useEffect(() => {
+    setSttAvailable(!!getSpeechRecognition());
+    const saved = localStorage.getItem("fleet-tts-enabled");
+    if (saved !== null) setTtsEnabled(saved === "true");
+  }, []);
 
   // ── Global Cmd+K + custom event listener ──────────────────────────────────
   useEffect(() => {
@@ -330,7 +445,7 @@ export function CommandPalette() {
     };
   }, []);
 
-  // ── Focus input on open ────────────────────────────────────────────────────
+  // ── Stop voice on close + focus input on open ─────────────────────────────
   useEffect(() => {
     if (open) {
       const t = setTimeout(() => inputRef.current?.focus(), 50);
@@ -340,8 +455,54 @@ export function CommandPalette() {
       setResponse(null);
       setError(null);
       setIsLoading(false);
+      // Stop any ongoing voice activity
+      recognitionRef.current?.abort();
+      setIsListening(false);
+      audioRef.current?.pause();
+      setIsSpeaking(false);
+      voiceInputRef.current = false;
     }
   }, [open]);
+
+  // ── TTS: speak response text ───────────────────────────────────────────────
+  const speak = useCallback(
+    async (text: string) => {
+      if (!ttsEnabled) return;
+      audioRef.current?.pause();
+      setIsSpeaking(false);
+
+      try {
+        setIsSpeaking(true);
+        const res = await fetch("/api/tts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
+        });
+        if (!res.ok) {
+          setIsSpeaking(false);
+          return;
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audioRef.current = audio;
+        audio.onended = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(url);
+        };
+        audio.onerror = () => setIsSpeaking(false);
+        await audio.play();
+      } catch {
+        setIsSpeaking(false);
+      }
+    },
+    [ttsEnabled]
+  );
+
+  const stopSpeaking = useCallback(() => {
+    audioRef.current?.pause();
+    setIsSpeaking(false);
+  }, []);
 
   // ── Query execution ────────────────────────────────────────────────────────
   const executeQuery = useCallback(
@@ -355,6 +516,7 @@ export function CommandPalette() {
       setIsLoading(true);
       setError(null);
       setResponse(null);
+      stopSpeaking();
 
       try {
         const res = await fetch("/api/assistant/query", {
@@ -367,6 +529,11 @@ export function CommandPalette() {
 
         if (json.ok) {
           setResponse(json.data);
+          // Auto-speak only when query came from voice input
+          if (voiceInputRef.current) {
+            voiceInputRef.current = false;
+            speak(json.data.text);
+          }
         } else {
           setError(json.error ?? "Something went wrong. Please try again.");
         }
@@ -376,13 +543,14 @@ export function CommandPalette() {
         setIsLoading(false);
       }
     },
-    [context]
+    [context, speak, stopSpeaking]
   );
 
   // ── Debounced query ────────────────────────────────────────────────────────
   const handleInputChange = useCallback(
     (value: string) => {
       setQuery(value);
+      stopSpeaking();
 
       if (debounceRef.current) clearTimeout(debounceRef.current);
 
@@ -397,8 +565,55 @@ export function CommandPalette() {
         executeQuery(value);
       }, 400);
     },
-    [executeQuery]
+    [executeQuery, stopSpeaking]
   );
+
+  // ── STT: start / stop listening ────────────────────────────────────────────
+  const startListening = useCallback(() => {
+    const SR = getSpeechRecognition();
+    if (!SR) return;
+
+    stopSpeaking();
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    const recognition = new SR();
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    recognition.continuous = false;
+
+    recognition.onresult = (event: WebSpeechResultEvent) => {
+      // Show interim transcript in real-time
+      const transcript = Array.from({ length: event.results.length }, (_, i) => event.results[i][0].transcript).join("");
+      setQuery(transcript);
+
+      // On final result, fire the query
+      if (event.results[event.results.length - 1]?.isFinal) {
+        voiceInputRef.current = true;
+        executeQuery(transcript);
+      }
+    };
+
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+
+    recognition.start();
+    recognitionRef.current = recognition;
+    setIsListening(true);
+  }, [executeQuery, stopSpeaking]);
+
+  const stopListening = useCallback(() => {
+    recognitionRef.current?.stop();
+    setIsListening(false);
+  }, []);
+
+  const toggleMic = useCallback(() => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  }, [isListening, startListening, stopListening]);
 
   // ── Keyboard navigation ────────────────────────────────────────────────────
   const handleKeyDown = useCallback(
@@ -426,10 +641,18 @@ export function CommandPalette() {
   const handleSuggestion = useCallback(
     (text: string) => {
       setQuery(text);
+      stopSpeaking();
       executeQuery(text);
     },
-    [executeQuery]
+    [executeQuery, stopSpeaking]
   );
+
+  const handleToggleTts = useCallback(() => {
+    const next = !ttsEnabled;
+    setTtsEnabled(next);
+    localStorage.setItem("fleet-tts-enabled", String(next));
+    if (!next) stopSpeaking();
+  }, [ttsEnabled, stopSpeaking]);
 
   const showEmpty = !query && !isLoading && !response && !error;
 
@@ -445,8 +668,15 @@ export function CommandPalette() {
           onOpenAutoFocus={(e) => e.preventDefault()}
           aria-label="Fleet assistant command palette"
         >
-          <div className="atlas-card-raised atlas-amber-border rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.7),0_0_0_1px_rgba(245,166,35,0.12)] animate-slide-in-bottom">
-
+          <div
+            className={`
+              atlas-card-raised rounded-2xl overflow-hidden
+              shadow-[0_24px_80px_rgba(0,0,0,0.7),0_0_0_1px_rgba(245,166,35,0.12)]
+              animate-slide-in-bottom
+              transition-shadow duration-300
+              ${isListening ? "shadow-[0_24px_80px_rgba(0,0,0,0.7),0_0_0_2px_rgba(245,166,35,0.55)]" : ""}
+            `}
+          >
             {/* Header bar */}
             <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--border-subtle)]">
               <div className="flex-shrink-0">
@@ -462,14 +692,40 @@ export function CommandPalette() {
                 value={query}
                 onChange={(e) => handleInputChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask about your fleet..."
-                className="flex-1 bg-transparent outline-none border-none text-[var(--text-primary)] placeholder:text-[var(--text-faint)] text-sm font-body"
+                placeholder={isListening ? "Listening…" : "Ask about your fleet…"}
+                className={`
+                  flex-1 bg-transparent outline-none border-none text-sm font-body
+                  transition-colors duration-150
+                  ${isListening
+                    ? "text-[var(--amber)] placeholder:text-[rgba(245,166,35,0.5)] caret-[var(--amber)]"
+                    : "text-[var(--text-primary)] placeholder:text-[var(--text-faint)]"
+                  }
+                `}
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
               />
 
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                {/* Mic button */}
+                {sttAvailable && (
+                  <button
+                    onClick={toggleMic}
+                    title={isListening ? "Stop listening (click or speak)" : "Speak your question"}
+                    aria-label={isListening ? "Stop listening" : "Start voice input"}
+                    className={`
+                      relative w-7 h-7 rounded-full flex items-center justify-center
+                      transition-all duration-150
+                      ${isListening
+                        ? "bg-[rgba(245,166,35,0.15)] text-[var(--amber)] animate-mic-ring"
+                        : "text-[var(--text-muted)] hover:text-[var(--amber)] hover:bg-[rgba(245,166,35,0.08)]"
+                      }
+                    `}
+                  >
+                    <Mic className={`w-3.5 h-3.5 ${isListening ? "text-[var(--amber)]" : ""}`} />
+                  </button>
+                )}
+
                 {query && (
                   <button
                     onClick={() => handleInputChange("")}
@@ -503,6 +759,10 @@ export function CommandPalette() {
                   isSelected={isSelected}
                   onAction={handleNavigate}
                   onSuggestion={handleSuggestion}
+                  isSpeaking={isSpeaking}
+                  ttsEnabled={ttsEnabled}
+                  onSpeak={() => speak(response.text)}
+                  onStopSpeak={stopSpeaking}
                 />
               )}
               {!isLoading && error && <ErrorState message={error} />}
@@ -519,10 +779,40 @@ export function CommandPalette() {
                   <kbd className="px-1 py-0.5 rounded bg-[var(--surface-3)] border border-[var(--border-subtle)]">esc</kbd>
                   close
                 </span>
+                {sttAvailable && (
+                  <span className="flex items-center gap-1">
+                    <Mic className="w-2.5 h-2.5" />
+                    voice
+                  </span>
+                )}
               </div>
-              <div className="flex items-center gap-1.5 text-[10px] font-data text-[var(--text-faint)]">
-                <Command className="w-3 h-3" />
-                <span>FleetHappens</span>
+
+              <div className="flex items-center gap-2.5">
+                {/* TTS toggle */}
+                <button
+                  onClick={handleToggleTts}
+                  title={ttsEnabled ? "Disable voice responses" : "Enable voice responses"}
+                  aria-label={ttsEnabled ? "Disable voice responses" : "Enable voice responses"}
+                  className={`
+                    flex items-center gap-1 text-[10px] font-data transition-colors duration-150
+                    ${ttsEnabled
+                      ? "text-[var(--amber)] hover:text-[rgba(245,166,35,0.6)]"
+                      : "text-[var(--text-faint)] hover:text-[var(--text-muted)]"
+                    }
+                  `}
+                >
+                  {ttsEnabled ? (
+                    <Volume2 className="w-3 h-3" />
+                  ) : (
+                    <VolumeX className="w-3 h-3" />
+                  )}
+                  <span>voice</span>
+                </button>
+
+                <div className="flex items-center gap-1.5 text-[10px] font-data text-[var(--text-faint)]">
+                  <Command className="w-3 h-3" />
+                  <span>FleetHappens</span>
+                </div>
               </div>
             </div>
           </div>

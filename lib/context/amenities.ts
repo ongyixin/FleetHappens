@@ -14,6 +14,24 @@ import type { NearbyAmenity } from "@/types";
 const RADIUS_M = 800;
 const MAX_RESULTS = 8;
 
+// ─── In-process coordinate cache ────────────────────────────────────────────
+// Key: "${lat.toFixed(3)}_${lon.toFixed(3)}" (~110 m grid cell).
+// Nearby POIs are stable over hours; 6-hour TTL prevents redundant API calls
+// when many vehicles share overlapping stop areas.
+
+const AMENITIES_TTL_MS = 6 * 60 * 60 * 1000;
+
+interface AmenitiesEntry {
+  result: NearbyAmenity[];
+  cachedAt: number;
+}
+
+const amenitiesCache = new Map<string, AmenitiesEntry>();
+
+function amenitiesCacheKey(lat: number, lon: number): string {
+  return `${lat.toFixed(3)}_${lon.toFixed(3)}`;
+}
+
 // ─── Haversine-based distance in metres ─────────────────────────────────────
 function distMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6_371_000;
@@ -32,13 +50,23 @@ export async function getNearbyAmenities(
   lat: number,
   lon: number
 ): Promise<NearbyAmenity[]> {
+  const key = amenitiesCacheKey(lat, lon);
+  const cached = amenitiesCache.get(key);
+  if (cached && Date.now() - cached.cachedAt < AMENITIES_TTL_MS) {
+    return cached.result;
+  }
+
+  let result: NearbyAmenity[];
   if (process.env.GOOGLE_MAPS_API_KEY) {
-    return getNearbyGoogle(lat, lon);
+    result = await getNearbyGoogle(lat, lon);
+  } else if (process.env.MAPBOX_ACCESS_TOKEN) {
+    result = await getNearbyMapbox(lat, lon);
+  } else {
+    result = await getNearbyOverpass(lat, lon);
   }
-  if (process.env.MAPBOX_ACCESS_TOKEN) {
-    return getNearbyMapbox(lat, lon);
-  }
-  return getNearbyOverpass(lat, lon);
+
+  amenitiesCache.set(key, { result, cachedAt: Date.now() });
+  return result;
 }
 
 // ─── Google Places Nearby Search ────────────────────────────────────────────

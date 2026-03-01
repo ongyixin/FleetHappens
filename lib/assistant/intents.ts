@@ -15,6 +15,7 @@ import type {
   AssistantContext,
   FleetGroup,
   VehicleCard,
+  AnalysisTopic,
 } from "@/types";
 import { generateText } from "@/lib/llm/client";
 
@@ -73,6 +74,23 @@ const KEYWORD_ROUTES: KeywordRoute[] = [
   {
     pattern: /\b(summar(y|ize)|overview|what.s\s*happening|status)\b/i,
     intent: { intent: "explain" },
+  },
+  // ─── Analytical queries ───────────────────────────────────────────────────
+  {
+    pattern: /route.*optimi[sz]|inefficien|worst\s*route|needs?\s*(optimis|optimiz)/i,
+    intent: { intent: "analyze", analysisTopic: "route_efficiency" as AnalysisTopic },
+  },
+  {
+    pattern: /\b(anomal|unusual|abnormal|outlier|exception|alert|flag)/i,
+    intent: { intent: "analyze", analysisTopic: "anomalies" as AnalysisTopic },
+  },
+  {
+    pattern: /which\s*fleet.*(best|worst|top|bottom|lead|trail)|compare\s*fleets?|fleet\s*rank|fleets?\s*(perform|compar)/i,
+    intent: { intent: "analyze", analysisTopic: "fleet_comparison" as AnalysisTopic },
+  },
+  {
+    pattern: /vehicle.*(pattern|behav|unusual|concern)|which\s*vehicle.*(most|worst|highest|lowest)/i,
+    intent: { intent: "analyze", analysisTopic: "vehicle_patterns" as AnalysisTopic },
   },
 ];
 
@@ -180,18 +198,27 @@ The app has these pages:
 Classify the user's query into ONE of these intents:
 - navigate: user wants to go to a specific page or view a specific fleet/vehicle
 - lookup: user wants a quick data fact (active count, distance, idle rate, trip count)
-- explain: user wants a summary or overview of what's happening
+- explain: user wants a brief summary or status overview of what's happening right now
+- analyze: user wants open-ended analytical reasoning (e.g. "which route needs optimising?", "what anomalies exist?", "which fleet is performing best?", "any vehicles with unusual behaviour?")
 - unknown: query is unclear or outside the scope of fleet data
+
+For "analyze" intent, also classify the analysisTopic:
+- route_efficiency: questions about route quality, optimisation, inefficiency
+- anomalies: questions about unusual behaviour, outliers, alerts, exceptions
+- fleet_comparison: questions comparing fleets against each other
+- vehicle_patterns: questions about individual vehicle behaviour patterns
+- general: other analytical questions not covered above
 
 Extract entity names exactly as mentioned. Do not invent entity names.
 
 Return ONLY valid JSON matching this schema:
 {
-  "intent": "navigate" | "lookup" | "explain" | "unknown",
+  "intent": "navigate" | "lookup" | "explain" | "analyze" | "unknown",
   "entity": { "type": "fleet" | "vehicle" | "trip" | "page", "name": "string" } | null,
   "metric": "distance" | "idle" | "trips" | "active" | "status" | "speed" | null,
   "timeframe": "string describing timeframe" | null,
-  "targetPage": "home" | "pulse" | "fleet-detail" | "dashboard" | "story" | "features" | null
+  "targetPage": "home" | "pulse" | "fleet-detail" | "dashboard" | "story" | "features" | null,
+  "analysisTopic": "route_efficiency" | "anomalies" | "fleet_comparison" | "vehicle_patterns" | "general" | null
 }`;
 
 /**
@@ -225,7 +252,7 @@ export async function llmClassify(
     const cleaned = raw.replace(/^```json?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
     const parsed = JSON.parse(cleaned) as AssistantIntent;
 
-    if (!["navigate", "lookup", "explain", "unknown"].includes(parsed.intent)) {
+    if (!["navigate", "lookup", "explain", "analyze", "unknown"].includes(parsed.intent)) {
       return null;
     }
     return parsed;
@@ -247,6 +274,10 @@ export async function classifyIntent(
   if (keyword && keyword.intent !== "unknown") {
     // Keyword match is confident enough — skip LLM for speed
     if (keyword.intent === "navigate" && keyword.targetPage) {
+      return { intent: keyword, fromFallback: true };
+    }
+    // Analyze keywords are specific enough to trust without LLM
+    if (keyword.intent === "analyze" && keyword.analysisTopic) {
       return { intent: keyword, fromFallback: true };
     }
   }

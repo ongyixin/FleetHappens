@@ -15,6 +15,22 @@ export interface GeocodeResult {
   formattedAddress: string;
 }
 
+// ─── In-process coordinate cache ────────────────────────────────────────────
+// Key: "${lat.toFixed(3)}_${lon.toFixed(3)}" (~110 m grid cell).
+
+const GEOCODE_TTL_MS = 24 * 60 * 60 * 1000;
+
+interface GeocodeEntry {
+  result: GeocodeResult;
+  cachedAt: number;
+}
+
+const geocodeCache = new Map<string, GeocodeEntry>();
+
+function cacheKey(coords: LatLon): string {
+  return `${coords.lat.toFixed(3)}_${coords.lon.toFixed(3)}`;
+}
+
 async function geocodeGoogle(coords: LatLon): Promise<GeocodeResult | null> {
   const key = process.env.GOOGLE_MAPS_API_KEY;
   if (!key) return null;
@@ -76,7 +92,13 @@ async function geocodeNominatim(coords: LatLon): Promise<GeocodeResult> {
 }
 
 export async function reverseGeocode(coords: LatLon): Promise<GeocodeResult> {
-  const google = await geocodeGoogle(coords);
-  if (google) return google;
-  return geocodeNominatim(coords);
+  const key = cacheKey(coords);
+  const cached = geocodeCache.get(key);
+  if (cached && Date.now() - cached.cachedAt < GEOCODE_TTL_MS) {
+    return cached.result;
+  }
+
+  const result = (await geocodeGoogle(coords)) ?? (await geocodeNominatim(coords));
+  geocodeCache.set(key, { result, cachedAt: Date.now() });
+  return result;
 }

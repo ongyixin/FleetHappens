@@ -1,0 +1,149 @@
+[
+  {
+    "id": "n5-t1",
+    "deviceId": "n5",
+    "deviceName": "Truck 06 — Robinson",
+    "start": "2026-02-28T08:29:00.000Z",
+    "stop": "2026-02-28T08:58:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:18:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 84,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    }
+  },
+  {
+    "id": "n5-t2",
+    "deviceId": "n5",
+    "deviceName": "Truck 06 — Robinson",
+    "start": "2026-02-28T10:39:00.000Z",
+    "stop": "2026-02-28T10:59:00.000Z",
+    "distanceMeters": 10100,
+    "distanceKm": 10.1,
+    "drivingDuration": "00:14:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 82,
+    "startPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n5-t3",
+    "deviceId": "n5",
+    "deviceName": "Truck 06 — Robinson",
+    "start": "2026-02-28T11:34:00.000Z",
+    "stop": "2026-02-28T12:24:00.000Z",
+    "distanceMeters": 21700,
+    "distanceKm": 21.7,
+    "drivingDuration": "00:28:00",
+    "idlingDuration": "00:22:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 97,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    }
+  },
+  {
+    "id": "n5-t4",
+    "deviceId": "n5",
+    "deviceName": "Truck 06 — Robinson",
+    "start": "2026-02-28T13:28:00.000Z",
+    "stop": "2026-02-28T13:55:00.000Z",
+    "distanceMeters": 17000,
+    "distanceKm": 17,
+    "drivingDuration": "00:18:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 105,
+    "startPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  },
+  {
+    "id": "n5-t5",
+    "deviceId": "n5",
+    "deviceName": "Truck 06 — Robinson",
+    "start": "2026-02-28T14:28:00.000Z",
+    "stop": "2026-02-28T14:44:00.000Z",
+    "distanceMeters": 7100,
+    "distanceKm": 7.1,
+    "drivingDuration": "00:09:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 82,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    }
+  },
+  {
+    "id": "n5-t6",
+    "deviceId": "n5",
+    "deviceName": "Truck 06 — Robinson",
+    "start": "2026-02-27T09:50:00.000Z",
+    "stop": "2026-02-27T10:01:00.000Z",
+    "distanceMeters": 5500,
+    "distanceKm": 5.5,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 94,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n5-t7",
+    "deviceId": "n5",
+    "deviceName": "Truck 06 — Robinson",
+    "start": "2026-02-27T13:19:00.000Z",
+    "stop": "2026-02-27T13:40:00.000Z",
+    "distanceMeters": 10100,
+    "distanceKm": 10.1,
+    "drivingDuration": "00:13:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 46,
+    "maxSpeedKmh": 83,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    }
+  }
+]

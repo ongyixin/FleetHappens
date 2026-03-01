@@ -1,0 +1,212 @@
+[
+  {
+    "id": "s1-t1",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T07:30:00.000Z",
+    "stop": "2026-02-28T07:49:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 86,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    }
+  },
+  {
+    "id": "s1-t2",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T08:09:00.000Z",
+    "stop": "2026-02-28T08:19:00.000Z",
+    "distanceMeters": 4200,
+    "distanceKm": 4.2,
+    "drivingDuration": "00:05:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 87,
+    "startPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    },
+    "endPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    }
+  },
+  {
+    "id": "s1-t3",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T09:28:00.000Z",
+    "stop": "2026-02-28T09:52:00.000Z",
+    "distanceMeters": 10000,
+    "distanceKm": 10,
+    "drivingDuration": "00:14:00",
+    "idlingDuration": "00:10:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 88,
+    "startPoint": {
+      "lat": 37.3688,
+      "lon": -121.925
+    },
+    "endPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    }
+  },
+  {
+    "id": "s1-t4",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T10:26:00.000Z",
+    "stop": "2026-02-28T10:47:00.000Z",
+    "distanceMeters": 14200,
+    "distanceKm": 14.2,
+    "drivingDuration": "00:15:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 88,
+    "startPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s1-t5",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T11:40:00.000Z",
+    "stop": "2026-02-28T12:01:00.000Z",
+    "distanceMeters": 11000,
+    "distanceKm": 11,
+    "drivingDuration": "00:12:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 104,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    }
+  },
+  {
+    "id": "s1-t6",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T12:28:00.000Z",
+    "stop": "2026-02-28T13:20:00.000Z",
+    "distanceMeters": 32500,
+    "distanceKm": 32.5,
+    "drivingDuration": "00:45:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 77,
+    "startPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    },
+    "endPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    }
+  },
+  {
+    "id": "s1-t7",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T14:37:00.000Z",
+    "stop": "2026-02-28T15:12:00.000Z",
+    "distanceMeters": 29000,
+    "distanceKm": 29,
+    "drivingDuration": "00:30:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 88,
+    "startPoint": {
+      "lat": 37.4419,
+      "lon": -122.143
+    },
+    "endPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    }
+  },
+  {
+    "id": "s1-t8",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-28T15:29:00.000Z",
+    "stop": "2026-02-28T15:53:00.000Z",
+    "distanceMeters": 14200,
+    "distanceKm": 14.2,
+    "drivingDuration": "00:20:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 83,
+    "startPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s1-t9",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-27T09:33:00.000Z",
+    "stop": "2026-02-27T09:49:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 51,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    }
+  },
+  {
+    "id": "s1-t10",
+    "deviceId": "s1",
+    "deviceName": "Truck 14 — Ahmed",
+    "start": "2026-02-27T13:22:00.000Z",
+    "stop": "2026-02-27T13:38:00.000Z",
+    "distanceMeters": 10100,
+    "distanceKm": 10.1,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 97,
+    "startPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    },
+    "endPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    }
+  }
+]

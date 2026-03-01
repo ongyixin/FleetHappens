@@ -1,0 +1,16 @@
+{
+  "id": "fleet-vehicle-outliers-g-north",
+  "question": "Which North Region vehicles are statistical outliers by distance, idle time, or trip count this week?",
+  "columns": ["device_name", "total_distance_km", "trip_count", "avg_idle_pct"],
+  "rows": [
+    { "device_name": "Truck 04 — Patel",     "total_distance_km": 980, "trip_count": 42, "avg_idle_pct": 9.8  },
+    { "device_name": "Van 05 — Nguyen",      "total_distance_km": 867, "trip_count": 38, "avg_idle_pct": 8.4  },
+    { "device_name": "Truck 02 — Chen",      "total_distance_km": 791, "trip_count": 31, "avg_idle_pct": 11.2 },
+    { "device_name": "Truck 06 — Robinson",  "total_distance_km": 634, "trip_count": 26, "avg_idle_pct": 29.1 },
+    { "device_name": "Van 01 — Martinez",    "total_distance_km": 578, "trip_count": 33, "avg_idle_pct": 7.9  }
+  ],
+  "reasoning": "Patel (Truck 04) tops distance at 980 km — 13% above Nguyen, the next-highest. Nguyen (Van 05) leads trip count at 38 with the lowest idle rate (8.4%), indicating tight urban loop efficiency. Robinson (Truck 06) is the region's idle outlier at 29.1% — nearly 2× the North Region average of 14.2% — driven by extended loading dock waits at San Leandro Warehouse. Martinez runs the second-highest trip count (33) at just 578 km, suggesting very short-hop delivery loops. Consider reassigning Robinson to a site with a dedicated unloading bay to reclaim idle time.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

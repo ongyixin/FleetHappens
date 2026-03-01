@@ -1,0 +1,16 @@
+{
+  "id": "fleet-vehicle-outliers-g-west",
+  "question": "Which West Region vehicles are statistical outliers by distance, idle time, or trip count this week?",
+  "columns": ["device_name", "total_distance_km", "trip_count", "avg_idle_pct"],
+  "rows": [
+    { "device_name": "Truck 32 — Nakamura",  "total_distance_km": 729, "trip_count": 31, "avg_idle_pct": 8.7  },
+    { "device_name": "Van 31 — Oliveira",    "total_distance_km": 614, "trip_count": 28, "avg_idle_pct": 7.4  },
+    { "device_name": "Truck 34 — Schreiber", "total_distance_km": 421, "trip_count": 18, "avg_idle_pct": 10.9 },
+    { "device_name": "Van 33 — Osei",        "total_distance_km": 298, "trip_count": 16, "avg_idle_pct": 12.3 },
+    { "device_name": "Truck 36 — Volkov",    "total_distance_km": 174, "trip_count": 8,  "avg_idle_pct": 14.8 }
+  ],
+  "reasoning": "Nakamura (Truck 32) leads the West Region at 729 km and 31 trips, anchoring the SF–Mission–Bayview corridor. Oliveira (Van 31) is the region's efficiency standout at 7.4% idle — the lowest in the fleet — with consistent SFO-South SF turnarounds. Schreiber (Truck 34) carries the best fuel efficiency per km despite a mid-range distance total. Osei's 12.3% idle reflects Mission District congestion delays. Volkov's low utilisation (8 trips, 174 km) stands out against a 5-vehicle fleet — this vehicle is a candidate for redeployment or load rebalancing from Nakamura's corridor.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

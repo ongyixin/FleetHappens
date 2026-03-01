@@ -1,0 +1,254 @@
+[
+  {
+    "id": "n1-t1",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T07:08:00.000Z",
+    "stop": "2026-02-28T07:42:00.000Z",
+    "distanceMeters": 21700,
+    "distanceKm": 21.7,
+    "drivingDuration": "00:22:00",
+    "idlingDuration": "00:12:00",
+    "averageSpeedKmh": 59,
+    "maxSpeedKmh": 98,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    }
+  },
+  {
+    "id": "n1-t2",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T08:47:00.000Z",
+    "stop": "2026-02-28T09:06:00.000Z",
+    "distanceMeters": 13100,
+    "distanceKm": 13.1,
+    "drivingDuration": "00:15:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 51,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    },
+    "endPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    }
+  },
+  {
+    "id": "n1-t3",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T09:47:00.000Z",
+    "stop": "2026-02-28T10:01:00.000Z",
+    "distanceMeters": 6400,
+    "distanceKm": 6.4,
+    "drivingDuration": "00:08:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 81,
+    "startPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    },
+    "endPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    }
+  },
+  {
+    "id": "n1-t4",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T10:37:00.000Z",
+    "stop": "2026-02-28T10:46:00.000Z",
+    "distanceMeters": 4700,
+    "distanceKm": 4.7,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:03:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 87,
+    "startPoint": {
+      "lat": 37.8317,
+      "lon": -122.2911
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n1-t5",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T11:24:00.000Z",
+    "stop": "2026-02-28T11:38:00.000Z",
+    "distanceMeters": 5100,
+    "distanceKm": 5.1,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    }
+  },
+  {
+    "id": "n1-t6",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T12:32:00.000Z",
+    "stop": "2026-02-28T12:56:00.000Z",
+    "distanceMeters": 13600,
+    "distanceKm": 13.6,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 42,
+    "maxSpeedKmh": 83,
+    "startPoint": {
+      "lat": 37.7738,
+      "lon": -122.2519
+    },
+    "endPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    }
+  },
+  {
+    "id": "n1-t7",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T13:15:00.000Z",
+    "stop": "2026-02-28T13:35:00.000Z",
+    "distanceMeters": 9700,
+    "distanceKm": 9.7,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 51,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.7238,
+      "lon": -122.1561
+    },
+    "endPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    }
+  },
+  {
+    "id": "n1-t8",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T14:49:00.000Z",
+    "stop": "2026-02-28T15:23:00.000Z",
+    "distanceMeters": 27800,
+    "distanceKm": 27.8,
+    "drivingDuration": "00:30:00",
+    "idlingDuration": "00:04:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 96,
+    "startPoint": {
+      "lat": 37.6909,
+      "lon": -122.0857
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  },
+  {
+    "id": "n1-t9",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-28T15:51:00.000Z",
+    "stop": "2026-02-28T16:03:00.000Z",
+    "distanceMeters": 5500,
+    "distanceKm": 5.5,
+    "drivingDuration": "00:06:00",
+    "idlingDuration": "00:06:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    },
+    "endPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    }
+  },
+  {
+    "id": "n1-t10",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-27T08:51:00.000Z",
+    "stop": "2026-02-27T09:05:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:09:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 57,
+    "maxSpeedKmh": 103,
+    "startPoint": {
+      "lat": 37.8239,
+      "lon": -122.232
+    },
+    "endPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    }
+  },
+  {
+    "id": "n1-t11",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-27T10:32:00.000Z",
+    "stop": "2026-02-27T10:53:00.000Z",
+    "distanceMeters": 13100,
+    "distanceKm": 13.1,
+    "drivingDuration": "00:14:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 55,
+    "maxSpeedKmh": 88,
+    "startPoint": {
+      "lat": 37.8716,
+      "lon": -122.2727
+    },
+    "endPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    }
+  },
+  {
+    "id": "n1-t12",
+    "deviceId": "n1",
+    "deviceName": "Truck 04 — Patel",
+    "start": "2026-02-27T14:47:00.000Z",
+    "stop": "2026-02-27T15:12:00.000Z",
+    "distanceMeters": 21700,
+    "distanceKm": 21.7,
+    "drivingDuration": "00:22:00",
+    "idlingDuration": "00:03:00",
+    "averageSpeedKmh": 58,
+    "maxSpeedKmh": 104,
+    "startPoint": {
+      "lat": 37.9358,
+      "lon": -122.3477
+    },
+    "endPoint": {
+      "lat": 37.8044,
+      "lon": -122.2712
+    }
+  }
+]

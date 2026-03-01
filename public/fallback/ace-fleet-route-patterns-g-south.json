@@ -1,0 +1,16 @@
+{
+  "id": "fleet-route-patterns-g-south",
+  "question": "What are the top origin-destination pairs for the South Region fleet in the last 14 days?",
+  "columns": ["origin", "destination", "trip_count", "avg_distance_km", "avg_duration_minutes"],
+  "rows": [
+    { "origin": "SJ Tech Campus",    "destination": "Santa Clara Depot", "trip_count": 88, "avg_distance_km": 8.6,  "avg_duration_minutes": 18 },
+    { "origin": "Santa Clara Depot", "destination": "Sunnyvale SC",      "trip_count": 72, "avg_distance_km": 5.8,  "avg_duration_minutes": 14 },
+    { "origin": "SJ Tech Campus",    "destination": "Milpitas Storage",  "trip_count": 59, "avg_distance_km": 14.2, "avg_duration_minutes": 26 },
+    { "origin": "Palo Alto Office",  "destination": "Sunnyvale SC",      "trip_count": 43, "avg_distance_km": 12.1, "avg_duration_minutes": 22 },
+    { "origin": "Campbell Hub",      "destination": "Los Gatos Ctr",     "trip_count": 27, "avg_distance_km": 10.7, "avg_duration_minutes": 21 }
+  ],
+  "reasoning": "SJ Tech Campus → Santa Clara Depot is the South Region's anchor corridor at 88 trips (6.3/day), reflecting the morning dispatch-and-return cycle. The Santa Clara → Sunnyvale micro-run at 5.8 km is highly repetitive; batching two deliveries per run here could reclaim ~40 daily km. SJ Tech → Milpitas is the longest routine lane at 14.2 km; Santos (s2) and Ahmed (s1) account for 78% of these runs. The Campbell → Los Gatos corridor is exclusive to Hassan (s5) and shows the high-idle pattern flagged in the outlier analysis.",
+  "queriedAt": "2026-02-28T06:00:00Z",
+  "totalRowCount": 5,
+  "fromCache": true
+}

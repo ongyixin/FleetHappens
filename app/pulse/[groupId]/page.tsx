@@ -89,7 +89,7 @@ function FleetViewContent() {
         const res  = await fetch("/api/ace/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ queryKey, groupName }),
+          body: JSON.stringify({ queryKey, groupName, groupId }),
         });
         const data = (await res.json()) as ApiResponse<AceInsight>;
         setter(data.ok ? data.data : null);
@@ -105,9 +105,9 @@ function FleetViewContent() {
 
   useEffect(() => {
     if (!groupName) return;
-    loadAceQuery("fleet-vehicle-outliers",  "ace-fleet-vehicle-outliers.json",  setOutlierInsight, setOutlierLoading);
-    loadAceQuery("fleet-route-patterns",    "ace-fleet-route-patterns.json",    setRouteInsight,   setRouteLoading);
-    loadAceQuery("fleet-stop-hotspots",     "ace-fleet-stop-hotspots.json",     setHotspotInsight, setHotspotLoading);
+    loadAceQuery("fleet-vehicle-outliers",  `ace-fleet-vehicle-outliers-${groupId}.json`,  setOutlierInsight, setOutlierLoading);
+    loadAceQuery("fleet-route-patterns",    `ace-fleet-route-patterns-${groupId}.json`,    setRouteInsight,   setRouteLoading);
+    loadAceQuery("fleet-stop-hotspots",     `ace-fleet-stop-hotspots-${groupId}.json`,     setHotspotInsight, setHotspotLoading);
   }, [groupName, loadAceQuery]);
 
   useEffect(() => {

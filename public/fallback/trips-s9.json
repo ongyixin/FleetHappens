@@ -1,0 +1,44 @@
+[
+  {
+    "id": "s9-t1",
+    "deviceId": "s9",
+    "deviceName": "Truck 22 — Kovacs",
+    "start": "2026-02-27T14:06:00.000Z",
+    "stop": "2026-02-27T14:32:00.000Z",
+    "distanceMeters": 14200,
+    "distanceKm": 14.2,
+    "drivingDuration": "00:19:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 45,
+    "maxSpeedKmh": 78,
+    "startPoint": {
+      "lat": 37.4323,
+      "lon": -121.8996
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s9-t2",
+    "deviceId": "s9",
+    "deviceName": "Truck 22 — Kovacs",
+    "start": "2026-02-25T09:05:00.000Z",
+    "stop": "2026-02-25T09:20:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:05:00",
+    "averageSpeedKmh": 54,
+    "maxSpeedKmh": 91,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    }
+  }
+]

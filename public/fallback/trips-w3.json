@@ -1,0 +1,86 @@
+[
+  {
+    "id": "w3-t1",
+    "deviceId": "w3",
+    "deviceName": "Truck 34 — Schreiber",
+    "start": "2026-02-28T08:27:00.000Z",
+    "stop": "2026-02-28T08:57:00.000Z",
+    "distanceMeters": 14800,
+    "distanceKm": 14.8,
+    "drivingDuration": "00:18:00",
+    "idlingDuration": "00:12:00",
+    "averageSpeedKmh": 49,
+    "maxSpeedKmh": 98,
+    "startPoint": {
+      "lat": 37.6879,
+      "lon": -122.4702
+    },
+    "endPoint": {
+      "lat": 37.6213,
+      "lon": -122.3789
+    }
+  },
+  {
+    "id": "w3-t2",
+    "deviceId": "w3",
+    "deviceName": "Truck 34 — Schreiber",
+    "start": "2026-02-28T10:42:00.000Z",
+    "stop": "2026-02-28T10:58:00.000Z",
+    "distanceMeters": 6100,
+    "distanceKm": 6.1,
+    "drivingDuration": "00:07:00",
+    "idlingDuration": "00:09:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 90,
+    "startPoint": {
+      "lat": 37.6213,
+      "lon": -122.3789
+    },
+    "endPoint": {
+      "lat": 37.6547,
+      "lon": -122.4077
+    }
+  },
+  {
+    "id": "w3-t3",
+    "deviceId": "w3",
+    "deviceName": "Truck 34 — Schreiber",
+    "start": "2026-02-28T12:40:00.000Z",
+    "stop": "2026-02-28T13:00:00.000Z",
+    "distanceMeters": 8700,
+    "distanceKm": 8.7,
+    "drivingDuration": "00:12:00",
+    "idlingDuration": "00:08:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 85,
+    "startPoint": {
+      "lat": 37.6547,
+      "lon": -122.4077
+    },
+    "endPoint": {
+      "lat": 37.7124,
+      "lon": -122.4036
+    }
+  },
+  {
+    "id": "w3-t4",
+    "deviceId": "w3",
+    "deviceName": "Truck 34 — Schreiber",
+    "start": "2026-02-27T09:57:00.000Z",
+    "stop": "2026-02-27T10:15:00.000Z",
+    "distanceMeters": 8700,
+    "distanceKm": 8.7,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:07:00",
+    "averageSpeedKmh": 48,
+    "maxSpeedKmh": 92,
+    "startPoint": {
+      "lat": 37.7124,
+      "lon": -122.4036
+    },
+    "endPoint": {
+      "lat": 37.6879,
+      "lon": -122.4702
+    }
+  }
+]

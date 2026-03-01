@@ -1,0 +1,107 @@
+[
+  {
+    "id": "s5-t1",
+    "deviceId": "s5",
+    "deviceName": "Truck 18 — Hassan",
+    "start": "2026-02-28T08:13:00.000Z",
+    "stop": "2026-02-28T08:50:00.000Z",
+    "distanceMeters": 7800,
+    "distanceKm": 7.8,
+    "drivingDuration": "00:09:00",
+    "idlingDuration": "00:28:00",
+    "averageSpeedKmh": 53,
+    "maxSpeedKmh": 97,
+    "startPoint": {
+      "lat": 37.2358,
+      "lon": -121.9624
+    },
+    "endPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    }
+  },
+  {
+    "id": "s5-t2",
+    "deviceId": "s5",
+    "deviceName": "Truck 18 — Hassan",
+    "start": "2026-02-28T10:28:00.000Z",
+    "stop": "2026-02-28T11:01:00.000Z",
+    "distanceMeters": 11000,
+    "distanceKm": 11,
+    "drivingDuration": "00:14:00",
+    "idlingDuration": "00:19:00",
+    "averageSpeedKmh": 47,
+    "maxSpeedKmh": 82,
+    "startPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    },
+    "endPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    }
+  },
+  {
+    "id": "s5-t3",
+    "deviceId": "s5",
+    "deviceName": "Truck 18 — Hassan",
+    "start": "2026-02-28T11:50:00.000Z",
+    "stop": "2026-02-28T12:15:00.000Z",
+    "distanceMeters": 8600,
+    "distanceKm": 8.6,
+    "drivingDuration": "00:10:00",
+    "idlingDuration": "00:15:00",
+    "averageSpeedKmh": 54,
+    "maxSpeedKmh": 93,
+    "startPoint": {
+      "lat": 37.3382,
+      "lon": -121.8863
+    },
+    "endPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    }
+  },
+  {
+    "id": "s5-t4",
+    "deviceId": "s5",
+    "deviceName": "Truck 18 — Hassan",
+    "start": "2026-02-28T13:00:00.000Z",
+    "stop": "2026-02-28T13:43:00.000Z",
+    "distanceMeters": 17800,
+    "distanceKm": 17.8,
+    "drivingDuration": "00:21:00",
+    "idlingDuration": "00:22:00",
+    "averageSpeedKmh": 50,
+    "maxSpeedKmh": 98,
+    "startPoint": {
+      "lat": 37.3541,
+      "lon": -121.9552
+    },
+    "endPoint": {
+      "lat": 37.2358,
+      "lon": -121.9624
+    }
+  },
+  {
+    "id": "s5-t5",
+    "deviceId": "s5",
+    "deviceName": "Truck 18 — Hassan",
+    "start": "2026-02-27T09:24:00.000Z",
+    "stop": "2026-02-27T09:51:00.000Z",
+    "distanceMeters": 7800,
+    "distanceKm": 7.8,
+    "drivingDuration": "00:11:00",
+    "idlingDuration": "00:16:00",
+    "averageSpeedKmh": 43,
+    "maxSpeedKmh": 89,
+    "startPoint": {
+      "lat": 37.2358,
+      "lon": -121.9624
+    },
+    "endPoint": {
+      "lat": 37.2871,
+      "lon": -121.952
+    }
+  }
+]
