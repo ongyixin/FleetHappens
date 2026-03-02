@@ -2,7 +2,7 @@
 
 ## How to Use This Document
 
-This is the **single source of truth** for implementing FleetHappens in the Geotab Vibe Coding Challenge. Treat it as product spec + architecture brief + Cursor implementation prompt. When making tradeoffs, prioritize **working end-to-end functionality over polish**. Every design decision below is shaped by the hackathon judging rubric.
+This is the **single source of truth** for implementing FleetHappens in the Geotab Vibe Coding Competition. Treat it as product spec + architecture brief + Cursor implementation prompt. When making tradeoffs, prioritize **working end-to-end functionality over polish**. Every design decision below is shaped by the hackathon judging rubric.
 
 ---
 

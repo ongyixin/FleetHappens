@@ -27,6 +27,16 @@ interface KeywordRoute {
 }
 
 const KEYWORD_ROUTES: KeywordRoute[] = [
+  // ─── Off-topic: greetings and explicit non-fleet queries ─────────────────
+  // These run first so they short-circuit before any fleet patterns can match.
+  {
+    pattern: /^(hi|hello|hey|howdy|greetings|good\s*(morning|afternoon|evening)|thanks|thank\s*you|cheers|bye|goodbye)[!.\s]*$/i,
+    intent: { intent: "off_topic" },
+  },
+  {
+    pattern: /\b(weather|forecast|rain|temperature|climate|news|sports|stocks|crypto)\b/i,
+    intent: { intent: "off_topic" },
+  },
   {
     pattern: /fleet\s*pulse|company\s*(overview|summary|wide)|all\s*fleets?/i,
     intent: { intent: "navigate", targetPage: "pulse", entity: { type: "page", name: "Fleet Pulse" } },
@@ -44,7 +54,7 @@ const KEYWORD_ROUTES: KeywordRoute[] = [
     intent: { intent: "navigate", targetPage: "dashboard", entity: { type: "page", name: "Dashboard" } },
   },
   {
-    pattern: /features?|how\s*it\s*works|about/i,
+    pattern: /\bfeatures?\b|how\s*it\s*works|^\s*about\s*$/i,
     intent: { intent: "navigate", targetPage: "features", entity: { type: "page", name: "Features" } },
   },
   {
@@ -91,6 +101,14 @@ const KEYWORD_ROUTES: KeywordRoute[] = [
   {
     pattern: /vehicle.*(pattern|behav|unusual|concern)|which\s*vehicle.*(most|worst|highest|lowest)/i,
     intent: { intent: "analyze", analysisTopic: "vehicle_patterns" as AnalysisTopic },
+  },
+  // ─── Conversational catch-all — open-ended fleet questions ────────────────
+  // These fire after the specific patterns above, so they only capture queries
+  // that weren't matched by a more precise intent. Common interrogative words
+  // used without a clear metric or navigation target land here.
+  {
+    pattern: /\b(what\s+should|what\s+can|what\s+do|what\s+are|what\s+is|how\s+(is|are|do|can)|why\s+(is|are)|tell\s+me|give\s+me|show\s+me|help\s+me|any\s+(insight|tip|recommend|suggest)|focus|prioriti[sz]|improve|optimis|optimiz)\b/i,
+    intent: { intent: "conversational" },
   },
 ];
 
@@ -199,8 +217,9 @@ Classify the user's query into ONE of these intents:
 - navigate: user wants to go to a specific page or view a specific fleet/vehicle
 - lookup: user wants a quick data fact (active count, distance, idle rate, trip count)
 - explain: user wants a brief summary or status overview of what's happening right now
-- analyze: user wants open-ended analytical reasoning (e.g. "which route needs optimising?", "what anomalies exist?", "which fleet is performing best?", "any vehicles with unusual behaviour?")
-- unknown: query is unclear or outside the scope of fleet data
+- analyze: user wants topic-specific analytical reasoning (e.g. "which route needs optimising?", "what anomalies exist?", "which fleet is performing best?", "any vehicles with unusual behaviour?")
+- conversational: user asks an open-ended fleet question that doesn't fit neatly into lookup/analyze — e.g. "What should I focus on today?", "Tell me something interesting about my fleet", "Why is performance down?", "What's the biggest issue right now?", "How is the fleet doing overall?", "Give me an update", "Any concerns I should know about?"
+- off_topic: query is a greeting (hi, hello, thanks), non-fleet chatter, weather, or genuinely outside the scope of fleet operations
 
 For "analyze" intent, also classify the analysisTopic:
 - route_efficiency: questions about route quality, optimisation, inefficiency
@@ -209,11 +228,15 @@ For "analyze" intent, also classify the analysisTopic:
 - vehicle_patterns: questions about individual vehicle behaviour patterns
 - general: other analytical questions not covered above
 
+Key distinction — analyze vs conversational:
+- analyze: has a clear analytical topic (route quality, anomalies, fleet comparison, vehicle patterns)
+- conversational: open-ended, exploratory, or advisory ("what should I do", "tell me something", "give me an update")
+
 Extract entity names exactly as mentioned. Do not invent entity names.
 
 Return ONLY valid JSON matching this schema:
 {
-  "intent": "navigate" | "lookup" | "explain" | "analyze" | "unknown",
+  "intent": "navigate" | "lookup" | "explain" | "analyze" | "conversational" | "off_topic",
   "entity": { "type": "fleet" | "vehicle" | "trip" | "page", "name": "string" } | null,
   "metric": "distance" | "idle" | "trips" | "active" | "status" | "speed" | null,
   "timeframe": "string describing timeframe" | null,
@@ -252,7 +275,7 @@ export async function llmClassify(
     const cleaned = raw.replace(/^```json?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
     const parsed = JSON.parse(cleaned) as AssistantIntent;
 
-    if (!["navigate", "lookup", "explain", "analyze", "unknown"].includes(parsed.intent)) {
+    if (!["navigate", "lookup", "explain", "analyze", "conversational", "off_topic", "unknown"].includes(parsed.intent)) {
       return null;
     }
     return parsed;
@@ -280,6 +303,12 @@ export async function classifyIntent(
     if (keyword.intent === "analyze" && keyword.analysisTopic) {
       return { intent: keyword, fromFallback: true };
     }
+    // Explicit off_topic patterns (greetings, non-fleet topics) — trust without LLM
+    if (keyword.intent === "off_topic") {
+      return { intent: keyword, fromFallback: true };
+    }
+    // For conversational, lookup, explain — still run LLM for better precision,
+    // but keep keyword result as fallback if LLM fails
   }
 
   // LLM path: more nuanced understanding
@@ -293,8 +322,9 @@ export async function classifyIntent(
     return { intent: keyword, fromFallback: true };
   }
 
-  // Complete fallback
-  return { intent: { intent: "unknown" }, fromFallback: true };
+  // Complete fallback — treat as conversational so we attempt an answer
+  // rather than returning a dead-end "I don't understand" response
+  return { intent: { intent: "conversational" }, fromFallback: true };
 }
 
 // ─── Contextual suggestions ───────────────────────────────────────────────────

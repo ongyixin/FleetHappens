@@ -67,7 +67,7 @@ function SkeletonShimmer() {
           <div className="w-10 h-10 rounded-full border border-[rgba(245,158,11,0.3)] flex items-center justify-center">
             <Eye className="w-5 h-5 text-[rgba(245,158,11,0.5)]" />
           </div>
-          <p className="text-[11px] font-body text-[rgba(232,237,248,0.4)] tracking-wide">
+          <p className="text-sm font-body text-[rgba(232,237,248,0.4)] tracking-wide">
             Loading Street View…
           </p>
         </div>
@@ -98,11 +98,11 @@ function NoCoverageFallback({ coords }: { coords: LatLon }) {
           <div className="absolute inset-x-0 bottom-0 pb-6 flex flex-col items-center gap-2">
             <div className="flex items-center gap-2 bg-[rgba(9,13,17,0.8)] border border-[rgba(245,158,11,0.25)] rounded-lg px-4 py-2.5">
               <AlertTriangle className="w-4 h-4 text-[#f59e0b] shrink-0" />
-              <p className="text-[11px] font-body text-[rgba(232,237,248,0.7)]">
+              <p className="text-sm font-body text-[rgba(232,237,248,0.7)]">
                 No street-level imagery at this location
               </p>
             </div>
-            <p className="text-[10px] font-body text-[rgba(232,237,248,0.3)]">
+            <p className="text-sm font-body text-[rgba(232,237,248,0.3)]">
               Showing satellite view instead
             </p>
           </div>
@@ -115,7 +115,7 @@ function NoCoverageFallback({ coords }: { coords: LatLon }) {
           <p className="text-sm font-body text-[rgba(232,237,248,0.55)] text-center leading-relaxed">
             No street-level imagery available at this location
           </p>
-          <p className="text-[11px] font-body text-[rgba(232,237,248,0.3)] text-center">
+          <p className="text-sm font-body text-[rgba(232,237,248,0.3)] text-center">
             Street View coverage is limited in some areas
           </p>
         </div>
@@ -263,7 +263,7 @@ export default function StreetViewPanel({ coords, onClose }: StreetViewPanelProp
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-1">
             <Eye className="w-3 h-3 text-[#f59e0b] shrink-0" />
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(245,158,11,0.65)] font-body">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(245,158,11,0.65)] font-body">
               Street View
             </p>
           </div>
@@ -272,13 +272,13 @@ export default function StreetViewPanel({ coords, onClose }: StreetViewPanelProp
               {address}
             </p>
           ) : (
-            <p className="text-[11px] font-body text-[rgba(232,237,248,0.4)] flex items-center gap-1.5">
+            <p className="text-sm font-body text-[rgba(232,237,248,0.4)] flex items-center gap-1.5">
               <MapPin className="w-3 h-3 text-[rgba(245,158,11,0.5)] shrink-0" />
               {formatCoords(coords)}
             </p>
           )}
           {address && (
-            <p className="mt-0.5 text-[11px] font-body text-[rgba(232,237,248,0.35)] flex items-center gap-1.5">
+            <p className="mt-0.5 text-sm font-body text-[rgba(232,237,248,0.35)] flex items-center gap-1.5">
               <Navigation className="w-2.5 h-2.5 shrink-0" />
               {formatCoords(coords)}
             </p>
@@ -310,12 +310,12 @@ export default function StreetViewPanel({ coords, onClose }: StreetViewPanelProp
             <p className="text-sm font-body text-[rgba(232,237,248,0.5)] text-center">
               Could not load Street View
             </p>
-            <p className="text-[11px] font-body text-[rgba(232,237,248,0.3)] text-center">
+            <p className="text-sm font-body text-[rgba(232,237,248,0.3)] text-center">
               Check that NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is configured with Maps JavaScript API enabled
             </p>
             <button
               onClick={initStreetView}
-              className="mt-2 px-4 py-2 rounded-md bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.25)] text-[11px] font-body text-[rgba(245,158,11,0.8)] hover:bg-[rgba(245,158,11,0.15)] transition-colors"
+              className="mt-2 px-4 py-2 rounded-md bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.25)] text-sm font-body text-[rgba(245,158,11,0.8)] hover:bg-[rgba(245,158,11,0.15)] transition-colors"
             >
               Retry
             </button>
@@ -327,7 +327,7 @@ export default function StreetViewPanel({ coords, onClose }: StreetViewPanelProp
       {state === "ready" && (
         <div className="shrink-0 px-4 py-2.5 border-t border-[rgba(255,255,255,0.06)] flex items-center gap-2">
           <Navigation className="w-3 h-3 text-[rgba(245,158,11,0.5)] shrink-0" />
-          <p className="text-[10px] font-body text-[rgba(232,237,248,0.35)]">
+          <p className="text-sm font-body text-[rgba(232,237,248,0.35)]">
             Drag to look around · Scroll to zoom · Click arrows to navigate
           </p>
         </div>

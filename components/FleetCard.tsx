@@ -12,9 +12,9 @@ interface FleetCardProps {
 function StatRow({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
     <div className="flex items-center gap-2">
-      <Icon className="h-3 w-3 shrink-0 text-[rgba(232,237,248,0.3)]" />
-      <span className="text-[11px] text-[rgba(232,237,248,0.45)] font-body">{label}</span>
-      <span className="text-[11px] font-data font-semibold text-white tabular-nums ml-auto">{value}</span>
+      <Icon className="h-3.5 w-3.5 shrink-0 text-[rgba(232,237,248,0.3)]" />
+      <span className="text-sm text-[rgba(232,237,248,0.45)] font-body">{label}</span>
+      <span className="text-sm font-data font-semibold text-white tabular-nums ml-auto">{value}</span>
     </div>
   );
 }
@@ -67,13 +67,13 @@ export default function FleetCard({ summary, aceRow, onClick }: FleetCardProps) 
           </div>
           <div className="min-w-0">
             <p className="font-display font-bold text-sm text-white truncate">{group.name}</p>
-            <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body">
+            <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">
               {group.vehicleCount} vehicle{group.vehicleCount !== 1 ? "s" : ""}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-[11px] font-bold rounded-full px-2 py-0.5 font-body"
+          <span className="text-xs font-bold rounded-full px-2 py-0.5 font-body"
             style={{ background: `${accentColor}15`, color: accentColor, border: `1px solid ${accentColor}30` }}>
             {activeRatio}% active
           </span>
@@ -93,7 +93,7 @@ export default function FleetCard({ summary, aceRow, onClick }: FleetCardProps) 
 
       {/* Activity bar */}
       <div className="mt-4">
-        <div className="flex justify-between text-[10px] text-[rgba(232,237,248,0.35)] mb-1.5 font-body">
+        <div className="flex justify-between text-sm text-[rgba(232,237,248,0.35)] mb-1.5 font-body">
           <span>Active vehicles</span>
           <span className="font-data">{summary.activeVehicles} / {summary.totalVehicles}</span>
         </div>

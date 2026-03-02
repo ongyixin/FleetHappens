@@ -52,7 +52,7 @@ export default function VehicleSelector({ vehicles, onSelect }: Props) {
               </div>
               <div className="flex items-center gap-2">
                 {v.currentPosition && (
-                  <span className="flex items-center gap-1 text-[11px] font-semibold text-[#34d399] font-body">
+                  <span className="flex items-center gap-1 text-sm font-semibold text-[#34d399] font-body">
                     <Circle className="w-1.5 h-1.5 fill-[#34d399]" />
                     Live
                   </span>
@@ -72,7 +72,7 @@ export default function VehicleSelector({ vehicles, onSelect }: Props) {
                 {v.name}
               </h3>
               {v.deviceType && (
-                <p className="text-[11px] text-[rgba(232,237,248,0.4)] mt-0.5 font-body">{v.deviceType}</p>
+                <p className="text-sm text-[rgba(232,237,248,0.4)] mt-0.5 font-body">{v.deviceType}</p>
               )}
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function VehicleSelector({ vehicles, onSelect }: Props) {
           {v.lastCommunication && (
             <div className="px-5 py-3 border-t border-[rgba(255,255,255,0.06)] flex items-center gap-1.5">
               <Clock className="w-3 h-3 text-[rgba(232,237,248,0.3)] shrink-0" />
-              <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body">
+              <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">
                 {formatDistanceToNow(new Date(v.lastCommunication), { addSuffix: true })}
               </p>
             </div>

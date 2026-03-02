@@ -66,7 +66,7 @@ function PhotoGallery({
       {imgError ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
           <Camera className="h-5 w-5 text-white/20" />
-          <span className="text-[10px] text-white/25 font-body">{locationName}</span>
+          <span className="text-sm text-white/25 font-body">{locationName}</span>
         </div>
       ) : (
         <Image
@@ -130,13 +130,13 @@ function PhotoGallery({
           {photo.caption && (
             <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5 max-w-[60%]">
               <Camera className="h-2.5 w-2.5 text-white/60 shrink-0" />
-              <span className="text-[9px] text-white/55 font-medium leading-none truncate">
+              <span className="text-sm text-white/55 font-medium leading-none truncate">
                 {photo.caption}
               </span>
             </div>
           )}
           {photo.attribution && (
-            <span className="text-[8px] text-white/30 bg-black/40 backdrop-blur-sm rounded px-1.5 py-0.5 max-w-[38%] truncate shrink-0">
+            <span className="text-sm text-white/30 bg-black/40 backdrop-blur-sm rounded px-1.5 py-0.5 max-w-[38%] truncate shrink-0">
               {photo.attribution}
             </span>
           )}
@@ -146,7 +146,7 @@ function PhotoGallery({
       {/* Photo counter badge */}
       {hasMultiple && (
         <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm rounded-full px-1.5 py-0.5 z-10">
-          <span className="text-[9px] text-white/50 font-data tabular-nums">
+          <span className="text-sm text-white/50 font-data tabular-nums">
             {current + 1}/{photos.length}
           </span>
         </div>
@@ -172,11 +172,11 @@ export default function ComicPanelCard({ panel, panelIndex, isEnriching }: Comic
       {/* Panel header */}
       <div className="flex items-center justify-between px-5 pt-4 pb-0">
         <div className="flex items-center gap-2.5">
-          <span className={`font-data text-[11px] font-bold tracking-wider ${style.accent} opacity-60`}>
+          <span className={`font-data text-sm font-bold tracking-wider ${style.accent} opacity-60`}>
             {style.num}
           </span>
           <div className="w-px h-3 bg-[rgba(255,255,255,0.12)]" />
-          <span className="text-[10px] font-bold text-[rgba(232,237,248,0.45)] uppercase tracking-[0.14em] font-body">
+          <span className="text-sm font-bold text-[rgba(232,237,248,0.45)] uppercase tracking-[0.14em] font-body">
             {SCENE_LABELS[panel.sceneType]}
           </span>
         </div>
@@ -186,7 +186,7 @@ export default function ComicPanelCard({ panel, panelIndex, isEnriching }: Comic
           <div className="flex items-center gap-0.5 bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.06)] rounded-lg p-0.5">
             <button
               onClick={() => setViewMode("map")}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-body font-semibold transition-all duration-150 ${
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-sm font-body font-semibold transition-all duration-150 ${
                 viewMode === "map"
                   ? "bg-[rgba(255,255,255,0.1)] text-white shadow-sm"
                   : "text-[rgba(232,237,248,0.38)] hover:text-[rgba(232,237,248,0.7)]"
@@ -197,7 +197,7 @@ export default function ComicPanelCard({ panel, panelIndex, isEnriching }: Comic
             </button>
             <button
               onClick={() => setViewMode("photos")}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-body font-semibold transition-all duration-150 ${
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-sm font-body font-semibold transition-all duration-150 ${
                 viewMode === "photos"
                   ? "bg-[rgba(245,166,35,0.18)] text-[#f5a623] shadow-sm"
                   : "text-[rgba(232,237,248,0.38)] hover:text-[rgba(232,237,248,0.7)]"
@@ -235,7 +235,7 @@ export default function ComicPanelCard({ panel, panelIndex, isEnriching }: Comic
         <div className="mb-3">
           <div className="flex items-center gap-1.5 mb-2">
             <MapPin className={`h-3 w-3 ${style.accent} opacity-60`} />
-            <span className="text-[10px] text-[rgba(232,237,248,0.45)] font-body font-semibold uppercase tracking-[0.1em]">
+            <span className="text-sm text-[rgba(232,237,248,0.45)] font-body font-semibold uppercase tracking-[0.1em]">
               {panel.locationName}
             </span>
           </div>
@@ -268,24 +268,24 @@ export default function ComicPanelCard({ panel, panelIndex, isEnriching }: Comic
       {/* Footer */}
       <div className="bg-[rgba(0,0,0,0.35)] px-5 py-3 flex items-center gap-4 flex-wrap border-t border-[rgba(255,255,255,0.06)]">
         {panel.timeLabel && (
-          <div className="flex items-center gap-1.5 text-[10px] text-[rgba(232,237,248,0.45)] font-data">
+          <div className="flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.45)] font-data">
             <Clock className="h-2.5 w-2.5" />
             {panel.timeLabel}
           </div>
         )}
         {panel.distanceLabel && (
-          <div className="flex items-center gap-1.5 text-[10px] text-[rgba(232,237,248,0.45)] font-data">
+          <div className="flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.45)] font-data">
             <Route className="h-2.5 w-2.5" />
             {panel.distanceLabel}
           </div>
         )}
         {panel.speedLabel && (
-          <div className="flex items-center gap-1.5 text-[10px] text-[rgba(232,237,248,0.45)] font-data">
+          <div className="flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.45)] font-data">
             <Gauge className="h-2.5 w-2.5" />
             {panel.speedLabel}
           </div>
         )}
-        <div className="ml-auto text-[9px] text-[rgba(232,237,248,0.2)] font-data tabular-nums">
+        <div className="ml-auto text-sm text-[rgba(232,237,248,0.2)] font-data tabular-nums">
           {panel.mapAnchor.lat.toFixed(4)}, {panel.mapAnchor.lon.toFixed(4)}
         </div>
       </div>

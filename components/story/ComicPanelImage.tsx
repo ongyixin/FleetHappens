@@ -107,10 +107,10 @@ function MapCard({
         <div className={cn("rounded-full p-2.5 ring-1", theme.ring, theme.glow)}>
           <Navigation className={cn("h-4 w-4", theme.icon)} />
         </div>
-        <p className="text-[11px] text-white/45 font-medium uppercase tracking-wider leading-tight max-w-[180px]">
+        <p className="text-sm text-white/45 font-medium uppercase tracking-wider leading-tight max-w-[180px]">
           {locationName}
         </p>
-        <p className="font-mono text-[9px] text-white/20 tabular-nums">
+        <p className="font-mono text-sm text-white/20 tabular-nums">
           {mapAnchor.lat.toFixed(4)}, {mapAnchor.lon.toFixed(4)}
         </p>
       </div>
@@ -139,7 +139,7 @@ function FallbackCard({
           <Navigation className={cn("h-4 w-4", theme.icon)} />
         </div>
         {label && (
-          <span className="text-[11px] text-white/30 font-medium">{label}</span>
+          <span className="text-sm text-white/30 font-medium">{label}</span>
         )}
       </div>
     </div>
@@ -205,12 +205,12 @@ export default function ComicPanelImage({
       <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between gap-2">
         <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5">
           <Camera className="h-2.5 w-2.5 text-white/60 shrink-0" />
-          <span className="text-[9px] text-white/55 font-medium leading-none">
+          <span className="text-sm text-white/55 font-medium leading-none">
             {image.placeName ?? "Place photo"}
           </span>
         </div>
         {image.attribution && (
-          <span className="text-[8px] text-white/30 bg-black/40 backdrop-blur-sm rounded px-1.5 py-0.5 max-w-[130px] truncate shrink-0">
+          <span className="text-sm text-white/30 bg-black/40 backdrop-blur-sm rounded px-1.5 py-0.5 max-w-[130px] truncate shrink-0">
             {image.attribution}
           </span>
         )}

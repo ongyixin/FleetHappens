@@ -239,7 +239,7 @@ export default function ComicStoryRenderer({
                 }
                 setShareOpen((v) => !v);
               }}
-              className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-[11px] transition-all border font-body ${
+              className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-sm transition-all border font-body ${
                 shareOpen
                   ? "text-white bg-[rgba(255,255,255,0.09)] border-[rgba(255,255,255,0.12)]"
                   : "text-[rgba(232,237,248,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] border-transparent hover:border-[rgba(255,255,255,0.08)]"
@@ -270,7 +270,7 @@ export default function ComicStoryRenderer({
                 <div className="rounded-2xl bg-[#16161f] border border-[rgba(255,255,255,0.1)] shadow-[0_20px_60px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.03)] overflow-hidden">
                   {/* Header */}
                   <div className="flex items-center justify-between px-4 pt-3.5 pb-2.5 border-b border-[rgba(255,255,255,0.07)]">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.3)] font-body">
+                    <span className="text-xs font-bold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.3)] font-body">
                       Share story
                     </span>
                     <button
@@ -291,8 +291,8 @@ export default function ComicStoryRenderer({
                         <Link className="h-3.5 w-3.5 text-[#38bdf8]" />
                       </div>
                       <div>
-                        <p className="text-[12px] font-semibold text-[rgba(232,237,248,0.85)] font-body leading-none">Copy link</p>
-                        <p className="text-[10px] text-[rgba(232,237,248,0.35)] mt-0.5 font-body">Share the page URL</p>
+                        <p className="text-sm font-semibold text-[rgba(232,237,248,0.85)] font-body leading-none">Copy link</p>
+                        <p className="text-sm text-[rgba(232,237,248,0.35)] mt-0.5 font-body">Share the page URL</p>
                       </div>
                     </button>
 
@@ -304,8 +304,8 @@ export default function ComicStoryRenderer({
                         <Copy className="h-3.5 w-3.5 text-[#fb923c]" />
                       </div>
                       <div>
-                        <p className="text-[12px] font-semibold text-[rgba(232,237,248,0.85)] font-body leading-none">Copy story</p>
-                        <p className="text-[10px] text-[rgba(232,237,248,0.35)] mt-0.5 font-body">All panels as text</p>
+                        <p className="text-sm font-semibold text-[rgba(232,237,248,0.85)] font-body leading-none">Copy story</p>
+                        <p className="text-sm text-[rgba(232,237,248,0.35)] mt-0.5 font-body">All panels as text</p>
                       </div>
                     </button>
                   </div>
@@ -316,7 +316,7 @@ export default function ComicStoryRenderer({
             <button
               onClick={handleExport}
               disabled={exporting}
-              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-[11px] text-[rgba(232,237,248,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] transition-all border border-transparent hover:border-[rgba(255,255,255,0.08)] font-body disabled:opacity-40 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-sm text-[rgba(232,237,248,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] transition-all border border-transparent hover:border-[rgba(255,255,255,0.08)] font-body disabled:opacity-40 disabled:cursor-not-allowed"
               aria-label="Export this trip story as a PDF"
             >
               {exporting ? (
@@ -353,7 +353,7 @@ export default function ComicStoryRenderer({
           )}
         </button>
         {!trip && (
-          <p className="text-xs text-[rgba(232,237,248,0.3)] text-center mt-2.5 font-body">
+          <p className="text-sm text-[rgba(232,237,248,0.3)] text-center mt-2.5 font-body">
             No trip loaded — the story will generate from cached data
           </p>
         )}
@@ -379,14 +379,14 @@ export default function ComicStoryRenderer({
           </div>
 
           {enriching && (
-            <div className="flex items-center gap-2 text-[11px] text-[rgba(232,237,248,0.3)] px-1 font-body">
+            <div className="flex items-center gap-2 text-sm text-[rgba(232,237,248,0.3)] px-1 font-body">
               <ImageIcon className="h-3 w-3 animate-pulse text-[#fb923c]/60" />
               Finding place photos…
             </div>
           )}
 
           {/* Story footer */}
-          <div className="flex items-center justify-between text-[10px] text-[rgba(232,237,248,0.2)] px-1 border-t border-[rgba(255,255,255,0.07)] pt-4">
+          <div className="flex items-center justify-between text-sm text-[rgba(232,237,248,0.2)] px-1 border-t border-[rgba(255,255,255,0.07)] pt-4">
             <span className="font-body">
               FleetHappens · {story.panels.length} panels · {story.tone} tone
             </span>

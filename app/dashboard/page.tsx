@@ -3,12 +3,11 @@
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { Truck, BookOpen, Brain, RefreshCw, ChevronLeft, Zap, Circle, ChevronUp, ChevronDown, Maximize2, Minimize2, ArrowLeft } from "lucide-react";
+import { Truck, BookOpen, Cpu, RefreshCw, ChevronLeft, Zap, Circle, ChevronUp, ChevronDown, Maximize2, Minimize2, ArrowLeft } from "lucide-react";
 import type {
   TripSummary,
   BreadcrumbPoint,
   StopContext,
-  AceInsight,
   LatLon,
   ApiResponse,
   LocationDossier,
@@ -17,12 +16,14 @@ import type {
 } from "@/types";
 import TripList from "@/components/TripList";
 import TripStatsCard from "@/components/TripStatsCard";
-import AceInsightCard, { AceInsightCardSkeleton } from "@/components/AceInsightCard";
-import AceInsightExpandedCard from "@/components/AceInsightExpandedCard";
 import LocationDossierPanel from "@/components/LocationDossierPanel";
 import StreetViewPanel from "@/components/StreetViewPanel";
 import NextStopPrediction from "@/components/NextStopPrediction";
 import NextStopExpandedCard from "@/components/NextStopExpandedCard";
+import VehicleTripProfileCard from "@/components/VehicleTripProfileCard";
+import RouteFingerPrintCard from "@/components/RouteFingerPrintCard";
+import DrivingBehaviorCard from "@/components/DrivingBehaviorCard";
+import TripAnomaliesCard from "@/components/TripAnomaliesCard";
 import { cn } from "@/lib/utils";
 
 const TripMap = dynamic(() => import("@/components/TripMap"), {
@@ -34,7 +35,7 @@ const TripMap = dynamic(() => import("@/components/TripMap"), {
           <div className="absolute inset-0 rounded-full border-2 border-[rgba(245,166,35,0.2)]" />
           <div className="absolute inset-0 rounded-full border-2 border-t-[#f5a623] border-transparent animate-spin" />
         </div>
-        <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body">Loading map…</p>
+        <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Loading map…</p>
       </div>
     </div>
   ),
@@ -63,8 +64,6 @@ function DashboardContent() {
   const [dossierPhase, setDossierPhase]   = useState<"fetching" | "briefing" | "enriching" | "ready">("fetching");
   const [storyStops, setStoryStops]       = useState<StopContext[]>([]);
 
-  const [aceInsights, setAceInsights] = useState<AceInsight[]>([]);
-  const [aceLoading, setAceLoading]   = useState(true);
 
   // Captured from NextStopPrediction's onResultLoaded — used by the expanded view
   const [nextStopResult, setNextStopResult] = useState<NextStopPredictionResult | null>(null);
@@ -206,24 +205,6 @@ function DashboardContent() {
     }
     fetchBreadcrumbs();
   }, [selectedTrip]);
-
-  useEffect(() => {
-    async function fetchAce() {
-      setAceLoading(true);
-      try {
-        const res  = await fetch("/api/ace/insights");
-        const data = (await res.json()) as ApiResponse<AceInsight[]>;
-        if (data.ok) setAceInsights(data.data); else throw new Error(data.error);
-      } catch {
-        try {
-          const res  = await fetch("/fallback/ace-insights.json");
-          const data = await res.json();
-          setAceInsights(data.insights ?? []);
-        } catch { setAceInsights([]); }
-      } finally { setAceLoading(false); }
-    }
-    fetchAce();
-  }, []);
 
   /** Build a LocationDossier from a StopContext (pre- or post-Ace enrichment). */
   function stopContextToDossier(ctx: StopContext, coords: LatLon, existing?: LocationDossier | null): LocationDossier {
@@ -401,13 +382,13 @@ function DashboardContent() {
             <>
               <button
                 onClick={() => router.push(`/pulse/${groupId}`)}
-                className="flex items-center gap-1.5 text-[rgba(232,237,248,0.55)] hover:text-white transition-colors text-xs font-body"
+                className="flex items-center gap-1.5 text-[rgba(232,237,248,0.55)] hover:text-white transition-colors text-sm font-body"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
                 <Zap className="h-3 w-3" />
                 <span>{groupName || "Region"}</span>
               </button>
-              <span className="text-[rgba(255,255,255,0.2)] text-xs">/</span>
+              <span className="text-[rgba(255,255,255,0.2)] text-sm">/</span>
             </>
           )}
 
@@ -418,7 +399,7 @@ function DashboardContent() {
             </div>
             <span className="font-semibold text-sm text-white font-body truncate">{deviceName}</span>
             {!tripsLoading && trips.length > 0 && (
-              <span className="text-[11px] font-data text-[rgba(232,237,248,0.4)] bg-[rgba(255,255,255,0.05)] px-2 py-0.5 rounded-full shrink-0">
+              <span className="text-sm font-data text-[rgba(232,237,248,0.4)] bg-[rgba(255,255,255,0.05)] px-2 py-0.5 rounded-full shrink-0">
                 {trips.length}t · {dateRangeDays === 365 ? "1yr" : `${dateRangeDays}d`}
               </span>
             )}
@@ -427,7 +408,7 @@ function DashboardContent() {
           {/* Right actions */}
           <div className="ml-auto flex items-center gap-3 shrink-0">
             {storyStops.length > 0 && (
-              <span className="hidden sm:flex items-center gap-1.5 text-[11px] text-[#34d399] font-body bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)] rounded-full px-3 py-1">
+              <span className="hidden sm:flex items-center gap-1.5 text-sm text-[#34d399] font-body bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)] rounded-full px-3 py-1">
                 <Circle className="h-1.5 w-1.5 fill-[#34d399]" />
                 {storyStops.length} stop{storyStops.length > 1 ? "s" : ""} flagged
               </span>
@@ -436,7 +417,7 @@ function DashboardContent() {
               onClick={handleCreateStory}
               disabled={!selectedTrip}
               className={cn(
-                "inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-xs font-display font-bold transition-all",
+                "inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-sm font-display font-bold transition-all",
                 selectedTrip
                   ? "btn-amber"
                   : "bg-[rgba(255,255,255,0.05)] text-[rgba(232,237,248,0.3)] cursor-not-allowed border border-[rgba(255,255,255,0.06)]"
@@ -456,7 +437,7 @@ function DashboardContent() {
         <aside className="w-[300px] shrink-0 flex flex-col bg-[#101318] border-r border-[rgba(255,255,255,0.07)] overflow-hidden">
           <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)] shrink-0">
             <div className="flex items-center justify-between">
-              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.35)] font-body">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.35)] font-body">
                 Recent Trips
               </p>
               <button className="p-1 rounded-md text-[rgba(232,237,248,0.3)] hover:text-[rgba(232,237,248,0.7)] hover:bg-[rgba(255,255,255,0.05)] transition-all">
@@ -527,7 +508,7 @@ function DashboardContent() {
           >
             {/* Left label: MAP */}
             <span className={cn(
-              "absolute left-3.5 text-[8.5px] font-bold tracking-[0.16em] uppercase font-body transition-colors duration-150",
+              "absolute left-3.5 text-sm font-bold tracking-[0.16em] uppercase font-body transition-colors duration-150",
               currentMode === "map"
                 ? "text-[#f5a623]"
                 : "text-[rgba(232,237,248,0.18)] group-hover:text-[rgba(232,237,248,0.4)]",
@@ -557,7 +538,7 @@ function DashboardContent() {
 
             {/* Right label: FLEET INTELLIGENCE */}
             <span className={cn(
-              "absolute right-3.5 text-[8.5px] font-bold tracking-[0.16em] uppercase font-body transition-colors duration-150",
+              "absolute right-3.5 text-sm font-bold tracking-[0.16em] uppercase font-body transition-colors duration-150",
               currentMode === "intel"
                 ? "text-[#f5a623]"
                 : "text-[rgba(232,237,248,0.18)] group-hover:text-[rgba(232,237,248,0.4)]",
@@ -576,25 +557,19 @@ function DashboardContent() {
           >
             {/* Panel header */}
             <div className="px-4 pt-3 pb-2 flex items-center gap-2.5 shrink-0">
-              <div className="rounded-lg bg-[rgba(245,166,35,0.1)] p-1.5">
-                <Brain className="h-3.5 w-3.5 text-[#f5a623]" />
+              <div className="rounded-lg bg-[rgba(45,212,191,0.1)] p-1.5">
+                <Cpu className="h-3.5 w-3.5 text-[#2dd4bf]" />
               </div>
-              <span className="text-xs font-display font-bold text-white">Fleet Intelligence</span>
-              <span className="text-[10px] font-bold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-2 py-0.5 font-body">
-                Ace API
+              <span className="text-sm font-display font-bold text-white">Vehicle Intelligence</span>
+              <span className="text-xs font-bold text-[#2dd4bf] bg-[rgba(45,212,191,0.08)] border border-[rgba(45,212,191,0.2)] rounded-full px-2 py-0.5 font-body">
+                Trip Analytics
               </span>
-              {aceLoading && (
-                <span className="text-[10px] text-[rgba(232,237,248,0.4)] flex items-center gap-1 font-body">
-                  <RefreshCw className="h-2.5 w-2.5 animate-spin" />
-                  Querying…
-                </span>
-              )}
 
               {/* Collapse button — visible when a card is maximised */}
               {expandedCard !== null && (
                 <button
                   onClick={() => setExpandedCard(null)}
-                  className="ml-auto flex items-center gap-1.5 h-7 px-3 rounded-lg text-[11px] font-semibold font-body text-[rgba(232,237,248,0.55)] hover:text-white bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.09)] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.14)] transition-all duration-150"
+                  className="ml-auto flex items-center gap-1.5 h-7 px-3 rounded-lg text-sm font-semibold font-body text-[rgba(232,237,248,0.55)] hover:text-white bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.09)] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.14)] transition-all duration-150"
                 >
                   <ArrowLeft className="h-3 w-3" />
                   All columns
@@ -631,30 +606,47 @@ function DashboardContent() {
                   </div>
                 )}
 
-                {/* Ace insight columns */}
-                {aceLoading
-                  ? Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="w-72 shrink-0"><AceInsightCardSkeleton /></div>
-                    ))
-                  : aceInsights.slice(0, 4).map((insight) => (
-                      <div key={insight.id} className="relative group/intel w-72 shrink-0">
-                        <AceInsightCard insight={insight} />
-                        {/* Expand overlay button */}
-                        <button
-                          onClick={() => setExpandedCard(insight.id)}
-                          className={cn(
-                            "absolute top-2 right-2 z-20 flex items-center justify-center w-6 h-6 rounded-md",
-                            "bg-[rgba(16,19,24,0.85)] border border-[rgba(245,166,35,0.18)] text-[rgba(245,166,35,0.55)]",
-                            "opacity-0 group-hover/intel:opacity-100 hover:!opacity-100",
-                            "hover:bg-[rgba(245,166,35,0.1)] hover:border-[rgba(245,166,35,0.4)] hover:text-[#f5a623]",
-                            "transition-all duration-150 backdrop-blur-sm",
-                          )}
-                          title="Maximise"
-                        >
-                          <Maximize2 className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ))}
+                {/* Vehicle intelligence columns */}
+                {(
+                  [
+                    { id: "trip-profile",       label: "Trip Profile",       borderColor: "rgba(45,212,191,0.2)",  textColor: "rgba(45,212,191,0.6)",  hoverBorder: "rgba(45,212,191,0.45)",  hoverText: "#2dd4bf"  },
+                    { id: "route-fingerprint",   label: "Route Fingerprint",  borderColor: "rgba(167,139,250,0.2)", textColor: "rgba(167,139,250,0.6)", hoverBorder: "rgba(167,139,250,0.45)", hoverText: "#a78bfa" },
+                    { id: "driving-behavior",    label: "Driving Behavior",   borderColor: "rgba(245,166,35,0.2)",  textColor: "rgba(245,166,35,0.55)", hoverBorder: "rgba(245,166,35,0.45)",  hoverText: "#f5a623"  },
+                    { id: "trip-anomalies",      label: "Trip Anomalies",     borderColor: "rgba(248,113,113,0.2)", textColor: "rgba(248,113,113,0.55)", hoverBorder: "rgba(248,113,113,0.45)", hoverText: "#f87171" },
+                  ] as const
+                ).map(({ id, borderColor, textColor, hoverBorder, hoverText }) => (
+                  <div key={id} className="relative group/intel w-72 shrink-0">
+                    {id === "trip-profile"     && <VehicleTripProfileCard trips={trips} />}
+                    {id === "route-fingerprint" && <RouteFingerPrintCard trips={trips} />}
+                    {id === "driving-behavior"  && <DrivingBehaviorCard trips={trips} />}
+                    {id === "trip-anomalies"    && <TripAnomaliesCard trips={trips} />}
+                    {/* Expand overlay button */}
+                    <button
+                      onClick={() => setExpandedCard(id)}
+                      className={cn(
+                        "absolute top-2 right-2 z-20 flex items-center justify-center w-6 h-6 rounded-md",
+                        "bg-[rgba(13,17,23,0.85)]",
+                        "opacity-0 group-hover/intel:opacity-100 hover:!opacity-100",
+                        "transition-all duration-150 backdrop-blur-sm",
+                      )}
+                      style={{
+                        border: `1px solid ${borderColor}`,
+                        color: textColor,
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = hoverBorder;
+                        (e.currentTarget as HTMLButtonElement).style.color = hoverText;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = borderColor;
+                        (e.currentTarget as HTMLButtonElement).style.color = textColor;
+                      }}
+                      title="Maximise"
+                    >
+                      <Maximize2 className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
 
@@ -679,21 +671,16 @@ function DashboardContent() {
                   ) : null
                 )}
 
-                {expandedCard !== "next-stop" && (() => {
-                  const insight = aceInsights.find((i) => i.id === expandedCard);
-                  if (!insight) return null;
-                  return (
-                    <div className="w-full">
-                      <AceInsightExpandedCard insight={insight} />
-                    </div>
-                  );
-                })()}
+                {expandedCard === "trip-profile"     && <VehicleTripProfileCard trips={trips} expanded />}
+                {expandedCard === "route-fingerprint" && <RouteFingerPrintCard   trips={trips} expanded />}
+                {expandedCard === "driving-behavior"  && <DrivingBehaviorCard    trips={trips} expanded />}
+                {expandedCard === "trip-anomalies"    && <TripAnomaliesCard      trips={trips} expanded />}
 
                 {/* Minimise pill at bottom */}
                 <div className="flex justify-center mt-4 pb-1">
                   <button
                     onClick={() => setExpandedCard(null)}
-                    className="inline-flex items-center gap-1.5 h-7 px-4 rounded-full text-[11px] font-semibold font-body text-[rgba(232,237,248,0.4)] hover:text-white bg-[rgba(255,255,255,0.04)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.07)] hover:border-[rgba(255,255,255,0.13)] transition-all duration-150"
+                    className="inline-flex items-center gap-1.5 h-7 px-4 rounded-full text-sm font-semibold font-body text-[rgba(232,237,248,0.4)] hover:text-white bg-[rgba(255,255,255,0.04)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.07)] hover:border-[rgba(255,255,255,0.13)] transition-all duration-150"
                   >
                     <Minimize2 className="h-3 w-3" />
                     Back to columns

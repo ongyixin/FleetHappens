@@ -122,19 +122,64 @@ function useAssistantContext(): AssistantContext {
   return { currentPage: "home" };
 }
 
-// ─── Markdown-bold renderer (simple **text** → <strong>) ─────────────────────
+// ─── Markdown renderer: **bold**, line breaks, and bullet lists ───────────────
 
-function renderMarkdown(text: string) {
+function renderInline(text: string, keyPrefix: string) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) =>
     part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={i} className="text-[var(--text-primary)] font-semibold">
+      <strong key={`${keyPrefix}-${i}`} className="text-[var(--text-primary)] font-semibold">
         {part.slice(2, -2)}
       </strong>
     ) : (
-      <span key={i}>{part}</span>
+      <span key={`${keyPrefix}-${i}`}>{part}</span>
     )
   );
+}
+
+function renderMarkdown(text: string) {
+  const lines = text.split(/\n/);
+  const elements: React.ReactNode[] = [];
+  let listItems: React.ReactNode[] = [];
+
+  const flushList = () => {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={`ul-${elements.length}`} className="mt-1.5 space-y-0.5 pl-3 list-none">
+          {listItems}
+        </ul>
+      );
+      listItems = [];
+    }
+  };
+
+  lines.forEach((line, i) => {
+    const bulletMatch = line.match(/^[\s]*[-*•]\s+(.+)$/);
+    if (bulletMatch) {
+      listItems.push(
+        <li key={`li-${i}`} className="flex items-start gap-1.5 text-sm text-[var(--text-secondary)] font-body">
+          <span className="mt-[0.4em] w-1 h-1 rounded-full bg-[var(--amber)] flex-shrink-0" aria-hidden />
+          <span>{renderInline(bulletMatch[1], `li-inline-${i}`)}</span>
+        </li>
+      );
+    } else {
+      flushList();
+      if (line.trim() === "") {
+        if (elements.length > 0) {
+          elements.push(<span key={`br-${i}`} className="block h-1" />);
+        }
+      } else {
+        elements.push(
+          <span key={`p-${i}`} className="block">
+            {renderInline(line, `p-inline-${i}`)}
+          </span>
+        );
+      }
+    }
+  });
+
+  flushList();
+  return elements;
 }
 
 // ─── Suggestion chip icons ────────────────────────────────────────────────────
@@ -229,7 +274,7 @@ function ResultCard({
                   )}
                 </span>
                 {response.data.context && (
-                  <span className="text-xs text-[var(--text-muted)] font-data">
+                  <span className="text-sm text-[var(--text-muted)] font-data">
                     {response.data.context}
                   </span>
                 )}
@@ -243,14 +288,14 @@ function ResultCard({
 
             {/* Fallback indicator */}
             {response.fromFallback && (
-              <p className="mt-1.5 text-[10px] text-[var(--text-faint)] font-data uppercase tracking-wide">
+              <p className="mt-1.5 text-sm text-[var(--text-faint)] font-data uppercase tracking-wide">
                 keyword match
               </p>
             )}
 
             {/* Data provenance for analyze responses */}
             {response.sources && response.sources.length > 0 && (
-              <p className="mt-1.5 text-[10px] text-[var(--text-faint)] font-data leading-snug">
+              <p className="mt-1.5 text-sm text-[var(--text-faint)] font-data leading-snug">
                 Based on: {response.sources.join(" · ")}
               </p>
             )}
@@ -306,7 +351,7 @@ function ResultCard({
       {/* Follow-up suggestions */}
       {response.suggestions && response.suggestions.length > 0 && (
         <div className="mt-3">
-          <p className="text-[10px] uppercase tracking-widest text-[var(--text-faint)] font-data mb-2 px-0.5">
+          <p className="text-xs uppercase tracking-widest text-[var(--text-faint)] font-data mb-2 px-0.5">
             Try also
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -314,7 +359,7 @@ function ResultCard({
               <button
                 key={i}
                 onClick={() => onSuggestion(s)}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-[var(--text-secondary)] bg-[var(--surface-2)] border border-[var(--border-default)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-3)] transition-all duration-100 font-body"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm text-[var(--text-secondary)] bg-[var(--surface-2)] border border-[var(--border-default)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-3)] transition-all duration-100 font-body"
               >
                 <SuggestionIcon text={s} />
                 {s}
@@ -368,7 +413,7 @@ interface EmptyStateProps {
 function EmptyState({ suggestions, onSuggestion }: EmptyStateProps) {
   return (
     <div className="animate-fade-up space-y-3">
-      <p className="text-[10px] uppercase tracking-widest text-[var(--text-faint)] font-data px-0.5">
+      <p className="text-xs uppercase tracking-widest text-[var(--text-faint)] font-data px-0.5">
         Suggestions
       </p>
       <div className="flex flex-wrap gap-2">
@@ -737,7 +782,7 @@ export function CommandPalette() {
                 )}
                 <button
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-1 text-[10px] font-data text-[var(--text-faint)] hover:text-[var(--text-muted)] transition-colors"
+                  className="flex items-center gap-1 text-sm font-data text-[var(--text-faint)] hover:text-[var(--text-muted)] transition-colors"
                   aria-label="Close"
                 >
                   <kbd className="px-1 py-0.5 rounded bg-[var(--surface-3)] border border-[var(--border-subtle)] text-[var(--text-faint)] font-data leading-tight">
@@ -770,7 +815,7 @@ export function CommandPalette() {
 
             {/* Footer hint */}
             <div className="px-4 py-2.5 border-t border-[var(--border-subtle)] flex items-center justify-between">
-              <div className="flex items-center gap-3 text-[10px] font-data text-[var(--text-faint)]">
+              <div className="flex items-center gap-3 text-sm font-data text-[var(--text-faint)]">
                 <span className="flex items-center gap-1">
                   <kbd className="px-1 py-0.5 rounded bg-[var(--surface-3)] border border-[var(--border-subtle)]">↵</kbd>
                   navigate
@@ -794,7 +839,7 @@ export function CommandPalette() {
                   title={ttsEnabled ? "Disable voice responses" : "Enable voice responses"}
                   aria-label={ttsEnabled ? "Disable voice responses" : "Enable voice responses"}
                   className={`
-                    flex items-center gap-1 text-[10px] font-data transition-colors duration-150
+                    flex items-center gap-1 text-sm font-data transition-colors duration-150
                     ${ttsEnabled
                       ? "text-[var(--amber)] hover:text-[rgba(245,166,35,0.6)]"
                       : "text-[var(--text-faint)] hover:text-[var(--text-muted)]"
@@ -809,7 +854,7 @@ export function CommandPalette() {
                   <span>voice</span>
                 </button>
 
-                <div className="flex items-center gap-1.5 text-[10px] font-data text-[var(--text-faint)]">
+                <div className="flex items-center gap-1.5 text-sm font-data text-[var(--text-faint)]">
                   <Command className="w-3 h-3" />
                   <span>FleetHappens</span>
                 </div>
@@ -858,7 +903,7 @@ export function CommandPaletteTrigger() {
         hidden sm:flex items-center justify-center
         ml-1 px-1.5 py-0.5 rounded-md
         bg-[rgba(9,9,14,0.18)] text-[rgba(9,9,14,0.65)]
-        text-[10px] font-data leading-tight
+        text-sm font-data leading-tight
         border border-[rgba(9,9,14,0.12)]
       ">
         ⌘K

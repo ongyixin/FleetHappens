@@ -27,7 +27,7 @@ import {
   fuzzyMatchVehicle,
   suggestFleets,
 } from "./intents";
-import { resolveAnalyze } from "./analyze";
+import { resolveAnalyze, resolveConversational } from "./analyze";
 import { generateText } from "@/lib/llm/client";
 
 // ─── Internal fetch helpers ───────────────────────────────────────────────────
@@ -146,9 +146,12 @@ export async function resolveIntent(
       return resolveExplain(intent, context);
     case "analyze":
       return resolveAnalyze(intent, context, rawQuery);
+    case "conversational":
+      return resolveConversational(intent, context, rawQuery);
+    case "off_topic":
     case "unknown":
     default:
-      return resolveUnknown(rawQuery);
+      return resolveOffTopic(rawQuery, context);
   }
 }
 
@@ -555,32 +558,61 @@ async function resolveExplain(
   };
 }
 
-// ─── Unknown handler ──────────────────────────────────────────────────────────
+// ─── Off-topic handler ────────────────────────────────────────────────────────
 
-function resolveUnknown(rawQuery: string): AssistantResponse {
+function resolveOffTopic(rawQuery: string, context: AssistantContext): AssistantResponse {
   const q = rawQuery.toLowerCase();
-  const isQuestion = q.includes("?") || /^(what|how|which|who|when|where|why|is|are|can|show)/i.test(q);
+  const isGreeting = /^(hi|hello|hey|howdy|greetings|good\s*(morning|afternoon|evening)|thanks|thank\s*you|cheers|bye|goodbye)\b/i.test(q.trim());
 
-  if (isQuestion) {
+  if (isGreeting) {
+    const pageSuggestions = getPageSuggestions(context);
     return {
-      text: "I can help with fleet navigation and quick lookups. Try asking about specific fleets, vehicles, or metrics.",
-      suggestions: [
-        "How many vehicles are active?",
-        "Open Fleet Pulse",
-        "Which fleet has the most distance?",
-        "Go to dashboard",
-      ],
+      text: "Hey! I'm your Fleet AI assistant. Ask me about vehicles, fleets, routes, or anything happening in your fleet right now.",
+      suggestions: pageSuggestions,
     };
   }
 
+  const pageSuggestions = getPageSuggestions(context);
   return {
-    text: "I'm not sure what you're looking for. Try navigating to a specific fleet or asking about fleet metrics.",
-    suggestions: [
-      "Open Fleet Pulse",
-      "How many vehicles are active?",
-      "Show me the dashboard",
-    ],
+    text: "I'm focused on fleet intelligence — I can help with fleet status, vehicle lookups, route analysis, and spotting issues. What would you like to know about your fleet?",
+    suggestions: pageSuggestions,
   };
+}
+
+/** Return page-contextual suggestions for off-topic redirects. */
+function getPageSuggestions(context: AssistantContext): string[] {
+  switch (context.currentPage) {
+    case "pulse":
+      return [
+        "What's the fleet idle rate?",
+        "Which fleet is performing best?",
+        "Any anomalies I should know about?",
+        "How many vehicles are active?",
+      ];
+    case "fleet-detail":
+      return [
+        context.currentFleetName
+          ? `What's happening with ${context.currentFleetName}?`
+          : "What's happening in this fleet?",
+        "Which vehicle is idling most?",
+        "Any vehicles with unusual patterns?",
+        "Go to Fleet Pulse",
+      ].filter(Boolean) as string[];
+    case "dashboard":
+      return [
+        "What was the last trip distance?",
+        "Create a trip story",
+        "Go to Fleet Pulse",
+        "How many vehicles are active?",
+      ];
+    default:
+      return [
+        "How many vehicles are active?",
+        "Which fleet has the most distance?",
+        "What should I focus on today?",
+        "Open Fleet Pulse",
+      ];
+  }
 }
 
 // ─── Error helpers ────────────────────────────────────────────────────────────

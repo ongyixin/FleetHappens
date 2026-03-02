@@ -165,14 +165,14 @@ function StoryCard({ story, index }: { story: StorySummary; index: number }) {
 
         {/* Top-left tone badge */}
         <div className="absolute top-3 left-3 z-10">
-          <span className={`text-[9px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded-full font-body ${cfg.badge}`}>
+          <span className={`text-xs font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded-full font-body ${cfg.badge}`}>
             {cfg.label}
           </span>
         </div>
 
         {/* Top-right issue number */}
         <div className="absolute top-3 right-3 z-10">
-          <span className="text-[9px] font-data text-[rgba(255,255,255,0.25)]">
+          <span className="text-sm font-data text-[rgba(255,255,255,0.25)]">
             #{String(index + 1).padStart(3, "0")}
           </span>
         </div>
@@ -180,7 +180,7 @@ function StoryCard({ story, index }: { story: StorySummary; index: number }) {
         {/* Hover CTA overlay */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
           <div
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[11px] font-display font-bold text-white border border-[rgba(255,255,255,0.2)] backdrop-blur-md"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-display font-bold text-white border border-[rgba(255,255,255,0.2)] backdrop-blur-md"
             style={{ background: "rgba(9,9,14,0.6)" }}
           >
             <BookOpen className="h-3.5 w-3.5" />
@@ -203,7 +203,7 @@ function StoryCard({ story, index }: { story: StorySummary; index: number }) {
         </h3>
 
         {/* Route */}
-        <div className="flex items-center gap-1.5 text-[11px] text-[rgba(232,237,248,0.38)] font-body mb-3 min-w-0">
+        <div className="flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.38)] font-body mb-3 min-w-0">
           <MapPin className="h-2.5 w-2.5 shrink-0" style={{ color: cfg.color, opacity: 0.7 }} />
           <span className="truncate">{story.firstLocationName}</span>
           <span className="shrink-0 text-[rgba(255,255,255,0.18)]">→</span>
@@ -212,17 +212,17 @@ function StoryCard({ story, index }: { story: StorySummary; index: number }) {
 
         {/* Caption excerpt */}
         {story.firstCaption && (
-          <p className="text-[11px] italic text-[rgba(232,237,248,0.32)] font-body leading-relaxed line-clamp-2 flex-1 mb-3">
+          <p className="text-sm italic text-[rgba(232,237,248,0.32)] font-body leading-relaxed line-clamp-2 flex-1 mb-3">
             &ldquo;{story.firstCaption}&rdquo;
           </p>
         )}
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-2.5 border-t border-[rgba(255,255,255,0.06)] mt-auto">
-          <span className="text-[10px] font-data text-[rgba(232,237,248,0.28)]">
+          <span className="text-sm font-data text-[rgba(232,237,248,0.28)]">
             {dateStr}
           </span>
-          <span className="text-[10px] font-body text-[rgba(232,237,248,0.28)]">
+          <span className="text-sm font-body text-[rgba(232,237,248,0.28)]">
             {story.panelCount} panels
           </span>
         </div>
@@ -258,8 +258,8 @@ function EmptyState({ bigqueryEnabled }: { bigqueryEnabled: boolean }) {
       ) : (
         <p className="text-sm text-[rgba(232,237,248,0.42)] max-w-sm leading-relaxed font-body mb-6">
           Stories are cached in BigQuery. Configure{" "}
-          <span className="font-mono text-[rgba(232,237,248,0.6)] text-[12px]">GOOGLE_CLOUD_PROJECT</span>{" "}
-          in your <span className="font-mono text-[rgba(232,237,248,0.6)] text-[12px]">.env.local</span> to
+          <span className="font-mono text-[rgba(232,237,248,0.6)] text-sm">GOOGLE_CLOUD_PROJECT</span>{" "}
+          in your <span className="font-mono text-[rgba(232,237,248,0.6)] text-sm">.env.local</span> to
           enable persistent story archiving.
         </p>
       )}
@@ -382,13 +382,13 @@ export default function StorybookPage() {
 
           <div className="ml-auto flex items-center gap-3">
             {!loading && total > 0 && (
-              <span className="hidden sm:block text-[11px] font-body text-[rgba(232,237,248,0.35)]">
+              <span className="hidden sm:block text-sm font-body text-[rgba(232,237,248,0.35)]">
                 {total} {total === 1 ? "story" : "stories"} archived
               </span>
             )}
             <button
               onClick={() => router.push("/")}
-              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-[11px] text-[rgba(232,237,248,0.45)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] border border-transparent hover:border-[rgba(255,255,255,0.09)] transition-all font-body"
+              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-sm text-[rgba(232,237,248,0.45)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] border border-transparent hover:border-[rgba(255,255,255,0.09)] transition-all font-body"
             >
               <ArrowLeft className="h-3 w-3" />
               Back
@@ -405,7 +405,7 @@ export default function StorybookPage() {
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-2 mb-6 animate-fade-in">
             <div className="w-1.5 h-1.5 rounded-full bg-[#f5a623] animate-glow-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(232,237,248,0.4)] font-body">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-[rgba(232,237,248,0.4)] font-body">
               Fleet Archive
             </span>
           </div>
@@ -456,7 +456,7 @@ export default function StorybookPage() {
                 <button
                   key={value}
                   onClick={() => setToneFilter(value)}
-                  className={`h-8 px-3.5 rounded-full text-[11px] font-semibold font-body border transition-all ${
+                  className={`h-8 px-3.5 rounded-full text-sm font-semibold font-body border transition-all ${
                     isActive
                       ? "bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.18)] text-white"
                       : "border-[rgba(255,255,255,0.08)] text-[rgba(232,237,248,0.45)] hover:border-[rgba(255,255,255,0.14)] hover:text-[rgba(232,237,248,0.7)] bg-transparent"
@@ -483,7 +483,7 @@ export default function StorybookPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search stories…"
-              className="h-8 pl-9 pr-9 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.09)] text-[12px] text-[rgba(232,237,248,0.8)] placeholder:text-[rgba(232,237,248,0.3)] font-body focus:outline-none focus:border-[rgba(255,255,255,0.18)] focus:bg-[rgba(255,255,255,0.07)] transition-all w-52"
+              className="h-8 pl-9 pr-9 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.09)] text-sm text-[rgba(232,237,248,0.8)] placeholder:text-[rgba(232,237,248,0.3)] font-body focus:outline-none focus:border-[rgba(255,255,255,0.18)] focus:bg-[rgba(255,255,255,0.07)] transition-all w-52"
             />
             {searchQuery && (
               <button
@@ -528,7 +528,7 @@ export default function StorybookPage() {
                 </p>
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="text-xs text-[#f5a623] hover:underline font-body"
+                  className="text-sm text-[#f5a623] hover:underline font-body"
                 >
                   Clear search
                 </button>
@@ -551,7 +551,7 @@ export default function StorybookPage() {
                   ) : (
                     <>
                       Load more
-                      <span className="text-[11px] text-[rgba(232,237,248,0.35)]">
+                      <span className="text-sm text-[rgba(232,237,248,0.35)]">
                         ({total - stories.length} remaining)
                       </span>
                     </>
@@ -564,7 +564,7 @@ export default function StorybookPage() {
             {!loading && !hasMore && filtered.length > 0 && (
               <div className="flex flex-col items-center gap-2 pb-16 pt-4">
                 <div className="h-px w-32 bg-gradient-to-r from-transparent via-[rgba(255,255,255,0.1)] to-transparent" />
-                <p className="text-[10px] font-body text-[rgba(232,237,248,0.2)] uppercase tracking-[0.15em]">
+                <p className="text-sm font-body text-[rgba(232,237,248,0.2)] uppercase tracking-[0.15em]">
                   End of archive
                 </p>
               </div>

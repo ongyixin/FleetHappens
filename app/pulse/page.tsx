@@ -21,7 +21,7 @@ const FleetRegionalMap = dynamic(
             <div className="absolute inset-0 rounded-full border-2 border-[rgba(245,166,35,0.2)]" />
             <div className="absolute inset-0 rounded-full border-2 border-t-[#f5a623] border-transparent animate-spin" />
           </div>
-          <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body">Loading map…</p>
+          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Loading map…</p>
         </div>
       </div>
     ),
@@ -130,14 +130,14 @@ function PulsePageContent() {
           <div className="flex items-center gap-2">
             <Zap className="h-3.5 w-3.5 text-[#f5a623]" />
             <span className="font-display font-bold text-white text-sm">Fleet Pulse</span>
-            <span className="text-[10px] font-bold text-[rgba(232,237,248,0.45)] bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-full px-2 py-0.5 font-body">
+            <span className="text-sm font-bold text-[rgba(232,237,248,0.45)] bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-full px-2 py-0.5 font-body">
               Company View
             </span>
           </div>
 
           <div className="ml-auto flex items-center gap-3 shrink-0">
             {aceLoading && (
-              <span className="hidden sm:flex items-center gap-1.5 text-[11px] text-[rgba(232,237,248,0.4)] font-body">
+              <span className="hidden sm:flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.4)] font-body">
                 <Brain className="h-3 w-3 text-[#f5a623] animate-pulse" />
                 Ace loading…
               </span>
@@ -189,12 +189,12 @@ function PulsePageContent() {
             <h2 className="font-display font-bold text-lg text-white">
               {viewMode === "cards" ? "Fleet Overview" : "Fleet Rankings"}
             </h2>
-            <p className="text-xs text-[rgba(232,237,248,0.4)] mt-0.5 font-body">
+            <p className="text-sm text-[rgba(232,237,248,0.4)] mt-0.5 font-body">
               Click any fleet to drill into vehicle activity
             </p>
           </div>
           {aceLoading && (
-            <span className="flex items-center gap-1.5 text-xs text-[rgba(232,237,248,0.4)] font-body">
+            <span className="flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.4)] font-body">
               <RefreshCw className="h-3 w-3 text-[#f5a623] animate-spin" />
               Loading Ace metrics…
             </span>

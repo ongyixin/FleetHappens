@@ -115,7 +115,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
               >
                 <Icon className="h-3 w-3" style={{ color: cfg.color }} />
               </span>
-              <span className="text-[13px] font-body text-[rgba(232,237,248,0.82)] leading-snug">
+              <span className="text-sm font-body text-[rgba(232,237,248,0.82)] leading-snug">
                 {insight.text}
               </span>
             </div>
@@ -130,7 +130,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
           <div className="space-y-2">
             <div className="flex items-center gap-1.5">
               <AlertOctagon className="w-3 h-3 text-[#fb923c]" />
-              <p className="text-[9px] font-data font-bold uppercase tracking-[0.18em] text-[rgba(251,146,60,0.6)]">
+              <p className="text-sm font-data font-bold uppercase tracking-[0.18em] text-[rgba(251,146,60,0.6)]">
                 Anomalies Detected
               </p>
             </div>
@@ -154,7 +154,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
                   />
                   <div className="flex-1 min-w-0">
                     <span
-                      className="text-[9px] font-data font-bold uppercase tracking-[0.14em] block mb-0.5"
+                      className="text-sm font-data font-bold uppercase tracking-[0.14em] block mb-0.5"
                       style={{
                         color: anomaly.severity === "critical"
                           ? "rgba(239,68,68,0.7)"
@@ -163,7 +163,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
                     >
                       {anomaly.severity} · {anomaly.metric.replace(/_/g, " ")}
                     </span>
-                    <span className="text-[12px] font-body text-[rgba(232,237,248,0.75)] leading-snug">
+                    <span className="text-sm font-body text-[rgba(232,237,248,0.75)] leading-snug">
                       {anomaly.text}
                     </span>
                   </div>
@@ -181,7 +181,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
           <div className="space-y-2">
             <div className="flex items-center gap-1.5">
               <Activity className="w-3 h-3 text-[#38bdf8]" />
-              <p className="text-[9px] font-data font-bold uppercase tracking-[0.18em] text-[rgba(56,189,248,0.6)]">
+              <p className="text-sm font-data font-bold uppercase tracking-[0.18em] text-[rgba(56,189,248,0.6)]">
                 Next-Week Predictions
               </p>
             </div>
@@ -199,19 +199,19 @@ function DigestContent({ digest }: { digest: DigestResult }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2 mb-0.5">
                       <span
-                        className="text-[11px] font-data font-bold tabular-nums"
+                        className="text-sm font-data font-bold tabular-nums"
                         style={{ color: directionColor(pred.direction) }}
                       >
                         {pred.magnitude}
                       </span>
-                      <span className="text-[10px] text-[rgba(232,237,248,0.4)] font-data">
+                      <span className="text-sm text-[rgba(232,237,248,0.4)] font-data">
                         {pred.metric.replace(/_/g, " ")}
                       </span>
-                      <span className="ml-auto text-[9px] font-data text-[rgba(232,237,248,0.25)] tabular-nums">
+                      <span className="ml-auto text-sm font-data text-[rgba(232,237,248,0.25)] tabular-nums">
                         {Math.round(pred.confidence * 100)}% conf
                       </span>
                     </div>
-                    <p className="text-[11px] font-body text-[rgba(232,237,248,0.55)] leading-snug italic">
+                    <p className="text-sm font-body text-[rgba(232,237,248,0.55)] leading-snug italic">
                       {pred.reasoning}
                     </p>
                   </div>
@@ -233,10 +233,10 @@ function DigestContent({ digest }: { digest: DigestResult }) {
         }}
       >
         <div className="shrink-0">
-          <p className="text-[9px] font-data font-bold uppercase tracking-[0.18em] text-[rgba(245,166,35,0.55)] mb-0.5">
+          <p className="text-sm font-data font-bold uppercase tracking-[0.18em] text-[rgba(245,166,35,0.55)] mb-0.5">
             Stat of the Day
           </p>
-          <p className="text-[10px] font-data text-[rgba(232,237,248,0.4)] leading-tight">
+          <p className="text-sm font-data text-[rgba(232,237,248,0.4)] leading-tight">
             {digest.statOfDay.label}
           </p>
         </div>
@@ -246,7 +246,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
             {digest.statOfDay.value}
           </p>
           {digest.statOfDay.context && (
-            <p className="text-[11px] font-body text-[rgba(232,237,248,0.38)] mt-1 leading-snug">
+            <p className="text-sm font-body text-[rgba(232,237,248,0.38)] mt-1 leading-snug">
               {digest.statOfDay.context}
             </p>
           )}
@@ -261,10 +261,10 @@ function DigestContent({ digest }: { digest: DigestResult }) {
             className="w-full flex items-center gap-2 text-left group"
           >
             <Lightbulb className="w-3 h-3 text-[rgba(167,139,250,0.6)] shrink-0" />
-            <p className="text-[9px] font-data font-bold uppercase tracking-[0.18em] text-[rgba(167,139,250,0.5)] flex-1">
+            <p className="text-sm font-data font-bold uppercase tracking-[0.18em] text-[rgba(167,139,250,0.5)] flex-1">
               Recommended Actions
             </p>
-            <span className="text-[9px] font-data text-[rgba(232,237,248,0.25)] group-hover:text-[rgba(232,237,248,0.5)] transition-colors">
+            <span className="text-sm font-data text-[rgba(232,237,248,0.25)] group-hover:text-[rgba(232,237,248,0.5)] transition-colors">
               {showRecs ? "hide" : `show ${digest.recommendations!.length}`}
             </span>
             <ChevronRight
@@ -292,7 +292,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
                     }}
                   >
                     <span
-                      className="text-[8.5px] font-data font-bold uppercase tracking-[0.12em] shrink-0 mt-0.5 px-1.5 py-0.5 rounded"
+                      className="text-sm font-data font-bold uppercase tracking-[0.12em] shrink-0 mt-0.5 px-1.5 py-0.5 rounded"
                       style={{
                         color: priorityColor,
                         background: `${priorityColor}18`,
@@ -301,7 +301,7 @@ function DigestContent({ digest }: { digest: DigestResult }) {
                     >
                       {rec.priority}
                     </span>
-                    <p className="text-[12px] font-body text-[rgba(232,237,248,0.72)] leading-snug">
+                    <p className="text-sm font-body text-[rgba(232,237,248,0.72)] leading-snug">
                       {rec.text}
                     </p>
                   </div>
@@ -336,15 +336,15 @@ function ChartTooltip({
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-lg border border-[rgba(255,255,255,0.1)] bg-[#1a1d23] px-3 py-2 shadow-xl pointer-events-none">
-      <p className="text-[10px] font-data text-[rgba(232,237,248,0.45)] mb-1">{label}</p>
+      <p className="text-sm font-data text-[rgba(232,237,248,0.45)] mb-1">{label}</p>
       {payload.map((p, i) => (
         <p
           key={i}
-          className="text-[12px] font-display font-bold tabular-nums"
+          className="text-sm font-display font-bold tabular-nums"
           style={{ color: p.color ?? p.fill ?? "#f5a623" }}
         >
           {p.value.toLocaleString()}
-          {p.unit ? <span className="font-body font-normal text-[10px] ml-0.5">{p.unit}</span> : null}
+          {p.unit ? <span className="font-body font-normal text-sm ml-0.5">{p.unit}</span> : null}
         </p>
       ))}
     </div>
@@ -360,7 +360,7 @@ function DigestChartView({ summary }: { summary: CompanyPulseSummary }) {
     name.replace(/\s+(Region|Fleet|Group|Division)$/i, "").slice(0, 11);
 
   const axisStyle = {
-    fontSize: 9,
+    fontSize: 12,
     fill: "rgba(232,237,248,0.38)",
     fontFamily: "inherit",
   };
@@ -390,7 +390,7 @@ function DigestChartView({ summary }: { summary: CompanyPulseSummary }) {
     <div className="px-4 pb-5 pt-1 space-y-4 animate-fade-up">
       {/* Distance per fleet */}
       <div>
-        <p className="text-[9px] font-data font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-2">
+        <p className="text-sm font-data font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-2">
           Distance this week (km)
         </p>
         <ResponsiveContainer width="100%" height={chartHeight}>
@@ -426,7 +426,7 @@ function DigestChartView({ summary }: { summary: CompanyPulseSummary }) {
       {/* Trips + Idle side by side */}
       <div className="grid grid-cols-2 gap-x-5">
         <div>
-          <p className="text-[9px] font-data font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-2">
+          <p className="text-sm font-data font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-2">
             Trips
           </p>
           <ResponsiveContainer width="100%" height={chartHeight}>
@@ -459,7 +459,7 @@ function DigestChartView({ summary }: { summary: CompanyPulseSummary }) {
 
         {/* Idle % donut */}
         <div>
-          <p className="text-[9px] font-data font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-1">
+          <p className="text-sm font-data font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-1">
             Idle %
           </p>
           <ResponsiveContainer width="100%" height={100}>
@@ -486,10 +486,10 @@ function DigestChartView({ summary }: { summary: CompanyPulseSummary }) {
             {idleData.map((d, i) => (
               <div key={i} className="flex items-center gap-1.5">
                 <div className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: d.color }} />
-                <span className="text-[9px] font-data text-[rgba(232,237,248,0.38)] truncate flex-1 min-w-0">
+                <span className="text-sm font-data text-[rgba(232,237,248,0.38)] truncate flex-1 min-w-0">
                   {d.name}
                 </span>
-                <span className="text-[9px] font-data font-bold tabular-nums" style={{ color: d.color }}>
+                <span className="text-sm font-data font-bold tabular-nums" style={{ color: d.color }}>
                   {d.idle}%
                 </span>
               </div>
@@ -540,7 +540,7 @@ function DigestChartView({ summary }: { summary: CompanyPulseSummary }) {
               border: "1px solid rgba(255,255,255,0.06)",
             }}
           >
-            <p className="text-[8px] font-data uppercase tracking-[0.14em] text-[rgba(232,237,248,0.3)] mb-0.5">
+            <p className="text-sm font-data uppercase tracking-[0.14em] text-[rgba(232,237,248,0.3)] mb-0.5">
               {stat.label}
             </p>
             <p
@@ -646,20 +646,20 @@ export default function FleetDailyDigest({ summary, aceInsight }: Props) {
 
         <Newspaper className="h-3 w-3 text-[#f5a623] shrink-0" />
 
-        <span className="text-[10px] font-data font-bold uppercase tracking-[0.2em] text-[#f5a623]">
+        <span className="text-sm font-data font-bold uppercase tracking-[0.2em] text-[#f5a623]">
           Fleet Daily Brief
         </span>
 
         <span className="w-px h-3 bg-[rgba(255,255,255,0.1)] shrink-0" />
 
-        <span className="text-[10px] font-data text-[rgba(232,237,248,0.32)]">
+        <span className="text-sm font-data text-[rgba(232,237,248,0.32)]">
           {today}
         </span>
 
         {isLoading && (
           <>
             <span className="w-px h-3 bg-[rgba(255,255,255,0.1)] shrink-0" />
-            <span className="text-[10px] font-body text-[rgba(232,237,248,0.28)] italic">
+            <span className="text-sm font-body text-[rgba(232,237,248,0.28)] italic">
               Analysing fleet data…
             </span>
           </>
@@ -668,7 +668,7 @@ export default function FleetDailyDigest({ summary, aceInsight }: Props) {
         {digest?.fromLLM && !isLoading && (
           <>
             <span className="w-px h-3 bg-[rgba(255,255,255,0.1)] shrink-0" />
-            <span className="flex items-center gap-1 text-[10px] font-body text-[rgba(232,237,248,0.3)]">
+            <span className="flex items-center gap-1 text-sm font-body text-[rgba(232,237,248,0.3)]">
               <Brain className="h-2.5 w-2.5 text-[#f5a623]" />
               AI Analyst
             </span>
@@ -678,7 +678,7 @@ export default function FleetDailyDigest({ summary, aceInsight }: Props) {
         {/* Anomaly count badge */}
         {anomalyCount > 0 && !isLoading && (
           <span
-            className="flex items-center gap-1 text-[9px] font-data font-bold px-1.5 py-0.5 rounded"
+            className="flex items-center gap-1 text-sm font-data font-bold px-1.5 py-0.5 rounded"
             style={{
               color: "rgba(251,146,60,0.9)",
               background: "rgba(251,146,60,0.1)",
@@ -693,7 +693,7 @@ export default function FleetDailyDigest({ summary, aceInsight }: Props) {
         {/* Prediction count badge */}
         {predCount > 0 && !isLoading && (
           <span
-            className="flex items-center gap-1 text-[9px] font-data font-bold px-1.5 py-0.5 rounded"
+            className="flex items-center gap-1 text-sm font-data font-bold px-1.5 py-0.5 rounded"
             style={{
               color: "rgba(56,189,248,0.85)",
               background: "rgba(56,189,248,0.08)",

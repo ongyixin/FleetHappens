@@ -198,7 +198,7 @@ export default function StoryPage() {
 
           <button
             onClick={() => router.push(`/dashboard?deviceId=${deviceId}&deviceName=${encodeURIComponent(trip?.deviceName ?? deviceName)}`)}
-            className="flex items-center gap-1.5 text-[rgba(232,237,248,0.45)] hover:text-white transition-colors text-xs font-body"
+            className="flex items-center gap-1.5 text-[rgba(232,237,248,0.45)] hover:text-white transition-colors text-sm font-body"
           >
             <ArrowLeft className="h-3 w-3" />
             {trip?.deviceName ?? deviceName}
@@ -207,12 +207,12 @@ export default function StoryPage() {
           <div className="ml-auto flex items-center gap-3">
             <button
               onClick={() => router.push("/storybook")}
-              className="hidden sm:inline-flex items-center gap-1.5 h-7 px-3 rounded-lg text-[11px] text-[rgba(232,237,248,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] border border-transparent hover:border-[rgba(255,255,255,0.08)] transition-all font-body"
+              className="hidden sm:inline-flex items-center gap-1.5 h-7 px-3 rounded-lg text-sm text-[rgba(232,237,248,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.07)] border border-transparent hover:border-[rgba(255,255,255,0.08)] transition-all font-body"
             >
               <Library className="h-3 w-3" />
               Storybook
             </button>
-            <div className="flex items-center gap-1.5 text-[11px] text-[rgba(232,237,248,0.28)] font-body">
+            <div className="flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.28)] font-body">
               <Sparkles className="h-3 w-3 text-[#fb923c]/60" />
               AI-generated · real Geotab data
             </div>
@@ -227,7 +227,7 @@ export default function StoryPage() {
           <div className="h-px flex-1 bg-gradient-to-r from-transparent to-[rgba(255,255,255,0.08)]" />
           <div className="flex items-center gap-2 shrink-0">
             <div className="w-1 h-1 rounded-full bg-[#fb923c]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(232,237,248,0.3)] font-body">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-[rgba(232,237,248,0.3)] font-body">
               Trip Story
             </span>
             <div className="w-1 h-1 rounded-full bg-[#fb923c]" />

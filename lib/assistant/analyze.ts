@@ -344,6 +344,17 @@ RULES:
 5. When recommending action, tie it to a specific metric or vehicle name from the data.
 6. Do not use markdown formatting — plain sentences only.`;
 
+const CONVERSATIONAL_SYSTEM = `You are a helpful fleet intelligence analyst for FleetHappens.
+
+RULES:
+1. Answer ONLY based on the DATA section provided — never invent numbers, vehicle names, or metrics.
+2. Be conversational, helpful, and direct. You may offer observations, insights, and prioritised recommendations.
+3. Cite specific values to ground your answer (e.g. "the North fleet has a 34% idle rate").
+4. If something is worth the user's attention, say so clearly and explain why.
+5. If the data doesn't fully answer the question, say what you can observe and suggest next steps.
+6. Keep the answer to 3-6 sentences. Use plain prose — no bullet points or markdown formatting.
+7. Prioritise actionable insight over generic statements.`;
+
 export async function groundedAnalysis(
   question: string,
   dossier: DataDossier
@@ -358,7 +369,7 @@ export async function groundedAnalysis(
           content: `${dossierText}\n\nQuestion: ${question}`,
         },
       ],
-      { maxTokens: 256, temperature: 0.2 }
+      { maxTokens: 512, temperature: 0.2 }
     );
     return raw.trim() || null;
   } catch {
@@ -485,6 +496,185 @@ function actionForTopic(topic: AnalysisTopic, context: AssistantContext) {
     type: "navigate" as const,
     url: "/pulse",
     label: "Open Fleet Pulse",
+  };
+}
+
+// ─── Conversational: broad dossier + flexible reasoning ──────────────────────
+
+/**
+ * Gathers a wide data snapshot — fleet rankings + vehicle-level outliers from
+ * the top 3 fleets — used for conversational open-ended queries where we don't
+ * know upfront which metric the user cares about.
+ */
+async function gatherBroadDossier(context: AssistantContext): Promise<DataDossier> {
+  const dossier: DataDossier = { topic: "general", sources: [] };
+
+  const summary = await fetchPulseSummary();
+  if (!summary) return dossier;
+  dossier.sources.push("Fleet Pulse summary");
+
+  dossier.totalVehicles = summary.totals.vehicles;
+  dossier.activeVehicles = summary.totals.activeVehicles;
+  dossier.fleetCount = summary.fleets.length;
+
+  dossier.fleetRankings = summary.fleets
+    .map(computeFleetRanking)
+    .sort((a, b) => b.compositeScore - a.compositeScore);
+
+  // Fetch details for the contextual fleet first, then top fleets by vehicle count
+  const priorityGroups: { id: string; name: string }[] = [];
+  if (context.currentFleetId && context.currentFleetName) {
+    priorityGroups.push({ id: context.currentFleetId, name: context.currentFleetName });
+  }
+  for (const f of summary.fleets) {
+    if (priorityGroups.length >= 3) break;
+    if (f.group.id !== context.currentFleetId) {
+      priorityGroups.push({ id: f.group.id, name: f.group.name });
+    }
+  }
+
+  const detailResults = await Promise.allSettled(
+    priorityGroups.map((g) => fetchFleetDetail(g.id))
+  );
+
+  dossier.fleetDetails = [];
+  dossier.vehicleOutliers = [];
+  dossier.idleOutliers = [];
+  dossier.offlineVehicles = [];
+
+  const fetched: string[] = [];
+
+  for (let i = 0; i < detailResults.length; i++) {
+    const result = detailResults[i];
+    if (result.status !== "fulfilled" || !result.value) continue;
+    const detail = result.value;
+    const fleetName = priorityGroups[i].name;
+    fetched.push(fleetName);
+
+    const active = detail.vehicles.filter((v) => v.status === "active").length;
+    const idle = detail.vehicles.filter((v) => v.status === "idle").length;
+    const offline = detail.vehicles.filter((v) => v.status === "offline").length;
+    const total = detail.vehicles.length;
+
+    dossier.fleetDetails.push({ group: detail.group, active, idle, offline, total });
+
+    dossier.vehicleOutliers.push(...detectVehicleOutliers(detail.vehicles, fleetName));
+
+    for (const v of detail.vehicles.filter((v) => v.status === "idle")) {
+      dossier.idleOutliers.push({
+        name: v.vehicle.name,
+        fleetName,
+        status: "idle",
+        distanceKm: v.distanceTodayKm ?? 0,
+        idleFlag: true,
+      });
+    }
+    for (const v of detail.vehicles.filter((v) => v.status === "offline")) {
+      dossier.offlineVehicles.push({
+        name: v.vehicle.name,
+        fleetName,
+        status: "offline",
+        distanceKm: 0,
+        idleFlag: false,
+      });
+    }
+  }
+
+  if (fetched.length > 0) {
+    dossier.sources.push(
+      `${fetched.length} fleet detail${fetched.length > 1 ? "s" : ""} (${fetched.join(", ")})`
+    );
+  }
+
+  return dossier;
+}
+
+async function conversationalAnalysis(
+  question: string,
+  dossier: DataDossier
+): Promise<string | null> {
+  const dossierText = formatDossier(dossier);
+  try {
+    const raw = await generateText(
+      CONVERSATIONAL_SYSTEM,
+      [{ role: "user", content: `${dossierText}\n\nUser question: ${question}` }],
+      { maxTokens: 512, temperature: 0.3 }
+    );
+    return raw.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function conversationalFallback(dossier: DataDossier): string {
+  const total = dossier.totalVehicles ?? 0;
+  const active = dossier.activeVehicles ?? 0;
+  const idleCount = dossier.idleOutliers?.length ?? 0;
+  const offlineCount = dossier.offlineVehicles?.length ?? 0;
+  const outlierCount = dossier.vehicleOutliers?.length ?? 0;
+  const rankings = dossier.fleetRankings ?? [];
+
+  const parts: string[] = [];
+  const fleetCount = dossier.fleetCount ?? 0;
+  parts.push(
+    `Fleet is ${total > 0 ? `at ${active} of ${total} vehicles active` : "loading"} across ${fleetCount} ${fleetCount === 1 ? "fleet" : "fleets"}.`
+  );
+  if (idleCount > 0) {
+    parts.push(`${idleCount} vehicle${idleCount > 1 ? "s are" : " is"} idle.`);
+  }
+  if (offlineCount > 0) {
+    parts.push(`${offlineCount} vehicle${offlineCount > 1 ? "s are" : " is"} offline.`);
+  }
+  if (outlierCount > 0) {
+    const first = dossier.vehicleOutliers![0];
+    parts.push(`Most notable flag: ${first.name} in ${first.fleetName} — ${first.reason}.`);
+  }
+  if (rankings.length >= 2) {
+    const best = rankings[0];
+    const worst = rankings[rankings.length - 1];
+    parts.push(
+      `${best.name} is the highest-performing fleet; ${worst.name} has the most room to improve.`
+    );
+  }
+  return parts.join(" ");
+}
+
+export async function resolveConversational(
+  intent: AssistantIntent,
+  context: AssistantContext,
+  rawQuery: string
+): Promise<AssistantResponse> {
+  const dossier = await gatherBroadDossier(context);
+
+  if (!dossier.totalVehicles && !dossier.fleetRankings) {
+    return {
+      text: "I'm having trouble loading fleet data right now. Try opening Fleet Pulse directly.",
+      action: { type: "navigate", url: "/pulse", label: "Open Fleet Pulse" },
+      suggestions: [
+        "How many vehicles are active?",
+        "Which fleet has the most distance?",
+        "Open Fleet Pulse",
+      ],
+    };
+  }
+
+  const llmAnswer = await conversationalAnalysis(rawQuery, dossier);
+  const text = llmAnswer ?? conversationalFallback(dossier);
+
+  const action = context.currentFleetId
+    ? { type: "navigate" as const, url: `/pulse/${context.currentFleetId}`, label: `View ${context.currentFleetName ?? "Fleet"}` }
+    : { type: "navigate" as const, url: "/pulse", label: "Open Fleet Pulse" };
+
+  return {
+    text,
+    action,
+    suggestions: [
+      "Which fleet is performing best?",
+      "What anomalies exist?",
+      "Which route needs optimising?",
+      "How many vehicles are active?",
+    ],
+    sources: dossier.sources,
   };
 }
 

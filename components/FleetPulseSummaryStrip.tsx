@@ -19,9 +19,9 @@ function KpiCard({ icon: Icon, label, value, sub, accentColor, accentBg }: KpiCa
         <Icon className="h-4 w-4" style={{ color: accentColor }} />
       </div>
       <div className="min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.38)] font-body truncate">{label}</p>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.38)] font-body truncate">{label}</p>
         <p className="text-2xl font-display font-bold text-white tabular-nums leading-tight">{value}</p>
-        {sub && <p className="text-[11px] text-[rgba(232,237,248,0.4)] font-body truncate">{sub}</p>}
+        {sub && <p className="text-sm text-[rgba(232,237,248,0.4)] font-body truncate">{sub}</p>}
       </div>
     </div>
   );

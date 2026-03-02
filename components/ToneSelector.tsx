@@ -57,7 +57,7 @@ export default function ToneSelector({ value, onChange, disabled }: ToneSelector
 
   return (
     <div className="space-y-3">
-      <p className="text-[9px] font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-[0.18em] font-body">
+      <p className="text-sm font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-[0.18em] font-body">
         Story Tone
       </p>
       <div className="grid grid-cols-3 gap-2">
@@ -85,10 +85,10 @@ export default function ToneSelector({ value, onChange, disabled }: ToneSelector
                 <Icon className="h-4 w-4" />
               </div>
               <div>
-                <span className="block text-xs font-display font-bold" style={{ color: isActive ? tone.color : undefined }}>
+                <span className="block text-sm font-display font-bold" style={{ color: isActive ? tone.color : undefined }}>
                   {tone.label}
                 </span>
-                <span className="block text-[10px] mt-0.5 text-[rgba(232,237,248,0.35)] leading-tight font-body">
+                <span className="block text-sm mt-0.5 text-[rgba(232,237,248,0.35)] leading-tight font-body">
                   {tone.description}
                 </span>
               </div>
@@ -99,7 +99,7 @@ export default function ToneSelector({ value, onChange, disabled }: ToneSelector
 
       {activeTone && (
         <div className="rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.07)] px-4 py-3">
-          <p className="text-[11px] text-[rgba(232,237,248,0.45)] italic leading-relaxed font-body">
+          <p className="text-sm text-[rgba(232,237,248,0.45)] italic leading-relaxed font-body">
             {activeTone.sample}
           </p>
         </div>

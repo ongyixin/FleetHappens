@@ -57,14 +57,14 @@ export default function ConnectButton() {
       <div className="flex items-center gap-2">
         <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[11px] font-semibold text-emerald-400 font-body truncate max-w-[140px]">
+          <span className="text-sm font-semibold text-emerald-400 font-body truncate max-w-[140px]">
             {status.database}
           </span>
         </div>
         <button
           onClick={handleDisconnect}
           disabled={disconnecting}
-          className="text-[11px] font-medium text-white/35 hover:text-white/70 transition-colors font-body disabled:opacity-50"
+          className="text-sm font-medium text-white/35 hover:text-white/70 transition-colors font-body disabled:opacity-50"
           title="Disconnect your database"
         >
           {disconnecting ? "…" : "Disconnect"}
@@ -77,7 +77,7 @@ export default function ConnectButton() {
   return (
     <Link
       href="/connect"
-      className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#f5a623]/70 hover:text-[#f5a623] transition-colors font-body"
+      className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-[#f5a623]/70 hover:text-[#f5a623] transition-colors font-body"
     >
       <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
         <circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" strokeWidth="1.2" />

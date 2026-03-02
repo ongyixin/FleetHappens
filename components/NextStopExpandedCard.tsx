@@ -89,7 +89,7 @@ function ChartTooltip({
       {label && (
         <p
           style={{
-            fontSize: 9,
+            fontSize: 12,
             fontFamily: "DM Sans, sans-serif",
             fontWeight: 700,
             letterSpacing: "0.13em",
@@ -134,7 +134,7 @@ function ChartTooltip({
               {formattedName && (
                 <span
                   style={{
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: "DM Sans, sans-serif",
                     color: "rgba(232,237,248,0.38)",
                   }}
@@ -175,7 +175,7 @@ function KpiTile({
           />
         )}
         <p
-          className="text-[10px] font-bold uppercase tracking-[0.14em] font-body truncate"
+          className="text-xs font-bold uppercase tracking-[0.14em] font-body truncate"
           style={{ color: accent ?? "rgba(232,237,248,0.35)" }}
         >
           {label}
@@ -185,7 +185,7 @@ function KpiTile({
         {value}
       </p>
       {sub && (
-        <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body mt-1 truncate">
+        <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mt-1 truncate">
           {sub}
         </p>
       )}
@@ -195,7 +195,7 @@ function KpiTile({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
+    <p className="text-xs font-bold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
       {children}
     </p>
   );
@@ -212,7 +212,7 @@ function ConfidencePill({ value }: { value: number }) {
 
   return (
     <span
-      className="inline-flex items-center gap-1 text-[9px] font-bold font-data px-1.5 py-0.5 rounded"
+      className="inline-flex items-center gap-1 text-sm font-bold font-data px-1.5 py-0.5 rounded"
       style={{ color, background: `${color}18`, border: `1px solid ${color}30` }}
     >
       {label} · {pct}%
@@ -245,7 +245,7 @@ function MiniSignalBar({
           style={{ width: animated ? `${Math.round(value * 100)}%` : "0%", background: color }}
         />
       </div>
-      <span className="text-[9px] font-data tabular-nums text-[rgba(232,237,248,0.3)]">
+      <span className="text-sm font-data tabular-nums text-[rgba(232,237,248,0.3)]">
         {Math.round(value * 100)}
       </span>
     </div>
@@ -287,13 +287,13 @@ function SignalComparisonChart({
             />
             <XAxis
               dataKey="name"
-              tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+              tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
               domain={[0, 100]}
-              tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+              tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
               tickLine={false}
               axisLine={false}
             />
@@ -309,7 +309,7 @@ function SignalComparisonChart({
               cursor={{ fill: "rgba(255,255,255,0.04)" }}
             />
             <Legend
-              wrapperStyle={{ fontSize: 9, fontFamily: "JetBrains Mono", color: "rgba(232,237,248,0.4)" }}
+              wrapperStyle={{ fontSize: 12, fontFamily: "JetBrains Mono", color: "rgba(232,237,248,0.4)" }}
             />
             <Bar dataKey="frequency" name="Frequency" fill={SIGNAL_COLORS.frequency} radius={[2, 2, 0, 0]} maxBarSize={12} />
             <Bar dataKey="temporal"  name="Temporal"  fill={SIGNAL_COLORS.temporal}  radius={[2, 2, 0, 0]} maxBarSize={12} />
@@ -331,14 +331,14 @@ function SignalTable({ predictions }: { predictions: StopPrediction[] }) {
     <div>
       <SectionLabel>Candidate Rankings — Signal Detail</SectionLabel>
       <div className="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
-        <table className="w-full text-xs">
+        <table className="w-full text-sm">
           <thead>
             <tr className="bg-[rgba(255,255,255,0.04)]">
               {["#", "Destination", "Confidence", "Freq", "Temporal", "Recency", "Seq", "Visits", "Dwell"].map(
                 (h) => (
                   <th
                     key={h}
-                    className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-[9px] font-body"
+                    className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-sm font-body"
                   >
                     {h}
                   </th>
@@ -358,7 +358,7 @@ function SignalTable({ predictions }: { predictions: StopPrediction[] }) {
                 <td className="px-3 py-2.5">
                   <span
                     className={cn(
-                      "w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold font-data",
+                      "w-5 h-5 rounded-md flex items-center justify-center text-sm font-bold font-data",
                       i === 0
                         ? "bg-[rgba(45,212,191,0.2)] text-[#2dd4bf]"
                         : "bg-[rgba(255,255,255,0.06)] text-[rgba(232,237,248,0.35)]"
@@ -419,7 +419,7 @@ function JustificationBlock({ predictions }: { predictions: StopPrediction[] }) 
     <div className="rounded-xl bg-[rgba(45,212,191,0.04)] border border-[rgba(45,212,191,0.14)] p-4">
       <div className="flex items-center gap-2 mb-3">
         <Brain className="h-3.5 w-3.5 text-[#2dd4bf] shrink-0" />
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#2dd4bf] font-body">
+        <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#2dd4bf] font-body">
           AI Prediction Justification
         </span>
       </div>
@@ -428,7 +428,7 @@ function JustificationBlock({ predictions }: { predictions: StopPrediction[] }) 
           <div key={p.rank} className="flex gap-3">
             <span
               className={cn(
-                "shrink-0 mt-0.5 w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold font-data",
+                "shrink-0 mt-0.5 w-5 h-5 rounded-md flex items-center justify-center text-sm font-bold font-data",
                 p.rank === 1
                   ? "bg-[rgba(45,212,191,0.2)] text-[#2dd4bf]"
                   : "bg-[rgba(255,255,255,0.06)] text-[rgba(232,237,248,0.35)]"
@@ -437,10 +437,10 @@ function JustificationBlock({ predictions }: { predictions: StopPrediction[] }) 
               {p.rank}
             </span>
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-body font-semibold text-[rgba(232,237,248,0.75)] mb-0.5">
+              <p className="text-sm font-body font-semibold text-[rgba(232,237,248,0.75)] mb-0.5">
                 {p.locationName}
               </p>
-              <p className="text-[12px] text-[rgba(232,237,248,0.6)] font-body leading-relaxed italic">
+              <p className="text-sm text-[rgba(232,237,248,0.6)] font-body leading-relaxed italic">
                 {p.reasoning}
               </p>
             </div>
@@ -458,7 +458,7 @@ function AnomalyCallout({ text }: { text: string }) {
     <div className="rounded-xl p-4" style={{ background: "rgba(251,146,60,0.07)", border: "1px solid rgba(251,146,60,0.22)" }}>
       <div className="flex items-center gap-2 mb-2">
         <AlertOctagon className="h-4 w-4 text-[#fb923c] shrink-0" />
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#fb923c] font-body">
+        <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#fb923c] font-body">
           Route Anomaly Detected
         </span>
       </div>
@@ -486,17 +486,17 @@ function PreloadedBriefingCard({
       <div className="flex items-center gap-2 mb-3">
         <MapPin className="h-3.5 w-3.5 text-[#38bdf8] shrink-0" />
         <div className="flex-1 min-w-0">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#38bdf8] font-body">
+          <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#38bdf8] font-body">
             Area Briefing
           </span>
           {briefing.placeName && (
-            <span className="ml-2 text-[10px] text-[rgba(232,237,248,0.45)] font-body">
+            <span className="ml-2 text-sm text-[rgba(232,237,248,0.45)] font-body">
               · {briefing.placeName}
             </span>
           )}
         </div>
         <span
-          className="shrink-0 text-[8.5px] font-bold font-data uppercase tracking-wider px-1.5 py-0.5 rounded"
+          className="shrink-0 text-sm font-bold font-data uppercase tracking-wider px-1.5 py-0.5 rounded"
           style={{
             color: "rgba(45,212,191,0.8)",
             background: "rgba(45,212,191,0.1)",
@@ -515,14 +515,14 @@ function PreloadedBriefingCard({
 
       {amenities.length > 0 && (
         <div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.3)] font-body mb-2">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.3)] font-body mb-2">
             Nearby
           </p>
           <div className="flex flex-wrap gap-1.5">
             {amenities.slice(0, 8).map((a, i) => (
               <span
                 key={i}
-                className="inline-flex items-center gap-1 text-[10px] text-[rgba(232,237,248,0.55)] bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-full px-2.5 py-0.5 font-body"
+                className="inline-flex items-center gap-1 text-sm text-[rgba(232,237,248,0.55)] bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-full px-2.5 py-0.5 font-body"
               >
                 {a.name}
                 {a.category && (
@@ -567,7 +567,7 @@ function ArrivalTimingCard({ predictions }: { predictions: StopPrediction[] }) {
               <div className="flex items-center gap-1 mb-1">
                 <Clock className="w-2.5 h-2.5" style={{ color: isTop ? "#2dd4bf" : "rgba(232,237,248,0.3)" }} />
                 <span
-                  className="text-[9px] font-data font-bold uppercase tracking-wider"
+                  className="text-sm font-data font-bold uppercase tracking-wider"
                   style={{ color: isTop ? "#2dd4bf" : "rgba(232,237,248,0.3)" }}
                 >
                   #{p.rank}
@@ -576,7 +576,7 @@ function ArrivalTimingCard({ predictions }: { predictions: StopPrediction[] }) {
               <p className="text-[13px] font-display font-bold text-white leading-none mb-1">
                 {fmtHour(p.typicalArrivalHour!)}
               </p>
-              <p className="text-[9px] font-body text-[rgba(232,237,248,0.4)] truncate">
+              <p className="text-sm font-body text-[rgba(232,237,248,0.4)] truncate">
                 {p.locationName.split(" ").slice(0, 3).join(" ")}
               </p>
             </div>
@@ -609,13 +609,13 @@ export default function NextStopExpandedCard({ result }: NextStopExpandedCardPro
             <Navigation className="h-[18px] w-[18px] text-[#2dd4bf]" />
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] font-body mb-0.5 text-[#2dd4bf]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] font-body mb-0.5 text-[#2dd4bf]">
               Next-Stop Prediction
             </p>
             <p className="text-sm font-semibold text-white font-body leading-snug">
               Destination inference from {basedOnTrips} historical trips
             </p>
-            <p className="text-[10px] text-[rgba(232,237,248,0.35)] font-data mt-0.5">
+            <p className="text-sm text-[rgba(232,237,248,0.35)] font-data mt-0.5">
               Origin: {fromCoordinates.lat.toFixed(4)}, {fromCoordinates.lon.toFixed(4)}
             </p>
           </div>
@@ -623,14 +623,14 @@ export default function NextStopExpandedCard({ result }: NextStopExpandedCardPro
 
         <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
           {fromLLM && (
-            <span className="flex items-center gap-1 text-[9px] font-bold font-data uppercase tracking-wider px-2 py-1 rounded-full border text-[rgba(167,139,250,0.9)] border-[rgba(167,139,250,0.25)] bg-[rgba(167,139,250,0.07)]">
+            <span className="flex items-center gap-1 text-sm font-bold font-data uppercase tracking-wider px-2 py-1 rounded-full border text-[rgba(167,139,250,0.9)] border-[rgba(167,139,250,0.25)] bg-[rgba(167,139,250,0.07)]">
               <Brain className="w-2.5 h-2.5" />
               AI Re-ranked
             </span>
           )}
           <span
             className={cn(
-              "flex items-center gap-1 text-[9px] font-bold font-data uppercase tracking-wider px-2 py-1 rounded-full border",
+              "flex items-center gap-1 text-sm font-bold font-data uppercase tracking-wider px-2 py-1 rounded-full border",
               fromCache
                 ? "text-[rgba(232,237,248,0.45)] border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)]"
                 : "text-[#2dd4bf] border-[rgba(45,212,191,0.25)] bg-[rgba(45,212,191,0.07)]"

@@ -299,20 +299,20 @@ export default function TripMap({
 
       {/* Legend — only shown when routes are available */}
       {(allTrips ?? []).length > 0 && (
-        <div className="absolute bottom-3 left-3 z-[400] bg-[rgba(9,9,14,0.85)] backdrop-blur-sm border border-[rgba(255,255,255,0.1)] rounded-lg px-3 py-2 flex items-center gap-3 text-xs shadow-lg pointer-events-none">
+        <div className="absolute bottom-3 left-3 z-[400] bg-[rgba(9,9,14,0.85)] backdrop-blur-sm border border-[rgba(255,255,255,0.1)] rounded-lg px-3 py-2 flex items-center gap-3 text-sm shadow-lg pointer-events-none">
           <div className="flex items-center gap-1.5">
             <span
               className="inline-block w-5 h-0.5 rounded-full opacity-60"
               style={{ background: "repeating-linear-gradient(90deg,#38bdf8 0,#38bdf8 4px,transparent 4px,transparent 8px)" }}
             />
-            <span className="text-[rgba(232,237,248,0.55)] font-body text-[10px]">All trips</span>
+            <span className="text-[rgba(232,237,248,0.55)] font-body">All trips</span>
           </div>
           {trip && (
             <>
               <span className="w-px h-3 bg-[rgba(255,255,255,0.15)]" />
               <div className="flex items-center gap-1.5">
                 <span className="inline-block w-5 h-0.5 rounded-full" style={{ backgroundColor: "#38bdf8" }} />
-                <span className="text-[rgba(232,237,248,0.55)] font-body text-[10px]">Selected route</span>
+                <span className="text-[rgba(232,237,248,0.55)] font-body">Selected route</span>
               </div>
               {onRouteClick && (
                 <>
@@ -322,7 +322,7 @@ export default function TripMap({
                       <circle cx="5" cy="5" r="4" stroke="#f59e0b" strokeWidth="1.5" fill="none" />
                       <circle cx="5" cy="5" r="2" fill="#f59e0b" />
                     </svg>
-                    <span className="text-[rgba(232,237,248,0.55)] font-body text-[10px]">Click route → Street View</span>
+                    <span className="text-[rgba(232,237,248,0.55)] font-body">Click route → Street View</span>
                   </div>
                 </>
               )}
@@ -336,7 +336,7 @@ export default function TripMap({
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center">
             <p className="text-sm font-body text-[rgba(232,237,248,0.4)]">Select a trip to see its route</p>
-            <p className="text-xs font-body text-[rgba(232,237,248,0.25)] mt-1">GPS breadcrumbs will appear here</p>
+            <p className="text-sm font-body text-[rgba(232,237,248,0.25)] mt-1">GPS breadcrumbs will appear here</p>
           </div>
         </div>
       )}

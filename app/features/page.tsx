@@ -441,7 +441,7 @@ export default function FeaturesPage() {
           <div className="ml-auto">
             <button
               onClick={() => router.push("/pulse")}
-              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[12px] font-semibold font-body text-[rgba(232,237,248,0.7)] hover:text-white hover:bg-[rgba(255,255,255,0.06)] border border-transparent hover:border-[rgba(255,255,255,0.08)] transition-all"
+              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-sm font-semibold font-body text-[rgba(232,237,248,0.7)] hover:text-white hover:bg-[rgba(255,255,255,0.06)] border border-transparent hover:border-[rgba(255,255,255,0.08)] transition-all"
             >
               Open Fleet Pulse <ChevronRight className="h-3 w-3" />
             </button>
@@ -453,7 +453,7 @@ export default function FeaturesPage() {
       <div className="relative z-10 max-w-5xl mx-auto px-6 pt-20 pb-16">
         <div className="inline-flex items-center gap-2 mb-7 animate-fade-in">
           <div className="w-1.5 h-1.5 rounded-full bg-[#f5a623] animate-glow-pulse" />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.4)] font-body">
+          <span className="text-sm font-semibold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.4)] font-body">
             End-to-End Guide
           </span>
         </div>
@@ -470,7 +470,7 @@ export default function FeaturesPage() {
 
         {/* ── Flow pipeline ─────────────────────────────────────────────── */}
         <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-5 font-body">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.3)] mb-5 font-body">
             User journey
           </p>
           <div className="flex flex-wrap gap-0 relative">
@@ -495,8 +495,8 @@ export default function FeaturesPage() {
                     <Icon className={`h-3.5 w-3.5 ${href ? "text-[#f5a623]" : "text-[rgba(232,237,248,0.3)]"}`} />
                   </div>
                   <div className="text-left">
-                    <p className="text-[12px] font-semibold text-white font-body leading-none">{title}</p>
-                    <p className="text-[10.5px] text-[rgba(232,237,248,0.35)] mt-0.5 font-body">{summary}</p>
+                    <p className="text-sm font-semibold text-white font-body leading-none">{title}</p>
+                    <p className="text-sm text-[rgba(232,237,248,0.35)] mt-0.5 font-body">{summary}</p>
                   </div>
                 </button>
 
@@ -537,7 +537,7 @@ export default function FeaturesPage() {
                     style={{ background: `linear-gradient(to right, transparent, ${feature.colorBorder})` }}
                   />
                   <span
-                    className="text-[10px] font-bold uppercase tracking-[0.2em] font-body px-3 py-1.5 rounded-full border"
+                    className="text-xs font-bold uppercase tracking-[0.2em] font-body px-3 py-1.5 rounded-full border"
                     style={{ color: feature.color, borderColor: feature.colorBorder, background: feature.colorDim }}
                   >
                     {feature.step}
@@ -561,7 +561,7 @@ export default function FeaturesPage() {
                       </div>
                       <div>
                         <p className="font-display font-extrabold text-2xl text-white leading-tight">{feature.label}</p>
-                        <p className="text-[12px] font-body mt-0.5" style={{ color: feature.color, opacity: 0.8 }}>
+                        <p className="text-sm font-body mt-0.5" style={{ color: feature.color, opacity: 0.8 }}>
                           {feature.tagline}
                         </p>
                       </div>
@@ -581,7 +581,7 @@ export default function FeaturesPage() {
                       className="rounded-2xl p-5 mb-8"
                       style={{ background: feature.colorDim, border: `1px solid ${feature.colorBorder}` }}
                     >
-                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] font-body mb-3.5" style={{ color: feature.color }}>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] font-body mb-3.5" style={{ color: feature.color }}>
                         Key capabilities
                       </p>
                       <ul className="space-y-2.5">
@@ -649,13 +649,13 @@ export default function FeaturesPage() {
               </svg>
             </div>
             <span className="font-display font-bold text-white text-sm">FleetHappens</span>
-            <span className="text-[10px] font-semibold text-[rgba(232,237,248,0.3)] font-body">
+            <span className="text-sm font-semibold text-[rgba(232,237,248,0.3)] font-body">
               Geotab Vibe Coding Challenge
             </span>
           </div>
           <button
             onClick={() => router.push("/")}
-            className="text-[12px] font-body text-[rgba(232,237,248,0.4)] hover:text-[rgba(232,237,248,0.7)] transition-colors"
+            className="text-sm font-body text-[rgba(232,237,248,0.4)] hover:text-[rgba(232,237,248,0.7)] transition-colors"
           >
             ← Back to home
           </button>

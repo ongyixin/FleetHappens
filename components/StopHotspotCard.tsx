@@ -47,7 +47,7 @@ export default function StopHotspotCard({ insight, loading, onStopClick }: StopH
           </div>
           <h3 className="text-[13px] font-display font-bold text-white">Stop Hotspots</h3>
         </div>
-        <p className="text-xs text-[rgba(232,237,248,0.4)] py-4 text-center font-body">No stop hotspot data available</p>
+        <p className="text-sm text-[rgba(232,237,248,0.4)] py-4 text-center font-body">No stop hotspot data available</p>
       </div>
     );
   }
@@ -63,9 +63,9 @@ export default function StopHotspotCard({ insight, loading, onStopClick }: StopH
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-[13px] font-display font-bold text-white">Stop Hotspots</h3>
-          <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body">Most-visited locations (30d)</p>
+          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Most-visited locations (30d)</p>
         </div>
-        <span className={`shrink-0 flex items-center gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 font-body ${
+        <span className={`shrink-0 flex items-center gap-1 text-xs font-bold rounded-full px-2 py-0.5 font-body ${
           insight.fromCache
             ? "text-[rgba(232,237,248,0.45)] bg-[rgba(255,255,255,0.06)]"
             : "text-[#34d399] bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)]"
@@ -94,22 +94,22 @@ export default function StopHotspotCard({ insight, loading, onStopClick }: StopH
               className={hasCoords && onStopClick ? "cursor-pointer group -mx-2 px-2 py-1 rounded-lg hover:bg-[rgba(255,255,255,0.04)] transition-colors" : ""}
             >
               <div className="flex items-center gap-2.5 mb-1.5">
-                <div className="h-5 w-5 rounded-full flex items-center justify-center text-[#09090e] text-[9px] font-display font-bold shrink-0"
+                <div className="h-5 w-5 rounded-full flex items-center justify-center text-[#09090e] text-xs font-display font-bold shrink-0"
                   style={{ background: color }}>
                   {i + 1}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[12px] font-body font-semibold text-white truncate">{name}</p>
+                  <p className="text-sm font-body font-semibold text-white truncate">{name}</p>
                   {dwell > 0 && (
                     <div className="flex items-center gap-1 mt-0.5">
                       <Clock className="h-2.5 w-2.5 text-[rgba(232,237,248,0.3)]" />
-                      <span className="text-[9px] text-[rgba(232,237,248,0.4)] font-body">avg {Math.round(dwell)} min dwell</span>
+                      <span className="text-sm text-[rgba(232,237,248,0.4)] font-body">avg {Math.round(dwell)} min dwell</span>
                     </div>
                   )}
                 </div>
                 <div className="shrink-0 text-right">
-                  <span className="text-xs font-data font-bold tabular-nums" style={{ color }}>{visits}</span>
-                  <span className="text-[9px] text-[rgba(232,237,248,0.35)] font-body ml-0.5">visits</span>
+                  <span className="text-sm font-data font-bold tabular-nums" style={{ color }}>{visits}</span>
+                  <span className="text-sm text-[rgba(232,237,248,0.35)] font-body ml-0.5">visits</span>
                 </div>
               </div>
               <div className="ml-7 h-1 rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden">
@@ -122,7 +122,7 @@ export default function StopHotspotCard({ insight, loading, onStopClick }: StopH
 
       {insight.reasoning && (
         <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.07)]">
-          <p className="text-[10px] text-[rgba(232,237,248,0.5)] font-body leading-relaxed">
+          <p className="text-sm text-[rgba(232,237,248,0.5)] font-body leading-relaxed">
             <span className="font-bold text-[#f5a623]">Ace: </span>{insight.reasoning}
           </p>
         </div>

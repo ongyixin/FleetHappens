@@ -44,13 +44,13 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
       {/* Header */}
       <div className="shrink-0 flex items-start justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.07)]">
         <div className="min-w-0">
-          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-1">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-1">
             Stop Context
           </p>
           {context ? (
             <h2 className="font-display font-bold text-base text-white leading-tight">{context.placeName}</h2>
           ) : coordinates ? (
-            <p className="text-[11px] font-data text-[rgba(232,237,248,0.5)]">
+            <p className="text-sm font-data text-[rgba(232,237,248,0.5)]">
               {coordinates.lat.toFixed(4)}, {coordinates.lon.toFixed(4)}
             </p>
           ) : (
@@ -68,7 +68,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
       {/* Loading state */}
       {loading && !context && (
         <div className="flex-1 p-5 space-y-4">
-          <div className="flex items-center gap-2 text-[rgba(232,237,248,0.4)] text-xs font-body">
+          <div className="flex items-center gap-2 text-[rgba(232,237,248,0.4)] text-sm font-body">
             <Loader2 className="w-3.5 h-3.5 animate-spin text-[#f5a623]" />
             Geocoding location…
           </div>
@@ -94,10 +94,10 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
               <div className="min-w-0">
                 <h3 className="font-display font-bold text-lg text-white leading-tight">{context.placeName}</h3>
                 {context.neighborhood && (
-                  <p className="text-xs text-[rgba(232,237,248,0.5)] mt-0.5 font-body">{context.neighborhood}</p>
+                  <p className="text-sm text-[rgba(232,237,248,0.5)] mt-0.5 font-body">{context.neighborhood}</p>
                 )}
                 {coordinates && (
-                  <p className="text-[10px] text-[rgba(232,237,248,0.3)] mt-1 font-data">
+                  <p className="text-sm text-[rgba(232,237,248,0.3)] mt-1 font-data">
                     {coordinates.lat.toFixed(5)}, {coordinates.lon.toFixed(5)}
                   </p>
                 )}
@@ -107,7 +107,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
 
           {/* Area briefing */}
           <div className="px-5 py-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
               Area Briefing
             </p>
             <p className="text-sm leading-relaxed text-[rgba(232,237,248,0.8)] font-body">
@@ -117,7 +117,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
 
           {/* Fleet visit history */}
           <div className="px-5 py-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
               Fleet Visits
             </p>
             {context.fleetVisitCount != null ? (
@@ -130,7 +130,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
                 </p>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-xs text-[rgba(232,237,248,0.4)] font-body">
+              <div className="flex items-center gap-2 text-sm text-[rgba(232,237,248,0.4)] font-body">
                 <Loader2 className="w-3 h-3 animate-spin text-[#f5a623]" />
                 Loading fleet history from Ace…
               </div>
@@ -140,7 +140,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
           {/* Nearby amenities */}
           {context.nearbyAmenities.length > 0 && (
             <div className="px-5 py-4">
-              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
                 Nearby
               </p>
               <ul className="space-y-2">
@@ -150,7 +150,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
                       <AmenityIcon category={a.category} />
                     </div>
                     <span className="flex-1 truncate text-sm text-[rgba(232,237,248,0.75)] font-body">{a.name}</span>
-                    <span className="text-[10px] text-[rgba(232,237,248,0.35)] shrink-0 font-data tabular-nums">
+                    <span className="text-sm text-[rgba(232,237,248,0.35)] shrink-0 font-data tabular-nums">
                       {a.distanceMeters < 1000 ? `${a.distanceMeters}m` : `${(a.distanceMeters / 1000).toFixed(1)}km`}
                     </span>
                   </li>
@@ -161,7 +161,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
 
           {/* Coords context */}
           <div className="px-5 py-3">
-            <p className="text-[10px] text-[rgba(232,237,248,0.25)] font-data flex items-center gap-1.5">
+            <p className="text-sm text-[rgba(232,237,248,0.25)] font-data flex items-center gap-1.5">
               <MapPin className="w-3 h-3" />
               {context.coordinates?.lat?.toFixed(5)}, {context.coordinates?.lon?.toFixed(5)}
             </p>
@@ -183,7 +183,7 @@ export default function StopContextPanel({ context, loading, onClose, onUseInSto
                 {useInStory ? "Added to Trip Story" : "Use in Trip Story"}
               </button>
               {!useInStory && (
-                <p className="text-[11px] text-[rgba(232,237,248,0.3)] text-center mt-1.5 font-body">
+                <p className="text-sm text-[rgba(232,237,248,0.3)] text-center mt-1.5 font-body">
                   Adds rich area context to this stop&apos;s panel
                 </p>
               )}

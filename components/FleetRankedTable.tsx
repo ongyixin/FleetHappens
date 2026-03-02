@@ -86,13 +86,13 @@ export default function FleetRankedTable({ fleets, aceRowById, onSelectFleet }: 
           <thead>
             <tr className="border-b border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.03)]">
               <th className="px-4 py-3 text-left">
-                <span className="text-[9px] font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.3)] font-body">#</span>
+                <span className="text-xs font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.3)] font-body">#</span>
               </th>
               {cols.map((col) => (
                 <th key={col.key} className={`px-4 py-3 ${col.align === "right" ? "text-right" : "text-left"}`}>
                   <button
                     onClick={() => handleSort(col.key)}
-                    className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.38)] hover:text-[rgba(232,237,248,0.7)] transition-colors font-body"
+                    className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.38)] hover:text-[rgba(232,237,248,0.7)] transition-colors font-body"
                   >
                     {col.label}
                     <SortIcon column={col.key} current={sortKey} direction={sortDir} />
@@ -116,7 +116,7 @@ export default function FleetRankedTable({ fleets, aceRowById, onSelectFleet }: 
                   className="hover:bg-[rgba(255,255,255,0.03)] transition-colors cursor-pointer group"
                 >
                   <td className="px-4 py-3">
-                    <span className="text-xs font-data font-bold text-[rgba(232,237,248,0.25)] tabular-nums w-5 inline-block">
+                    <span className="text-sm font-data font-bold text-[rgba(232,237,248,0.25)] tabular-nums w-5 inline-block">
                       {idx + 1}
                     </span>
                   </td>
@@ -130,7 +130,7 @@ export default function FleetRankedTable({ fleets, aceRowById, onSelectFleet }: 
                     {fleet.totalVehicles}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-body font-bold"
+                    <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5 text-sm font-body font-bold"
                       style={{ background: `${accentColor}15`, color: accentColor }}>
                       {fleet.activeRatio}%
                     </span>

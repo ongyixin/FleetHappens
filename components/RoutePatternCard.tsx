@@ -42,7 +42,7 @@ export default function RoutePatternCard({ insight, loading }: RoutePatternCardP
           </div>
           <h3 className="text-sm font-display font-bold text-white">Route Patterns</h3>
         </div>
-        <p className="text-xs text-[rgba(232,237,248,0.4)] py-4 text-center font-body">No route pattern data available</p>
+        <p className="text-sm text-[rgba(232,237,248,0.4)] py-4 text-center font-body">No route pattern data available</p>
       </div>
     );
   }
@@ -58,9 +58,9 @@ export default function RoutePatternCard({ insight, loading }: RoutePatternCardP
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-[13px] font-display font-bold text-white">Route Patterns</h3>
-          <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body">Top origin-destination pairs</p>
+          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Top origin-destination pairs</p>
         </div>
-        <span className={`shrink-0 flex items-center gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 font-body ${
+        <span className={`shrink-0 flex items-center gap-1 text-xs font-bold rounded-full px-2 py-0.5 font-body ${
           insight.fromCache
             ? "text-[rgba(232,237,248,0.45)] bg-[rgba(255,255,255,0.06)]"
             : "text-[#34d399] bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)]"
@@ -83,13 +83,13 @@ export default function RoutePatternCard({ insight, loading }: RoutePatternCardP
           return (
             <div key={i}>
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-[10px] font-data font-bold text-[rgba(232,237,248,0.3)] w-4 tabular-nums shrink-0">{i + 1}</span>
+                <span className="text-sm font-data font-bold text-[rgba(232,237,248,0.3)] w-4 tabular-nums shrink-0">{i + 1}</span>
                 <div className="flex items-center gap-1.5 min-w-0 flex-1">
-                  <span className="text-[11px] font-body font-semibold text-white truncate">{origin}</span>
+                  <span className="text-sm font-body font-semibold text-white truncate">{origin}</span>
                   <ArrowRight className="h-3 w-3 text-[rgba(232,237,248,0.3)] shrink-0" />
-                  <span className="text-[11px] font-body text-[rgba(232,237,248,0.55)] truncate">{dest}</span>
+                  <span className="text-sm font-body text-[rgba(232,237,248,0.55)] truncate">{dest}</span>
                 </div>
-                <div className="flex items-center gap-2 shrink-0 text-[10px]">
+                <div className="flex items-center gap-2 shrink-0 text-sm">
                   <span className="font-data font-bold text-white tabular-nums">{trips}×</span>
                   {dist > 0 && <span className="font-data text-[rgba(232,237,248,0.45)] tabular-nums hidden sm:block">{dist.toFixed(0)} km</span>}
                   {dur > 0 && <span className="font-data text-[rgba(232,237,248,0.45)] tabular-nums hidden md:block">{dur >= 60 ? `${(dur / 60).toFixed(1)}h` : `${Math.round(dur)}m`}</span>}
@@ -105,7 +105,7 @@ export default function RoutePatternCard({ insight, loading }: RoutePatternCardP
 
       {insight.reasoning && (
         <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.07)]">
-          <p className="text-[10px] text-[rgba(232,237,248,0.5)] font-body leading-relaxed">
+          <p className="text-sm text-[rgba(232,237,248,0.5)] font-body leading-relaxed">
             <span className="font-bold text-[#f5a623]">Ace: </span>{insight.reasoning}
           </p>
         </div>

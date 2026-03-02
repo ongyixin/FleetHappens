@@ -44,7 +44,7 @@ export default function VehicleOutliersCard({ insight, loading, onSelectVehicle 
           </div>
           <h3 className="text-[13px] font-display font-bold text-white">Vehicle Outliers</h3>
         </div>
-        <p className="text-xs text-[rgba(232,237,248,0.4)] py-4 text-center font-body">No outlier data available</p>
+        <p className="text-sm text-[rgba(232,237,248,0.4)] py-4 text-center font-body">No outlier data available</p>
       </div>
     );
   }
@@ -69,9 +69,9 @@ export default function VehicleOutliersCard({ insight, loading, onSelectVehicle 
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-[13px] font-display font-bold text-white">Vehicle Outliers</h3>
-          <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body">Standout vehicles this week</p>
+          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Standout vehicles this week</p>
         </div>
-        <span className={`shrink-0 flex items-center gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 font-body ${
+        <span className={`shrink-0 flex items-center gap-1 text-xs font-bold rounded-full px-2 py-0.5 font-body ${
           insight.fromCache
             ? "text-[rgba(232,237,248,0.45)] bg-[rgba(255,255,255,0.06)]"
             : "text-[#34d399] bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)]"
@@ -99,10 +99,10 @@ export default function VehicleOutliersCard({ insight, loading, onSelectVehicle 
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-[12px] font-body font-semibold text-white truncate">{name}</p>
-                  <span className="text-[11px] font-data font-bold tabular-nums shrink-0" style={{ color }}>{value}</span>
+                  <p className="text-sm font-body font-semibold text-white truncate">{name}</p>
+                  <span className="text-sm font-data font-bold tabular-nums shrink-0" style={{ color }}>{value}</span>
                 </div>
-                <p className="text-[10px] text-[rgba(232,237,248,0.38)] font-body mt-0.5">{label}</p>
+                <p className="text-sm text-[rgba(232,237,248,0.38)] font-body mt-0.5">{label}</p>
               </div>
               {onSelectVehicle && (
                 <svg className="h-4 w-4 text-[rgba(232,237,248,0.2)] group-hover:text-[#f5a623] transition-colors shrink-0"
@@ -118,7 +118,7 @@ export default function VehicleOutliersCard({ insight, loading, onSelectVehicle 
       {/* All top vehicles */}
       {rows.length > 1 && (
         <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.07)]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.3)] font-body mb-2">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.3)] font-body mb-2">
             All Top Vehicles
           </p>
           <div className="space-y-1.5">
@@ -126,7 +126,7 @@ export default function VehicleOutliersCard({ insight, loading, onSelectVehicle 
               <div
                 key={i}
                 onClick={() => onSelectVehicle?.(String(row["device_name"] ?? ""))}
-                className={`flex items-center gap-2 text-[11px] ${onSelectVehicle ? "cursor-pointer group" : ""}`}
+                className={`flex items-center gap-2 text-sm ${onSelectVehicle ? "cursor-pointer group" : ""}`}
               >
                 <span className="text-[rgba(232,237,248,0.3)] font-data w-4 tabular-nums shrink-0">{i + 1}.</span>
                 <Truck className="h-3 w-3 text-[rgba(232,237,248,0.3)] shrink-0" />

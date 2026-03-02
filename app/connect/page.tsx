@@ -112,7 +112,7 @@ export default function ConnectPage() {
               <div>
                 <label
                   htmlFor="database"
-                  className="block text-[12px] font-medium text-white/55 mb-1.5 tracking-wide uppercase"
+                  className="block text-sm font-medium text-white/55 mb-1.5 tracking-wide uppercase"
                 >
                   Database name
                 </label>
@@ -133,7 +133,7 @@ export default function ConnectPage() {
               <div>
                 <label
                   htmlFor="userName"
-                  className="block text-[12px] font-medium text-white/55 mb-1.5 tracking-wide uppercase"
+                  className="block text-sm font-medium text-white/55 mb-1.5 tracking-wide uppercase"
                 >
                   Username (email)
                 </label>
@@ -153,7 +153,7 @@ export default function ConnectPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-[12px] font-medium text-white/55 mb-1.5 tracking-wide uppercase"
+                  className="block text-sm font-medium text-white/55 mb-1.5 tracking-wide uppercase"
                 >
                   Password
                 </label>
@@ -174,7 +174,7 @@ export default function ConnectPage() {
                 <button
                   type="button"
                   onClick={() => setShowAdvanced((v) => !v)}
-                  className="text-[12px] text-white/35 hover:text-white/60 transition-colors flex items-center gap-1.5"
+                  className="text-sm text-white/35 hover:text-white/60 transition-colors flex items-center gap-1.5"
                 >
                   <svg
                     width="10"
@@ -192,7 +192,7 @@ export default function ConnectPage() {
                   <div className="mt-3">
                     <label
                       htmlFor="server"
-                      className="block text-[12px] font-medium text-white/55 mb-1.5 tracking-wide uppercase"
+                      className="block text-sm font-medium text-white/55 mb-1.5 tracking-wide uppercase"
                     >
                       Server <span className="text-white/25 normal-case font-normal">(default: my.geotab.com)</span>
                     </label>
@@ -237,7 +237,7 @@ export default function ConnectPage() {
           </div>
 
           {/* Footer note */}
-          <p className="mt-5 text-center text-[12px] text-white/30 leading-relaxed">
+          <p className="mt-5 text-center text-sm text-white/30 leading-relaxed">
             Your credentials are used only to authenticate with Geotab&apos;s API.
             <br />
             They are never stored — only the session token is saved in an encrypted cookie.

@@ -91,10 +91,10 @@ export default function VehicleActivityTable({ vehicles, onSelectVehicle }: Vehi
             placeholder="Search vehicles…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-8 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-lg pl-9 pr-3 text-xs font-body text-white placeholder:text-[rgba(232,237,248,0.3)] focus:outline-none focus:border-[rgba(245,166,35,0.4)] focus:bg-[rgba(245,166,35,0.04)] transition-all"
+            className="w-full h-8 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-lg pl-9 pr-3 text-sm font-body text-white placeholder:text-[rgba(232,237,248,0.3)] focus:outline-none focus:border-[rgba(245,166,35,0.4)] focus:bg-[rgba(245,166,35,0.04)] transition-all"
           />
         </div>
-        <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-data shrink-0">
+        <span className="text-sm text-[rgba(232,237,248,0.35)] font-data shrink-0">
           {filtered.length} vehicles
         </span>
       </div>
@@ -107,7 +107,7 @@ export default function VehicleActivityTable({ vehicles, onSelectVehicle }: Vehi
                 <th key={col.key} className={`px-4 py-3 ${col.align === "right" ? "text-right" : "text-left"}`}>
                   <button
                     onClick={() => handleSort(col.key)}
-                    className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.35)] hover:text-[rgba(232,237,248,0.65)] transition-colors font-body"
+                    className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] text-[rgba(232,237,248,0.35)] hover:text-[rgba(232,237,248,0.65)] transition-colors font-body"
                   >
                     {col.label}
                     <SortIcon column={col.key} current={sortKey} direction={sortDir} />
@@ -127,25 +127,25 @@ export default function VehicleActivityTable({ vehicles, onSelectVehicle }: Vehi
                   className="hover:bg-[rgba(255,255,255,0.03)] transition-colors cursor-pointer group"
                 >
                   <td className="px-4 py-3">
-                    <span className="font-body font-semibold text-white text-[13px]">{v.vehicle.name}</span>
+                    <span className="font-body font-semibold text-white text-sm">{v.vehicle.name}</span>
                     {v.vehicle.deviceType && (
-                      <p className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">{v.vehicle.deviceType}</p>
+                      <p className="text-sm text-[rgba(232,237,248,0.35)] font-body">{v.vehicle.deviceType}</p>
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold font-body"
+                    <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-bold font-body"
                       style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.border}` }}>
                       <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: sc.color }} />
                       {sc.label}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right text-[11px] font-data text-[rgba(232,237,248,0.45)]">
+                  <td className="px-4 py-3 text-right text-sm font-data text-[rgba(232,237,248,0.45)]">
                     {v.lastTripEnd ? formatDistanceToNow(new Date(v.lastTripEnd), { addSuffix: true }) : "—"}
                   </td>
-                  <td className="px-4 py-3 text-right font-data tabular-nums font-semibold text-white text-[12px]">
+                  <td className="px-4 py-3 text-right font-data tabular-nums font-semibold text-white text-sm">
                     {v.distanceTodayKm != null ? `${v.distanceTodayKm.toLocaleString()} km` : "—"}
                   </td>
-                  <td className="px-4 py-3 text-right font-data tabular-nums text-[rgba(232,237,248,0.55)] text-[12px]">
+                  <td className="px-4 py-3 text-right font-data tabular-nums text-[rgba(232,237,248,0.55)] text-sm">
                     {v.tripCountToday != null ? v.tripCountToday.toLocaleString() : "—"}
                   </td>
                   <td className="px-4 py-3 text-right">

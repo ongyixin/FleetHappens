@@ -282,7 +282,7 @@ export default function FleetRegionalMap({
     <div className="relative w-full h-full rounded-xl overflow-hidden border border-border">
       <div ref={mapContainerRef} className="w-full h-full" />
       {/* Legend */}
-      <div className="absolute bottom-3 left-3 z-[400] bg-[rgba(9,9,14,0.85)] backdrop-blur-sm border border-[rgba(255,255,255,0.1)] rounded-lg px-3 py-2 flex items-center gap-3 text-xs shadow-lg">
+      <div className="absolute bottom-3 left-3 z-[400] bg-[rgba(9,9,14,0.85)] backdrop-blur-sm border border-[rgba(255,255,255,0.1)] rounded-lg px-3 py-2 flex items-center gap-3 text-sm shadow-lg">
         {[
           { label: "Active", color: "#34d399" },
           { label: "Idle", color: "#f5a623" },

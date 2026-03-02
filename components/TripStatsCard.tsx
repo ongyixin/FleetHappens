@@ -12,8 +12,8 @@ function Stat({ icon, label, value, highlight }: StatProps) {
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.35)] font-body">{label}</p>
-        <p className="text-xs font-data font-semibold text-white leading-tight">{value}</p>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.35)] font-body">{label}</p>
+        <p className="text-sm font-data font-semibold text-white leading-tight">{value}</p>
       </div>
     </div>
   );

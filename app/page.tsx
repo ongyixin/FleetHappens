@@ -345,14 +345,14 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.push("/storybook")}
-              className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold text-[rgba(232,237,248,0.5)] hover:text-white transition-colors font-body"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-[rgba(232,237,248,0.5)] hover:text-white transition-colors font-body"
             >
               <Library className="h-3 w-3" />
               Storybook
             </button>
             <ConnectButton />
-            <span className="text-[11px] font-semibold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-3 py-1 font-body">
-              Geotab Vibe Coding Challenge
+            <span className="text-sm font-semibold text-[#f5a623] bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)] rounded-full px-3 py-1 font-body">
+              Geotab Competition
             </span>
           </div>
         </div>
@@ -363,7 +363,7 @@ export default function HomePage() {
         {/* Tag */}
         <div className="inline-flex items-center gap-2 mb-8 animate-fade-in">
           <div className="w-1.5 h-1.5 rounded-full bg-[#f5a623] animate-glow-pulse" />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.5)] font-body">
+          <span className="text-sm font-semibold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.5)] font-body">
             Fleet Route Intelligence
           </span>
         </div>
@@ -395,7 +395,7 @@ export default function HomePage() {
               </div>
               <div>
                 <p className="text-[13px] font-semibold text-white font-body leading-none">{label}</p>
-                <p className="text-[11px] text-[rgba(232,237,248,0.4)] mt-0.5 font-body">{desc}</p>
+                <p className="text-sm text-[rgba(232,237,248,0.4)] mt-0.5 font-body">{desc}</p>
               </div>
 
               {/* Tooltip */}
@@ -404,8 +404,8 @@ export default function HomePage() {
                 role="tooltip"
               >
                 <div className="bg-[#13131c] border border-[rgba(245,166,35,0.22)] rounded-2xl p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.7),0_0_0_1px_rgba(245,166,35,0.06)]">
-                  <p className="text-[11.5px] text-[rgba(232,237,248,0.7)] leading-relaxed font-body">{tooltip}</p>
-                  <p className="text-[10px] font-semibold text-[#f5a623] mt-2 font-body tracking-wide">View details →</p>
+                  <p className="text-sm text-[rgba(232,237,248,0.7)] leading-relaxed font-body">{tooltip}</p>
+                  <p className="text-sm font-semibold text-[#f5a623] mt-2 font-body tracking-wide">View details →</p>
                 </div>
                 {/* Caret */}
                 <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[rgba(245,166,35,0.22)]" />
@@ -463,7 +463,7 @@ export default function HomePage() {
           <div className="h-px bg-gradient-to-r from-transparent via-[rgba(255,255,255,0.08)] to-transparent mb-12" />
 
           <div className="mb-8">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] mb-2 font-body">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] mb-2 font-body">
               Fleet Vehicles
             </p>
             <h2 className="font-display font-bold text-2xl text-white">
@@ -493,7 +493,7 @@ export default function HomePage() {
                   <MapPin className="h-7 w-7 text-[#f87171] mx-auto" />
                 </div>
                 <p className="text-sm font-semibold text-[#f87171] font-body">{error}</p>
-                <p className="text-xs text-[rgba(232,237,248,0.4)] font-body">Check your Geotab credentials in .env.local</p>
+                <p className="text-sm text-[rgba(232,237,248,0.4)] font-body">Check your Geotab credentials in .env.local</p>
               </div>
             </div>
           )}

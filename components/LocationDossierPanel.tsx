@@ -135,16 +135,16 @@ export default function LocationDossierPanel({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-1">
             <Archive className="w-3 h-3 text-[#2dd4bf] shrink-0" />
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(45,212,191,0.65)] font-body">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(45,212,191,0.65)] font-body">
               Location Dossier
             </p>
             {!loading && dossier && isNew && (
-              <span className="text-[8px] font-bold uppercase tracking-wide bg-[rgba(245,166,35,0.15)] text-[#f5a623] border border-[rgba(245,166,35,0.3)] rounded-full px-1.5 py-0.5 font-body">
+              <span className="text-xs font-bold uppercase tracking-wide bg-[rgba(245,166,35,0.15)] text-[#f5a623] border border-[rgba(245,166,35,0.3)] rounded-full px-1.5 py-0.5 font-body">
                 New
               </span>
             )}
             {!loading && dossier && !isNew && isActive && (
-              <span className="inline-flex items-center gap-1 text-[8px] font-bold uppercase tracking-wide bg-[rgba(52,211,153,0.1)] text-[#34d399] border border-[rgba(52,211,153,0.2)] rounded-full px-1.5 py-0.5 font-body">
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide bg-[rgba(52,211,153,0.1)] text-[#34d399] border border-[rgba(52,211,153,0.2)] rounded-full px-1.5 py-0.5 font-body">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse shrink-0" />
                 Active
               </span>
@@ -157,14 +157,14 @@ export default function LocationDossierPanel({
                 {dossier.placeName}
               </h2>
               {dossier.neighborhood && (
-                <p className="text-[10px] text-[rgba(232,237,248,0.45)] mt-0.5 font-body">
+                <p className="text-sm text-[rgba(232,237,248,0.45)] mt-0.5 font-body">
                   {dossier.neighborhood}
                   {dossier.city ? `, ${dossier.city}` : ""}
                 </p>
               )}
             </>
           ) : coordinates ? (
-            <p className="text-[11px] font-data text-[rgba(232,237,248,0.5)]">
+            <p className="text-sm font-data text-[rgba(232,237,248,0.5)]">
               {coordinates.lat.toFixed(4)}°, {coordinates.lon.toFixed(4)}°
             </p>
           ) : (
@@ -185,7 +185,7 @@ export default function LocationDossierPanel({
       {/* ── Loading skeleton ─────────────────────────────────────────────── */}
       {loading && !dossier && (
         <div className="flex-1 p-5 space-y-4">
-          <div className="flex items-center gap-2 text-[rgba(232,237,248,0.4)] text-xs font-body">
+          <div className="flex items-center gap-2 text-[rgba(232,237,248,0.4)] text-sm font-body">
             <Loader2 className="w-3.5 h-3.5 animate-spin text-[#2dd4bf]" />
             {phaseLabel(phase)}
           </div>
@@ -209,11 +209,11 @@ export default function LocationDossierPanel({
           {/* Fleet Memory block */}
           <div className="px-5 py-4">
             <div className="flex items-center gap-2 mb-3.5">
-              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(45,212,191,0.65)] font-body">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(45,212,191,0.65)] font-body">
                 Fleet Memory
               </p>
               {phase === "enriching" && (
-                <span className="inline-flex items-center gap-1 text-[9px] text-[rgba(232,237,248,0.35)] font-body">
+                <span className="inline-flex items-center gap-1 text-sm text-[rgba(232,237,248,0.35)] font-body">
                   <Loader2 className="w-2.5 h-2.5 animate-spin text-[#2dd4bf]" />
                   updating
                 </span>
@@ -230,7 +230,7 @@ export default function LocationDossierPanel({
                     ? "—"
                     : visitCount}
                 </div>
-                <p className="text-[8px] font-bold uppercase tracking-[0.14em] text-[rgba(45,212,191,0.55)] font-body mt-1">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[rgba(45,212,191,0.55)] font-body mt-1">
                   Fleet Visits
                 </p>
               </div>
@@ -239,23 +239,23 @@ export default function LocationDossierPanel({
               <div className="flex-1 space-y-2.5 pt-0.5">
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-3 h-3 text-[rgba(45,212,191,0.4)] shrink-0" />
-                  <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">First seen</span>
-                  <span className="ml-auto text-[10px] font-data text-[rgba(232,237,248,0.75)] tabular-nums">
+                  <span className="text-sm text-[rgba(232,237,248,0.35)] font-body">First seen</span>
+                  <span className="ml-auto text-sm font-data text-[rgba(232,237,248,0.75)] tabular-nums">
                     {formatDate(dossier.firstSeenAt)}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Activity className="w-3 h-3 text-[rgba(45,212,191,0.4)] shrink-0" />
-                  <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">Last seen</span>
-                  <span className="ml-auto text-[10px] font-data text-[rgba(232,237,248,0.75)] tabular-nums">
+                  <span className="text-sm text-[rgba(232,237,248,0.35)] font-body">Last seen</span>
+                  <span className="ml-auto text-sm font-data text-[rgba(232,237,248,0.75)] tabular-nums">
                     {formatDate(dossier.lastSeenAt)}
                   </span>
                 </div>
                 {dossier.peakDayOfWeek && (
                   <div className="flex items-center gap-1.5">
                     <CalendarDays className="w-3 h-3 text-[rgba(45,212,191,0.4)] shrink-0" />
-                    <span className="text-[10px] text-[rgba(232,237,248,0.35)] font-body">Peak day</span>
-                    <span className="ml-auto text-[10px] font-data text-[rgba(232,237,248,0.75)]">
+                    <span className="text-sm text-[rgba(232,237,248,0.35)] font-body">Peak day</span>
+                    <span className="ml-auto text-sm font-data text-[rgba(232,237,248,0.75)]">
                       {dossier.peakDayOfWeek}
                     </span>
                   </div>
@@ -268,11 +268,11 @@ export default function LocationDossierPanel({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">
                   <Layers className="w-3 h-3 text-[rgba(45,212,191,0.5)]" />
-                  <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.35)] font-body">
+                  <span className="text-xs font-bold uppercase tracking-[0.14em] text-[rgba(232,237,248,0.35)] font-body">
                     Knowledge depth
                   </span>
                 </div>
-                <span className="text-[9px] font-bold font-data text-[#2dd4bf]">
+                <span className="text-sm font-bold font-data text-[#2dd4bf]">
                   {knowledgeLabel(depth)}
                 </span>
               </div>
@@ -282,7 +282,7 @@ export default function LocationDossierPanel({
                   style={{ width: `${depth}%` }}
                 />
               </div>
-              <p className="text-[9px] text-[rgba(232,237,248,0.28)] mt-1.5 font-body">
+              <p className="text-sm text-[rgba(232,237,248,0.28)] mt-1.5 font-body">
                 {dossier.accessCount} dossier view{dossier.accessCount !== 1 ? "s" : ""}
                 {dossier.fleetVisitSummary ? ` · ${dossier.fleetVisitSummary}` : ""}
               </p>
@@ -291,7 +291,7 @@ export default function LocationDossierPanel({
 
           {/* Area briefing */}
           <div className="px-5 py-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
               Area Briefing
             </p>
             <p className="text-[13px] leading-relaxed text-[rgba(232,237,248,0.8)] font-body">
@@ -302,7 +302,7 @@ export default function LocationDossierPanel({
           {/* Nearby amenities */}
           {dossier.nearbyAmenities?.length > 0 && (
             <div className="px-5 py-4">
-              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
                 Nearby
               </p>
               <ul className="space-y-2">
@@ -314,7 +314,7 @@ export default function LocationDossierPanel({
                     <span className="flex-1 truncate text-[13px] text-[rgba(232,237,248,0.75)] font-body">
                       {a.name}
                     </span>
-                    <span className="text-[10px] text-[rgba(232,237,248,0.35)] shrink-0 font-data tabular-nums">
+                    <span className="text-sm text-[rgba(232,237,248,0.35)] shrink-0 font-data tabular-nums">
                       {a.distanceMeters < 1000
                         ? `${a.distanceMeters}m`
                         : `${(a.distanceMeters / 1000).toFixed(1)}km`}
@@ -327,7 +327,7 @@ export default function LocationDossierPanel({
 
           {/* Coordinates footer */}
           <div className="px-5 py-3">
-            <p className="text-[10px] text-[rgba(232,237,248,0.22)] font-data flex items-center gap-1.5">
+            <p className="text-sm text-[rgba(232,237,248,0.22)] font-data flex items-center gap-1.5">
               <MapPin className="w-3 h-3" />
               {dossier.lat.toFixed(5)}, {dossier.lon.toFixed(5)}
             </p>
@@ -351,7 +351,7 @@ export default function LocationDossierPanel({
                 {useInStory ? "Added to Trip Story" : "Use in Trip Story"}
               </button>
               {!useInStory && (
-                <p className="text-[11px] text-[rgba(232,237,248,0.3)] text-center mt-1.5 font-body">
+                <p className="text-sm text-[rgba(232,237,248,0.3)] text-center mt-1.5 font-body">
                   Adds rich area context to this stop&apos;s panel
                 </p>
               )}

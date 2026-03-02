@@ -82,7 +82,7 @@ function KpiTile({
     <div className="flex-1 min-w-0 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.07)] px-4 py-3">
       <div className="flex items-center gap-1.5 mb-1">
         {Icon && <Icon className="h-3 w-3 shrink-0" style={{ color: accent ?? "rgba(232,237,248,0.35)" }} />}
-        <p className="text-[10px] font-bold uppercase tracking-[0.14em] font-body truncate" style={{ color: accent ?? "rgba(232,237,248,0.35)" }}>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] font-body truncate" style={{ color: accent ?? "rgba(232,237,248,0.35)" }}>
           {label}
         </p>
       </div>
@@ -92,14 +92,14 @@ function KpiTile({
         </p>
         {TrendIcon && <TrendIcon className={cn("h-3.5 w-3.5 shrink-0", trendColor)} />}
       </div>
-      {sub && <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body mt-1 truncate">{sub}</p>}
+      {sub && <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mt-1 truncate">{sub}</p>}
     </div>
   );
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
+    <p className="text-xs font-bold uppercase tracking-[0.15em] text-[rgba(232,237,248,0.35)] font-body mb-2.5">
       {children}
     </p>
   );
@@ -110,7 +110,7 @@ function ReasoningBlock({ reasoning }: { reasoning: string }) {
     <div className="rounded-xl bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.14)] p-4">
       <div className="flex items-center gap-2 mb-2">
         <Brain className="h-3.5 w-3.5 text-[#f5a623] shrink-0" />
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#f5a623] font-body">
+        <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#f5a623] font-body">
           Ace Analysis
         </span>
       </div>
@@ -151,7 +151,7 @@ function ChartTooltip({
       {label && (
         <p
           style={{
-            fontSize: 9,
+            fontSize: 12,
             fontFamily: "DM Sans, sans-serif",
             fontWeight: 700,
             letterSpacing: "0.13em",
@@ -196,7 +196,7 @@ function ChartTooltip({
               {formattedName && (
                 <span
                   style={{
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: "DM Sans, sans-serif",
                     color: "rgba(232,237,248,0.38)",
                   }}
@@ -251,12 +251,12 @@ function TopVehiclesExpanded({ insight }: { insight: AceInsight }) {
               <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false} />
               <XAxis
                 dataKey="shortName"
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -278,11 +278,11 @@ function TopVehiclesExpanded({ insight }: { insight: AceInsight }) {
       <div>
         <SectionLabel>Vehicle Performance — Full Ranking</SectionLabel>
         <div className="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
-          <table className="w-full text-xs">
+          <table className="w-full text-sm">
             <thead>
               <tr className="bg-[rgba(255,255,255,0.04)]">
                 {["#", "Vehicle", "Distance", "Trips", "km / Trip", "Fleet Share"].map((h) => (
-                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-[9px] font-body">
+                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-sm font-body">
                     {h}
                   </th>
                 ))}
@@ -304,7 +304,7 @@ function TopVehiclesExpanded({ insight }: { insight: AceInsight }) {
                           style={{ width: `${r.sharePct}%`, background: CHART_COLORS[i % CHART_COLORS.length], opacity: 0.8 }}
                         />
                       </div>
-                      <span className="text-[10px] font-data text-[rgba(232,237,248,0.5)]">{r.sharePct}%</span>
+                      <span className="text-sm font-data text-[rgba(232,237,248,0.5)]">{r.sharePct}%</span>
                     </div>
                   </td>
                 </tr>
@@ -312,7 +312,7 @@ function TopVehiclesExpanded({ insight }: { insight: AceInsight }) {
             </tbody>
           </table>
         </div>
-        <p className="text-[10px] text-[rgba(232,237,248,0.3)] font-body mt-2">
+        <p className="text-sm text-[rgba(232,237,248,0.3)] font-body mt-2">
           Top vehicle accounts for {topShare.toFixed(1)}% of fleet distance · Top 3 account for {top3Share.toFixed(0)}%
         </p>
       </div>
@@ -371,12 +371,12 @@ function IdleByDayExpanded({ insight }: { insight: AceInsight }) {
               <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false} />
               <XAxis
                 dataKey="day"
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
                 domain={[0, "dataMax + 5"]}
@@ -389,7 +389,7 @@ function IdleByDayExpanded({ insight }: { insight: AceInsight }) {
                 y={IDLE_BENCHMARK_PCT}
                 stroke="rgba(248,113,113,0.55)"
                 strokeDasharray="5 4"
-                label={{ value: `${IDLE_BENCHMARK_PCT}% target`, position: "right", fontSize: 8, fill: "rgba(248,113,113,0.6)", fontFamily: "JetBrains Mono" }}
+                label={{ value: `${IDLE_BENCHMARK_PCT}% target`, position: "right", fontSize: 12, fill: "rgba(248,113,113,0.6)", fontFamily: "JetBrains Mono" }}
               />
               <Bar dataKey="idle_pct" radius={[3, 3, 0, 0]} maxBarSize={36}>
                 {chartData.map((entry, i) => (
@@ -408,14 +408,14 @@ function IdleByDayExpanded({ insight }: { insight: AceInsight }) {
       {/* Weekday vs weekend split */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl bg-[rgba(248,113,113,0.05)] border border-[rgba(248,113,113,0.15)] p-3">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[rgba(248,113,113,0.65)] font-body mb-1">Weekday Avg</p>
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[rgba(248,113,113,0.65)] font-body mb-1">Weekday Avg</p>
           <p className="text-2xl font-display font-extrabold text-white">{weekdayAvg.toFixed(1)}%</p>
-          <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body mt-0.5">Mon – Fri · {weekdays.length} days</p>
+          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mt-0.5">Mon – Fri · {weekdays.length} days</p>
         </div>
         <div className="rounded-xl bg-[rgba(52,211,153,0.05)] border border-[rgba(52,211,153,0.15)] p-3">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[rgba(52,211,153,0.65)] font-body mb-1">Weekend Avg</p>
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[rgba(52,211,153,0.65)] font-body mb-1">Weekend Avg</p>
           <p className="text-2xl font-display font-extrabold text-white">{weekendAvg.toFixed(1)}%</p>
-          <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body mt-0.5">Sat – Sun · {weekends.length} days</p>
+          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mt-0.5">Sat – Sun · {weekends.length} days</p>
         </div>
       </div>
 
@@ -423,11 +423,11 @@ function IdleByDayExpanded({ insight }: { insight: AceInsight }) {
       <div>
         <SectionLabel>Day-by-Day Breakdown vs Target</SectionLabel>
         <div className="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
-          <table className="w-full text-xs">
+          <table className="w-full text-sm">
             <thead>
               <tr className="bg-[rgba(255,255,255,0.04)]">
                 {["Day", "Avg Idle %", "Avg Idle Min", "vs Target"].map((h) => (
-                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-[9px] font-body">{h}</th>
+                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-sm font-body">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -439,7 +439,7 @@ function IdleByDayExpanded({ insight }: { insight: AceInsight }) {
                   <td className="px-3 py-2 font-data tabular-nums text-[rgba(232,237,248,0.55)]">{r.idle_min} min</td>
                   <td className="px-3 py-2">
                     <span className={cn(
-                      "text-[10px] font-bold font-data px-1.5 py-0.5 rounded",
+                      "text-sm font-bold font-data px-1.5 py-0.5 rounded",
                       r.delta > 0
                         ? "text-[#f87171] bg-[rgba(248,113,113,0.1)]"
                         : "text-[#34d399] bg-[rgba(52,211,153,0.1)]"
@@ -503,12 +503,12 @@ function CommonStopsExpanded({ insight }: { insight: AceInsight }) {
               <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false} />
               <XAxis
                 dataKey="name"
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -530,11 +530,11 @@ function CommonStopsExpanded({ insight }: { insight: AceInsight }) {
       <div>
         <SectionLabel>Stop Locations — Visit & Dwell Analysis</SectionLabel>
         <div className="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
-          <table className="w-full text-xs">
+          <table className="w-full text-sm">
             <thead>
               <tr className="bg-[rgba(255,255,255,0.04)]">
                 {["Location", "Visits", "Share", "Avg Dwell", "Efficiency"].map((h) => (
-                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-[9px] font-body">{h}</th>
+                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-sm font-body">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -551,12 +551,12 @@ function CommonStopsExpanded({ insight }: { insight: AceInsight }) {
                         <div className="w-10 h-1 bg-[rgba(255,255,255,0.06)] rounded-full overflow-hidden">
                           <div className="h-full rounded-full bg-[#38bdf8]" style={{ width: `${share}%`, opacity: 0.75 }} />
                         </div>
-                        <span className="text-[10px] font-data text-[rgba(232,237,248,0.45)]">{share}%</span>
+                        <span className="text-sm font-data text-[rgba(232,237,248,0.45)]">{share}%</span>
                       </div>
                     </td>
                     <td className="px-3 py-2 font-data tabular-nums text-[rgba(232,237,248,0.55)]">{r.avg_dwell_minutes} min</td>
                     <td className="px-3 py-2">
-                      <span className={cn("text-[9px] font-bold font-body px-1.5 py-0.5 rounded", eff.color, eff.bg)}>
+                      <span className={cn("text-sm font-bold font-body px-1.5 py-0.5 rounded", eff.color, eff.bg)}>
                         {eff.label}
                       </span>
                     </td>
@@ -566,7 +566,7 @@ function CommonStopsExpanded({ insight }: { insight: AceInsight }) {
             </tbody>
           </table>
         </div>
-        <p className="text-[10px] text-[rgba(232,237,248,0.3)] font-body mt-2">
+        <p className="text-sm text-[rgba(232,237,248,0.3)] font-body mt-2">
           Top stop ({topVisit?.location_name ?? "—"}) accounts for {topShare.toFixed(1)}% of all stop events in top 5 locations
         </p>
       </div>
@@ -580,12 +580,12 @@ function CommonStopsExpanded({ insight }: { insight: AceInsight }) {
               <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false} />
               <XAxis
                 dataKey="name"
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -597,13 +597,13 @@ function CommonStopsExpanded({ insight }: { insight: AceInsight }) {
                 y={DWELL_THRESHOLDS.fast}
                 stroke="rgba(52,211,153,0.45)"
                 strokeDasharray="4 3"
-                label={{ value: "Efficient ≤30 min", position: "right", fontSize: 8, fill: "rgba(52,211,153,0.55)", fontFamily: "JetBrains Mono" }}
+                label={{ value: "Efficient ≤30 min", position: "right", fontSize: 12, fill: "rgba(52,211,153,0.55)", fontFamily: "JetBrains Mono" }}
               />
               <ReferenceLine
                 y={DWELL_THRESHOLDS.moderate}
                 stroke="rgba(248,113,113,0.45)"
                 strokeDasharray="4 3"
-                label={{ value: "Bottleneck >60 min", position: "right", fontSize: 8, fill: "rgba(248,113,113,0.55)", fontFamily: "JetBrains Mono" }}
+                label={{ value: "Bottleneck >60 min", position: "right", fontSize: 12, fill: "rgba(248,113,113,0.55)", fontFamily: "JetBrains Mono" }}
               />
               <Bar dataKey="dwell" radius={[3, 3, 0, 0]} maxBarSize={48}>
                 {chartData.map((entry, i) => {
@@ -692,12 +692,12 @@ function TripDurationExpanded({ insight }: { insight: AceInsight }) {
               <CartesianGrid stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" vertical={false} />
               <XAxis
                 dataKey="label"
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+                tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -719,23 +719,23 @@ function TripDurationExpanded({ insight }: { insight: AceInsight }) {
       <div className="rounded-xl bg-[rgba(167,139,250,0.05)] border border-[rgba(167,139,250,0.15)] p-4">
         <div className="flex items-center gap-2 mb-3">
           <Activity className="h-3.5 w-3.5 text-[#a78bfa]" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#a78bfa] font-body">Skew Analysis</span>
+          <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#a78bfa] font-body">Skew Analysis</span>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body mb-0.5">Average</p>
+            <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mb-0.5">Average</p>
             <p className="text-lg font-display font-bold text-white">{fmtMin(avgMin)}</p>
           </div>
           <div>
-            <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body mb-0.5">Median</p>
+            <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mb-0.5">Median</p>
             <p className="text-lg font-display font-bold text-white">{fmtMin(medianMin)}</p>
           </div>
           <div>
-            <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body mb-0.5">Gap</p>
+            <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mb-0.5">Gap</p>
             <p className="text-lg font-display font-bold text-[#a78bfa]">+{meanMedianGap}m</p>
           </div>
         </div>
-        <p className="text-[11.5px] text-[rgba(232,237,248,0.55)] font-body mt-3 leading-relaxed">
+        <p className="text-sm text-[rgba(232,237,248,0.55)] font-body mt-3 leading-relaxed">
           The {skewPct}% right-skew between mean and median indicates a subset of long-haul runs pulling the average upward. Eliminating or routing the top 5–10% longest trips could reduce average duration by an estimated 10–15%.
         </p>
       </div>
@@ -744,11 +744,11 @@ function TripDurationExpanded({ insight }: { insight: AceInsight }) {
       <div>
         <SectionLabel>All Duration Statistics</SectionLabel>
         <div className="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
-          <table className="w-full text-xs">
+          <table className="w-full text-sm">
             <thead>
               <tr className="bg-[rgba(255,255,255,0.04)]">
                 {["Metric", "Value", "Formatted"].map((h) => (
-                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-[9px] font-body">{h}</th>
+                  <th key={h} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-sm font-body">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -792,11 +792,11 @@ function UnknownExpanded({ insight }: { insight: AceInsight }) {
   return (
     <div className="space-y-4">
       <div className="rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
-        <table className="w-full text-xs">
+        <table className="w-full text-sm">
           <thead>
             <tr className="bg-[rgba(255,255,255,0.04)]">
               {insight.columns.map((col) => (
-                <th key={col} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-[9px] font-body">
+                <th key={col} className="px-3 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-sm font-body">
                   {col.replace(/_/g, " ")}
                 </th>
               ))}
@@ -848,11 +848,11 @@ export default function AceInsightExpandedCard({ insight }: AceInsightExpandedCa
             <Brain className="h-4.5 w-4.5" style={{ color: config.color, width: 18, height: 18 }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] font-body mb-0.5" style={{ color: config.color }}>{config.label}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] font-body mb-0.5" style={{ color: config.color }}>{config.label}</p>
             <p className="text-sm font-semibold text-white font-body leading-snug">{insight.question}</p>
           </div>
         </div>
-        <span className={`shrink-0 flex items-center gap-1 text-[10px] font-bold rounded-full px-2.5 py-1 font-body ${
+        <span className={`shrink-0 flex items-center gap-1 text-xs font-bold rounded-full px-2.5 py-1 font-body ${
           insight.fromCache
             ? "text-[rgba(232,237,248,0.45)] bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.1)]"
             : "text-[#34d399] bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)]"

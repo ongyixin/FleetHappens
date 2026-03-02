@@ -31,18 +31,18 @@ function InsightChart({ insight }: { insight: AceInsight }) {
         <BarChart data={chartData} margin={{ top: 0, right: 0, bottom: 0, left: -22 }}>
           <XAxis
             dataKey="name"
-            tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+            tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
-            tick={{ fontSize: 9, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
+            tick={{ fontSize: 12, fill: "rgba(232,237,248,0.35)", fontFamily: "JetBrains Mono" }}
             tickLine={false}
             axisLine={false}
           />
           <Tooltip
             contentStyle={{
-              fontSize: 11,
+              fontSize: 12,
               border: "1px solid rgba(255,255,255,0.12)",
               borderRadius: 8,
               background: "#17191f",
@@ -65,11 +65,11 @@ function InsightTable({ insight }: { insight: AceInsight }) {
   const displayRows = insight.rows.slice(0, 5);
   return (
     <div className="mt-3 rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]">
-      <table className="w-full text-xs">
+      <table className="w-full text-sm">
         <thead>
           <tr className="bg-[rgba(255,255,255,0.04)]">
             {insight.columns.map((col) => (
-              <th key={col} className="px-2.5 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-[9px] font-body">
+              <th key={col} className="px-2.5 py-2 text-left font-bold text-[rgba(232,237,248,0.35)] uppercase tracking-wider text-sm font-body">
                 {col.replace(/_/g, " ")}
               </th>
             ))}
@@ -88,7 +88,7 @@ function InsightTable({ insight }: { insight: AceInsight }) {
         </tbody>
       </table>
       {insight.totalRowCount && insight.totalRowCount > 5 && (
-        <div className="px-2.5 py-2 text-[10px] text-[rgba(232,237,248,0.35)] bg-[rgba(255,255,255,0.03)] border-t border-[rgba(255,255,255,0.06)] font-body">
+        <div className="px-2.5 py-2 text-sm text-[rgba(232,237,248,0.35)] bg-[rgba(255,255,255,0.03)] border-t border-[rgba(255,255,255,0.06)] font-body">
           Showing 5 of {insight.totalRowCount} rows
           {insight.downloadUrl && (
             <a href={insight.downloadUrl} target="_blank" rel="noreferrer" className="ml-2 text-[#f5a623] hover:underline font-semibold">
@@ -131,7 +131,7 @@ export default function AceInsightCard({ insight }: AceInsightCardProps) {
           </div>
           <p className="text-[13px] font-body font-semibold text-white leading-snug">{insight.question}</p>
         </div>
-        <span className={`shrink-0 flex items-center gap-1 text-[10px] font-bold rounded-full px-2 py-0.5 font-body ${
+        <span className={`shrink-0 flex items-center gap-1 text-xs font-bold rounded-full px-2 py-0.5 font-body ${
           insight.fromCache
             ? "text-[rgba(232,237,248,0.45)] bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.1)]"
             : "text-[#34d399] bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)]"
@@ -146,7 +146,7 @@ export default function AceInsightCard({ insight }: AceInsightCardProps) {
 
       {insight.reasoning && (
         <div className="mt-3 rounded-xl bg-[rgba(245,166,35,0.06)] border border-[rgba(245,166,35,0.15)] p-3">
-          <p className="text-[11px] text-[rgba(232,237,248,0.6)] font-body leading-relaxed">
+          <p className="text-sm text-[rgba(232,237,248,0.6)] font-body leading-relaxed">
             <span className="font-bold text-[#f5a623]">Ace: </span>
             {insight.reasoning}
           </p>

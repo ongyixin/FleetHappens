@@ -165,7 +165,7 @@ export default function FleetMapSlider({
         <div className="absolute top-3 left-3 z-[750] pointer-events-none">
           <div className="flex items-center gap-1.5 bg-[rgba(9,9,14,0.8)] backdrop-blur-md border border-[rgba(56,189,248,0.2)] rounded-lg px-2.5 py-1.5">
             <Map className="h-3 w-3 text-[#38bdf8]" />
-            <span className="text-[10px] font-display font-bold text-white tracking-wide">Fleet Map</span>
+            <span className="text-sm font-display font-bold text-white tracking-wide">Fleet Map</span>
           </div>
         </div>
 
@@ -175,7 +175,7 @@ export default function FleetMapSlider({
           onClick={() => setMobileOpen((v) => !v)}
         >
           <Brain className="h-3.5 w-3.5 text-[#f5a623]" />
-          <span className="text-xs font-display font-bold text-white">Fleet Intel</span>
+          <span className="text-sm font-display font-bold text-white">Fleet Intel</span>
           {mobileOpen
             ? <ChevronDown className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)]" />
             : <ChevronUp   className="h-3.5 w-3.5 text-[rgba(232,237,248,0.4)]" />}
@@ -225,7 +225,7 @@ export default function FleetMapSlider({
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className="flex items-center gap-1.5 px-3 py-2.5 text-[11px] font-body font-semibold border-b-2 transition-all duration-200 whitespace-nowrap shrink-0"
+                  className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-body font-semibold border-b-2 transition-all duration-200 whitespace-nowrap shrink-0"
                   style={{
                     borderColor: activeTab === tab.id ? tab.color : "transparent",
                     color: activeTab === tab.id ? tab.color : "rgba(232,237,248,0.4)",
