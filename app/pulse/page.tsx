@@ -3,12 +3,14 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { LayoutGrid, List, RefreshCw, Brain, Zap, Maximize2, Minimize2 } from "lucide-react";
+import { LayoutGrid, List, RefreshCw, Brain, Zap, Maximize2, Minimize2, FileText } from "lucide-react";
 import type { CompanyPulseSummary, AceInsight, VehicleActivity, FleetGroup, ApiResponse } from "@/types";
 import FleetPulseSummaryStrip, { FleetPulseSummaryStripSkeleton } from "@/components/FleetPulseSummaryStrip";
 import FleetCard, { FleetCardSkeleton, mergeAceDistanceData } from "@/components/FleetCard";
 import FleetRankedTable, { FleetRankedTableSkeleton } from "@/components/FleetRankedTable";
 import FleetDailyDigest from "@/components/FleetDailyDigest";
+import ReportBuilderModal from "@/components/ReportBuilderModal";
+import { getCompanyPulseSections } from "@/lib/report/sections";
 
 const FleetRegionalMap = dynamic(
   () => import("@/components/FleetRegionalMap"),
@@ -41,6 +43,7 @@ function PulsePageContent() {
   const [mapGroups, setMapGroups]     = useState<FleetGroup[]>([]);
   const [viewMode, setViewMode]       = useState<ViewMode>("cards");
   const [mapMaximised, setMapMaximised] = useState(false);
+  const [reportOpen, setReportOpen]   = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -142,6 +145,14 @@ function PulsePageContent() {
                 Ace loading…
               </span>
             )}
+            {/* Export Report */}
+            <button
+              onClick={() => setReportOpen(true)}
+              className="hidden sm:flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.08)] text-[#f5a623] text-xs font-medium font-body hover:bg-[rgba(245,166,35,0.14)] transition-colors"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              Export Report
+            </button>
             {/* View toggle */}
             <div className="flex rounded-lg border border-[rgba(255,255,255,0.08)] overflow-hidden bg-[rgba(255,255,255,0.03)]">
               <button
@@ -272,6 +283,15 @@ function PulsePageContent() {
           </div>
         </div>
       </div>
+
+      {/* Report Builder Modal */}
+      <ReportBuilderModal
+        key={reportOpen ? "open" : "closed"}
+        isOpen={reportOpen}
+        onClose={() => setReportOpen(false)}
+        availableSections={getCompanyPulseSections({ summary, aceInsight })}
+        defaultTitle="Fleet Pulse Report — Company View"
+      />
     </div>
   );
 }

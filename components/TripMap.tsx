@@ -200,7 +200,6 @@ export default function TripMap({
           color: "transparent",
           weight: 20,
           opacity: 0,
-          // @ts-expect-error Leaflet accepts cursor via interactive options
           interactive: true,
         }).addTo(map);
 

@@ -13,6 +13,7 @@ import {
   BarChart3,
   Layers,
   Navigation,
+  Library,
 } from "lucide-react";
 
 // ── Flow steps ──────────────────────────────────────────────────────────────
@@ -26,31 +27,38 @@ const FLOW_STEPS = [
   },
   {
     step: "02",
-    title: "Fleet Pulse overview",
-    summary: "Company-wide KPI dashboard loads",
-    icon: Zap,
-    href: "#fleet-pulse",
-  },
-  {
-    step: "03",
     title: "Live GPS trip maps",
     summary: "Pick a vehicle, explore its routes",
     icon: MapPin,
     href: "#live-gps",
   },
   {
+    step: "03",
+    title: "Ace fleet intelligence",
+    summary: "Historical patterns surface automatically",
+    icon: Brain,
+    href: "#ace-intelligence",
+  },
+  {
     step: "04",
+    title: "Fleet Pulse overview",
+    summary: "Company-wide KPI dashboard loads",
+    icon: Zap,
+    href: "#fleet-pulse",
+  },
+  {
+    step: "05",
     title: "Comic trip recaps",
     summary: "LLM turns raw trips into stories",
     icon: BookOpen,
     href: "#comic-recaps",
   },
   {
-    step: "05",
-    title: "Ace fleet intelligence",
-    summary: "Historical patterns surface automatically",
-    icon: Brain,
-    href: "#ace-intelligence",
+    step: "06",
+    title: "Fleet Storybook",
+    summary: "Browse and share archived trip stories",
+    icon: Library,
+    href: "#storybook",
   },
 ];
 
@@ -58,32 +66,8 @@ const FLOW_STEPS = [
 
 const FEATURES = [
   {
-    id: "fleet-pulse",
-    step: "Step 1",
-    icon: Zap,
-    label: "Fleet Pulse Overview",
-    tagline: "The command centre for your entire vehicle portfolio",
-    color: "#f5a623",
-    colorDim: "rgba(245,166,35,0.12)",
-    colorBorder: "rgba(245,166,35,0.25)",
-    body: [
-      "Fleet Pulse is where every session begins. The moment your Geotab credentials are verified, a company-wide dashboard assembles in real time — pulling live vehicle counts, total distance driven, active trip states, and group-level aggregates from the Geotab Direct API.",
-      "The overview is split into two complementary layers: a KPI strip across the top surfaces the headline numbers at a glance, while a fleet grid below lets you compare groups side-by-side. Switch between a card layout for at-a-glance comparison or a ranked table to sort fleets by any metric.",
-      "A regional map sits alongside the fleet grid, plotting every active vehicle's last known position. Click any pin to jump directly to that vehicle's trip dashboard. The whole page stays live — refresh triggers a fresh API pull so you're never looking at stale data.",
-    ],
-    highlights: [
-      "Real-time KPI strip: total vehicles, distance, active trips",
-      "Fleet card grid with per-group utilisation and distance metrics",
-      "Ace-enriched distance data overlaid on each fleet card",
-      "Interactive regional map with vehicle pins",
-      "Toggle between card and ranked-table views",
-    ],
-    next: { label: "Live GPS trip maps", href: "#live-gps" },
-    illustration: <FleetPulseIllustration />,
-  },
-  {
     id: "live-gps",
-    step: "Step 2",
+    step: "Step 1",
     icon: MapPin,
     label: "Live GPS Trip Maps",
     tagline: "Every route your fleet has ever taken, rendered on the map",
@@ -102,36 +86,12 @@ const FEATURES = [
       "Animated line-draw on trip load",
       "Geofence and zone overlays where group data is available",
     ],
-    next: { label: "Comic trip recaps", href: "#comic-recaps" },
+    next: { label: "Ace fleet intelligence", href: "#ace-intelligence" },
     illustration: <GpsMapIllustration />,
   },
   {
-    id: "comic-recaps",
-    step: "Step 3",
-    icon: BookOpen,
-    label: "Comic Trip Recaps",
-    tagline: "Raw GPS data narrated into a story worth reading",
-    color: "#a78bfa",
-    colorDim: "rgba(167,139,250,0.1)",
-    colorBorder: "rgba(167,139,250,0.22)",
-    body: [
-      "Numbers and coordinates are precise — but they don't tell you what a trip felt like. The Comic Trip Recap feature passes each journey's structured data to a large language model and asks it to narrate the route as a short comic-panel story.",
-      "The LLM receives the start address, end address, stop sequence, total distance, duration, and any zone names crossed. It weaves these facts into panel-by-panel narration: naming suburbs, calling out an unusual 40-minute stop, noting if the vehicle doubled back, and adding a final punchline about the journey.",
-      "Each panel is styled as a comic strip tile — bold caption text, a contextual icon, and a short punchy sentence per stop or segment. The result is a trip recap that a fleet manager can scan in seconds and actually remember.",
-    ],
-    highlights: [
-      "LLM-generated panel-by-panel comic narration",
-      "Stop addresses resolved and named in natural language",
-      "Unusual patterns (backtracking, long dwell, late-night trips) called out explicitly",
-      "Comic-strip tile layout with icon, caption, and narrative text",
-      "Generates in under 3 seconds via streaming response",
-    ],
-    next: { label: "Ace fleet intelligence", href: "#ace-intelligence" },
-    illustration: <ComicIllustration />,
-  },
-  {
     id: "ace-intelligence",
-    step: "Step 4",
+    step: "Step 2",
     icon: Brain,
     label: "Ace Fleet Intelligence",
     tagline: "Months of trip history distilled into actionable patterns",
@@ -150,8 +110,81 @@ const FEATURES = [
       "Most-common route pattern (O-D pairs) surface automatically",
       "Ace data loaded in parallel with live data — no extra waiting",
     ],
-    next: null,
+    next: { label: "Fleet Pulse overview", href: "#fleet-pulse" },
     illustration: <AceIllustration />,
+  },
+  {
+    id: "fleet-pulse",
+    step: "Step 3",
+    icon: Zap,
+    label: "Fleet Pulse Overview",
+    tagline: "The command centre for your entire vehicle portfolio",
+    color: "#f5a623",
+    colorDim: "rgba(245,166,35,0.12)",
+    colorBorder: "rgba(245,166,35,0.25)",
+    body: [
+      "Fleet Pulse is where every session begins. The moment your Geotab credentials are verified, a company-wide dashboard assembles in real time — pulling live vehicle counts, total distance driven, active trip states, and group-level aggregates from the Geotab Direct API.",
+      "The overview is split into two complementary layers: a KPI strip across the top surfaces the headline numbers at a glance, while a fleet grid below lets you compare groups side-by-side. Switch between a card layout for at-a-glance comparison or a ranked table to sort fleets by any metric.",
+      "A regional map sits alongside the fleet grid, plotting every active vehicle's last known position. Click any pin to jump directly to that vehicle's trip dashboard. The whole page stays live — refresh triggers a fresh API pull so you're never looking at stale data.",
+    ],
+    highlights: [
+      "Real-time KPI strip: total vehicles, distance, active trips",
+      "Fleet card grid with per-group utilisation and distance metrics",
+      "Ace-enriched distance data overlaid on each fleet card",
+      "Interactive regional map with vehicle pins",
+      "Toggle between card and ranked-table views",
+    ],
+    next: { label: "Comic trip recaps", href: "#comic-recaps" },
+    illustration: <FleetPulseIllustration />,
+  },
+  {
+    id: "comic-recaps",
+    step: "Step 4",
+    icon: BookOpen,
+    label: "Comic Trip Recaps",
+    tagline: "Raw GPS data narrated into a story worth reading",
+    color: "#a78bfa",
+    colorDim: "rgba(167,139,250,0.1)",
+    colorBorder: "rgba(167,139,250,0.22)",
+    body: [
+      "Numbers and coordinates are precise — but they don't tell you what a trip felt like. The Comic Trip Recap feature passes each journey's structured data to a large language model and asks it to narrate the route as a short comic-panel story.",
+      "The LLM receives the start address, end address, stop sequence, total distance, duration, and any zone names crossed. It weaves these facts into panel-by-panel narration: naming suburbs, calling out an unusual 40-minute stop, noting if the vehicle doubled back, and adding a final punchline about the journey.",
+      "Each panel is styled as a comic strip tile — bold caption text, a contextual icon, and a short punchy sentence per stop or segment. The result is a trip recap that a fleet manager can scan in seconds and actually remember.",
+    ],
+    highlights: [
+      "LLM-generated panel-by-panel comic narration",
+      "Stop addresses resolved and named in natural language",
+      "Unusual patterns (backtracking, long dwell, late-night trips) called out explicitly",
+      "Comic-strip tile layout with icon, caption, and narrative text",
+      "Generates in under 3 seconds via streaming response",
+    ],
+    next: { label: "Fleet Storybook", href: "#storybook" },
+    illustration: <ComicIllustration />,
+  },
+  {
+    id: "storybook",
+    step: "Step 5",
+    icon: Library,
+    label: "Fleet Storybook",
+    tagline: "A searchable archive of every comic trip narrative you've generated",
+    color: "#e879f9",
+    colorDim: "rgba(232,121,249,0.1)",
+    colorBorder: "rgba(232,121,249,0.22)",
+    body: [
+      "Every generated story is preserved in the Fleet Storybook — a searchable archive of comic trip narratives. Once you've created a recap from the trip dashboard, it's automatically added to your storybook for future reference.",
+      "Filter stories by tone (guidebook, playful, cinematic) to find the right style for different audiences. Browse past routes, share highlight reels with clients or new drivers, and build a library of contextual fleet narratives that go beyond raw telemetry.",
+      "The storybook connects to your BigQuery cache when configured, or falls back to a local archive. Each card shows the trip title, tone, panel count, and key locations — click through to read the full comic recap or jump back to the original trip map.",
+    ],
+    highlights: [
+      "Searchable archive of all generated comic recaps",
+      "Filter by tone: guidebook, playful, cinematic",
+      "Card layout with trip title, locations, and preview",
+      "Share stories with clients or onboard new drivers",
+      "BigQuery-backed or local fallback storage",
+    ],
+    next: null,
+    cta: { label: "Open Fleet Storybook", href: "/storybook", icon: Library },
+    illustration: <StorybookIllustration />,
   },
 ];
 
@@ -390,17 +423,73 @@ function AceIllustration() {
   );
 }
 
+function StorybookIllustration() {
+  return (
+    <svg viewBox="0 0 400 260" fill="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* Shelf/archive background */}
+      <rect width="400" height="260" rx="12" fill="#0a0a0f" />
+      {/* Book spines on shelf */}
+      {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+        <g key={i}>
+          <rect
+            x={24 + i * 52}
+            y={180}
+            width={44}
+            height={56}
+            rx="2"
+            fill={`rgba(232,121,249,${0.08 + (i % 3) * 0.04})`}
+            stroke="rgba(232,121,249,0.2)"
+            strokeWidth="1"
+          />
+          <rect x={30 + i * 52} y={192} width={32} height="3" rx="1.5" fill="rgba(232,237,248,0.2)" />
+          <rect x={30 + i * 52} y={200} width={24} height="2" rx="1" fill="rgba(232,237,248,0.1)" />
+        </g>
+      ))}
+      {/* Story cards grid */}
+      {[0, 1, 2].map((i) => (
+        <g key={i} transform={`translate(${20 + i * 128}, 20)`}>
+          <rect width="120" height="140" rx="10" fill="#0f0f18" stroke="rgba(232,121,249,0.25)" strokeWidth="1.5" />
+          <rect x="12" y="12" width="96" height="56" rx="6" fill="rgba(232,121,249,0.06)" />
+          {/* Mini comic panels */}
+          <rect x="18" y="18" width="28" height="20" rx="3" fill="rgba(232,121,249,0.1)" />
+          <rect x="50" y="18" width="28" height="20" rx="3" fill="rgba(232,121,249,0.08)" />
+          <rect x="82" y="18" width="22" height="20" rx="3" fill="rgba(232,121,249,0.12)" />
+          <rect x="18" y="42" width="84" height="18" rx="3" fill="rgba(232,237,248,0.06)" />
+          <rect x="24" y="78" width="72" height="4" rx="2" fill="rgba(232,237,248,0.4)" />
+          <rect x="24" y="88" width="52" height="3" rx="1.5" fill="rgba(232,237,248,0.2)" />
+          <rect x="24" y="98" width="40" height="3" rx="1.5" fill="rgba(232,121,249,0.4)" />
+          <rect x="24" y="118" width="36" height="14" rx="7" fill="rgba(232,121,249,0.12)" stroke="rgba(232,121,249,0.25)" strokeWidth="1" />
+          <rect x="32" y="123" width="20" height="3" rx="1.5" fill="rgba(232,121,249,0.6)" />
+        </g>
+      ))}
+      {/* Search/filter bar */}
+      <rect x="20" y="168" width="360" height="8" rx="4" fill="rgba(255,255,255,0.04)" />
+      <rect x="24" y="170" width="80" height="4" rx="2" fill="rgba(232,121,249,0.2)" />
+    </svg>
+  );
+}
+
 // ── Scroll-to-hash helper ────────────────────────────────────────────────────
 
 function ScrollToHash() {
   const searchParams = useSearchParams();
   useEffect(() => {
-    const hash = window.location.hash;
-    if (!hash) return;
-    const el = document.querySelector(hash);
-    if (el) {
-      setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-    }
+    const scrollToHash = () => {
+      const hash = window.location.hash;
+      if (!hash) return;
+      const el = document.querySelector(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    scrollToHash();
+    // Retry after layout (Next.js client nav may not have DOM ready yet)
+    const id = setTimeout(scrollToHash, 200);
+    window.addEventListener("hashchange", scrollToHash);
+    return () => {
+      clearTimeout(id);
+      window.removeEventListener("hashchange", scrollToHash);
+    };
   }, [searchParams]);
   return null;
 }
@@ -614,7 +703,19 @@ export default function FeaturesPage() {
                     )}
 
                     {/* Final CTA */}
-                    {!feature.next && (
+                    {!feature.next && feature.cta && (() => {
+                      const CtaIcon = feature.cta.icon;
+                      return (
+                        <button
+                          onClick={() => router.push(feature.cta!.href)}
+                          className="inline-flex items-center gap-2 h-10 px-5 rounded-xl text-[13px] font-semibold font-body btn-amber group"
+                        >
+                          <CtaIcon className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
+                          {feature.cta.label}
+                        </button>
+                      );
+                    })()}
+                    {!feature.next && !feature.cta && (
                       <button
                         onClick={() => router.push("/pulse")}
                         className="inline-flex items-center gap-2 h-10 px-5 rounded-xl text-[13px] font-semibold font-body btn-amber group"

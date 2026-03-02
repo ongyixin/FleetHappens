@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { Truck, BookOpen, Cpu, RefreshCw, ChevronLeft, Zap, Circle, ChevronUp, ChevronDown, Maximize2, Minimize2, ArrowLeft } from "lucide-react";
+import { Truck, BookOpen, Cpu, RefreshCw, ChevronLeft, Zap, Circle, ChevronUp, ChevronDown, Maximize2, Minimize2, ArrowLeft, FileText } from "lucide-react";
 import type {
   TripSummary,
   BreadcrumbPoint,
@@ -24,6 +24,8 @@ import VehicleTripProfileCard from "@/components/VehicleTripProfileCard";
 import RouteFingerPrintCard from "@/components/RouteFingerPrintCard";
 import DrivingBehaviorCard from "@/components/DrivingBehaviorCard";
 import TripAnomaliesCard from "@/components/TripAnomaliesCard";
+import ReportBuilderModal from "@/components/ReportBuilderModal";
+import { getDashboardSections } from "@/lib/report/sections";
 import { cn } from "@/lib/utils";
 
 const TripMap = dynamic(() => import("@/components/TripMap"), {
@@ -67,6 +69,7 @@ function DashboardContent() {
 
   // Captured from NextStopPrediction's onResultLoaded — used by the expanded view
   const [nextStopResult, setNextStopResult] = useState<NextStopPredictionResult | null>(null);
+  const [reportOpen, setReportOpen]         = useState(false);
 
   // ── Street View panel ───────────────────────────────────────────────────
   const [streetViewCoords, setStreetViewCoords] = useState<LatLon | null>(null);
@@ -414,6 +417,13 @@ function DashboardContent() {
               </span>
             )}
             <button
+              onClick={() => setReportOpen(true)}
+              className="hidden sm:flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.08)] text-[#f5a623] text-xs font-medium font-body hover:bg-[rgba(245,166,35,0.14)] transition-colors"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              Export Report
+            </button>
+            <button
               onClick={handleCreateStory}
               disabled={!selectedTrip}
               className={cn(
@@ -724,6 +734,20 @@ function DashboardContent() {
           />
         </>
       )}
+
+      {/* Report Builder Modal */}
+      <ReportBuilderModal
+        key={reportOpen ? "open" : "closed"}
+        isOpen={reportOpen}
+        onClose={() => setReportOpen(false)}
+        availableSections={getDashboardSections({
+          deviceName,
+          trips,
+          selectedTrip,
+          dossier,
+        })}
+        defaultTitle={`Trip Report — ${deviceName}`}
+      />
     </div>
   );
 }

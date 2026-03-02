@@ -161,13 +161,6 @@ const FEATURES = [
     tooltip: "Geotab Ace digs through months of trip history to surface distance trends, utilization rates, outlier vehicles, and recurring patterns — so you can act on data, not instinct.",
   },
   {
-    icon: BookOpen,
-    label: "Comic trip recaps",
-    desc: "LLM-narrated stories",
-    href: "/features#comic-recaps",
-    tooltip: "Every route becomes a story. An LLM weaves trip data into comic-panel narratives — naming neighbourhoods, calling out unusual stops, and giving each journey personality and context.",
-  },
-  {
     icon: Zap,
     label: "Fleet Pulse overview",
     desc: "Multi-fleet portfolio",
@@ -175,10 +168,17 @@ const FEATURES = [
     tooltip: "A command-centre view across your entire vehicle portfolio. Compare fleet KPIs side-by-side, spot underperformers, and drill from company level down to a single vehicle in two clicks.",
   },
   {
+    icon: BookOpen,
+    label: "Comic trip recaps",
+    desc: "LLM-narrated stories",
+    href: "/features#comic-recaps",
+    tooltip: "Every route becomes a story. An LLM weaves trip data into comic-panel narratives — naming neighbourhoods, calling out unusual stops, and giving each journey personality and context.",
+  },
+  {
     icon: Library,
     label: "Fleet Storybook",
     desc: "Archived trip stories",
-    href: "/storybook",
+    href: "/features#storybook",
     tooltip: "Every generated story is preserved in the Fleet Storybook — a searchable archive of comic trip narratives. Filter by tone, browse past routes, and share highlight reels with clients or new drivers.",
   },
 ];
@@ -383,19 +383,19 @@ export default function HomePage() {
         <DemoModeBanner />
 
         {/* Feature chips */}
-        <div className="relative z-10 flex flex-wrap gap-3 mb-12 stagger animate-fade-up" style={{ animationDelay: "180ms" }}>
+        <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-12 stagger animate-fade-up" style={{ animationDelay: "180ms" }}>
           {FEATURES.map(({ icon: Icon, label, desc, href, tooltip }) => (
-            <button
+            <Link
               key={label}
-              onClick={() => router.push(href)}
-              className="relative flex items-center gap-2.5 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl px-4 py-2.5 hover:border-[rgba(245,166,35,0.3)] hover:bg-[rgba(245,166,35,0.05)] transition-all duration-200 group text-left cursor-pointer"
+              href={href}
+              className="relative flex items-center gap-2 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl px-3 py-2 hover:border-[rgba(245,166,35,0.3)] hover:bg-[rgba(245,166,35,0.05)] transition-all duration-200 group text-left cursor-pointer min-w-0"
             >
-              <div className="w-7 h-7 rounded-lg bg-[rgba(245,166,35,0.1)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(245,166,35,0.18)] transition-colors">
-                <Icon className="h-3.5 w-3.5 text-[#f5a623]" />
+              <div className="w-6 h-6 rounded-lg bg-[rgba(245,166,35,0.1)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(245,166,35,0.18)] transition-colors">
+                <Icon className="h-3 w-3 text-[#f5a623]" />
               </div>
-              <div>
-                <p className="text-[13px] font-semibold text-white font-body leading-none">{label}</p>
-                <p className="text-sm text-[rgba(232,237,248,0.4)] mt-0.5 font-body">{desc}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-[12px] font-semibold text-white font-body leading-tight truncate">{label}</p>
+                <p className="text-[11px] text-[rgba(232,237,248,0.4)] mt-0.5 font-body truncate">{desc}</p>
               </div>
 
               {/* Tooltip */}
@@ -411,7 +411,7 @@ export default function HomePage() {
                 <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[rgba(245,166,35,0.22)]" />
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-[-1px] w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#13131c]" />
               </div>
-            </button>
+            </Link>
           ))}
         </div>
 

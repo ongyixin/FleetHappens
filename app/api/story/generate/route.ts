@@ -14,6 +14,7 @@ import { deriveStoryBeats } from "@/lib/story/beats";
 import { buildStoryPrompt } from "@/lib/story/prompts";
 import { parseLLMOutput } from "@/lib/story/validate";
 import { ComicToneSchema } from "@/lib/story/schema";
+import { generateFallbackCaption, generateFallbackSpeechBubble } from "@/lib/story/fallback-captions";
 import { bqGetStory, bqSetStory, isBigQueryEnabled } from "@/lib/bigquery/client";
 import { isLLMEnabled } from "@/lib/llm/client";
 import type { ComicStory, ComicPanel, ComicTone, TripSummary, StopContext, BreadcrumbPoint } from "@/types";
@@ -122,19 +123,76 @@ async function callOpenAI(prompt: string): Promise<string> {
 
 // ─── Fallback loader ──────────────────────────────────────────────────────────
 
+/**
+ * Loads the demo story template and patches every panel with structural data
+ * from the real trip's beats so that:
+ *  - mapAnchor uses the actual GPS coordinates → image enrichment fetches
+ *    Google Places photos for the correct location
+ *  - locationName, timeLabel, distanceLabel, speedLabel, dwellLabel reflect
+ *    the real trip rather than the hardcoded SF demo values
+ *  - caption and speechBubble are generated from beat data to match the
+ *    current route context (no hardcoded demo text)
+ */
 async function loadFallbackStory(
   tripId: string,
-  tone: ComicTone
+  tone: ComicTone,
+  beats: ReturnType<typeof deriveStoryBeats>,
+  trip: TripSummary,
+  startLocationName: string,
+  endLocationName: string
 ): Promise<ComicStory | null> {
   try {
     const fallback = await import("@/public/fallback/story-demo.json");
-    const story = fallback.default ?? fallback;
-    // Patch the tripId and tone to match the request so the UI renders correctly.
+    const template = (fallback.default ?? fallback) as ComicStory;
+
+    const tripMeta = {
+      startLocationName,
+      endLocationName,
+      distanceKm: trip.distanceKm ?? trip.distanceMeters / 1000,
+      drivingDuration: trip.drivingDuration,
+      averageSpeedKmh: trip.averageSpeedKmh,
+      maxSpeedKmh: trip.maxSpeedKmh,
+    };
+
+    // Derive a title from the real start/end location hints.
+    const startHint = beats[0]?.locationNameHint ?? "Departure";
+    const endHint   = beats[3]?.locationNameHint ?? "Destination";
+    const title =
+      startHint !== endHint
+        ? `From ${startHint} to ${endHint}`
+        : template.title;
+
+    // Build each panel with contextual captions and speech bubbles from beat data.
+    const panels: ComicPanel[] = template.panels.map((templatePanel) => {
+      const beat = beats.find((b) => b.panelNumber === templatePanel.panelNumber);
+      if (!beat) return templatePanel;
+
+      const caption = generateFallbackCaption({ beat, tone, tripMeta });
+      const speechBubble = generateFallbackSpeechBubble({ beat, tone, tripMeta });
+
+      const panel: ComicPanel = {
+        ...templatePanel,
+        sceneType:     beat.sceneType,
+        mapAnchor:     beat.coordinates,
+        locationName:  beat.locationNameHint,
+        caption,
+        timeLabel:     beat.timeLabel,
+        distanceLabel: beat.distanceLabel ?? templatePanel.distanceLabel,
+        speedLabel:    beat.speedLabel    ?? templatePanel.speedLabel,
+        dwellLabel:    beat.dwellLabel    ?? templatePanel.dwellLabel,
+      };
+      if (speechBubble) panel.speechBubble = speechBubble;
+      else delete panel.speechBubble;
+      return panel;
+    });
+
     return {
-      ...(story as ComicStory),
-      id: `fallback-${Date.now()}`,
+      ...template,
+      id:        `fallback-${Date.now()}`,
       tripId,
+      title,
       tone,
+      panels,
       createdAt: new Date().toISOString(),
     };
   } catch {
@@ -268,7 +326,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   } catch (llmErr) {
     console.error("[story/generate] LLM failed, using fallback:", llmErr);
 
-    const fallback = await loadFallbackStory(trip.id, tone);
+    const fallback = await loadFallbackStory(
+      trip.id,
+      tone,
+      beats,
+      trip,
+      startLocationName,
+      endLocationName
+    );
     if (fallback) {
       return NextResponse.json({ data: fallback, fromCache: true });
     }

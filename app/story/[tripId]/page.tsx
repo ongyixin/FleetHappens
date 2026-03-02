@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, MapPin, Library } from "lucide-react";
+import { ArrowLeft, Sparkles, MapPin, Library, FileText } from "lucide-react";
 import type { ComicStory, ComicTone, TripSummary, StopContext, ApiResponse } from "@/types";
 import ComicStoryRenderer from "@/components/ComicStoryRenderer";
+import ReportBuilderModal from "@/components/ReportBuilderModal";
+import { getStorySections } from "@/lib/report/sections";
 import { format } from "date-fns";
 
 // ─── Geocode helpers ──────────────────────────────────────────────────────────
@@ -70,6 +72,7 @@ export default function StoryPage() {
   const [tone, setTone]           = useState<ComicTone>("playful");
   const [startName, setStartName] = useState<string>("Departure");
   const [endName, setEndName]     = useState<string>("Destination");
+  const [reportOpen, setReportOpen] = useState(false);
 
   useEffect(() => {
     async function fetchTrip() {
@@ -212,6 +215,14 @@ export default function StoryPage() {
               <Library className="h-3 w-3" />
               Storybook
             </button>
+            <button
+              onClick={() => setReportOpen(true)}
+              disabled={!trip}
+              className="hidden sm:flex items-center gap-1.5 h-7 px-3 rounded-lg border border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.08)] text-[#f5a623] text-xs font-medium font-body hover:bg-[rgba(245,166,35,0.14)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              Export Report
+            </button>
             <div className="flex items-center gap-1.5 text-sm text-[rgba(232,237,248,0.28)] font-body">
               <Sparkles className="h-3 w-3 text-[#fb923c]/60" />
               AI-generated · real Geotab data
@@ -267,6 +278,15 @@ export default function StoryPage() {
           onRegenerate={handleRegenerate}
         />
       </div>
+
+      {/* Report Builder Modal */}
+      <ReportBuilderModal
+        key={reportOpen ? "open" : "closed"}
+        isOpen={reportOpen}
+        onClose={() => setReportOpen(false)}
+        availableSections={getStorySections({ trip, deviceName: trip?.deviceName ?? deviceName })}
+        defaultTitle={`Trip Debrief — ${trip?.deviceName ?? deviceName}`}
+      />
     </div>
   );
 }

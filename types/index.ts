@@ -595,3 +595,45 @@ export interface DigestRecommendation {
   priority: "high" | "medium" | "low";
   text: string;
 }
+
+// ─── Report Builder ─────────────────────────────────────────────────────────
+
+/** The kind of content block a report section renders. */
+export type ReportSectionType =
+  | "kpi-strip"
+  | "fleet-cards"
+  | "vehicle-table"
+  | "ace-insight"
+  | "trip-stats"
+  | "trip-list"
+  | "story-panels"
+  | "narrative"
+  | "location-dossier"
+  | "trend-chart";
+
+/** A single toggleable content block in the report builder. */
+export interface ReportSection {
+  id: string;
+  type: ReportSectionType;
+  label: string;
+  description: string;
+  enabled: boolean;
+  /** The page data serialised for this section. */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+}
+
+/** Report metadata entered by the user before generating. */
+export interface ReportMetadata {
+  title: string;
+  subtitle?: string;
+  audience?: "internal" | "stakeholder" | "client" | "driver";
+  notes?: string;
+  generatedAt: string;
+}
+
+/** Full payload sent to POST /api/report/generate. */
+export interface ReportPayload {
+  metadata: ReportMetadata;
+  sections: ReportSection[];
+}

@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import {
   ChevronLeft, Truck, Brain, RefreshCw,
   Award, TrendingUp, TrendingDown, RotateCcw, AlertTriangle, Zap, BarChart2,
-  Maximize2, ArrowLeft, Minimize2, Clock, Activity, Radio, Loader2, Navigation,
+  Maximize2, ArrowLeft, Minimize2, Clock, Activity, Radio, Loader2, Navigation, FileText,
 } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell, ReferenceLine } from "recharts";
 import type { FleetPulseDetail, AceInsight, VehicleActivity, CompanyPulseSummary, ApiResponse } from "@/types";
@@ -17,6 +17,8 @@ import StopHotspotCard, { StopHotspotCardSkeleton } from "@/components/StopHotsp
 import VehicleOutliersCard, { VehicleOutliersCardSkeleton } from "@/components/VehicleOutliersCard";
 import AceInsightExpandedCard from "@/components/AceInsightExpandedCard";
 import FleetMapSlider from "@/components/FleetMapSlider";
+import ReportBuilderModal from "@/components/ReportBuilderModal";
+import { getFleetPulseSections } from "@/lib/report/sections";
 
 const FleetRegionalMap = dynamic(
   () => import("@/components/FleetRegionalMap"),
@@ -64,6 +66,7 @@ function FleetViewContent() {
   const [expandedIntelCard, setExpandedIntelCard]       = useState<string | null>(null);
   const [trends, setTrends]                             = useState<FleetTrendPoint[]>([]);
   const [trendsLoading, setTrendsLoading]               = useState(false);
+  const [reportOpen, setReportOpen]                     = useState(false);
 
   useEffect(() => {
     if (!groupId) return;
@@ -698,9 +701,36 @@ function FleetViewContent() {
                 Ace loading…
               </span>
             )}
+            <button
+              onClick={() => setReportOpen(true)}
+              className="hidden sm:flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.08)] text-[#f5a623] text-xs font-medium font-body hover:bg-[rgba(245,166,35,0.14)] transition-colors"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              Export Report
+            </button>
           </div>
         </div>
       </header>
+
+      {/* Report Builder Modal */}
+      <ReportBuilderModal
+        key={reportOpen ? "open" : "closed"}
+        isOpen={reportOpen}
+        onClose={() => setReportOpen(false)}
+        availableSections={getFleetPulseSections({
+          detail,
+          groupName: detail?.group.name ?? groupId,
+          outlierInsight,
+          routeInsight,
+          hotspotInsight,
+          topVehiclesInsight,
+          idleByDayInsight,
+          commonStopsInsight,
+          tripDurationInsight,
+          trends,
+        })}
+        defaultTitle={`Fleet Pulse Report — ${detail?.group.name ?? groupId}`}
+      />
 
       {/* Full-height split view */}
       <div className="relative z-10 flex-1 min-h-0">
