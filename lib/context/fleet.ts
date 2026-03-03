@@ -3,7 +3,7 @@
  *
  * Queries Ace for the number of trips that ended within ~1 km of the
  * given coordinates in the last 90 days.  Returns a visit count and
- * a human-readable summary string for display in the StopContextPanel.
+ * a human-readable summary string for display in the context panel.
  *
  * Ace is slow (30–90 s) — only call this from the Phase 2 enrichment
  * path, never in the fast Phase 1 response.

@@ -553,7 +553,7 @@ export default function FeaturesPage() {
         </h1>
 
         <p className="font-body text-[rgba(232,237,248,0.5)] text-lg leading-relaxed max-w-2xl mb-14 animate-fade-up" style={{ animationDelay: "60ms" }}>
-          From a Geotab database connection to comic-strip trip stories and AI-surfaced fleet patterns — here's how every
+          From a Geotab database connection to comic-strip trip stories and AI-surfaced fleet patterns — here&apos;s how every
           feature fits together into a single, continuous workflow.
         </p>
 

@@ -212,7 +212,7 @@ function buildStatus(
  * Recursively walk an object tree looking for a Google Storage CSV URL.
  * Ace has inconsistent response schemas across functions.
  */
-export function findCsvUrl(obj: unknown): string | null {
+function findCsvUrl(obj: unknown): string | null {
   if (typeof obj === "string") {
     if (
       obj.startsWith("https://") &&

@@ -1714,20 +1714,28 @@ for the comic generation page, add a toggle (match the style of the other fronte
 then populate the demo data with images - you may access the internet to fetch images
 ```
 
-## 3-minute hackathon demo planning
-
-> Near submission, this prompt was used to structure the demo flow itself — ensuring all core features could be demonstrated clearly within a 3-minute window and that the most impressive moments (Fleet Pulse, Ace intelligence, stop context briefing, comic generation) were sequenced for maximum impact.
-
-```
-plan the flow for my 3-min project demo for the hackathon - ensure that all core functionalities are demonstrated
-```
-
 ## Submission readiness
 
-> A final pass to ensure all README files across the repo were written for an external audience who would read the submission, and that nothing sensitive was included in the committed files.
+> A final pass to ensure that the repo was ready for submission by cleaning up the codebase.
 
 ```
-note that this entire repo will be submitted as my project submission, excluding the hackathon resources/ folder and all other files in .gitignore
+@README.md 
 
-ensure that all README files are appropriately addressed for the purpose of an audience who wants to understand the codebase
+Perform a comprehensive audit of this repo and produce a safe cleanup + verification PR.
+
+Goals
+- Confirm all currently implemented features work as intended.
+- Remove deprecated/unused code without altering current behavior.
+- Improve maintainability where it’s low-risk (naming, file structure, small refactors).
+
+Constraints
+- Do not break existing functionality.
+- No changes to external APIs/contracts unless you prove they’re unused.
+- Avoid large rewrites unless necessary.
+
+Deliverables
+- A checklist of features discovered + how you validated each (manual steps and/or tests).
+- A list of deprecated/unused code removed and why it’s safe to remove (evidence: references, grep results, call sites).
+- Test updates/additions (unit/integration) to prevent regressions.
+- A final “diff summary” and any remaining tech debt.
 ```
