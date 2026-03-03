@@ -3,12 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { MapPin, Clock, Route, Gauge, Navigation, Images, Camera, ChevronLeft, ChevronRight } from "lucide-react";
-import type { ComicPanel, ComicTone, AreaPhoto, SceneType } from "@/types";
+import type { ComicPanel, AreaPhoto } from "@/types";
 import ComicPanelImage from "@/components/story/ComicPanelImage";
 
 interface ComicPanelCardProps {
   panel: ComicPanel;
-  tone: ComicTone;
   panelIndex: number;
   isEnriching?: boolean;
 }
@@ -41,7 +40,6 @@ function PhotoGallery({
   locationName,
 }: {
   photos: AreaPhoto[];
-  sceneType: SceneType;
   locationName: string;
 }) {
   const [current, setCurrent] = useState(0);
@@ -215,7 +213,6 @@ export default function ComicPanelCard({ panel, panelIndex, isEnriching }: Comic
         {viewMode === "photos" && hasPhotos ? (
           <PhotoGallery
             photos={panel.areaPhotos!}
-            sceneType={panel.sceneType}
             locationName={panel.locationName}
           />
         ) : (

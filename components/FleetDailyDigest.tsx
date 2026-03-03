@@ -27,8 +27,7 @@ import {
   PieChart,
   Pie,
 } from "recharts";
-import type { CompanyPulseSummary, AceInsight } from "@/types";
-import type { DigestResult, InsightType } from "@/app/api/digest/generate/route";
+import type { CompanyPulseSummary, AceInsight, DigestResult, InsightType } from "@/types";
 
 // ─── Icon + colour config per insight type ────────────────────────────────────
 

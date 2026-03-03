@@ -18,15 +18,3 @@
 export function latLonToGeohash(lat: number, lon: number): string {
   return `${lat.toFixed(3)}_${lon.toFixed(3)}`;
 }
-
-/**
- * Recover the approximate center coordinates from a geohash key.
- * Inverse of latLonToGeohash.
- */
-export function geohashCenter(geohash: string): { lat: number; lon: number } {
-  const parts = geohash.split("_");
-  return {
-    lat: parseFloat(parts[0] ?? "0"),
-    lon: parseFloat(parts[1] ?? "0"),
-  };
-}

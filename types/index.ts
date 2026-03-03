@@ -199,7 +199,7 @@ export interface Amenity {
   address?: string;
 }
 
-/** Alias used by lib/context/amenities.ts and StopContextPanel */
+/** Alias used by lib/context/amenities.ts */
 export type NearbyAmenity = Amenity;
 
 // ─── Context Briefing types ────────────────────────────────────────────────
@@ -636,4 +636,28 @@ export interface ReportMetadata {
 export interface ReportPayload {
   metadata: ReportMetadata;
   sections: ReportSection[];
+}
+
+// ─── Digest types ─────────────────────────────────────────────────────────────
+
+export type InsightType = "positive" | "neutral" | "alert" | "record";
+
+export interface DigestInsight {
+  type: InsightType;
+  text: string;
+}
+
+export interface DigestResult {
+  headline: string;
+  insights: DigestInsight[];
+  statOfDay: {
+    label: string;
+    value: string;
+    context: string;
+  };
+  predictions?: DigestPrediction[];
+  anomalies?: DigestAnomaly[];
+  recommendations?: DigestRecommendation[];
+  generatedAt: string;
+  fromLLM: boolean;
 }

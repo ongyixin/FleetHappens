@@ -506,7 +506,6 @@ export default function ComicStoryRenderer({
               <ComicPanelCard
                 key={panel.panelNumber}
                 panel={panel}
-                tone={story.tone}
                 panelIndex={i}
                 isEnriching={enriching}
               />
@@ -541,7 +540,7 @@ export default function ComicStoryRenderer({
           <p className="font-display font-bold text-white text-xl mb-1.5">Your story is waiting</p>
           <p className="text-sm text-[rgba(232,237,248,0.38)] max-w-sm leading-relaxed font-body">
             Select a tone, optionally explore stop contexts on the dashboard for richer panels, then hit{" "}
-            <span className="text-[#f5a623] font-semibold">"Generate Trip Story"</span> above.
+            <span className="text-[#f5a623] font-semibold">&ldquo;Generate Trip Story&rdquo;</span> above.
           </p>
         </div>
       )}

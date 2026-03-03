@@ -23,34 +23,10 @@ import type {
   DigestPrediction,
   DigestAnomaly,
   DigestRecommendation,
+  DigestResult,
+  DigestInsight,
+  InsightType,
 } from "@/types";
-
-// ─── Shared types (also exported for the component) ──────────────────────────
-
-export type InsightType = "positive" | "neutral" | "alert" | "record";
-
-export interface DigestInsight {
-  type: InsightType;
-  text: string;
-}
-
-export interface DigestResult {
-  headline: string;
-  insights: DigestInsight[];
-  statOfDay: {
-    label: string;
-    value: string;
-    context: string;
-  };
-  /** Forward-looking metric trend predictions produced by the LLM analyst. */
-  predictions?: DigestPrediction[];
-  /** Anomalies detected via statistical comparison or LLM reasoning. */
-  anomalies?: DigestAnomaly[];
-  /** Prioritised recommended actions for the fleet manager. */
-  recommendations?: DigestRecommendation[];
-  generatedAt: string;
-  fromLLM: boolean;
-}
 
 // ─── Request body ─────────────────────────────────────────────────────────────
 

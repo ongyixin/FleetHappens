@@ -109,30 +109,6 @@ export async function withFallback<T>(
   }
 }
 
-/**
- * Manually seed the memory cache (e.g. after a background prefetch).
- */
-export function setCacheEntry<T>(filename: string, data: T): void {
-  store.set(filename, { data, cachedAt: Date.now() });
-}
-
-/**
- * Invalidate a specific entry (forces the next call to go live).
- */
-export function invalidateCache(filename: string): void {
-  store.delete(filename);
-}
-
-/**
- * Invalidate all entries whose filenames start with a given prefix.
- * Useful for clearing all ace-* entries at once.
- */
-export function invalidateCacheByPrefix(prefix: string): void {
-  for (const key of store.keys()) {
-    if (key.startsWith(prefix)) store.delete(key);
-  }
-}
-
 // ─── Internal helpers ─────────────────────────────────────────────────────────
 
 /**

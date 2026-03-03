@@ -127,7 +127,7 @@ export default function LocationDossierPanel({
   return (
     <aside className="fixed right-0 top-14 bottom-0 w-80 z-50 flex flex-col bg-[#090d11] border-l border-[rgba(255,255,255,0.08)] shadow-[-12px_0_40px_rgba(0,0,0,0.7)] panel-open overflow-y-auto">
 
-      {/* Teal accent stripe — visual distinction from amber StopContextPanel */}
+      {/* Teal accent stripe */}
       <div className="shrink-0 h-[2px] bg-gradient-to-r from-[#2dd4bf] via-[#0ea5e9] to-transparent" />
 
       {/* ── Header ──────────────────────────────────────────────────────── */}
