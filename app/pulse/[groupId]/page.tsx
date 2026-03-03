@@ -8,7 +8,7 @@ import {
   Award, TrendingUp, TrendingDown, RotateCcw, AlertTriangle, Zap, BarChart2,
   Maximize2, ArrowLeft, Minimize2, Clock, Activity, Radio, Loader2, Navigation, FileText,
 } from "lucide-react";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell, ReferenceLine } from "recharts";
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell, ReferenceLine } from "recharts";
 import type { FleetPulseDetail, AceInsight, VehicleActivity, CompanyPulseSummary, ApiResponse } from "@/types";
 import type { FleetTrendPoint } from "@/app/api/analytics/trends/route";
 import VehicleActivityTable, { VehicleActivityTableSkeleton } from "@/components/VehicleActivityTable";
@@ -66,6 +66,7 @@ function FleetViewContent() {
   const [expandedIntelCard, setExpandedIntelCard]       = useState<string | null>(null);
   const [trends, setTrends]                             = useState<FleetTrendPoint[]>([]);
   const [trendsLoading, setTrendsLoading]               = useState(false);
+  const [trendsIsDemo, setTrendsIsDemo]                 = useState(false);
   const [reportOpen, setReportOpen]                     = useState(false);
 
   useEffect(() => {
@@ -136,8 +137,11 @@ function FleetViewContent() {
     setTrendsLoading(true);
     fetch(`/api/analytics/trends?groupId=${groupId}&days=30`)
       .then((r) => r.json())
-      .then((d: { ok: boolean; data?: FleetTrendPoint[] }) => {
-        if (d.ok && d.data) setTrends(d.data);
+      .then((d: { ok: boolean; data?: FleetTrendPoint[]; demo?: boolean }) => {
+        if (d.ok && d.data) {
+          setTrends(d.data);
+          setTrendsIsDemo(d.demo === true);
+        }
       })
       .catch(() => {})
       .finally(() => setTrendsLoading(false));
@@ -589,18 +593,63 @@ function FleetViewContent() {
   );
 
   // ── Trends tab content ────────────────────────────────────────────────────
+  // Derived trend stats (only computed when trends data is present)
+  const trendMetrics = useMemo(() => {
+    if (trends.length === 0) return null;
+    const m = (t: FleetTrendPoint) => t.metrics as Record<string, number>;
+    const weekdays = trends.filter((t) => { const d = new Date(t.date + "T12:00:00").getDay(); return d >= 1 && d <= 5; });
+    const src = weekdays.length >= 5 ? weekdays : trends;
+    const avgKm    = src.reduce((s, t) => s + (m(t).totalDistanceKm ?? 0), 0) / src.length;
+    const avgIdle  = src.reduce((s, t) => s + (m(t).avgIdlePct ?? 0), 0) / src.length;
+    const avgTrips = src.reduce((s, t) => s + (m(t).totalTrips ?? 0), 0) / src.length;
+    const first7   = trends.slice(0, 7);
+    const last7    = trends.slice(-7);
+    const f7km = first7.reduce((s, t) => s + (m(t).totalDistanceKm ?? 0), 0) / first7.length;
+    const l7km = last7.reduce((s, t)  => s + (m(t).totalDistanceKm ?? 0), 0) / last7.length;
+    const kmTrendPct = f7km > 0 ? ((l7km - f7km) / f7km) * 100 : 0;
+    const f7idle = first7.reduce((s, t) => s + (m(t).avgIdlePct ?? 0), 0) / first7.length;
+    const l7idle = last7.reduce((s, t)  => s + (m(t).avgIdlePct ?? 0), 0) / last7.length;
+    const idleTrendPct = f7idle > 0 ? ((l7idle - f7idle) / f7idle) * 100 : 0;
+    const peakDay = trends.reduce((best, t) => (m(t).totalDistanceKm ?? 0) > (m(best).totalDistanceKm ?? 0) ? t : best, trends[0]);
+    return { avgKm, avgIdle, avgTrips, kmTrendPct, idleTrendPct, peakDay };
+  }, [trends]);
+
+  const trendsChartData = useMemo(() =>
+    trends.map((t) => {
+      const m = t.metrics as Record<string, number>;
+      return {
+        date: t.date.slice(5),
+        km:    Math.round(m.totalDistanceKm ?? 0),
+        idle:  parseFloat((m.avgIdlePct ?? 0).toFixed(1)),
+        trips: Math.round(m.totalTrips ?? 0),
+      };
+    }),
+  [trends]);
+
   const trendsContent = (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-sm font-bold text-[#38bdf8] bg-[rgba(56,189,248,0.08)] border border-[rgba(56,189,248,0.2)] rounded-full px-2 py-0.5 font-body">
-          BigQuery
-        </span>
-        <span className="text-sm text-[rgba(232,237,248,0.35)] font-body">30-day history</span>
+        {trendsIsDemo ? (
+          <span className="text-xs font-bold text-[#f5a623] bg-[rgba(245,166,35,0.08)] border border-[rgba(245,166,35,0.2)] rounded-full px-2 py-0.5 font-body">
+            Demo
+          </span>
+        ) : (
+          <span className="text-xs font-bold text-[#38bdf8] bg-[rgba(56,189,248,0.08)] border border-[rgba(56,189,248,0.2)] rounded-full px-2 py-0.5 font-body">
+            BigQuery
+          </span>
+        )}
+        <span className="text-xs text-[rgba(232,237,248,0.35)] font-body">30-day history</span>
         {trendsLoading && <RefreshCw className="h-2.5 w-2.5 animate-spin text-[#38bdf8]" />}
       </div>
 
       {trendsLoading ? (
-        <div className="atlas-card rounded-xl h-[160px] animate-pulse" />
+        <div className="space-y-2">
+          <div className="grid grid-cols-3 gap-2">
+            {[0,1,2].map((i) => <div key={i} className="atlas-card rounded-xl h-[68px] animate-pulse" />)}
+          </div>
+          <div className="atlas-card rounded-xl h-[130px] animate-pulse" />
+          <div className="atlas-card rounded-xl h-[90px] animate-pulse" />
+        </div>
       ) : trends.length === 0 ? (
         <div className="atlas-card rounded-xl p-6 flex flex-col items-center justify-center gap-2 text-center min-h-[120px]">
           <BarChart2 className="h-6 w-6 text-[rgba(56,189,248,0.3)]" />
@@ -608,51 +657,104 @@ function FleetViewContent() {
             No historical snapshots yet. Fleet trends appear here once BigQuery analytics data starts accumulating.
           </p>
         </div>
-      ) : (
-        <div className="atlas-card rounded-xl p-4">
-          <p className="text-sm text-[rgba(232,237,248,0.4)] font-body mb-3">
-            Daily km driven · last {trends.length} data points
-          </p>
-          <ResponsiveContainer width="100%" height={160}>
-            <LineChart data={trends.map((t) => ({
-              date: t.date.slice(5),
-              km: Number((t.metrics as Record<string, unknown>).totalDistanceKm ?? 0),
-            }))}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis
-                dataKey="date"
-                tick={{ fill: "rgba(232,237,248,0.35)", fontSize: 12, fontFamily: "var(--font-jetbrains-mono)" }}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                tick={{ fill: "rgba(232,237,248,0.35)", fontSize: 12, fontFamily: "var(--font-jetbrains-mono)" }}
-                tickLine={false}
-                axisLine={false}
-                width={36}
-              />
-              <Tooltip
-                contentStyle={{
-                  background: "#101318",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: "8px",
-                  fontSize: 12,
-                  fontFamily: "var(--font-dm-sans)",
-                  color: "rgba(232,237,248,0.9)",
-                }}
-                formatter={(v: number) => [`${v.toLocaleString()} km`, "Distance"]}
-                labelStyle={{ color: "rgba(232,237,248,0.5)" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="km"
-                stroke="#38bdf8"
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 4, fill: "#38bdf8", strokeWidth: 0 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+      ) : trendMetrics && (
+        <div className="space-y-2">
+          {/* KPI summary row */}
+          <div className="grid grid-cols-3 gap-2">
+            <div className="atlas-card rounded-xl p-3">
+              <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body uppercase tracking-wide mb-1">Avg km/day</p>
+              <p className="text-base font-bold text-white font-display leading-none">{Math.round(trendMetrics.avgKm)}</p>
+              <p className={`text-[10px] mt-1 font-body flex items-center gap-0.5 ${trendMetrics.kmTrendPct >= 0 ? "text-[#22c55e]" : "text-[#f87171]"}`}>
+                {trendMetrics.kmTrendPct >= 0
+                  ? <TrendingUp className="h-2.5 w-2.5" />
+                  : <TrendingDown className="h-2.5 w-2.5" />}
+                {Math.abs(trendMetrics.kmTrendPct).toFixed(1)}%
+              </p>
+            </div>
+            <div className="atlas-card rounded-xl p-3">
+              <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body uppercase tracking-wide mb-1">Avg idle %</p>
+              <p className="text-base font-bold text-white font-display leading-none">{trendMetrics.avgIdle.toFixed(1)}%</p>
+              <p className={`text-[10px] mt-1 font-body flex items-center gap-0.5 ${trendMetrics.idleTrendPct <= 0 ? "text-[#22c55e]" : "text-[#f87171]"}`}>
+                {trendMetrics.idleTrendPct <= 0
+                  ? <TrendingDown className="h-2.5 w-2.5" />
+                  : <TrendingUp className="h-2.5 w-2.5" />}
+                {Math.abs(trendMetrics.idleTrendPct).toFixed(1)}%
+              </p>
+            </div>
+            <div className="atlas-card rounded-xl p-3">
+              <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body uppercase tracking-wide mb-1">Trips/day</p>
+              <p className="text-base font-bold text-white font-display leading-none">{trendMetrics.avgTrips.toFixed(1)}</p>
+              <p className="text-[10px] text-[rgba(232,237,248,0.3)] mt-1 font-body truncate">
+                peak {trendMetrics.peakDay.date.slice(5)}
+              </p>
+            </div>
+          </div>
+
+          {/* Distance area chart */}
+          <div className="atlas-card rounded-xl p-3">
+            <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body uppercase tracking-wide mb-2">Daily distance (km)</p>
+            <ResponsiveContainer width="100%" height={120}>
+              <AreaChart data={trendsChartData} margin={{ top: 2, right: 4, left: -8, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="kmGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%"  stopColor="#38bdf8" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fill: "rgba(232,237,248,0.3)", fontSize: 10, fontFamily: "var(--font-jetbrains-mono)" }}
+                  tickLine={false} axisLine={false}
+                  interval={6}
+                />
+                <YAxis
+                  tick={{ fill: "rgba(232,237,248,0.3)", fontSize: 10, fontFamily: "var(--font-jetbrains-mono)" }}
+                  tickLine={false} axisLine={false} width={32}
+                />
+                <Tooltip
+                  contentStyle={{ background: "#101318", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "8px", fontSize: 11, fontFamily: "var(--font-dm-sans)", color: "rgba(232,237,248,0.9)" }}
+                  formatter={(v: number) => [`${v.toLocaleString()} km`, "Distance"]}
+                  labelStyle={{ color: "rgba(232,237,248,0.5)" }}
+                />
+                <Area type="monotone" dataKey="km" stroke="#38bdf8" strokeWidth={1.5} fill="url(#kmGrad)" dot={false} activeDot={{ r: 3, fill: "#38bdf8", strokeWidth: 0 }} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Idle % bar chart */}
+          <div className="atlas-card rounded-xl p-3">
+            <p className="text-[10px] text-[rgba(232,237,248,0.4)] font-body uppercase tracking-wide mb-2">Idle % by day</p>
+            <ResponsiveContainer width="100%" height={80}>
+              <BarChart data={trendsChartData} barCategoryGap="20%" margin={{ top: 2, right: 4, left: -8, bottom: 0 }}>
+                <XAxis
+                  dataKey="date"
+                  tick={{ fill: "rgba(232,237,248,0.3)", fontSize: 10, fontFamily: "var(--font-jetbrains-mono)" }}
+                  tickLine={false} axisLine={false}
+                  interval={6}
+                />
+                <YAxis
+                  tick={{ fill: "rgba(232,237,248,0.3)", fontSize: 10, fontFamily: "var(--font-jetbrains-mono)" }}
+                  tickLine={false} axisLine={false} width={32}
+                  tickFormatter={(v) => `${v}%`}
+                />
+                <Tooltip
+                  contentStyle={{ background: "#101318", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "8px", fontSize: 11, fontFamily: "var(--font-dm-sans)", color: "rgba(232,237,248,0.9)" }}
+                  formatter={(v: number) => [`${v}%`, "Idle"]}
+                  labelStyle={{ color: "rgba(232,237,248,0.5)" }}
+                />
+                <ReferenceLine y={trendMetrics.avgIdle} stroke="rgba(248,113,113,0.4)" strokeDasharray="3 3" />
+                <Bar dataKey="idle" radius={[2, 2, 0, 0]}>
+                  {trendsChartData.map((entry, idx) => (
+                    <Cell
+                      key={idx}
+                      fill={entry.idle > trendMetrics.avgIdle + 2 ? "rgba(248,113,113,0.6)" : "rgba(56,189,248,0.35)"}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       )}
     </div>

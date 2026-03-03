@@ -86,7 +86,17 @@ export async function runInsightQuery(
 ): Promise<AceInsight> {
   const question = buildAceQuestion(queryKey, opts);
   const fallbackFile = getFallbackFile(queryKey);
-  const cacheKey = `ace-${queryKey}.json`;
+
+  // Include coordinates in the cache key when provided so that
+  // position-specific queries (e.g. vehicle-next-stop) don't share a single
+  // cache entry across vehicles at different locations.
+  // 0.01° precision ≈ 1 km — same granularity as runStopVisitQuery.
+  let cacheKey = `ace-${queryKey}.json`;
+  if (opts?.coordinates) {
+    const latR = Math.round(opts.coordinates.lat * 100) / 100;
+    const lonR = Math.round(opts.coordinates.lon * 100) / 100;
+    cacheKey = `ace-${queryKey}-${latR}-${lonR}.json`;
+  }
 
   const { data } = await withFallback(
     () => queryAce(question),
@@ -94,8 +104,6 @@ export async function runInsightQuery(
     ACE_TTL_MS
   );
 
-  // File fallback file names differ from cache keys, so also try the
-  // template-specific fallback if cache miss reaches the file tier.
   void fallbackFile; // used implicitly via withFallback filename matching
 
   return data;

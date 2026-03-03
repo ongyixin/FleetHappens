@@ -25,6 +25,7 @@ import { runInsightQuery } from "@/lib/ace/client";
 import { QUERY_KEYS } from "@/lib/ace/queries";
 import { scoreCandidates, type ScoreContext } from "@/lib/predict/score";
 import { generateText } from "@/lib/llm/client";
+import { loadFileFallback } from "@/lib/cache/fallback";
 import type {
   ApiResponse,
   NextStopPredictionResult,
@@ -61,6 +62,61 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       { ok: false, error: "lat and lon must be valid numbers" } satisfies ApiResponse<never>,
       { status: 400 }
     );
+  }
+
+  // Demo mode: serve per-vehicle varied predictions without hitting Ace.
+  // A seeded shuffle of the expanded mock data pool ensures each vehicle
+  // consistently "sees" a different set of destinations.
+  if (process.env.PULSE_DEMO_GROUPS === "true") {
+    const mock = loadFileFallback<{
+      rows: Array<Record<string, string | number>>;
+      reasoning: string;
+    }>("ace-vehicle-next-stop.json");
+
+    if (!mock) {
+      return NextResponse.json(
+        { ok: false, error: "[demo] Mock file not found" } satisfies ApiResponse<never>,
+        { status: 404 }
+      );
+    }
+
+    // Deterministic per-vehicle shuffle — same deviceId always produces the
+    // same ordering, but different deviceIds produce different orderings.
+    const seed = [...(deviceId || "x")].reduce(
+      (acc, c) => ((acc * 31 + c.charCodeAt(0)) & 0x7fffffff),
+      0
+    );
+    const shuffled = demoShuffleRows(mock.rows, seed);
+
+    const now = new Date();
+    const scored = scoreCandidates(shuffled, {
+      currentHour: now.getUTCHours(),
+      currentDayOfWeek: now.getUTCDay(),
+      lastTripOrigin: { lat, lon },
+    });
+
+    const predictions: StopPrediction[] = scored.slice(0, 5).map((c, i) => ({
+      rank: i + 1,
+      locationName: c.locationName,
+      confidence: Math.min(0.97, c.rawScore),
+      visitCount: c.visitCount,
+      avgDwellMinutes: c.avgDwellMinutes,
+      typicalArrivalHour: c.typicalArrivalHour,
+      coordinates: c.coordinates,
+      signals: c.signals,
+    }));
+
+    const result: NextStopPredictionResult = {
+      deviceId,
+      fromCoordinates: { lat, lon },
+      predictions,
+      basedOnTrips: shuffled.reduce((s, r) => s + (Number(r.visit_count) || 0), 0),
+      queriedAt: new Date().toISOString(),
+      fromCache: true,
+      fromLLM: false,
+    };
+
+    return NextResponse.json({ ok: true, data: result } satisfies ApiResponse<NextStopPredictionResult>);
   }
 
   try {
@@ -314,6 +370,24 @@ async function fetchBriefingWithTimeout(
   } finally {
     clearTimeout(timer);
   }
+}
+
+// ─── Demo helpers ─────────────────────────────────────────────────────────────
+
+/**
+ * Fisher-Yates shuffle seeded by an integer.
+ * Produces a deterministic, device-specific ordering of candidate rows
+ * so each vehicle consistently shows different predicted destinations.
+ */
+function demoShuffleRows<T>(rows: T[], seed: number): T[] {
+  const arr = [...rows];
+  let s = seed;
+  for (let i = arr.length - 1; i > 0; i--) {
+    s = (s * 1664525 + 1013904223) & 0x7fffffff;
+    const j = s % (i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
 // ─── Fallback ─────────────────────────────────────────────────────────────────

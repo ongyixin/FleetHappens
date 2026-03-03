@@ -7,10 +7,15 @@
     { "destination_name": "Fremont Warehouse",           "visit_count": 31, "avg_dwell_minutes": 72, "avg_arrival_hour": 14, "dest_lat": 37.5485, "dest_lon": -121.9886 },
     { "destination_name": "Hayward Logistics Park",      "visit_count": 19, "avg_dwell_minutes": 44, "avg_arrival_hour": 11, "dest_lat": 37.6688, "dest_lon": -122.0808 },
     { "destination_name": "SF Embarcadero Hub",          "visit_count": 12, "avg_dwell_minutes": 22, "avg_arrival_hour": 9,  "dest_lat": 37.7956, "dest_lon": -122.3933 },
-    { "destination_name": "South SF Depot",              "visit_count": 7,  "avg_dwell_minutes": 18, "avg_arrival_hour": 15, "dest_lat": 37.6547, "dest_lon": -122.4077 }
+    { "destination_name": "South SF Depot",              "visit_count": 7,  "avg_dwell_minutes": 18, "avg_arrival_hour": 15, "dest_lat": 37.6547, "dest_lon": -122.4077 },
+    { "destination_name": "San Jose Distribution Hub",   "visit_count": 41, "avg_dwell_minutes": 55, "avg_arrival_hour": 8,  "dest_lat": 37.3382, "dest_lon": -121.8863 },
+    { "destination_name": "Santa Clara Yard",            "visit_count": 28, "avg_dwell_minutes": 30, "avg_arrival_hour": 13, "dest_lat": 37.3541, "dest_lon": -121.9552 },
+    { "destination_name": "Milpitas Cross-Dock",         "visit_count": 22, "avg_dwell_minutes": 48, "avg_arrival_hour": 7,  "dest_lat": 37.4323, "dest_lon": -121.8996 },
+    { "destination_name": "Richmond Fuel & Service",     "visit_count": 16, "avg_dwell_minutes": 12, "avg_arrival_hour": 16, "dest_lat": 37.9358, "dest_lon": -122.3478 },
+    { "destination_name": "Concord Terminal",            "visit_count": 9,  "avg_dwell_minutes": 65, "avg_arrival_hour": 12, "dest_lat": 37.9780, "dest_lon": -122.0311 }
   ],
-  "reasoning": "Oakland Distribution Center leads with 47 departures from this origin — 41% of all outbound trips. Typical arrival window is 09:30–10:30 UTC. The Fremont Warehouse run shows longest average dwell (72 min), indicating loading/unloading activity.",
+  "reasoning": "Oakland Distribution Center leads with 47 departures — 41% of all outbound trips from this origin. The Fremont Warehouse run shows longest average dwell (72 min), indicating loading/unloading activity. San Jose Distribution Hub is the primary South Bay anchor.",
   "queriedAt": "2026-02-28T06:00:00Z",
-  "totalRowCount": 5,
+  "totalRowCount": 10,
   "fromCache": true
 }

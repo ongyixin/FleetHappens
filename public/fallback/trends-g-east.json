@@ -1,0 +1,332 @@
+[
+  {
+    "date": "2026-02-01",
+    "metrics": {
+      "totalDistanceKm": 49.3,
+      "totalTrips": 4,
+      "avgIdlePct": 7.7,
+      "avgTripDurationMin": 20,
+      "activeVehicles": 4,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-02",
+    "metrics": {
+      "totalDistanceKm": 21.5,
+      "totalTrips": 1,
+      "avgIdlePct": 7,
+      "avgTripDurationMin": 23.8,
+      "activeVehicles": 2,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-03",
+    "metrics": {
+      "totalDistanceKm": 170.1,
+      "totalTrips": 15,
+      "avgIdlePct": 9.4,
+      "avgTripDurationMin": 24.6,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-04",
+    "metrics": {
+      "totalDistanceKm": 173.5,
+      "totalTrips": 14,
+      "avgIdlePct": 10.9,
+      "avgTripDurationMin": 25.6,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-05",
+    "metrics": {
+      "totalDistanceKm": 189.8,
+      "totalTrips": 17,
+      "avgIdlePct": 9.7,
+      "avgTripDurationMin": 27.9,
+      "activeVehicles": 5,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-06",
+    "metrics": {
+      "totalDistanceKm": 147.9,
+      "totalTrips": 16,
+      "avgIdlePct": 11.9,
+      "avgTripDurationMin": 25.1,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-07",
+    "metrics": {
+      "totalDistanceKm": 155.1,
+      "totalTrips": 16,
+      "avgIdlePct": 11.7,
+      "avgTripDurationMin": 27,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-08",
+    "metrics": {
+      "totalDistanceKm": 42,
+      "totalTrips": 5,
+      "avgIdlePct": 7.3,
+      "avgTripDurationMin": 19.4,
+      "activeVehicles": 3,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-09",
+    "metrics": {
+      "totalDistanceKm": 20,
+      "totalTrips": 1,
+      "avgIdlePct": 8.3,
+      "avgTripDurationMin": 22.6,
+      "activeVehicles": 2,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-10",
+    "metrics": {
+      "totalDistanceKm": 191.7,
+      "totalTrips": 16,
+      "avgIdlePct": 12,
+      "avgTripDurationMin": 20.2,
+      "activeVehicles": 7,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-11",
+    "metrics": {
+      "totalDistanceKm": 159.3,
+      "totalTrips": 17,
+      "avgIdlePct": 9.2,
+      "avgTripDurationMin": 20.7,
+      "activeVehicles": 7,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-12",
+    "metrics": {
+      "totalDistanceKm": 187.5,
+      "totalTrips": 16,
+      "avgIdlePct": 9,
+      "avgTripDurationMin": 24.7,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-13",
+    "metrics": {
+      "totalDistanceKm": 162.3,
+      "totalTrips": 17,
+      "avgIdlePct": 9.9,
+      "avgTripDurationMin": 20.6,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-14",
+    "metrics": {
+      "totalDistanceKm": 154.8,
+      "totalTrips": 18,
+      "avgIdlePct": 11.4,
+      "avgTripDurationMin": 24.9,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-15",
+    "metrics": {
+      "totalDistanceKm": 52.4,
+      "totalTrips": 4,
+      "avgIdlePct": 7.7,
+      "avgTripDurationMin": 23.2,
+      "activeVehicles": 4,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-16",
+    "metrics": {
+      "totalDistanceKm": 18.9,
+      "totalTrips": 2,
+      "avgIdlePct": 8.5,
+      "avgTripDurationMin": 22.1,
+      "activeVehicles": 2,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-17",
+    "metrics": {
+      "totalDistanceKm": 157.6,
+      "totalTrips": 14,
+      "avgIdlePct": 10.2,
+      "avgTripDurationMin": 20.9,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-18",
+    "metrics": {
+      "totalDistanceKm": 150.7,
+      "totalTrips": 18,
+      "avgIdlePct": 11.7,
+      "avgTripDurationMin": 25,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-19",
+    "metrics": {
+      "totalDistanceKm": 159,
+      "totalTrips": 16,
+      "avgIdlePct": 11.9,
+      "avgTripDurationMin": 26.7,
+      "activeVehicles": 7,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-20",
+    "metrics": {
+      "totalDistanceKm": 133.3,
+      "totalTrips": 17,
+      "avgIdlePct": 10.1,
+      "avgTripDurationMin": 23.2,
+      "activeVehicles": 7,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-21",
+    "metrics": {
+      "totalDistanceKm": 146.5,
+      "totalTrips": 14,
+      "avgIdlePct": 9.6,
+      "avgTripDurationMin": 22,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-22",
+    "metrics": {
+      "totalDistanceKm": 49,
+      "totalTrips": 6,
+      "avgIdlePct": 7.9,
+      "avgTripDurationMin": 16.7,
+      "activeVehicles": 3,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-23",
+    "metrics": {
+      "totalDistanceKm": 22.8,
+      "totalTrips": 3,
+      "avgIdlePct": 9.6,
+      "avgTripDurationMin": 22.3,
+      "activeVehicles": 2,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-24",
+    "metrics": {
+      "totalDistanceKm": 166.1,
+      "totalTrips": 16,
+      "avgIdlePct": 9.5,
+      "avgTripDurationMin": 22.3,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-25",
+    "metrics": {
+      "totalDistanceKm": 144.6,
+      "totalTrips": 15,
+      "avgIdlePct": 10,
+      "avgTripDurationMin": 27.8,
+      "activeVehicles": 7,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-26",
+    "metrics": {
+      "totalDistanceKm": 158.6,
+      "totalTrips": 15,
+      "avgIdlePct": 9.4,
+      "avgTripDurationMin": 21.5,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-27",
+    "metrics": {
+      "totalDistanceKm": 138.4,
+      "totalTrips": 17,
+      "avgIdlePct": 10.1,
+      "avgTripDurationMin": 28.2,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-02-28",
+    "metrics": {
+      "totalDistanceKm": 134.9,
+      "totalTrips": 17,
+      "avgIdlePct": 12,
+      "avgTripDurationMin": 22.4,
+      "activeVehicles": 6,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-03-01",
+    "metrics": {
+      "totalDistanceKm": 49.1,
+      "totalTrips": 6,
+      "avgIdlePct": 7.2,
+      "avgTripDurationMin": 22.8,
+      "activeVehicles": 3,
+      "totalVehicles": 7
+    }
+  },
+  {
+    "date": "2026-03-02",
+    "metrics": {
+      "totalDistanceKm": 15.5,
+      "totalTrips": 2,
+      "avgIdlePct": 9.1,
+      "avgTripDurationMin": 23.4,
+      "activeVehicles": 2,
+      "totalVehicles": 7
+    }
+  }
+]
